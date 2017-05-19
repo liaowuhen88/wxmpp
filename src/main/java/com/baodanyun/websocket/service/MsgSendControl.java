@@ -8,6 +8,7 @@ import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.XMPPUtil;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.SerializationUtils;
 import org.jivesoftware.smack.packet.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +66,14 @@ public class MsgSendControl {
                 logger.error("", e);
             }
             webSocketService.produce(msg);
+
+            String key = msg.getTo()+"_"+msg.getFrom();
+            if(webSocketService.hasH5Connected(key)){
+                Msg cloneMsg = SerializationUtils.clone(msg);
+                cloneMsg.setTo(key);
+                webSocketService.produce(msg);
+            }
+
         } else {
             try {
                 messageSendToWeixin.send(msg, msg.getOpenId(), msg.getId());

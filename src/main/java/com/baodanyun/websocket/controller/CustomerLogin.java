@@ -2,6 +2,7 @@ package com.baodanyun.websocket.controller;
 
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.bean.user.AcsessCustomer;
 import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.bean.userInterface.user.WeiXinUser;
@@ -66,9 +67,9 @@ public class CustomerLogin extends BaseController {
     public void api(LoginModel user, HttpServletRequest request, HttpServletResponse response) {
         //客服必须填写用户名 和 密码
         logger.info("user" + JSONUtil.toJson(user));
-        AbstractUser au = null;
+        AcsessCustomer au =  new AcsessCustomer();
         try {
-            au = customerInit(user);
+            customerInit(au,user);
             boolean flag = userLifeCycleService.login(au);
 
             if (flag) {
@@ -99,8 +100,8 @@ public class CustomerLogin extends BaseController {
             if (StringUtils.isBlank(user.getTo())) {
                 throw new BusinessException("to 参数不能为空");
             }
-
-            Customer customer = customerInit(user);
+            AcsessCustomer customer = new AcsessCustomer();
+            customerInit(customer,user);
             if (!xmppServer.isAuthenticated(customer.getId())) {
                 throw new BusinessException("客服未登录");
             }
@@ -143,6 +144,8 @@ public class CustomerLogin extends BaseController {
                     }
                 }
             }
+
+            customer.setTo(visitor.getLoginUsername());
             request.getSession().setAttribute(Common.USER_KEY, customer);
             us.online(visitor);
             mv.addObject("user", JSONUtil.toJson(customer));
@@ -179,8 +182,9 @@ public class CustomerLogin extends BaseController {
      * @return
      * @throws BusinessException
      */
-    public Customer customerInit(LoginModel user) throws BusinessException {
-        Customer customer = new Customer();
+
+
+    public void customerInit(Customer customer,LoginModel user) throws BusinessException {
         if (StringUtils.isBlank(user.getUsername())) {
             throw new BusinessException("[username]参数用户名不能为空");
         } else {
@@ -199,7 +203,6 @@ public class CustomerLogin extends BaseController {
         customer.setLoginTime(System.currentTimeMillis());
         customer.setId(jid);
 
-        return customer;
     }
 
 

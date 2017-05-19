@@ -124,7 +124,7 @@
 
 
 	<build>
-		<finalName>wxmpp</finalName>
+		<finalName>kf</finalName>
 
 		<resources>
 			<resource>

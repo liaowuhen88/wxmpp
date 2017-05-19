@@ -1,6 +1,7 @@
 package com.baodanyun.websocket.core.handle;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.bean.user.AcsessCustomer;
 import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.service.UserLifeCycleService;
 import com.baodanyun.websocket.service.WebSocketService;
@@ -20,8 +21,12 @@ public class CustomerSimpleWebSocketHandler extends AbstractWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        AbstractUser customer = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
-        webSocketService.saveSession(customer.getId(), session);
+        AcsessCustomer customer = (AcsessCustomer) session.getHandshakeAttributes().get(Common.USER_KEY);
+        // from_to
+        String key = customer.getId()+"_"+customer.getTo();
+
+        logger.info(key);
+        webSocketService.saveSession(key, session);
     }
 
     @Override
@@ -30,7 +35,6 @@ public class CustomerSimpleWebSocketHandler extends AbstractWebSocketHandler {
             AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
             logger.info("webSocket receive message:" + JSONUtil.toJson(message));
             String content = message.getPayload();
-
 
            /* Msg msg = Msg.handelMsg(content);
 
