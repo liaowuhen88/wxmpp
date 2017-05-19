@@ -1,0 +1,44 @@
+.loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 101;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 206, 255, .8);
+  padding-top: 200px;
+  text-align: center;
+  .pic {
+    width: 20px;
+    height: 20px;
+    margin: 0 auto;
+    background-color: #fff;
+    animation: loading 2s linear 0s infinite;
+    transform-style: preserve-3d;
+  }
+  .text {
+    color: #fff;
+    font-size: 12px;
+    margin-top: 10px;
+  }
+}
+
+@keyframes loading {
+  0% {
+    transform: perspective(40px) rotateX(0deg);
+  }
+  25% {
+    transform: perspective(40px) rotateX(30deg);
+  }
+  50% {
+    transform: perspective(40px) rotateX(180deg);
+  }
+  75% {
+    transform: perspective(40px) rotateX(200deg);
+  }
+  100% {
+    transform: perspective(40px) rotateX(360deg);
+  }
+}

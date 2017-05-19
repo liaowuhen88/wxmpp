@@ -1,0 +1,24 @@
+// Code (inline and block)
+// Inline and block code styles
+code,
+kbd,
+pre,
+samp {}
+
+// Inline code
+code {}
+
+// User input typically entered via keyboard
+kbd {
+  kbd {
+    padding: 0;
+    font-size: 100%;
+    font-weight: bold;
+    box-shadow: none;
+  }
+}
+
+// Blocks of code
+pre {
+  code {}
+}

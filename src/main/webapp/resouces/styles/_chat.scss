@@ -1,0 +1,47 @@
+/* chat */
+
+.chat {
+  display: flex;
+  flex-direction: row;
+  background-color: #f2f3f5;
+  box-sizing: border-box;
+}
+
+@import 'chat-title';
+@import 'chat-list';
+@import 'chat-window';
+@import 'chat-source';
+@import 'chat-input';
+@import 'chat-detail';
+.holdList {
+  width: 100%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.holdList li {
+  line-height: 40px;
+  height: 40px;
+  border-bottom: 1px solid #eee;
+  padding: 0 10px;
+}
+
+.holdList li:hover {
+  background-color: #ecf9ff;
+}
+
+.holdList li .call_in {
+  float: right;
+  color: #0997d8;
+  cursor: pointer;
+}
+
+.holdList li .time {
+  margin-left: 20px;
+  color: #999;
+}
+
+.pages {
+  margin-top: 10px;
+}

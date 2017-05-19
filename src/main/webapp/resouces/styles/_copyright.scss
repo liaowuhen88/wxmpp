@@ -1,0 +1,15 @@
+.copyright {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  color: #fff;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+  opacity: .3;
+  &:hover {
+    opacity: .6;
+  }
+}

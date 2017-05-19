@@ -1,0 +1,17 @@
+/* msgbox */
+
+.base-msgbox {
+    width: 100%;
+    overflow: auto;
+    position: absolute;
+    top: 0;
+    bottom: px2rem(100);
+    -webkit-overflow-scrolling: touch;
+    &::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+    }
+    &::-webkit-scrollbar-track-piece {
+        background-color: transparent;
+    }
+}

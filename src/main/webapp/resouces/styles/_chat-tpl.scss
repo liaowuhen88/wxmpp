@@ -1,0 +1,90 @@
+.chat-tpl {
+    height: 100%;
+    width: 110%;
+    padding-right: 10%;
+    box-sizing: border-box;
+    overflow-y: auto;
+    position: relative;
+}
+
+.chat-tpl-list {
+    overflow: hidden;
+    li {
+        background-color: #fff;
+        border-radius: 3px;
+        margin-top: 5px;
+        min-height: 40px;
+        line-height: 40px;
+        padding: 0 10px;
+        transition: all .3s;
+        cursor: pointer;
+        position: relative;
+        &:hover {
+            box-shadow: 0 0 10px rgba(155, 88, 189, .15);
+            margin-left: -10px;
+            transition: all .3s;
+            color: $purple;
+            .tpl-btns {
+                transition: all .3s;
+                display: block;
+            }
+        }
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+}
+
+.chat-tpl-tools {
+    li {
+        line-height: 40px;
+        text-align: center;
+        color: #fff;
+        cursor: pointer;
+        background-color: $purple;
+        border-radius: 3px;
+        min-height: 40px;
+        line-height: 40px;
+        margin-bottom: $space / 2 !important;
+        &:hover {
+            background-color: $purple - 20;
+        }
+    }
+}
+
+
+/* chat-tpl-search */
+
+.chat-tpl-search {
+    border-bottom: $chat-border;
+    margin-bottom: 10px;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    label {
+        display: flex;
+        padding: 0 5px;
+        &:before {
+            display: inline-block;
+            content: ' ';
+            width: 20px;
+            height: 20px;
+            background-image: url(../images/icon.png);
+            background-repeat: no-repeat;
+            background-size: 300px;
+            vertical-align: middle;
+            margin-top: 5px;
+            margin-right: 10px;
+            background-position: -60px -40px;
+        }
+    }
+    input {
+        border: none;
+        margin: 0;
+        padding: 0;
+        outline: none;
+        width: 100%;
+        height: 30px;
+        box-sizing: border-box;
+    }
+}

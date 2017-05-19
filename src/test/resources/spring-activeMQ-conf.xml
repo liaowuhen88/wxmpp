@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+       ">
+
+    <bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL">
+            <value>${broker.url}</value>
+        </property>
+    </bean>
+
+    <!-- a pooling based JMS provider -->
+    <bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
+        <property name="connectionFactory" ref="connectionFactory"/>
+    </bean>
+
+    <!-- Spring JMS Template -->
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="jmsFactory"/>
+    </bean>
+
+    <!--
+     消费者
+    <bean id="listenerContainer"
+          class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="concurrentConsumers" value="2"/>
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="destination" ref="destination"/>
+        <property name="messageListener" ref="userEventListMessageListener"/>
+    </bean>-->
+
+
+</beans>

@@ -1,0 +1,60 @@
+.leave-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #f0f0f0;
+    z-index: 101;
+    padding: px2rem(20);
+    .info {
+        font-size: px2rem(30);
+        background-color: #fff;
+        padding: px2rem(10);
+        margin-bottom: px2rem(20);
+        color: #333;
+        border-radius: px2rem(5);
+    }
+    .form {
+        label {
+            display: block;
+            margin: px2rem(20) 0;
+        }
+        .tag {
+            font-size: px2rem(30);
+            color: #333;
+            margin-bottom: px2rem(10);
+        }
+        input {
+            width: 100%;
+            height: px2rem(80);
+            padding: px2rem(0) px2rem(20);
+            outline: none;
+            font-size: px2rem(30);
+            border-radius: px2rem(5);
+            border: none;
+        }
+        textarea {
+            width: 100%;
+            height: px2rem(200);
+            padding: px2rem(20);
+            outline: none;
+            font-size: px2rem(30);
+            resize: none;
+            border-radius: px2rem(5);
+            border: none;
+        }
+        button {
+            width: 100%;
+            height: px2rem(80);
+            line-height: px2rem(80);
+            font-size: px2rem(30);
+            background-color: #0997d8;
+            border: none;
+            color: #fff;
+            outline: none;
+            border-radius: px2rem(5);
+            border: none;
+        }
+    }
+}

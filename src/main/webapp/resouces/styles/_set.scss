@@ -1,0 +1,108 @@
+
+.profile .title h2 {
+  color: #999;
+}
+
+.profile .content {
+  padding: 20px;
+}
+
+.profile .avatar {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.profile .avatar span {
+  display: block;
+  color: #009de7;
+  margin-top: 10px;
+  position: relative;
+}
+
+.profile .avatar .remark {
+  font-size: 12px;
+  color: #999;
+  padding: 10px 0 0 0;
+}
+
+.profile .avatar img {
+  width: 60px;
+  height: 60px;
+  float: left;
+  border-radius: 60px;
+  margin: 0 20px 0 0;
+}
+
+.profile .avatar input[type="file"] {
+  display: none;
+}
+
+.item {
+  clear: both;
+  overflow: hidden;
+  font-size: 14px;
+}
+
+.item .tag {
+  display: block;
+  float: left;
+  width: 80px;
+  padding: 10px 0;
+}
+
+.item input[type="text"], .item textarea {
+  border: 1px solid #fff;
+  resize: none;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.item input[type="text"]:focus, .item textarea:focus {
+  border-color: #eee;
+}
+
+.item input[type="text"], .item .text {
+  padding: 10px 5px;
+  display: inline-block;
+}
+
+.item textarea {
+  width: 300px;
+  padding: 10px 5px;
+}
+
+.password .text {
+  color: #009de7;
+}
+
+.changePWD-form {
+  padding: 20px 0;
+}
+
+.changePWD-form label {
+}
+
+.changePWD-form input {
+  padding: 10px 5px;
+  outline: none;
+  border: 1px solid #eee;
+}
+
+.changePWD-form input:focus {
+  border-color: #009de7;
+}
+
+.btn {
+  margin: 10px 0;
+  padding: 0 20px;
+  background-color: #009de7;
+  color: #fff;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+
+.cancel-btn {
+  background-color: #ccc;
+}

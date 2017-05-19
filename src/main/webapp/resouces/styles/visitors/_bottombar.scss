@@ -1,0 +1,165 @@
+/* bottombar */
+
+.bottombar {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+ul.base-bottombar {
+    background-color: #f4f4f4;
+    border-top: 1px solid #c5c5c5;
+    color: transparent;
+    display: -webkit-box;
+    -webkit-box-align: center;
+    padding: 0 px2rem(20);
+    b {
+        display: block;
+        font-size: 0;
+    }
+    li {}
+    .voice-btn {
+        display: none;
+        width: px2rem(56);
+        height: px2rem(56);
+        margin: px2rem(24) 0.192rem 0.448rem 0.192rem;
+        border-radius: px2rem(56);
+        border: 1px solid #848388;
+        position: relative;
+        b {
+            width: 0.512rem;
+            height: 0.512rem;
+            border-top: 0.08533333rem solid #848388;
+            border-left: 0.08533333rem solid #848388;
+            border-radius: 0.512rem 0 0 0;
+            overflow: hidden;
+            -webkit-transform: rotate(135deg);
+            -ms-transform: rotate(135deg);
+            transform: rotate(135deg);
+            position: absolute;
+            left: 0.384rem;
+            top: 0.32rem;
+            &:before {
+                content: '';
+                width: 0.59733333rem;
+                height: 0.59733333rem;
+                box-sizing: border-box;
+                border: 0.08533333rem solid #848388;
+                border-radius: 0.59733333rem;
+                position: absolute;
+                left: 0.10666667rem;
+                top: 0.10666667rem;
+            }
+            &:after {
+                content: '';
+                width: 0.256rem;
+                height: 0.256rem;
+                box-sizing: border-box;
+                background-color: #848388;
+                border-radius: 0.256rem;
+                position: absolute;
+                left: 0.29866667rem;
+                top: 0.29866667rem;
+            }
+        }
+    }
+    .text-btn {
+        height: px2rem(76);
+        margin: px2rem(10) 0 px2rem(10) px2rem(10);
+        border: 1px solid #aeaeb0;
+        border-radius: px2rem(10);
+        background-color: #fdfdfd;
+        overflow: hidden;
+        -webkit-box-flex: 1;
+        label {}
+        .textarea,
+        textarea {
+            color: #333;
+            outline: none;
+            width: 100%;
+            height: 100%;
+            padding: px2rem(20);
+            font-size: px2rem(30);
+            border: none;
+            resize: none;
+            border-radius: px2rem(10);
+        }
+    }
+    .emoji-btn {
+        display: none;
+        width: px2rem(56);
+        height: px2rem(56);
+        margin: px2rem(24) 0.384rem 0.448rem 0;
+        border: 1px solid #848388;
+        border-radius: px2rem(56);
+        position: relative;
+        &:before {
+            content: '';
+            width: 0.72533333rem;
+            height: 0.34133333rem;
+            position: absolute;
+            left: 0.23466667rem;
+            bottom: 0.21333333rem;
+            border-radius: 0 0 0.72533333rem 0.72533333rem;
+            background-color: #848388;
+        }
+        b {
+            &:before,
+            &:after {
+                content: '';
+                width: 0.14933333rem;
+                height: 0.192rem;
+                border-radius: 0.14933333rem;
+                position: absolute;
+                background-color: #848388;
+                top: 0.27733333rem;
+            }
+            &:after {
+                right: 0.29866667rem;
+            }
+            &:before {
+                left: 0.29866667rem;
+            }
+        }
+    }
+    .other-btn {
+        width: px2rem(56);
+        height: px2rem(56);
+        margin: px2rem(24) 0.192rem 0.448rem 0;
+        border: 1px solid #848388;
+        border-radius: px2rem(56);
+        position: relative;
+        &:before,
+        &:after {
+            content: '';
+            width: 0.08533333rem;
+            height: 0.704rem;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin: -0.352rem 0 0 -0.04266667rem;
+            background-color: #848388;
+        }
+        &:after {
+            -webkit-transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+            transform: rotate(90deg);
+        }
+    }
+    .send-btn {
+        width: px2rem(160);
+        height: px2rem(76);
+        line-height: px2rem(76);
+        margin-left: px2rem(10);
+        background-image: linear-gradient(to bottom, #41d41c, #43cc21);
+        border: px2rem(1) solid #2a9e0d;
+        box-shadow: inset 0 0 px2rem(2) rgba(255, 255, 255, .4);
+        text-align: center;
+        cursor: pointer;
+        border-radius: px2rem(10);
+        color: #fff;
+        font-size: px2rem(28);
+        font-weight: 900;
+    }
+}

@@ -1,0 +1,66 @@
+/* -------------Variables------------- */
+
+//color
+$gray-base: #000 !default;
+$gray-darker: lighten($gray-base, 13.5%) !default; // #222
+$gray-dark: lighten($gray-base, 20%) !default; // #333
+$gray: lighten($gray-base, 33.5%) !default; // #555
+$gray-light: lighten($gray-base, 46.7%) !default; // #777
+$gray-lighter: lighten($gray-base, 93.5%) !default; // #eee
+$brand-primary: darken(#428bca, 6.5%) !default; // #337ab7
+$brand-success: #5cb85c !default;
+$brand-info: #5bc0de !default;
+$brand-warning: #f0ad4e !default;
+$brand-danger: #d9534f !default;
+$orange: #f2671f;
+$hover: #c94b0a;
+$white: #fff;
+$border-color: #e0e0e0;
+$black:#333;
+$dark: #666;
+$dark-light: #999;
+$dark-lighter: #ccc;
+$purple:#00a0e9;
+//type
+$line-height: 1.5 !default;
+// space
+$space:20px;
+$space-over:8px;
+
+/* -------------------- */
+
+// navbar
+$navbar-height:60px;
+// sidebar
+$sidebar-width:70px;
+$sidebar-bg:#343f4b;
+// wrapper
+$wrapper-bg:#e4e6eb;
+// tab-bar
+$tabbar-height:36px;
+$tabbar-border:1px solid #cfcfcf;
+$tabbar-bg:#fafafa;
+$tabbar-font-size:12px;
+// chat
+$chat-border:1px solid #eee;
+// chat-title
+$chat-title-height:50px;
+$chat-title-indent:20px;
+$chat-title-font-size:14px;
+$chat-title-title-bg:#fff;
+// chat-source
+$chat-source-height:30px;
+// chat-list
+$chat-list-width:15%;
+$chat-list-minWidth:250px;
+$chat-list-bg:#fbfcfe;
+$chat-contact-list-height:60px;
+// chat-input
+$chat-input-height:100px;
+// chat-detail
+$chat-detail-width:400px;
+$chat-tab-bar-height:40px;
+// tooltip
+$tooltip-bg:rgba(0, 0, 0, .8);
+$tooltip-shadow:2px 2px 10px rgba(0, 0, 0, .3);
+$tooltip-font-size:14px;

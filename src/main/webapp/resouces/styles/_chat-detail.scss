@@ -1,0 +1,117 @@
+.chat-detail {
+  width: $chat-detail-width;
+  height: 100%;
+  padding: 20px 20px 20px 0;
+  box-sizing: border-box;
+}
+
+@import 'chat-tab';
+@import 'chat-tpl';
+.chat-detail .btn {
+  display: block;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  font-size: 14px;
+  background-color: #0997d8;
+  color: #fff;
+  cursor: pointer;
+}
+
+.tags {
+  margin: 10px 0 0 0 !important;
+  padding: 0;
+  list-style: none;
+}
+
+.tags li {
+  display: inline;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.tags input[type=checkbox] {
+  display: none;
+}
+
+.tags input[type=checkbox]:checked + label {
+  background-color: #0997d8;
+}
+
+.tags label {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: #ccc;
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.tags label:hover {
+  background-color: #ddd;
+}
+
+.type-inputs dt {
+  width: 70px;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.type-inputs {
+  line-height: 30px;
+}
+
+.type-inputs dt, .type-inputs dd {
+  height: 30px;
+  line-height: 30px;
+}
+
+.type-inputs input {
+  outline: none;
+  border: 1px solid #eee;
+  padding: 5px;
+}
+
+.type-inputs input:focus {
+  border-color: #ddd;
+}
+.chat-detail .remark{
+  margin-top: 20px;
+  width: 100%;
+  height: 150px;
+  outline: none;
+  border: 1px solid #eee;
+  resize: none;
+  box-sizing: border-box;
+  padding: 10px;
+}
+.modal_ul{
+  margin:10px 0;
+  list-style: none;
+  border: 1px solid #eee;
+  padding: 10px;
+  font-size: 14px;
+}
+.modal_ul .tag{
+  color: #666;
+  padding-right: 10px;
+}
+.modal_scroll{
+  max-height: 400px;
+  overflow: auto;
+}
+
+.iframe-info {
+  width: 390px;
+  margin: 15px auto 0;
+  text-align: left;
+  overflow: hidden;
+}
+
+iframe {
+  width: 390px;
+  height: 683px;
+  float: left;
+  margin-right: 40px;
+}

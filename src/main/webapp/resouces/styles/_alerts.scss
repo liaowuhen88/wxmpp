@@ -1,0 +1,21 @@
+// Alerts
+.alert {
+  background-color: #f0f0f0;
+  display: block;
+  text-align: center;
+  margin: 10px auto;
+  width: 20%;
+  max-width: 300px;
+  line-height: 1.5;
+  padding: 3px;
+  border-radius: 3px;
+  color: $gray-light;
+}
+
+.alert-success {}
+
+.alert-info {}
+
+.alert-warning {}
+
+.alert-danger {}

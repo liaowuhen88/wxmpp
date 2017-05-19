@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baodanyun.websocket.dao.OfuserMapper">
+    <resultMap id="BaseResultMap" type="com.baodanyun.websocket.model.Ofuser">
+        <id column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="storedKey" property="storedkey" jdbcType="VARCHAR"/>
+        <result column="serverKey" property="serverkey" jdbcType="VARCHAR"/>
+        <result column="salt" property="salt" jdbcType="VARCHAR"/>
+        <result column="iterations" property="iterations" jdbcType="INTEGER"/>
+        <result column="plainPassword" property="plainpassword" jdbcType="VARCHAR"/>
+        <result column="encryptedPassword" property="encryptedpassword" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="creationDate" property="creationdate" jdbcType="CHAR"/>
+        <result column="modificationDate" property="modificationdate" jdbcType="CHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    username, storedKey, serverKey, salt, iterations, plainPassword, encryptedPassword, 
+    name, email, creationDate, modificationDate
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from ofuser
+        where username = #{username,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from ofuser
+    where username = #{username,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.baodanyun.websocket.model.Ofuser">
+    insert into ofuser (username, storedKey, serverKey, 
+      salt, iterations, plainPassword, 
+      encryptedPassword, name, email, 
+      creationDate, modificationDate)
+    values (#{username,jdbcType=VARCHAR}, #{storedkey,jdbcType=VARCHAR}, #{serverkey,jdbcType=VARCHAR}, 
+      #{salt,jdbcType=VARCHAR}, #{iterations,jdbcType=INTEGER}, #{plainpassword,jdbcType=VARCHAR}, 
+      #{encryptedpassword,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{creationdate,jdbcType=CHAR}, #{modificationdate,jdbcType=CHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.baodanyun.websocket.model.Ofuser">
+        insert into ofuser
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null">
+                username,
+            </if>
+            <if test="storedkey != null">
+                storedKey,
+            </if>
+            <if test="serverkey != null">
+                serverKey,
+            </if>
+            <if test="salt != null">
+                salt,
+            </if>
+            <if test="iterations != null">
+                iterations,
+            </if>
+            <if test="plainpassword != null">
+                plainPassword,
+            </if>
+            <if test="encryptedpassword != null">
+                encryptedPassword,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="creationdate != null">
+                creationDate,
+            </if>
+            <if test="modificationdate != null">
+                modificationDate,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="storedkey != null">
+                #{storedkey,jdbcType=VARCHAR},
+            </if>
+            <if test="serverkey != null">
+                #{serverkey,jdbcType=VARCHAR},
+            </if>
+            <if test="salt != null">
+                #{salt,jdbcType=VARCHAR},
+            </if>
+            <if test="iterations != null">
+                #{iterations,jdbcType=INTEGER},
+            </if>
+            <if test="plainpassword != null">
+                #{plainpassword,jdbcType=VARCHAR},
+            </if>
+            <if test="encryptedpassword != null">
+                #{encryptedpassword,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="creationdate != null">
+                #{creationdate,jdbcType=CHAR},
+            </if>
+            <if test="modificationdate != null">
+                #{modificationdate,jdbcType=CHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.baodanyun.websocket.model.Ofuser">
+        update ofuser
+        <set>
+            <if test="storedkey != null">
+                storedKey = #{storedkey,jdbcType=VARCHAR},
+            </if>
+            <if test="serverkey != null">
+                serverKey = #{serverkey,jdbcType=VARCHAR},
+            </if>
+            <if test="salt != null">
+                salt = #{salt,jdbcType=VARCHAR},
+            </if>
+            <if test="iterations != null">
+                iterations = #{iterations,jdbcType=INTEGER},
+            </if>
+            <if test="plainpassword != null">
+                plainPassword = #{plainpassword,jdbcType=VARCHAR},
+            </if>
+            <if test="encryptedpassword != null">
+                encryptedPassword = #{encryptedpassword,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="creationdate != null">
+                creationDate = #{creationdate,jdbcType=CHAR},
+            </if>
+            <if test="modificationdate != null">
+                modificationDate = #{modificationdate,jdbcType=CHAR},
+            </if>
+        </set>
+        where username = #{username,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.baodanyun.websocket.model.Ofuser">
+    update ofuser
+    set storedKey = #{storedkey,jdbcType=VARCHAR},
+      serverKey = #{serverkey,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR},
+      iterations = #{iterations,jdbcType=INTEGER},
+      plainPassword = #{plainpassword,jdbcType=VARCHAR},
+      encryptedPassword = #{encryptedpassword,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      creationDate = #{creationdate,jdbcType=CHAR},
+      modificationDate = #{modificationdate,jdbcType=CHAR}
+    where username = #{username,jdbcType=VARCHAR}
+  </update>
+</mapper>

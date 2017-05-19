@@ -1,0 +1,132 @@
+/* chat-list */
+
+.chat-list {
+    width: $chat-list-width;
+    min-width: $chat-list-minWidth;
+    background-color: $chat-list-bg;
+    height: 100%;
+    overflow: hidden;
+    border-right: $chat-border;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.chat-contact-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    li {
+        height: $chat-contact-list-height;
+        font-size: 14px;
+        cursor: pointer;
+        background-color: #fff;
+        position: relative;
+        padding: 10px 0;
+        &:hover,
+        &.active {
+            background-color: #f5f8ff;
+        }
+        &.online {
+            .avatar {
+                &:before {
+                    background-color: #4AD93A;
+                }
+            }
+        }
+        &.offline {
+            .avatar {
+                &:before {
+                    background-color: #B3B8BA;
+                }
+            }
+        }
+    }
+    .avatar {
+        float: left;
+        width: 40px;
+        height: 40px;
+        margin: $space / 2;
+        position: relative;
+        &:before {
+            display: block;
+            content: ' ';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: $space / 2;
+            height: $space / 2;
+            background-color: #fff;
+            border-radius: $space / 2;
+        }
+        img {
+            width: 100%;
+            max-height: 40px;
+            border-radius: 40px;
+        }
+    }
+    .name {
+        width: 50%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-top: 10px;
+    }
+    .time {
+        /*position: absolute;
+        top: 20px;
+        right: 10px;*/
+        font-size: 12px;
+        color: $gray-light;
+    }
+    .new-message {
+        position: absolute;
+        right: 10px;
+        bottom: 20px;
+        min-width: 20px;
+        height: 20px;
+        background-color: red;
+        border-radius: 20px;
+        line-height: 20px;
+        color: #fff;
+        text-align: center;
+        font-size: 12px;
+        padding: 0 5px;
+        box-sizing: border-box;
+    }
+    .last-message {
+        font-size: 12px;
+        color: $gray-light;
+    }
+}
+
+
+.chat-list-item{
+    height: 100%;
+    overflow: auto;
+}
+.holdListBtn {
+    height: 40px;
+    line-height: 40px;
+    border: 20px solid #fff;
+    text-align: center;
+    font-size: 14px;
+    background-color: #0997d8;
+    color: #fff;
+    cursor: pointer;
+}
+
+.holdListBtn:hover {
+    background-color: #1088bf;
+}
+.hasJoined{
+    position: relative;
+}
+.hasJoined:after{
+    display: inline;
+    content: '(有人排队)';
+    margin-left: 10px;
+    font-size: 12px;
+    color: yellow;
+}

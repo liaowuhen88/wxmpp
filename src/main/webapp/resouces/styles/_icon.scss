@@ -1,0 +1,251 @@
+// icon
+.tools-icon {
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin: 0 auto;
+    background: url(../images/icon.png)  no-repeat;
+    background-size: 300px;
+    cursor: pointer;
+    text-indent: -999em;
+}
+
+.icon-emoji {
+    background-position-y: -60px;
+    &:hover {
+        background-position-y: -80px;
+    }
+}
+
+.icon-image {
+    background-position: -20px -60px;
+    &:hover {
+        background-position-y: -80px;
+    }
+}
+
+.icon-file {
+    background-position: -40px -60px;
+    &:hover {
+        background-position-y: -80px;
+    }
+}
+
+.icon-invite {
+    background-position: -100px -60px;
+    &:hover {
+        background-position-y: -80px;
+    }
+}
+
+.icon-set {
+    background-position-y: -20px;
+    &:hover {
+        background-position-y: -40px;
+    }
+}
+
+.icon-signout {
+    background-position: -20px -20px;
+    &:hover {
+        background-position-y: -40px;
+    }
+}
+
+.icon-delete {
+    background-position: -80px -20px;
+    &:hover {
+        background-position-y: -40px;
+    }
+}
+
+
+/* source icon browser system */
+
+.source-icon {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background-image: url(../images/source.png);
+    background-repeat: no-repeat;
+    background-size: 252px;
+    text-indent: -999em;
+    vertical-align: middle;
+}
+
+.icon-undefined {
+    background-position: 0 0;
+}
+
+.icon-macos {
+    background-position: -18px 0;
+}
+
+.icon-windows {
+    background-position: -36px 0;
+}
+
+.icon-chrome {
+    background-position: 0 -18px;
+}
+
+.icon-ip {}
+
+//
+.icon-close {
+    display: inline-block;
+    content: ' ';
+    width: 20px;
+    height: 20px;
+    background-image: url(../images/icon.png);
+    background-repeat: no-repeat;
+    background-size: 300px;
+    background-position-x: -40px;
+    vertical-align: middle;
+    margin-right: 8px;
+    line-height: 1;
+}
+
+.icon-turn {
+    display: inline-block;
+    content: ' ';
+    width: 20px;
+    height: 20px;
+    background-image: url(../images/icon.png);
+    background-repeat: no-repeat;
+    background-size: 300px;
+    background-position-x: -20px;
+    vertical-align: middle;
+    margin-right: 8px;
+    line-height: 1;
+}
+
+.nav-icon {
+    display: block;
+    width: 28px;
+    height: 28px;
+    background-image: url(../images/nav.png);
+    background-repeat: no-repeat;
+    background-size: 168px;
+}
+
+.icon-home {
+    background-position-x: 0;
+}
+
+.icon-chat {
+    background-position-x: -28px;
+}
+
+.icon-history {
+    background-position-x: -56px;
+}
+
+.icon-report {
+    background-position-x: -140px;
+}
+
+.icon-visitor {
+    background-position-x: -84px;
+}
+
+
+/* status */
+
+.status-icon {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.icon-online {
+    background-color: #4AD93A;
+}
+
+.icon-offline {
+    background-color: #B3B8BA;
+}
+
+.icon-leave {
+    background-color: #B3B8BA;
+    position: relative;
+    &:before {
+        position: absolute;
+        top: 5px;
+        left: 4px;
+        display: block;
+        content: ' ';
+        width: 4px;
+        height: 1px;
+        background-color: #fff;
+    }
+    &:after {
+        position: absolute;
+        top: 2px;
+        left: 4px;
+        display: block;
+        content: ' ';
+        width: 1px;
+        height: 4px;
+        background-color: #fff;
+    }
+}
+
+.icon-invisible {
+    background-color: #4AD93A;
+    position: relative;
+    &:before {
+        position: absolute;
+        top: 6px;
+        left: 3px;
+        display: block;
+        content: ' ';
+        width: 4px;
+        height: 1px;
+        background-color: #333;
+    }
+    &:after {
+        position: absolute;
+        top: 4px;
+        left: 3px;
+        display: block;
+        content: ' ';
+        width: 4px;
+        height: 1px;
+        background-color: #333;
+    }
+}
+
+.chat-tpl-tools-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-image: url(../images/icon.png);
+    background-repeat: no-repeat;
+    background-size: 300px;
+    cursor: pointer;
+    text-indent: -999em;
+    vertical-align: middle;
+}
+
+.tpl-btns {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    background-color: #fff;
+    transition: all .3s;
+    display: none;
+    .tpl-btns-icon {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background-image: url(../images/icon.png);
+        background-repeat: no-repeat;
+        background-size: 300px;
+        cursor: pointer;
+        text-indent: -999em;
+        vertical-align: middle;
+    }
+}

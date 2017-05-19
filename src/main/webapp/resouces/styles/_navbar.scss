@@ -1,0 +1,44 @@
+//
+// Navbars
+.navbar {
+  margin-top: 40px;
+  .nav {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    li {
+      width: 70px;
+      height: 70px;
+      position: relative;
+      &:hover,
+      &.active {
+        background-color: #2a3541;
+        color: #fff;
+        .nav-icon {
+          background-position-y: -28px;
+        }
+      }
+      span.msg{
+        position: absolute;
+        top: 20px;
+        right: 15px;
+        display: block;
+        min-width: 20px;
+        height: 20px;
+        background-color: red;
+        color: #fff;
+        border-radius: 10px;
+        text-align: center;
+        line-height: 20px;
+        font-size: 12px;
+      }
+    }
+    a {
+      display: block;
+      width: 70px;
+      height: 70px;
+      padding: 21px;
+      box-sizing: border-box;
+    }
+  }
+}

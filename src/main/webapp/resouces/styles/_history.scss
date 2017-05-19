@@ -1,0 +1,73 @@
+
+.history .search {
+  width: 100%;
+  padding: 20px;
+
+}
+
+.history .avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 60px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.history .search input {
+  outline: none;
+  border: 1px solid #eee;
+  padding: 0 10px;
+  font-size: 14px;
+  width: 300px;
+  border-radius: 5px;
+  height: 40px;
+  line-height: 40px;
+  box-sizing: border-box;
+  float: left;
+  margin-right: 10px;
+}
+
+.history .search button {
+  outline: none;
+  min-width: 80px;
+  border: 1px solid #009de7;
+  background-color: #009de7;
+  color: #fff;
+  padding: 0 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  height: 40px;
+  line-height: 40px;
+}
+
+.history .content {
+  margin: 0 20px;
+  background-color: #fff;
+}
+
+.pages {
+  margin-top: 10px;
+}
+
+tr:hover {
+  background-color: #f0f0f0;
+}
+
+.showHistory {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 102;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .5);
+  display: none;
+}
+.showHistory .chat-window{
+  width: 50%;
+  margin: 0 auto;
+}
+
+.history th, .history td {
+  padding: 10px 0;
+}

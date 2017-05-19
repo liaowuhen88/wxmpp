@@ -1,0 +1,70 @@
+.chat-input {
+  width: 100%;
+  border-top: $chat-border;
+  background-color: #fff;
+  .tools {
+    height: 44px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    li {
+      float: left;
+      width: 44px;
+      padding: 11px;
+      box-sizing: border-box;
+      position: relative;
+      input[type="file"]{
+        display: none;
+      }
+    }
+  }
+  textarea {
+    width: 100%;
+    height: $chat-input-height;
+    margin: 0;
+    padding: $space / 2;
+    border: none;
+    outline: none;
+    box-sizing: border-box;
+    resize: none;
+  }
+  .send-btn {
+    text-align: right;
+    button {
+      margin-right: $space;
+      margin-bottom: $space / 2;
+      padding: 0;
+      border: none;
+      background-color: #00A0E9;
+      cursor: pointer;
+      color: #fff;
+      width: 80px;
+      height: 30px;
+      border-radius: 3px;
+      outline: none;
+      &:hover {
+        background-color: #0997d8;
+      }
+    }
+  }
+}
+
+.chat-input-disabled {
+  position: relative;
+  &:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    display: block;
+    content: 'Chat Over';
+    color: $gray-lighter;
+    font-size: 24px;
+    text-align: center;
+    padding-top: 60px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, .6);
+    cursor: not-allowed;
+  }
+}

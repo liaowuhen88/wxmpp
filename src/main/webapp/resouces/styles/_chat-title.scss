@@ -1,0 +1,36 @@
+/* chat-title */
+
+@import 'icon';
+.chat-title {
+    height: $chat-title-height;
+    line-height: $chat-title-height;
+    text-indent: $chat-title-indent;
+    font-size: $chat-title-font-size;
+    font-weight: bold;
+    border-bottom: $chat-border;
+    background-color: $chat-title-title-bg;
+    .close {
+        float: right;
+        display: inline-block;
+        font-weight: normal;
+        padding: 0 $space 0 0;
+        color: $purple;
+        -webkit-font-smoothing: antialiased;
+        cursor: pointer;
+        &:before {
+            @extend .icon-close;
+        }
+    }
+    .turn {
+        float: right;
+        display: inline-block;
+        font-weight: normal;
+        padding: 0 0 0 0;
+        color: $purple;
+        -webkit-font-smoothing: antialiased;
+        cursor: pointer;
+        &:before {
+            @extend .icon-turn;
+        }
+    }
+}

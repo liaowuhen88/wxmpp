@@ -1,0 +1,89 @@
+/* sign in out up */
+
+.sign {
+  width: 280px;
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  margin-left: -140px;
+  .logo {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 30px;
+    color: #fff;
+    /* .letter {
+      display: inline-block;
+      font-weight: 900;
+      font-size: 30px;
+      position: relative;
+      color: $purple - 100;
+      transform-style: preserve-3d;
+      perspective: 400;
+      z-index: 1;
+      &:before,
+      &:after {
+        position: absolute;
+        content: attr(data-letter);
+        transform-origin: top left;
+        top: 0;
+        left: 0;
+      }
+      &,
+      &:before,
+      &:after {
+        transition: all 0.3s ease-in-out;
+      }
+      &:before {
+        color: #fff;
+        // text-shadow: 0px 0px 0px rgba(255, 255, 255, .8), 1px 0px 1px rgba(0, 0, 0, .8);
+        z-index: 3;
+        transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+      }
+      &:after {
+        color: rgba(0, 0, 0, .11);
+        z-index: 2;
+        // transform: scale(1.08, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 1deg);
+      }
+      &:hover:before {
+        color: #fff;
+        transform: rotateX(0deg) rotateY(-80deg) rotateZ(0deg);
+      }
+      &:hover:after {
+        transform: scale(1.08, 1) rotateX(0deg) rotateY(80deg) rotateZ(0deg) skew(0deg, 22deg);
+      }
+    } */
+  }
+  label {}
+  input {
+    border: none;
+    background: none;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 10px;
+    outline: none;
+    border: $chat-border;
+    border-radius: 3px;
+    background-color: #fff;
+    height: 40px;
+    line-height: 40px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    &:focus {
+      box-shadow: 0 0 20px rgba(196, 118, 255, 0.2);
+      border-color: rgba(196, 118, 255, .3);
+    }
+  }
+  .sign-btn {
+    background-color: $purple;
+    color: #fff;
+    border: none;
+    height: 40px;
+    width: 100%;
+    font-size: 14px;
+    border-radius: 3px;
+    outline: none;
+    &:hover {
+      background-color: $purple - 20;
+    }
+  }
+}

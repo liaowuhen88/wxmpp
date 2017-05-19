@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baodanyun.websocket.dao.TransferlogMapper">
+    <resultMap id="BaseResultMap" type="com.baodanyun.websocket.model.Transferlog">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="transferfrom" property="transferfrom" jdbcType="VARCHAR"/>
+        <result column="transferto" property="transferto" jdbcType="VARCHAR"/>
+        <result column="ct" property="ct" jdbcType="TIMESTAMP"/>
+        <result column="cause" property="cause" jdbcType="VARCHAR"/>
+        <result column="visitorJid" property="visitorjid" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="BIT"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.baodanyun.websocket.model.Transferlog" extends="BaseResultMap">
+        <result column="detail" property="detail" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, transferfrom, transferto, ct, cause, visitorJid, status
+    </sql>
+    <sql id="Blob_Column_List">
+        detail
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from transferlog
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from transferlog
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.baodanyun.websocket.model.Transferlog">
+        insert into transferlog (id, transferfrom, transferto,
+        ct, cause, visitorJid,
+        status, detail)
+        values (#{id,jdbcType=INTEGER}, #{transferfrom,jdbcType=VARCHAR}, #{transferto,jdbcType=VARCHAR},
+        #{ct,jdbcType=TIMESTAMP}, #{cause,jdbcType=VARCHAR}, #{visitorjid,jdbcType=VARCHAR},
+        #{status,jdbcType=BIT}, #{detail,jdbcType=LONGVARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.baodanyun.websocket.model.Transferlog">
+        insert into transferlog
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="transferfrom != null">
+                transferfrom,
+            </if>
+            <if test="transferto != null">
+                transferto,
+            </if>
+            <if test="ct != null">
+                ct,
+            </if>
+            <if test="cause != null">
+                cause,
+            </if>
+            <if test="visitorjid != null">
+                visitorJid,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="detail != null">
+                detail,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="transferfrom != null">
+                #{transferfrom,jdbcType=VARCHAR},
+            </if>
+            <if test="transferto != null">
+                #{transferto,jdbcType=VARCHAR},
+            </if>
+            <if test="ct != null">
+                #{ct,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cause != null">
+                #{cause,jdbcType=VARCHAR},
+            </if>
+            <if test="visitorjid != null">
+                #{visitorjid,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=BIT},
+            </if>
+            <if test="detail != null">
+                #{detail,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.baodanyun.websocket.model.Transferlog">
+        update transferlog
+        <set>
+            <if test="transferfrom != null">
+                transferfrom = #{transferfrom,jdbcType=VARCHAR},
+            </if>
+            <if test="transferto != null">
+                transferto = #{transferto,jdbcType=VARCHAR},
+            </if>
+            <if test="ct != null">
+                ct = #{ct,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cause != null">
+                cause = #{cause,jdbcType=VARCHAR},
+            </if>
+            <if test="visitorjid != null">
+                visitorJid = #{visitorjid,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=BIT},
+            </if>
+            <if test="detail != null">
+                detail = #{detail,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.baodanyun.websocket.model.Transferlog">
+        update transferlog
+        set transferfrom = #{transferfrom,jdbcType=VARCHAR},
+        transferto = #{transferto,jdbcType=VARCHAR},
+        ct = #{ct,jdbcType=TIMESTAMP},
+        cause = #{cause,jdbcType=VARCHAR},
+        visitorJid = #{visitorjid,jdbcType=VARCHAR},
+        status = #{status,jdbcType=BIT},
+        detail = #{detail,jdbcType=LONGVARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.baodanyun.websocket.model.Transferlog">
+        update transferlog
+        set transferfrom = #{transferfrom,jdbcType=VARCHAR},
+        transferto = #{transferto,jdbcType=VARCHAR},
+        ct = #{ct,jdbcType=TIMESTAMP},
+        cause = #{cause,jdbcType=VARCHAR},
+        visitorJid = #{visitorjid,jdbcType=VARCHAR},
+        status = #{status,jdbcType=BIT}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

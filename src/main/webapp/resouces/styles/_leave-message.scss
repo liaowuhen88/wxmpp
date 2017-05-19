@@ -1,0 +1,47 @@
+.leave-message{
+}
+.leave-message .type dd{
+  height: auto;
+}
+.message-list{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.message-list li{
+  position: relative;
+  border-bottom: 1px solid #eee;
+}
+.message-list .process-btn{
+  position: absolute;
+  top: 16px;
+  right: 0;
+  width: 100px;
+  height: 30px;
+  background-color: #00a0e9;
+  color: #fff;
+  text-align: center;
+  line-height: 30px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.message-list textarea{
+  outline: none;
+  width: 100%;
+  height: 80px;
+  border: 1px solid #eee;
+  resize: none;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.message-status{
+  background-color: #bdbdbd;
+  color: #fff;
+  font-size: 12px;
+  padding: 5px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+.status-active{
+  background-color: #00a0e9;
+}

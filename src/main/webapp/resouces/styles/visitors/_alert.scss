@@ -1,0 +1,12 @@
+.alert {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 101;
+    font-size: px2rem(26);
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: px2rem(20) px2rem(20);
+    display: none;
+}

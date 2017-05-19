@@ -1,0 +1,2024 @@
+img,
+legend {
+  border: 0
+}
+
+pre,
+textarea {
+  overflow: auto
+}
+
+a,
+img {
+  -webkit-touch-callout: none
+}
+
+legend,
+li,
+ol,
+td,
+th,
+ul {
+  padding: 0
+}
+
+.overview .organ li.liver p,
+.overview .organ li.ovary p {
+  text-indent: -.5em
+}
+
+.menu .menu-content:after,
+.menu ul.menu-bar li.item:after,
+.overview .state:before {
+  content: ' '
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section,
+summary {
+  display: block
+}
+
+audio,
+canvas,
+progress,
+video {
+  display: inline-block;
+  vertical-align: baseline
+}
+
+audio:not([controls]) {
+  display: none;
+  height: 0
+}
+
+[hidden],
+template {
+  display: none
+}
+
+a {
+  background-color: transparent
+}
+
+a:active,
+a:hover {
+  outline: 0
+}
+
+abbr[title] {
+  border-bottom: 1px dotted
+}
+
+b,
+optgroup,
+strong {
+  font-weight: 700
+}
+
+dfn {
+  font-style: italic
+}
+
+h1 {
+  font-size: 2em;
+  margin: .67em 0
+}
+
+mark {
+  color: #000;
+  background: #ff0
+}
+
+small {
+  font-size: 80%
+}
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline
+}
+
+sup {
+  top: -.5em
+}
+
+sub {
+  bottom: -.25em
+}
+
+img {
+  vertical-align: middle
+}
+
+svg:not(:root) {
+  overflow: hidden
+}
+
+figure {
+  margin: 1em 40px
+}
+
+hr {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0
+}
+
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font: inherit;
+  margin: 0;
+  color: inherit
+}
+
+button {
+  overflow: visible
+}
+
+button,
+select {
+  text-transform: none
+}
+
+button,
+html input[type=button],
+input[type=reset],
+input[type=submit] {
+  cursor: pointer;
+  -webkit-appearance: button
+}
+
+button[disabled],
+html input[disabled] {
+  cursor: default
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  padding: 0;
+  border: 0
+}
+
+input {
+  line-height: normal
+}
+
+input[type=checkbox],
+input[type=radio] {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  height: auto
+}
+
+input[type=search] {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  -webkit-appearance: textfield
+}
+
+input[type=search]::-webkit-search-cancel-button,
+input[type=search]::-webkit-search-decoration {
+  -webkit-appearance: none
+}
+
+fieldset {
+  margin: 0 2px;
+  padding: .35em .625em .75em;
+  border: 1px solid silver
+}
+
+textarea {
+  resize: none
+}
+
+table {
+  border-spacing: 0;
+  border-collapse: collapse
+}
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box
+}
+
+body,
+html {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none
+}
+
+html {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%
+}
+
+a,
+img {
+  -webkit-tap-highlight-color: transparent
+}
+
+button,
+input,
+label,
+select,
+textarea {
+  outline: 0;
+  -webkit-tap-highlight-color: transparent
+}
+
+li,
+ol,
+ul {
+  margin: 0;
+  list-style: none
+}
+
+body {
+  margin: 0;
+  line-height: 1;
+  color: #333;
+  background-color: #f0f0f0;
+  -webkit-font-smoothing: antialiased
+}
+
+ul.nav {
+  position: fixed;
+  z-index: 100;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2.34667rem;
+  background-color: #0e0e0e
+}
+
+ul.nav li.bar {
+  font-size: 0;
+  float: left;
+  width: 25%;
+  height: 100%;
+  text-align: center;
+  color: #fff
+}
+
+ul.nav li.bar i.icon {
+  display: inline-block;
+  width: 1.152rem;
+  height: 1.152rem;
+  margin-top: .27733rem;
+  margin-bottom: .14933rem;
+  background: url(../images/checkup/nav_icon.png) no-repeat;
+  -webkit-background-size: 4.608rem 2.304rem;
+  background-size: 4.608rem 2.304rem
+}
+
+.overview,
+.overview .organ li,
+.overview .organ li .pic,
+.overview .person {
+  background-repeat: no-repeat
+}
+
+ul.nav li.bar p.text {
+  font-size: .55467rem;
+  margin: 0
+}
+
+ul.nav li.bar.active i.icon,
+ul.nav li.bar:active i.icon {
+  background-position-y: -1.152rem
+}
+
+ul.nav li.bar.active p.text,
+ul.nav li.bar:active p.text {
+  color: #00cee1
+}
+
+ul.nav li.overview-bar i.icon {
+  background-position: 0 0
+}
+
+ul.nav li.abnormal-bar i.icon {
+  background-position: -3.456rem 0
+}
+
+ul.nav li.suggest-bar i.icon {
+  background-position: -1.152rem 0
+}
+
+ul.nav li.overall-bar i.icon {
+  background-position: -2.304rem 0
+}
+
+.content {
+  width: 100%;
+  min-height: 100%
+}
+
+.content>li {
+  display: none
+}
+
+.content>li.active {
+  display: block
+}
+
+.content>li.page {
+  min-height: 100%
+}
+
+.content>li.page .over .no-report {
+  margin: 4.69333rem 0 0;
+  text-align: center
+}
+
+.content>li.page .over .no-report img.report-img {
+  width: 2.88rem;
+  height: 4.82133rem
+}
+
+.content>li.page .over .no-report p.conts {
+  font-size: .68267rem;
+  line-height: 1;
+  margin: .53333rem 0 0;
+  color: #666
+}
+
+.overview .organ li p,
+.overview .state {
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap
+}
+
+.content>li.abnormal {
+  padding-bottom: 2.34667rem
+}
+
+.overview {
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  background-color: #b2cbd3;
+  background-image: url(../images/checkup/bg.png);
+  background-position: center top;
+  -webkit-background-size: 16rem 25.728rem;
+  background-size: 16rem 25.728rem
+}
+
+.overview .state {
+  font-size: .59733rem;
+  position: absolute;
+  top: .32rem;
+  right: 1.17333rem;
+  width: 1.92rem;
+  height: .64rem;
+  -webkit-transition: all .5s linear;
+  transition: all .5s linear;
+  letter-spacing: .17067rem
+}
+
+.overview .state:before {
+  position: absolute;
+  top: .64rem;
+  display: block;
+  width: .34133rem;
+  height: .32rem;
+  background-image: url(../images/checkup/arrow.png);
+  -webkit-background-size: .34133rem .32rem;
+  background-size: .34133rem .32rem
+}
+
+.overview .good:before {
+  left: .17067rem
+}
+
+.overview .normal:before {
+  left: .85333rem
+}
+
+.overview .bad:before {
+  left: 1.6rem
+}
+
+.overview .person {
+  position: absolute;
+  z-index: 2;
+  top: 2.90133rem;
+  left: 50%;
+  background-position: top left
+}
+
+.overview .men {
+  width: 5.93067rem;
+  height: 18.816rem;
+  margin-left: -2.96533rem;
+  background-image: url(../images/checkup/men.png);
+  -webkit-background-size: 5.93067rem 18.816rem;
+  background-size: 5.93067rem 18.816rem
+}
+
+.overview .women {
+  width: 5.97333rem;
+  height: 18.83733rem;
+  margin-left: -2.98667rem;
+  background-image: url(../images/checkup/women.png);
+  -webkit-background-size: 5.97333rem 18.83733rem;
+  background-size: 5.97333rem 18.83733rem
+}
+
+.overview .organ {
+  position: relative;
+  width: 100%;
+  height: 100%
+}
+
+.overview .organ li {
+  position: absolute;
+  z-index: 4;
+  margin-bottom: .27733rem;
+  -webkit-background-size: 100% 100%;
+  background-size: 100%
+}
+
+.overview .organ li>img {
+  position: absolute;
+  display: none
+}
+
+.overview .organ li .pic {
+  width: 1.49333rem;
+  height: 1.49333rem;
+  background-image: url(../images/checkup/organ/organ.png);
+  -webkit-background-size: 4.032rem 24.59733rem;
+  background-size: 4.032rem 24.59733rem
+}
+
+.overview .organ li p {
+  font-size: .512rem;
+  margin: 0;
+  padding-top: .10667rem;
+  text-align: center
+}
+
+.overview .organ li.active .pic {
+  background-position-x: -1.92rem
+}
+
+.overview .organ li.active>img {
+  display: block
+}
+
+.overview .organ li.artery {
+  top: 6.4rem;
+  right: .85333rem
+}
+
+.overview .organ li.artery .pic {
+  background-position-y: -15.06133rem
+}
+
+.overview .organ li.artery img {
+  right: 1.49333rem;
+  bottom: .64rem;
+  width: 5.58933rem;
+  height: 2.56rem
+}
+
+.overview .organ li.bone {
+  top: 19.264rem;
+  right: .85333rem
+}
+
+.overview .organ li.bone .pic {
+  background-position-y: -22.69867rem
+}
+
+.overview .organ li.bone img {
+  right: 1.49333rem;
+  bottom: .64rem;
+  width: 5.14133rem;
+  height: 7.18933rem
+}
+
+.overview .organ li.brain {
+  top: 1.23733rem;
+  left: .85333rem
+}
+
+.overview .organ li.brain .pic {
+  background-position-y: 0
+}
+
+.overview .organ li.brain img {
+  top: 0;
+  left: 1.45067rem;
+  width: 6.03733rem;
+  height: 2.688rem
+}
+
+.overview .organ li.ear {
+  top: 3.81867rem;
+  right: .85333rem
+}
+
+.overview .organ li.ear .pic {
+  background-position-y: -13.568rem
+}
+
+.overview .organ li.ear img {
+  right: 1.49333rem;
+  bottom: .64rem;
+  width: 5.20533rem;
+  height: 1.45067rem
+}
+
+.overview .organ li.eye {
+  top: 3.81867rem;
+  left: .85333rem
+}
+
+.overview .organ li.eye .pic {
+  background-position-y: -1.49333rem
+}
+
+.overview .organ li.eye img {
+  top: 0;
+  left: 1.45067rem;
+  width: 5.71733rem;
+  height: 1.45067rem
+}
+
+.overview .organ li.heart {
+  top: 11.54133rem;
+  right: .85333rem
+}
+
+.overview .organ li.heart .pic {
+  background-position-y: -18.13333rem
+}
+
+.overview .organ li.heart img {
+  right: 1.49333rem;
+  bottom: .64rem;
+  width: 5.696rem;
+  height: 6.016rem
+}
+
+.overview .organ li.intestinal {
+  top: 16.68267rem;
+  left: .85333rem
+}
+
+.overview .organ li.intestinal .pic {
+  background-position-y: -9.04533rem
+}
+
+.overview .organ li.intestinal img {
+  bottom: .64rem;
+  left: 1.45067rem;
+  width: 6.03733rem;
+  height: 8.08533rem
+}
+
+.overview .organ li.kidney {
+  top: 16.68267rem;
+  right: .85333rem
+}
+
+.overview .organ li.kidney .pic {
+  background-position-y: -21.12rem
+}
+
+.overview .organ li.kidney img {
+  right: 1.49333rem;
+  bottom: .64rem;
+  width: 5.61067rem;
+  height: 8.74667rem
+}
+
+.overview .organ li.liver {
+  top: 14.12267rem;
+  left: .85333rem
+}
+
+.overview .organ li.liver .pic {
+  background-position-y: -7.46667rem
+}
+
+.overview .organ li.liver img {
+  bottom: .64rem;
+  left: 1.45067rem;
+  width: 5.61067rem;
+  height: 7.168rem
+}
+
+.overview .organ li.lung {
+  top: 11.54133rem;
+  left: .85333rem
+}
+
+.overview .organ li.lung .pic {
+  background-position-y: -5.97333rem
+}
+
+.overview .organ li.lung img {
+  bottom: .64rem;
+  left: 1.45067rem;
+  width: 5.376rem;
+  height: 5.71733rem
+}
+
+.overview .organ li.mouth {
+  top: 6.37867rem;
+  left: .85333rem
+}
+
+.overview .organ li.mouth .pic {
+  background-position-y: -2.98667rem
+}
+
+.overview .organ li.mouth img {
+  bottom: .64rem;
+  left: 1.45067rem;
+  width: 6.03733rem;
+  height: 3.02933rem
+}
+
+.overview .organ li.ovary {
+  top: 19.264rem;
+  left: .85333rem;
+  display: none
+}
+
+.overview .organ li.ovary .pic {
+  background-position-y: -12.05333rem
+}
+
+.overview .organ li.ovary img {
+  top: -7.808rem;
+  left: 1.45067rem;
+  width: 6.03733rem;
+  height: 9.216rem
+}
+
+.overview .organ li.prostate {
+  top: 19.264rem;
+  left: .85333rem;
+  display: none
+}
+
+.overview .organ li.prostate .pic {
+  background-position-y: -10.53867rem
+}
+
+.overview .organ li.prostate img {
+  top: -7.808rem;
+  left: 1.49333rem;
+  width: 6.03733rem;
+  height: 9.216rem
+}
+
+.overview .organ li.stomach {
+  top: 14.12267rem;
+  right: .85333rem
+}
+
+.overview .organ li.stomach .pic {
+  background-position-y: -19.62667rem
+}
+
+.overview .organ li.stomach img {
+  right: 1.49333rem;
+  bottom: .64rem;
+  width: 5.58933rem;
+  height: 6.99733rem
+}
+
+.overview .organ li.thyroid {
+  top: 8.96rem;
+  left: .85333rem
+}
+
+.overview .organ li.thyroid .pic {
+  background-position-y: -4.48rem
+}
+
+.overview .organ li.thyroid img {
+  top: -3.62667rem;
+  left: 1.45067rem;
+  width: 6.03733rem;
+  height: 5.07733rem
+}
+
+.overview .organ li.vertebral {
+  top: 8.96rem;
+  right: .85333rem
+}
+
+.overview .organ li.vertebral .pic {
+  background-position-y: -16.59733rem
+}
+
+.overview .organ li.vertebral img {
+  right: 1.49333rem;
+  bottom: .64rem;
+  width: 6.016rem;
+  height: 4.62933rem
+}
+
+.menu,
+.menu ul.menu-bar {
+  height: 1.92rem;
+  line-height: 1.92rem
+}
+
+.menu {
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  right: 0;
+  left: 0;
+  border-bottom: .04267rem solid #ccc;
+  background-color: #fff
+}
+
+.menu ul.menu-bar {
+  font-size: 0;
+  -webkit-box-shadow: 0 0 .10667rem rgba(0, 0, 0, .2);
+  box-shadow: 0 0 .10667rem rgba(0, 0, 0, .2)
+}
+
+.menu ul.menu-bar li.item {
+  font-size: .85333rem;
+  position: relative;
+  display: inline-block;
+  width: 50%;
+  text-align: center;
+  color: #999
+}
+
+.menu ul.menu-bar li.item:first-child {
+  border-right: .04267rem solid #eee
+}
+
+.menu ul.menu-bar li.item:after {
+  position: absolute;
+  top: .81067rem;
+  display: inline-block;
+  width: .49067rem;
+  height: .29867rem;
+  margin-left: .46933rem;
+  background: url(../images/menu_level1_li_icon.png) no-repeat;
+  -webkit-background-size: .49067rem .29867rem;
+  background-size: .49067rem .29867rem
+}
+
+.menu ul.menu-bar li.active {
+  color: #00cee1
+}
+
+.menu ul.menu-bar li.active:after {
+  -webkit-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg)
+}
+
+.menu .menu-content {
+  position: fixed;
+  z-index: 3;
+  top: 1.92rem;
+  right: 0;
+  left: 0;
+  display: none;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .7)
+}
+
+.menu .menu-content:after {
+  display: block;
+  height: 1.06667rem;
+  border-top: .02133rem solid #eee;
+  background: url(../images/meun_content_bg.png) center center no-repeat #fff;
+  -webkit-background-size: 1.83467rem .34133rem;
+  background-size: 1.83467rem .34133rem
+}
+
+.menu .menu-content .items {
+  font-size: 0;
+  display: none;
+  overflow: auto;
+  max-height: 14.93333rem;
+  background-color: #fafafa;
+  -webkit-overflow-scrolling: touch
+}
+
+.menu .menu-content .items li.item {
+  font-size: .64rem;
+  display: block;
+  float: left;
+  width: 5.312rem;
+  height: 2.13333rem;
+  text-align: center;
+  border-right: .04267rem solid #eee;
+  border-bottom: .04267rem solid #eee;
+  background-color: #fafafa
+}
+
+.menu .menu-content .items li.waring {
+  color: #ff5012
+}
+
+.menu .menu-content .items li.waring:before {
+  display: inline-block;
+  width: .384rem;
+  height: .384rem;
+  margin-right: .17067rem;
+  content: ' ';
+  background: url(../images/waring_icon.png) no-repeat;
+  -webkit-background-size: .384rem .384rem;
+  background-size: .384rem .384rem
+}
+
+.menu .menu-content .active {
+  display: block
+}
+
+.over .over-items {
+  margin-bottom: -.85333rem
+}
+
+.over .over-items h3.title {
+  font-size: .72533rem;
+  font-weight: 400;
+  height: 2.56rem;
+  margin: 0;
+  padding-top: 1.152rem;
+  text-align: center;
+  color: #ccc
+}
+
+.over .over-items h3.title:after,
+.over .over-items h3.title:before {
+  width: 2.944rem;
+  height: .128rem;
+  margin-top: .34133rem;
+  vertical-align: top;
+  display: inline-block;
+  content: ' '
+}
+
+.over .over-items h3.title:before {
+  margin-right: 1.17333rem;
+  background: url(../images/over_title_bg.png) no-repeat;
+  -webkit-background-size: 5.888rem .128rem;
+  background-size: 5.888rem .128rem
+}
+
+.over .over-items h3.title:after {
+  margin-left: 1.17333rem;
+  background: url(../images/over_title_bg.png) -2.944rem 0 no-repeat;
+  -webkit-background-size: 5.888rem .128rem;
+  background-size: 5.888rem .128rem
+}
+
+.over .over-items h4.tag {
+  font-size: .81067rem;
+  font-weight: 400;
+  line-height: 1.92rem;
+  position: relative;
+  height: 1.92rem;
+  margin: 0;
+  text-align: center;
+  background-color: #c4ecf8
+}
+
+.over .over-items h4.tag span.note {
+  font-size: .64rem;
+  line-height: 1.23733rem;
+  position: absolute;
+  top: .34133rem;
+  right: .512rem;
+  display: inline-block;
+  height: 1.23733rem;
+  padding: 0 .42667rem;
+  color: #999;
+  border-radius: 1.23733rem;
+  background-color: rgba(255, 255, 255, .7)
+}
+
+.chart,
+.guide,
+.guide img.pic {
+  position: fixed
+}
+
+.over .over-items h4.tag span.note em {
+  font-size: .81067rem;
+  font-style: normal;
+  margin-right: .10667rem;
+  vertical-align: bottom;
+  color: #ff5a00
+}
+
+.over .over-items table.over-tabel {
+  width: 100%;
+  margin-bottom: .85333rem;
+  background-color: #fff
+}
+
+.over .over-items table.over-tabel tr td,
+.over .over-items table.over-tabel tr th {
+  font-size: .768rem;
+  font-weight: 400;
+  line-height: 1.2;
+  width: 50%;
+  height: 1.92rem;
+  padding-top: .64rem;
+  padding-bottom: .64rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: .04267rem solid #eee
+}
+
+.over .over-items table.over-tabel tr:last-child td,
+.over .over-items table.over-tabel tr:last-child th {
+  border-bottom: none
+}
+
+.over .over-items table.over-tabel tr th {
+  padding-right: 1.64267rem;
+  padding-left: .512rem;
+  color: #999
+}
+
+.over .over-items table.over-tabel tr td {
+  padding-right: .512rem;
+  color: #333
+}
+
+.over .over-items table.over-conclusion {
+  margin-top: -.42667rem;
+  border-top: .02133rem solid #eee
+}
+
+.over i.icon {
+  display: inline-block;
+  margin-right: .21333rem;
+  content: ' ';
+  vertical-align: middle;
+  background: url(../images/over_icon.png) no-repeat;
+  -webkit-background-size: 2.45333rem .93867rem;
+  background-size: 2.45333rem .93867rem
+}
+
+.over i.conclusion {
+  width: 1.00267rem;
+  height: .93867rem;
+  background-position: 0 0
+}
+
+.over i.caution {
+  width: .59733rem;
+  height: .59733rem;
+  background-position: -1.00267rem 0
+}
+
+.over i.high,
+.over i.low {
+  width: .42667rem;
+  height: .59733rem
+}
+
+.over i.high {
+  background-position: -1.6rem 0
+}
+
+.over i.low {
+  background-position: -2.02667rem 0
+}
+
+.over p.remark {
+  font-size: .59733rem;
+  margin: .192rem 0 0;
+  color: #999
+}
+
+.over span.unit {
+  font-size: .64rem;
+  color: #999
+}
+
+.over-abnormal {
+  margin-bottom: .85333rem!important
+}
+
+.guide {
+  z-index: 9999;
+  display: none;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .5)
+}
+
+.guide img.pic {
+  right: .21333rem;
+  bottom: 2.53867rem;
+  width: 13.888rem;
+  height: 4.43733rem
+}
+
+.loading {
+  text-align: center
+}
+
+.remind {
+  margin-bottom: .85333rem;
+  padding: .40533rem .55467rem;
+  color: #fff;
+  background-color: #ffc766
+}
+
+.remind h3.remind-title {
+  font-size: .68267rem;
+  font-weight: 400;
+  margin: 0 0 .32rem
+}
+
+.remind h3.remind-title img.icon {
+  width: .68267rem;
+  height: .704rem;
+  margin-right: .192rem;
+  vertical-align: bottom
+}
+
+.remind p.remind-info {
+  font-size: .59733rem;
+  line-height: 1.5;
+  margin: 0
+}
+
+.chart {
+  font-size: .72533rem;
+  line-height: 1.1;
+  z-index: 3;
+  right: 3.79733rem;
+  bottom: 5.376rem;
+  width: 5.35467rem;
+  height: 3.34933rem;
+  padding: .53333rem .53333rem 0 .29867rem;
+  text-align: center;
+  white-space: nowrap;
+  background: url(../images/chart_bg.png) no-repeat;
+  -webkit-background-size: 5.35467rem 3.34933rem;
+  background-size: 5.35467rem 3.34933rem
+}
+
+.overall,
+.swiper-wrapper .good {
+  background-color: #f0f0f0
+}
+
+.chart-bad {
+  color: #ff5012
+}
+
+.overall {
+  position: relative;
+  padding-top: 1.92rem;
+  padding-bottom: 4.26667rem
+}
+
+.swiper-wrapper {
+  width: 100%;
+  height: 100%
+}
+
+.swiper-wrapper .swiper-slide {
+  position: fixed
+}
+
+.swiper-wrapper .pic-report {
+  z-index: 2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%
+}
+
+.swiper-wrapper .text-report {
+  z-index: 1;
+  left: 100%;
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 6.61333rem;
+  background-color: #f0f0f0;
+  -webkit-overflow-scrolling: touch
+}
+
+.swiper-wrapper .text-report::-webkit-scrollbar {
+  width: 0;
+  height: 0
+}
+
+.swiper-wrapper .bad {
+  background-image: -webkit-radial-gradient(ellipse, #f4e96a, #de9649);
+  background-image: radial-gradient(ellipse, #f4e96a, #de9649)
+}
+
+.swiper-wrapper .bad .people {
+  display: block!important
+}
+
+.swiper-wrapper .bad .people .status {
+  font-size: .64rem;
+  position: absolute;
+  top: .42667rem;
+  right: .512rem;
+  color: #fff
+}
+
+.swiper-wrapper .bad .people .status:before {
+  display: inline-block;
+  width: .68267rem;
+  height: .68267rem;
+  margin-right: .10667rem;
+  content: ' ';
+  vertical-align: middle;
+  background: url(../images/bad_icon.png) no-repeat;
+  -webkit-background-size: .68267rem .68267rem;
+  background-size: .68267rem
+}
+
+.swiper-wrapper .bad .people .status:after {
+  font-size: .64rem;
+  display: inline-block;
+  content: '';
+  color: #fff
+}
+
+.swiper-wrapper .worst {
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#f7adcb), to(#f8839a));
+  background-image: -webkit-linear-gradient(top, #f7adcb, #f8839a);
+  background-image: linear-gradient(to bottom, #f7adcb, #f8839a)
+}
+
+.swiper-wrapper .worst .people {
+  display: block!important
+}
+
+.swiper-wrapper .good-info,
+.swiper-wrapper .people {
+  display: none
+}
+
+.swiper-wrapper .good-info {
+  display: block;
+  width: 14.976rem;
+  height: 21.67467rem;
+  margin: .85333rem auto 0;
+  text-align: center;
+  color: #333;
+  border-radius: .42667rem;
+  background-color: #fff
+}
+
+.swiper-wrapper .good-info img.icon {
+  margin-top: 2.06933rem;
+  margin-bottom: .64rem
+}
+
+.swiper-wrapper .good-info h1.congratulations {
+  font-size: .85333rem;
+  font-weight: 400;
+  margin: 0
+}
+
+.swiper-wrapper .good-info p.info {
+  font-size: .64rem;
+  line-height: 1.2;
+  margin: 3.456rem 0 3.56267rem
+}
+
+.swiper-wrapper .good-info p.info span.percent {
+  font-size: .81067rem;
+  margin: 0 .384rem;
+  color: #ff3b02
+}
+
+.swiper-wrapper .good-info h3.tell {
+  font-size: .64rem;
+  font-weight: 400;
+  margin: 0
+}
+
+.swiper-wrapper .good-info p.tell-info {
+  font-size: .72533rem;
+  line-height: .93867rem;
+  margin: .512rem 0 0;
+  color: #ff3b02
+}
+
+.swiper-wrapper .people {
+  position: relative;
+  width: 15.616rem
+}
+
+.swiper-wrapper .people .visceral {
+  width: 100%;
+  height: 100%;
+  margin-left: .10667rem;
+  background: url(../images/visceral.png) center .576rem no-repeat;
+  -webkit-background-size: 4.65067rem 15.91467rem;
+  background-size: 4.65067rem 15.91467rem
+}
+
+.swiper-wrapper .people .visceral .heart-icon {
+  position: absolute;
+  top: 6.74133rem;
+  left: 7.53067rem;
+  display: block;
+  display: none;
+  width: 2.73067rem;
+  height: 2.752rem;
+  margin-top: -.23467rem;
+  margin-left: -.384rem;
+  content: ' ';
+  background: url(../images/visceral/heart.png) no-repeat;
+  -webkit-background-size: 2.73067rem 2.752rem;
+  background-size: 2.73067rem 2.752rem
+}
+
+.swiper-wrapper .people .visceral .liver-icon,
+.swiper-wrapper .people .visceral .mouth-icon {
+  display: block;
+  margin-top: -.23467rem;
+  margin-left: -.384rem;
+  content: ' ';
+  position: absolute
+}
+
+.swiper-wrapper .people .visceral .heart-icon:active {
+  background: url(../images/visceral/heart_active.png) no-repeat;
+  -webkit-background-size: 2.73067rem 2.752rem;
+  background-size: 2.73067rem 2.752rem
+}
+
+.swiper-wrapper .people .visceral .liver-icon {
+  top: 9.87733rem;
+  left: 5.632rem;
+  display: none;
+  width: 4.26667rem;
+  height: 3.09333rem;
+  background: url(../images/visceral/liver.png) no-repeat;
+  -webkit-background-size: 4.26667rem 3.09333rem;
+  background-size: 4.26667rem 3.09333rem
+}
+
+.swiper-wrapper .people .visceral .liver-icon:active {
+  background: url(../images/visceral/liver_active.png) no-repeat;
+  -webkit-background-size: 4.26667rem 3.09333rem;
+  background-size: 4.26667rem 3.09333rem
+}
+
+.swiper-wrapper .people .visceral .mouth-icon {
+  top: 3.712rem;
+  left: 7.40267rem;
+  display: none;
+  width: 1.68533rem;
+  height: 1.10933rem;
+  background: url(../images/visceral/mouth.png) no-repeat;
+  -webkit-background-size: 1.68533rem 1.10933rem;
+  background-size: 1.68533rem 1.10933rem
+}
+
+.swiper-wrapper .people .visceral .mouth-icon:active {
+  background: url(../images/visceral/mouth_active.png) no-repeat;
+  -webkit-background-size: 1.68533rem 1.10933rem;
+  background-size: 1.68533rem 1.10933rem
+}
+
+.swiper-wrapper .people .visceral .eyes-icon {
+  position: absolute;
+  top: 2.06933rem;
+  left: 6.67733rem;
+  display: block;
+  display: none;
+  width: 2.98667rem;
+  height: 1.42933rem;
+  margin-top: -.23467rem;
+  margin-left: -.384rem;
+  content: ' ';
+  background: url(../images/visceral/eyes.png) no-repeat;
+  -webkit-background-size: 2.98667rem 1.42933rem;
+  background-size: 2.98667rem 1.42933rem
+}
+
+.swiper-wrapper .people .visceral .eyes-icon:active {
+  background: url(../images/visceral/eyes_active.png) no-repeat;
+  -webkit-background-size: 2.98667rem 1.42933rem;
+  background-size: 2.98667rem 1.42933rem
+}
+
+.swiper-wrapper .people .visceral .kidney-icon {
+  position: absolute;
+  top: 12.13867rem;
+  left: 6.912rem;
+  display: block;
+  display: none;
+  width: 2.70933rem;
+  height: 2.048rem;
+  margin-top: -.23467rem;
+  margin-left: -.384rem;
+  content: ' ';
+  background: url(../images/visceral/kidney.png) no-repeat;
+  -webkit-background-size: 2.70933rem 2.048rem;
+  background-size: 2.70933rem 2.048rem
+}
+
+.swiper-wrapper .people .visceral .bones-icon,
+.swiper-wrapper .people .visceral .thyroid-icon {
+  display: block;
+  margin-top: -.23467rem;
+  margin-left: -.384rem;
+  content: ' ';
+  position: absolute
+}
+
+.swiper-wrapper .people .visceral .kidney-icon:active {
+  background: url(../images/visceral/kidney_active.png) no-repeat;
+  -webkit-background-size: 2.70933rem 2.048rem;
+  background-size: 2.70933rem 2.048rem
+}
+
+.swiper-wrapper .people .visceral .thyroid-icon {
+  top: 4.544rem;
+  left: 7.46667rem;
+  display: none;
+  width: 1.49333rem;
+  height: 1.36533rem;
+  background: url(../images/visceral/thyroid.png) no-repeat;
+  -webkit-background-size: 1.49333rem 1.36533rem;
+  background-size: 1.49333rem 1.36533rem
+}
+
+.swiper-wrapper .people .visceral .thyroid-icon:active {
+  background: url(../images/visceral/thyroid_active.png) no-repeat;
+  -webkit-background-size: 1.49333rem 1.36533rem;
+  background-size: 1.49333rem 1.36533rem
+}
+
+.swiper-wrapper .people .visceral .bones-icon {
+  top: 9.06667rem;
+  left: 3.2rem;
+  display: none;
+  width: 10.048rem;
+  height: 5.888rem;
+  background: url(../images/visceral/bones.png) no-repeat;
+  -webkit-background-size: 10.048rem 5.888rem;
+  background-size: 10.048rem 5.888rem
+}
+
+.swiper-wrapper .people .visceral .bones-icon:active {
+  background: url(../images/visceral/bones_active.png) no-repeat;
+  -webkit-background-size: 10.048rem 5.888rem;
+  background-size: 10.048rem 5.888rem
+}
+
+.swiper-wrapper .people .visceral .carotid-icon {
+  position: absolute;
+  top: 4.352rem;
+  left: 7.44533rem;
+  display: block;
+  display: none;
+  width: 1.45067rem;
+  height: 1.216rem;
+  margin-top: -.23467rem;
+  margin-left: -.384rem;
+  content: ' ';
+  background: url(../images/visceral/carotid.png) no-repeat;
+  -webkit-background-size: 1.45067rem 1.216rem;
+  background-size: 1.45067rem 1.216rem
+}
+
+.swiper-wrapper .people .visceral .cervical-icon,
+.swiper-wrapper .people .visceral .ent-icon {
+  left: 7.82933rem;
+  margin-top: -.23467rem;
+  margin-left: -.384rem;
+  content: ' ';
+  position: absolute
+}
+
+.swiper-wrapper .people .visceral .carotid-icon:active {
+  background: url(../images/visceral/carotid_active.png) no-repeat;
+  -webkit-background-size: 1.45067rem 1.216rem;
+  background-size: 1.45067rem 1.216rem
+}
+
+.swiper-wrapper .people .visceral .cervical-icon {
+  top: 4.416rem;
+  display: block;
+  display: none;
+  width: .704rem;
+  height: 1.25867rem;
+  background: url(../images/visceral/cervical.png) no-repeat;
+  -webkit-background-size: .704rem 1.25867rem;
+  background-size: .704rem 1.25867rem
+}
+
+.swiper-wrapper .people .visceral .cervical-icon:active {
+  background: url(../images/visceral/cervical_active.png) no-repeat;
+  -webkit-background-size: .704rem 1.25867rem;
+  background-size: .704rem 1.25867rem
+}
+
+.swiper-wrapper .people .visceral .ent-icon {
+  top: 2.64533rem;
+  display: block;
+  display: none;
+  width: .72533rem;
+  height: 1.024rem;
+  background: url(../images/visceral/ent.png) no-repeat;
+  -webkit-background-size: .72533rem 1.024rem;
+  background-size: .72533rem 1.024rem
+}
+
+.swiper-wrapper .people .visceral .ent-icon:active {
+  background: url(../images/visceral/ent_active.png) no-repeat;
+  -webkit-background-size: .72533rem 1.024rem;
+  background-size: .72533rem 1.024rem
+}
+
+.swiper-wrapper .people .visceral .intestine-icon {
+  position: absolute;
+  top: 13.376rem;
+  left: 6.272rem;
+  display: block;
+  display: none;
+  width: 3.73333rem;
+  height: 3.69067rem;
+  margin-top: -.23467rem;
+  margin-left: -.384rem;
+  content: ' ';
+  background: url(../images/visceral/intestine.png) no-repeat;
+  -webkit-background-size: 3.73333rem 3.69067rem;
+  background-size: 3.73333rem 3.69067rem
+}
+
+.swiper-wrapper .people .visceral .leep-icon,
+.swiper-wrapper .people .visceral .lung-icon {
+  display: block;
+  margin-top: -.23467rem;
+  margin-left: -.384rem;
+  content: ' ';
+  position: absolute
+}
+
+.swiper-wrapper .people .visceral .intestine-icon:active {
+  background: url(../images/visceral/intestine_active.png) no-repeat;
+  -webkit-background-size: 3.73333rem 3.69067rem;
+  background-size: 3.73333rem 3.69067rem
+}
+
+.swiper-wrapper .people .visceral .leep-icon {
+  top: 15.82933rem;
+  left: 7.85067rem;
+  display: none;
+  width: .768rem;
+  height: .74667rem;
+  background: url(../images/visceral/leep.png) no-repeat;
+  -webkit-background-size: .768rem .74667rem;
+  background-size: .768rem .74667rem
+}
+
+.swiper-wrapper .people .visceral .leep-icon:active {
+  background: url(../images/visceral/leep_active.png) no-repeat;
+  -webkit-background-size: .768rem .74667rem;
+  background-size: .768rem .74667rem
+}
+
+.swiper-wrapper .people .visceral .lung-icon {
+  top: 5.67467rem;
+  left: 5.73867rem;
+  display: none;
+  width: 5.16267rem;
+  height: 4.992rem;
+  background: url(../images/visceral/lung.png) no-repeat;
+  -webkit-background-size: 5.16267rem 4.992rem;
+  background-size: 5.16267rem 4.992rem
+}
+
+.swiper-wrapper .people .visceral .lung-icon:active {
+  background: url(../images/visceral/lung_active.png) no-repeat;
+  -webkit-background-size: 5.16267rem 4.992rem;
+  background-size: 5.16267rem 4.992rem
+}
+
+.swiper-wrapper .people .visceral .mra-icon {
+  position: absolute;
+  top: .78933rem;
+  left: 7.14667rem;
+  display: block;
+  display: none;
+  width: 1.96267rem;
+  height: 1.38667rem;
+  margin-top: -.23467rem;
+  margin-left: -.384rem;
+  content: ' ';
+  background: url(../images/visceral/mra.png) no-repeat;
+  -webkit-background-size: 1.96267rem 1.38667rem;
+  background-size: 1.96267rem 1.38667rem
+}
+
+.swiper-wrapper .people .visceral .mra-icon:active {
+  background: url(../images/visceral/mra_active.png) no-repeat;
+  -webkit-background-size: 1.96267rem 1.38667rem;
+  background-size: 1.96267rem 1.38667rem
+}
+
+.swiper-wrapper .people .visceral .ovary-icon {
+  position: absolute;
+  top: 15.21067rem;
+  left: 7.04rem;
+  display: block;
+  display: none;
+  width: 2.368rem;
+  height: .66133rem;
+  margin-top: -.23467rem;
+  margin-left: -.384rem;
+  content: ' ';
+  background: url(../images/visceral/ovary.png) no-repeat;
+  -webkit-background-size: 2.368rem .66133rem;
+  background-size: 2.368rem .66133rem
+}
+
+.swiper-wrapper .people .visceral .prostate_testis-icon,
+.swiper-wrapper .people .visceral .stomach-icon {
+  display: block;
+  position: absolute;
+  margin-top: -.23467rem;
+  margin-left: -.384rem;
+  content: ' '
+}
+
+.swiper-wrapper .people .visceral .ovary-icon:active {
+  background: url(../images/visceral/ovary_active.png) no-repeat;
+  -webkit-background-size: 2.368rem .66133rem;
+  background-size: 2.368rem .66133rem
+}
+
+.swiper-wrapper .people .visceral .prostate_testis-icon {
+  top: 15.89333rem;
+  left: 7.04rem;
+  display: none;
+  width: 2.32533rem;
+  height: 2.98667rem;
+  background: url(../images/visceral/prostate_testis.png) no-repeat;
+  -webkit-background-size: 2.32533rem 2.98667rem;
+  background-size: 2.32533rem 2.98667rem
+}
+
+.swiper-wrapper .people .visceral .prostate_testis-icon:active {
+  background: url(../images/visceral/prostate_testis_active.png) no-repeat;
+  -webkit-background-size: 2.32533rem 2.98667rem;
+  background-size: 2.32533rem 2.98667rem
+}
+
+.swiper-wrapper .people .visceral .stomach-icon {
+  top: 10.51733rem;
+  left: 8.02133rem;
+  display: none;
+  width: 2.752rem;
+  height: 2.368rem;
+  background: url(../images/visceral/stomach.png) no-repeat;
+  -webkit-background-size: 2.752rem 2.368rem;
+  background-size: 2.752rem 2.368rem
+}
+
+.swiper-wrapper .people .visceral .stomach-icon:active {
+  background: url(../images/visceral/stomach_active.png) no-repeat;
+  -webkit-background-size: 2.752rem 2.368rem;
+  background-size: 2.752rem 2.368rem
+}
+
+.swiper-wrapper .people .visceral .uterus-icon {
+  position: absolute;
+  top: 14.67733rem;
+  left: 6.69867rem;
+  display: block;
+  display: none;
+  width: 3.05067rem;
+  height: 1.51467rem;
+  margin-top: -.23467rem;
+  margin-left: -.384rem;
+  content: ' ';
+  background: url(../images/visceral/uterus.png) no-repeat;
+  -webkit-background-size: 3.05067rem 1.51467rem;
+  background-size: 3.05067rem 1.51467rem
+}
+
+.swiper-wrapper .people .visceral .uterus-icon:active {
+  background: url(../images/visceral/uterus_active.png) no-repeat;
+  -webkit-background-size: 3.05067rem 1.51467rem;
+  background-size: 3.05067rem 1.51467rem
+}
+
+.swiper-wrapper .men .people {
+  height: 25.984rem;
+  margin: 0 auto;
+  background: url(../images/men.png) center -.256rem no-repeat;
+  -webkit-background-size: 15.53067rem 25.984rem;
+  background-size: 15.53067rem 25.984rem
+}
+
+.swiper-wrapper .women .people {
+  height: 25.92rem;
+  margin: 0 auto;
+  background: url(../images/women.png) center -.256rem no-repeat;
+  -webkit-background-size: 15.616rem 25.92rem;
+  background-size: 15.616rem 25.92rem
+}
+
+.suggest {
+  position: relative;
+  padding-bottom: 3.2rem
+}
+
+.suggest img.head {
+  width: 100%
+}
+
+.suggest h3.title {
+  font-size: .72533rem;
+  font-weight: 400;
+  line-height: 1;
+  min-height: 1.088rem;
+  margin: .42667rem .512rem 0;
+  padding-bottom: .36267rem;
+  color: #999;
+  border-bottom: .02133rem solid #ccc
+}
+
+.suggest .content {
+  font-size: .64rem;
+  line-height: 1.5;
+  width: 14.976rem;
+  max-height: 100%;
+  margin: .53333rem auto;
+  padding: .53333rem .64rem .896rem;
+  border-radius: .42667rem;
+  background-color: #fff
+}
+
+.suggest .content .remark {
+  font-size: .81067rem;
+  margin-left: -.64rem;
+  color: #00cee1
+}
+
+.suggest .content .remark:before {
+  display: inline-block;
+  width: .21333rem;
+  height: .768rem;
+  margin-right: .42667rem;
+  content: ' ';
+  background-color: #00cee1
+}
+
+.suggest .content .editor-view,
+.suggest .content .editor-view b,
+.suggest .content .editor-view div,
+.suggest .content .editor-view h1,
+.suggest .content .editor-view h3,
+.suggest .content .editor-view h4,
+.suggest .content .editor-view h5,
+.suggest .content .editor-view h6,
+.suggest .content .editor-view li,
+.suggest .content .editor-view ol,
+.suggest .content .editor-view p,
+.suggest .content .editor-view span,
+.suggest .content .editor-view strong,
+.suggest .content .editor-view ul {
+  font-size: .64rem!important
+}
+
+.head-cont {
+  font-size: .768rem;
+  font-weight: 700;
+  line-height: 1.92rem;
+  overflow: hidden;
+  width: 100%;
+  height: 1.92rem;
+  padding: 0;
+  text-align: center;
+  color: #999;
+  background: #fff
+}
+
+.head-cont img {
+  position: absolute;
+  top: 0;
+  left: .512rem;
+  max-width: 4.43733rem;
+  height: 1.92rem
+}
+
+.head-cont.head-cont-bar {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  left: 0
+}
+
+.health-report-body {
+  width: 100%;
+  background: #58c4c7
+}
+
+.hide {
+  display: none
+}
+
+.health-report {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 25.728rem;
+  text-align: center
+}
+
+.health-report img.health_bg {
+  width: 16rem;
+  margin: 0 auto
+}
+
+.health-report .health-report-content {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 12.50133rem;
+  margin-left: -6.25067rem
+}
+
+.health-report .health-report-content .item img.start-img {
+  width: 1.89867rem;
+  height: .98133rem;
+  margin: 5.65333rem 0 .128rem
+}
+
+.health-report .health-report-content .item img.start-btn {
+  width: 2.28267rem;
+  height: 3.54133rem;
+  margin: 0 0 2.13333rem;
+  cursor: pointer
+}
+
+.health-report .health-report-content .item img.yue-report {
+  width: 9.216rem;
+  height: 3.28533rem
+}
+
+.health-report .health-report-title {
+  font-size: 1.36533rem;
+  color: #fcf9d0
+}
+
+.health-report .health-report-title span {
+  line-height: 1.70667rem;
+  text-shadow: -1px 5px 12px #666
+}
+
+.health-report .health-wrap {
+  position: absolute;
+  z-index: 2;
+  top: 2.60267rem;
+  left: 50%;
+  width: 12.50133rem;
+  height: 19.968rem;
+  margin-left: -6.25067rem;
+  cursor: pointer
+}
+
+.health-report .health-wrap a {
+  display: block;
+  width: 100%;
+  height: 100%
+}
+
+.health-content {
+  overflow: hidden;
+  width: 100%
+}
+
+.health-content img.pic {
+  width: 100%
+}
+
+.health-content h3.title {
+  font-size: .72533rem;
+  font-weight: 400;
+  line-height: 1;
+  margin: .42667rem .512rem 0;
+  padding-bottom: .36267rem;
+  color: #999;
+  border-bottom: .02133rem solid #ccc
+}
+
+.health-content ul.list {
+  margin: .53333rem .512rem 0
+}
+
+.health-content ul.list li.item {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  margin-bottom: .42667rem;
+  padding: .93867rem .85333rem .87467rem;
+  text-decoration: none;
+  border-radius: 15px;
+  background: #fff
+}
+
+.health-content ul.list li.item img.report {
+  float: left;
+  width: 1.792rem;
+  height: 1.792rem;
+  margin-top: .128rem;
+  margin-right: .384rem
+}
+
+.health-content ul.list li.item span.tit {
+  font-size: .72533rem;
+  font-weight: 400;
+  line-height: 1;
+  display: block;
+  float: right;
+  overflow: hidden;
+  width: 11.09333rem;
+  margin: 0 0 .17067rem;
+  padding: .17067rem 0 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #00cee1
+}
+
+.health-content ul.list li.item span.address,
+.health-content ul.list li.item span.name {
+  font-size: .59733rem;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 1
+}
+
+.health-content ul.list li.item span.address {
+  float: right;
+  width: 11.09333rem;
+  margin: 0;
+  color: #999
+}
+
+.health-content ul.list li.item span.address img.address-icon {
+  float: left;
+  width: .53333rem;
+  height: .46933rem;
+  margin: .08533rem .21333rem 0 0
+}
+
+.health-content ul.list li.item span.name {
+  font-weight: 400;
+  float: right;
+  width: 11.09333rem;
+  margin: .17067rem 0 .08533rem;
+  color: #999
+}
+
+.health-content ul.list li.item span.name img.name-icon {
+  float: left;
+  width: .53333rem;
+  height: .46933rem;
+  margin: .064rem .21333rem 0 0
+}
+
+.health-content ul.list li.item span.example {
+  position: absolute;
+  top: .21333rem;
+  right: .192rem;
+  display: inline-block;
+  width: 2.38933rem;
+  height: 2.41067rem
+}
+
+.health-content ul.list li.item span.example img {
+  width: 2.38933rem;
+  height: 2.41067rem
+}
+
+.health-content ul.list .no-report {
+  margin: 0 0 .42667rem
+}
+
+.health-content ul.list .no-report img.report-img {
+  width: 2.88rem;
+  height: 4.82133rem
+}
+
+.health-content ul.list .no-report p.cont {
+  font-size: .768rem;
+  line-height: 1;
+  margin: 6.4rem 0 0;
+  text-align: center;
+  color: #999
+}
+
+.health-content ul.list .no-report .url {
+  margin: 4.69333rem 0 .42667rem
+}
+
+.health-content ul.list .no-report .url p.item {
+  font-size: .55467rem;
+  text-align: center
+}
+
+.health-content ul.list .no-report .url p.item a {
+  text-decoration: none;
+  color: #00cee1
+}
+
+.health-content .no-tip {
+  font-size: .72533rem;
+  line-height: 1;
+  width: 100%;
+  margin: 4.69333rem 0 3.2rem;
+  text-align: center;
+  color: #999
+}
+
+.health-content .no-tip p {
+  font-size: .64rem;
+  margin: .21333rem 0 0
+}
+
+.health-content .checkup-btn {
+  font-size: .64rem;
+  line-height: 1.49333rem;
+  width: 4.90667rem;
+  height: 1.49333rem;
+  margin: 0 auto;
+  text-align: center;
+  border: .02133rem solid #ccc;
+  border-radius: .17067rem;
+  background: #f0f0f0
+}
+
+.health-content .checkup-btn a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: #999
+}

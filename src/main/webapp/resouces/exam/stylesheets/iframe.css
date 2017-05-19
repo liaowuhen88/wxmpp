@@ -1,0 +1,110 @@
+body {
+  margin: 0;
+}
+
+.iframe-info {
+  width: 390px;
+  margin: 20px auto;
+  text-align: left;
+  overflow: hidden;
+}
+
+iframe {
+  width: 390px;
+  height: 693px;
+  float: left;
+  margin-right: 40px;
+}
+
+.attention-item {
+  float: left;
+  width: 546px;
+  margin: 0;
+}
+
+.attention-item .preview {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  padding: 8px 15px;
+  background: #eee;
+  font-size: 20px;
+  color: #666;
+  font-weight: bold;
+}
+
+.attention-item .preview span {
+  padding: 5px 8px;
+  background: #56719c;
+  color: #fff;
+  margin: 0px 20px;
+  display: inline-block;
+  border-radius: 2px;
+}
+
+.attention-item ul.item-list {
+  overflow: hidden;
+  list-style: none;
+  padding: 0;
+}
+
+.attention-item ul.item-list li.title {
+  line-height: 25px;
+  font-size: 14px;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.attention-item ul.item-list li.title span {
+  line-height: 25px;
+  font-size: 14px;
+  color: #b1aaaa;
+  margin-bottom: 10px;
+  display: block;
+  font-weight: normal;
+  font-size: 12px;
+  background: #fbf39b;
+  padding: 0 6px;
+}
+
+.attention-item ul.item-list li.item {
+  line-height: 25px;
+  font-size: 14px;
+  color: #666;
+}
+
+.attention-item ul.item-list li.item ul {
+  overflow: hidden;
+  list-style: none;
+  padding: 0;
+}
+
+.attention-item ul.item-list li.item ul li {
+  line-height: 25px;
+  font-size: 14px;
+  color: #666;
+}
+
+.attention-item .tip {
+  line-height: 25px;
+  font-size: 14px;
+  color: #f00;
+  font-weight: bold;
+  margin-top: 10px;
+  border-top: 1px solid #ccc;
+  padding-top: 20px;
+}
+
+.attention-item .tip span {
+  width: 20px;
+  height: 20px;
+  background: #f00;
+  line-height: 1;
+  display: inline-block;
+  text-align: center;
+  line-height: 20px;
+  color: #fff;
+  font-size: 14px;
+  display: inline-block;
+  border-radius: 50px;
+}

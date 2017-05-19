@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>体检样例</title>
+  <link rel="stylesheet" href="stylesheets/style.css">
+  <script src="javascripts/hot.min.js"></script>
+  <script src="javascripts/zepto.min.js"></script>
+  <script src="javascripts/touch.min.js"></script>
+  <script src="javascripts/data.js"></script>
+  <script src="javascripts/nav.js"></script>
+  <script src="javascripts/menu.js"></script>
+</head>
+
+<body>
+  <ul class="nav" id="nav">
+    <li class="bar overview-bar active">
+      <i class="icon"></i>
+      <p class="text">体检概览</p>
+    </li>
+    <li class="bar abnormal-bar">
+      <i class="icon"></i>
+      <p class="text">异常指标</p>
+    </li>
+    <li class="bar suggest-bar">
+      <i class="icon"></i>
+      <p class="text">医生建议</p>
+    </li>
+    <li class="bar overall-bar">
+      <i class="icon"></i>
+      <p class="text">报告详情</p>
+    </li>
+  </ul>
+  <ul class="content" id="content">
+    <li id="overview" class="page overview active">
+      <div class="state" id="states">很健康</div>
+      <div class="person"></div>
+      <ul class="organ" id="visceral">
+        <li class="artery">
+          <div class="pic"></div>
+          <img src="images/checkup/organ/artery.png" alt="">
+          <p>颈动脉</p>
+        </li>
+        <li class="bone">
+          <div class="pic"></div>
+          <img src="images/checkup/organ/bone.png" alt="">
+          <p>骨骼</p>
+        </li>
+        <li class="brain">
+          <div class="pic"></div>
+          <img src="images/checkup/organ/brain.png" alt="">
+          <p>脑血管</p>
+        </li>
+        <li class="ear">
+          <div class="pic"></div>
+          <img src="images/checkup/organ/ear.png" alt="">
+          <p>耳鼻喉</p>
+        </li>
+        <li class="eye">
+          <div class="pic"></div>
+          <img src="images/checkup/organ/eye.png" alt="">
+          <p>眼睛</p>
+        </li>
+        <li class="heart">
+          <div class="pic"></div>
+          <img src="images/checkup/organ/heart.png" alt="">
+          <p>心脏</p>
+        </li>
+        <li class="intestinal">
+          <div class="pic"></div>
+          <img src="images/checkup/organ/intestinal.png" alt="">
+          <p>肠道</p>
+        </li>
+        <li class="kidney">
+          <div class="pic"></div>
+          <img src="images/checkup/organ/kidney.png" alt="">
+          <p>肾</p>
+        </li>
+        <li class="liver">
+          <div class="pic"></div>
+          <img src="images/checkup/organ/liver.png" alt="">
+          <p>肝胆胰脾</p>
+        </li>
+        <li class="lung">
+          <div class="pic"></div>
+          <img src="images/checkup/organ/lung.png" alt="">
+          <p>肺</p>
+        </li>
+        <li class="mouth">
+          <div class="pic"></div>
+          <img src="images/checkup/organ/mouth.png" alt="">
+          <p>口腔</p>
+        </li>
+        <li class="ovary">
+          <div class="pic"></div>
+          <img src="images/checkup/organ/ovary.png" alt="">
+          <p>子宫宫颈</p>
+          <p>卵巢乳腺</p>
+        </li>
+        <li class="prostate">
+          <div class="pic"></div>
+          <img src="images/checkup/organ/prostate.png" alt="">
+          <p>前列腺</p>
+        </li>
+        <li class="stomach">
+          <div class="pic"></div>
+          <img src="images/checkup/organ/stomach.png" alt="">
+          <p>胃</p>
+        </li>
+        <li class="thyroid">
+          <div class="pic"></div>
+          <img src="images/checkup/organ/thyroid.png" alt="">
+          <p>甲状腺</p>
+        </li>
+        <li class="vertebral">
+          <div class="pic"></div>
+          <img src="images/checkup/organ/vertebral.png" alt="">
+          <p>颈椎</p>
+        </li>
+      </ul>
+    </li>
+    <li id="abnormal" class="page abnormal">
+      <div class="remind">
+        <h3 class="remind-title"><img src="images/remind_icon.png" alt="" class="icon">豆包医生提醒您：</h3>
+        <p class="remind-info">您的身体处于<strong class="state"></strong>，有<strong class="abnormalNumber"></strong>项指标异常，请定期检查哦~</p>
+      </div>
+      <div class="over">
+        <div class="loading">数据加载中...</div>
+      </div>
+    </li>
+    <li id="suggest" class="page suggest">
+      <img src="images/health/curtain.png" alt="" class="head">
+      <h3 class="title">医生建议</h3>
+      <div class="content">
+      </div>
+    </li>
+    <li id="overall" class="page overall">
+      <div class="menu" id="menu">
+        <ul class="menu-bar">
+          <li class="item">体检科室</li>
+          <li class="item">体检分类</li>
+        </ul>
+        <div class="menu-content">
+          <ul class="items" id="menuDepartment">
+            <div class="loading">数据加载中...</div>
+          </ul>
+          <ul class="items" id="menuProject">
+            <div class="loading">数据加载中...</div>
+          </ul>
+        </div>
+      </div>
+      <div class="over">
+        <div class="loading">数据加载中...</div>
+      </div>
+    </li>
+  </ul>
+</body>
+
+</html>

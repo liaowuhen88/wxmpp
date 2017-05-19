@@ -1,0 +1,535 @@
+/* component */
+
+.component-time,
+.component-info {
+    padding: 0.53333333rem 0 0.32rem 0;
+    font-size: px2rem(24);
+    height: 1.70666667rem;
+    color: #fff;
+    text-align: center;
+    b {
+        font-weight: normal;
+        height: 0.85333333rem;
+        line-height: 0.85333333rem;
+        display: inline-block;
+        padding: 0 0.21333333rem;
+        background-color: rgba(0, 0, 0, 0.15);
+        border-radius: 0.128rem;
+    }
+}
+
+.component-info {
+    height: auto;
+    b {
+        height: auto;
+        padding: 0.21333333rem;
+        line-height: 0.68266667rem;
+        max-width: 12.8rem;
+    }
+}
+
+.component-message,
+.component-send {
+    width: 100%;
+    padding: px2rem(20);
+    @include clearfix;
+    .avatar {
+        float: left;
+        width: 1.70666667rem;
+        height: 1.70666667rem;
+        position: relative;
+        z-index: 1;
+        &:before {
+            content: '';
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            position: absolute;
+            left: 0;
+            top: 0;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+        }
+        img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+    }
+    .content {
+        width: px2rem(600);
+        padding-left: 0.17066667rem;
+        float: left;
+    }
+    .name {
+        height: 0.78933333rem;
+        line-height: 0.78933333rem;
+        font-size: 0.53333333rem;
+        color: #999;
+        padding-left: 0.34133333rem;
+    }
+    .message-wrapper {
+        display: inline-block;
+        position: relative;
+        max-width: px2rem(500);
+        margin-left: 0.34133333rem;
+        border-radius: 0.256rem;
+        font-size: 0.68266667rem;
+        color: #282828;
+        word-wrap: break-word;
+        word-break: break-all;
+        border: 1px solid #d3d3d3;
+        background-image: -webkit-linear-gradient(top, #fff, #fafafa);
+        background-image: linear-gradient(to bottom, #fff, #fafafa);
+        &:before {
+            content: '';
+            width: 0.42666667rem;
+            height: 0.42666667rem;
+            border-top: 1px solid #d3d3d3;
+            border-left: 1px solid #d3d3d3;
+            position: absolute;
+            left: -0.21333333rem;
+            top: 0.59733333rem;
+            background-color: #fcfcfc;
+            -webkit-transform: rotate(-45deg);
+            -ms-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+            border-radius: 0.10666667rem 0 0 0;
+            z-index: 1;
+        }
+    }
+}
+
+.component-message .content .message-wrapper.text,
+.component-send .content .message-wrapper.text {
+    border-radius: 0.256rem;
+    max-height: 100%;
+    padding: 0.384rem;
+    line-height: 0.91733333rem;
+}
+
+.component-message .content .message-wrapper.image,
+.component-send .content .message-wrapper.image {
+    border-color: #a2a2a2;
+    background: transparent;
+}
+
+.component-message .content .message-wrapper.image:before,
+.component-send .content .message-wrapper.image:before {
+    border-color: #a2a2a2;
+    background-color: #fff;
+}
+
+.component-message .content .message-wrapper.image img,
+.component-send .content .message-wrapper.image img {
+    max-width: 100%;
+    border-radius: 0.256rem;
+    overflow-y: hidden;
+    display: block;
+    position: relative;
+    z-index: 2;
+}
+
+.component-message .content .message-wrapper.card,
+.component-send .content .message-wrapper.card {
+    background-color: red;
+    width: 9.81333333rem;
+    height: 3.92533333rem;
+    padding: 0.08533333rem;
+}
+
+.component-message .content .message-wrapper.card .wrap,
+.component-send .content .message-wrapper.card .wrap {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.192rem;
+    position: relative;
+    z-index: 2;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.component-message .content .message-wrapper.card .wrap .card-type,
+.component-send .content .message-wrapper.card .wrap .card-type {
+    margin-left: 0.42666667rem;
+    height: 1.10933333rem;
+    line-height: 1.10933333rem;
+    font-size: 0.512rem;
+    color: #666;
+    border-bottom: 1px dashed #666;
+}
+
+.component-message .content .message-wrapper.card .wrap .card-info,
+.component-send .content .message-wrapper.card .wrap .card-info {
+    position: relative;
+    height: 1.92rem;
+    padding: 0.36266667rem 0;
+    margin-left: 0.42666667rem;
+}
+
+.component-message .content .message-wrapper.card .wrap .card-info .card-avatar,
+.component-send .content .message-wrapper.card .wrap .card-info .card-avatar {
+    width: 1.92rem;
+    height: 1.92rem;
+    position: absolute;
+    left: 0;
+    border-radius: 0.128rem;
+    overflow: hidden;
+}
+
+.component-message .content .message-wrapper.card .wrap .card-info .card-avatar img,
+.component-send .content .message-wrapper.card .wrap .card-info .card-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.14933333rem;
+    display: block;
+}
+
+.component-message .content .message-wrapper.card .wrap .card-info .card-name,
+.component-send .content .message-wrapper.card .wrap .card-info .card-name {
+    padding-left: 2.26133333rem;
+    font-size: 0.68266667rem;
+    color: #333;
+    line-height: 0.96rem;
+}
+
+.component-message .content .message-wrapper.card .wrap .card-info .card-num,
+.component-send .content .message-wrapper.card .wrap .card-info .card-num {
+    padding-left: 2.26133333rem;
+    font-size: 0.512rem;
+    color: #999;
+    line-height: 0.96rem;
+}
+
+.component-message .content .message-wrapper.envelop,
+.component-send .content .message-wrapper.envelop {
+    width: 8.49066667rem;
+    height: 3.79733333rem;
+    background-image: none;
+    background-color: #fff;
+    border: none;
+}
+
+.component-message .content .message-wrapper.envelop:before,
+.component-send .content .message-wrapper.envelop:before {
+    background-color: #fa9e3b;
+    border-color: #e5831f;
+}
+
+.component-message .content .message-wrapper.envelop .pack,
+.component-send .content .message-wrapper.envelop .pack {
+    width: 100%;
+    height: 2.944rem;
+    background-color: #fa9e3b;
+    border: 1px solid #e5831f;
+    border-bottom: none;
+    border-radius: 0.256rem 0.256rem 0 0;
+}
+
+.component-message .content .message-wrapper.envelop .pack .logo,
+.component-send .content .message-wrapper.envelop .pack .logo {
+    width: 1.45066667rem;
+    height: 1.62133333rem;
+    background-color: #d03f2e;
+    border-radius: 0.08533333rem;
+    position: absolute;
+    left: px2rem(24);
+    top: 0.59733333rem;
+    overflow: hidden;
+}
+
+.component-message .content .message-wrapper.envelop .pack .logo:before,
+.component-send .content .message-wrapper.envelop .pack .logo:before {
+    content: '';
+    width: 2.048rem;
+    height: 2.048rem;
+    border-radius: 2.048rem;
+    background-color: #ff5454;
+    position: absolute;
+    left: 50%;
+    bottom: 0.93866667rem;
+    margin-left: -1.024rem;
+}
+
+.component-message .content .message-wrapper.envelop .pack .logo:after,
+.component-send .content .message-wrapper.envelop .pack .logo:after {
+    content: '￥';
+    width: 0.59733333rem;
+    height: 0.59733333rem;
+    border-radius: 0.59733333rem;
+    background-color: #f7d454;
+    position: absolute;
+    font-size: 0.42666667rem;
+    color: rgba(0, 0, 0, 0.4);
+    text-align: center;
+    line-height: 0.59733333rem;
+    left: 50%;
+    bottom: 0.64rem;
+    margin-left: -0.29866667rem;
+}
+
+.component-message .content .message-wrapper.envelop .pack .text,
+.component-send .content .message-wrapper.envelop .pack .text {
+    padding-left: 2.304rem;
+    padding-top: 0.64rem;
+}
+
+.component-message .content .message-wrapper.envelop .pack .text span:nth-child(1),
+.component-send .content .message-wrapper.envelop .pack .text span:nth-child(1) {
+    font-size: 0.59733333rem;
+    line-height: 0.85333333rem;
+    color: #fff;
+    display: block;
+    font-weight: normal;
+}
+
+.component-message .content .message-wrapper.envelop .pack .text span:nth-child(2),
+.component-send .content .message-wrapper.envelop .pack .text span:nth-child(2) {
+    font-size: 0.55466667rem;
+    line-height: 0.768rem;
+    color: #fff;
+    display: block;
+    font-weight: normal;
+}
+
+.component-message .content .message-wrapper.envelop .info,
+.component-send .content .message-wrapper.envelop .info {
+    height: 0.85333333rem;
+    line-height: 0.85333333rem;
+    padding-left: 0.42666667rem;
+    font-size: 0.512rem;
+    color: #999;
+    position: relative;
+    border: 1px solid #d2d2d2;
+    border-top: none;
+    border-radius: 0 0 0.256rem 0.256rem;
+}
+
+.component-message .content .message-wrapper.envelop .info .logo,
+.component-send .content .message-wrapper.envelop .info .logo {
+    width: 0.55466667rem;
+    height: 0.64rem;
+    position: absolute;
+    top: 0.08533333rem;
+    right: 0.256rem;
+    overflow: hidden;
+}
+
+.component-message .content .message-wrapper.envelop .info .logo:before,
+.component-send .content .message-wrapper.envelop .info .logo:before {
+    content: '';
+    width: 0.55466667rem;
+    height: 0.53333333rem;
+    border-radius: 0 0 0.896rem 0.896rem;
+    background-color: #e5e5e5;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.component-message .content .message-wrapper.envelop .info .logo:after,
+.component-send .content .message-wrapper.envelop .info .logo:after {
+    content: '';
+    width: 0.55466667rem;
+    height: 0.10666667rem;
+    background-color: #e5e5e5;
+    position: absolute;
+}
+
+.component-message .content .message-wrapper.envelop .info .logo .mask,
+.component-send .content .message-wrapper.envelop .info .logo .mask {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+}
+
+.component-message .content .message-wrapper.envelop .info .logo .mask:after,
+.component-send .content .message-wrapper.envelop .info .logo .mask:after,
+.component-message .content .message-wrapper.envelop .info .logo .mask:before,
+.component-send .content .message-wrapper.envelop .info .logo .mask:before {
+    content: '';
+    width: 0.512rem;
+    height: 0.512rem;
+    background-color: #fff;
+    position: absolute;
+    border-radius: 0.896rem;
+    right: -0.21333333rem;
+    bottom: 0.53333333rem;
+    z-index: 2;
+}
+
+.component-message .content .message-wrapper.envelop .info .logo .mask:before,
+.component-send .content .message-wrapper.envelop .info .logo .mask:before {
+    right: auto;
+    left: -0.21333333rem;
+    bottom: 0.53333333rem;
+    z-index: 2;
+}
+
+.component-message .content .message-wrapper.envelop .info .logo .face,
+.component-send .content .message-wrapper.envelop .info .logo .face {
+    width: 0.34133333rem;
+    height: 0.29866667rem;
+    position: absolute;
+    left: 0.128rem;
+    top: 0.192rem;
+    border-radius: 0.34133333rem;
+    background-color: #fff;
+}
+
+.component-message .content .message-wrapper.envelop .info .logo .face:before,
+.component-send .content .message-wrapper.envelop .info .logo .face:before,
+.component-message .content .message-wrapper.envelop .info .logo .face:after,
+.component-send .content .message-wrapper.envelop .info .logo .face:after {
+    content: '';
+    width: 0.064rem;
+    height: 0.064rem;
+    position: absolute;
+    left: 0.08533333rem;
+    top: 0.08533333rem;
+    border-radius: 0.064rem;
+    background-color: #e5e5e5;
+}
+
+.component-message .content .message-wrapper.envelop .info .logo .face:after,
+.component-send .content .message-wrapper.envelop .info .logo .face:after {
+    left: 0.21333333rem;
+}
+
+.component-message .content .message-wrapper.emoji,
+.component-send .content .message-wrapper.emoji {
+    border-color: transparent;
+    background: transparent;
+}
+
+.component-message .content .message-wrapper.emoji img,
+.component-send .content .message-wrapper.emoji img {
+    max-width: 100%;
+    display: block;
+}
+
+.component-message .content .message-wrapper.emoji:before,
+.component-send .content .message-wrapper.emoji:before {
+    display: none;
+}
+
+.component-send {
+    width: 16rem;
+    padding: px2rem(24) 0.42666667rem 0 2.77333333rem;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    -webkit-flex-direction: row-reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+}
+
+.component-send .content {
+    padding-right: 0.17066667rem;
+    padding-left: 0;
+    text-align: right;
+}
+
+.component-send .content .name {
+    padding-left: 0;
+    padding-right: 0.34133333rem;
+}
+
+.component-send .content .message-wrapper {
+    text-align: left;
+    margin-left: auto;
+    margin-right: 0.34133333rem;
+    border-color: #85ce48;
+    background-image: -webkit-linear-gradient(top, #a2e65b, #9fe862);
+    background-image: linear-gradient(to bottom, #a2e65b, #9fe862);
+}
+
+.component-send .content .message-wrapper:before {
+    left: auto;
+    right: -0.21333333rem;
+    -webkit-transform: rotate(135deg);
+    -ms-transform: rotate(135deg);
+    transform: rotate(135deg);
+    border-color: #85ce48;
+    background-color: #a2e854;
+}
+
+.me-message {
+    text-align: right;
+    .message-wrapper {
+        text-align: left;
+    }
+}
+
+
+/* send status */
+
+.send-failed {
+    position: relative;
+    &:after {
+        font-family: arial;
+        display: inline-block;
+        content: '!';
+        width: px2rem(40);
+        height: px2rem(40);
+        background-color: red;
+        vertical-align: top;
+        margin-top: px2rem(10);
+        border-radius: px2rem(40);
+        font-size: px2rem(30);
+        color: #fff;
+        text-align: center;
+        line-height: px2rem(40);
+        font-weight: bold;
+    }
+}
+
+.sending {
+    position: relative;
+    &:after {
+        font-family: arial;
+        display: inline-block;
+        content: ' ';
+        width: px2rem(40);
+        height: px2rem(40);
+        vertical-align: top;
+        margin-top: px2rem(10);
+        border-radius: px2rem(40);
+        font-size: px2rem(30);
+        color: #fff;
+        text-align: center;
+        line-height: px2rem(40);
+        font-weight: bold;
+        background: url(../images/loading.gif) no-repeat center;
+        background-size: px2rem(24);
+    }
+}
+
+// dctxf
+.me-message {
+    .avatar {
+        float: right;
+    }
+    .content {
+        float: right;
+        .name {
+            text-align: right;
+            padding-right: .34133333rem;
+        }
+        .message-wrapper {
+            margin-right: .34133333rem;
+            background: #A2E563;
+            border-color: #A4DA7F;
+            &:before {
+                background: #A2E563;
+                border-color: #A4DA7F;
+                left: inherit;
+                right: -.21333333rem;
+                transform: rotate(135deg);
+            }
+        }
+    }
+    .message-wrapper {
+        float: right;
+    }
+}

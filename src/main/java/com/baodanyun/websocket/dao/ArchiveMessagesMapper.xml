@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baodanyun.websocket.dao.ArchiveMessagesMapper">
+
+    <resultMap id="BaseResultMap" type="com.baodanyun.websocket.model.ArchiveMessages">
+        <id column="messageId" property="messageid" jdbcType="BIGINT"/>
+        <result column="time" property="time" jdbcType="BIGINT"/>
+        <result column="direction" property="direction" jdbcType="CHAR"/>
+        <result column="type" property="type" jdbcType="CHAR"/>
+        <result column="subject" property="subject" jdbcType="VARCHAR"/>
+        <result column="conversationId" property="conversationid" jdbcType="BIGINT"/>
+    </resultMap>
+
+
+    <resultMap id="ResultMapWithBLOBs" type="com.baodanyun.websocket.model.ArchiveMessages" extends="BaseResultMap">
+        <result column="body" property="body" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    messageId, time, direction, type, subject, conversationId
+  </sql>
+    <sql id="Blob_Column_List">
+    body
+  </sql>
+
+
+    <resultMap id="ResultMapFromAndTo" type="com.baodanyun.websocket.bean.msg.HistoryMsg" extends="BaseResultMap">
+
+    </resultMap>
+
+    <select id="selectByFromAndTo" resultMap="ResultMapFromAndTo"
+            parameterType="com.baodanyun.websocket.model.HistoryMessageModel">
+    SELECT
+	am.`subject` AS 'contentType',
+	am.time ct,
+	am.body content,
+	am.type,
+	ac.withJid AS 'to',
+	ac.ownerJid AS 'from',
+  vto.vcard as 'toCard',
+  vfrom.vcard as 'fromCard'
+
+FROM
+	archiveMessages am
+LEFT JOIN archiveConversations ac ON ac.conversationId = am.conversationId
+LEFT JOIN ofVCard vto on CONCAT(vto.username,'@126xmpp') = ac.withJid
+LEFT JOIN ofVCard vfrom on CONCAT(vfrom.username,'@126xmpp') = ac.ownerJid
+WHERE
+am.direction = 'to'
+AND	ownerJid =  #{to,jdbcType=VARCHAR}
+AND withJid =  #{from,jdbcType=VARCHAR}
+
+UNION
+
+SELECT
+	am.`subject` AS 'contentType',
+	am.time ct,
+	am.body content,
+	am.type,
+	ac.withJid AS 'to',
+	ac.ownerJid AS 'from',
+ vto.vcard as 'toCard',
+  vfrom.vcard as 'fromCard'
+FROM
+	archiveMessages am
+LEFT JOIN archiveConversations ac ON ac.conversationId = am.conversationId
+LEFT JOIN ofVCard vto on CONCAT(vto.username,'@126xmpp') = ac.withJid
+LEFT JOIN ofVCard vfrom on CONCAT(vfrom.username,'@126xmpp') = ac.ownerJid
+WHERE
+am.direction = 'to'
+AND ownerJid =  #{from,jdbcType=VARCHAR}
+AND withJid =  #{to,jdbcType=VARCHAR}
+
+ORDER BY
+	ct DESC LIMIT    #{fromCount,jdbcType=VARCHAR}, #{count,jdbcType=VARCHAR}
+  </select>
+
+
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from archiveMessages
+        where messageId = #{messageid,jdbcType=BIGINT}
+    </select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from archiveMessages
+    where messageId = #{messageid,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.baodanyun.websocket.model.ArchiveMessages">
+    insert into archiveMessages (messageId, time, direction, 
+      type, subject, conversationId, 
+      body)
+    values (#{messageid,jdbcType=BIGINT}, #{time,jdbcType=BIGINT}, #{direction,jdbcType=CHAR}, 
+      #{type,jdbcType=CHAR}, #{subject,jdbcType=VARCHAR}, #{conversationid,jdbcType=BIGINT}, 
+      #{body,jdbcType=LONGVARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.baodanyun.websocket.model.ArchiveMessages">
+        insert into archiveMessages
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="messageid != null">
+                messageId,
+            </if>
+            <if test="time != null">
+                time,
+            </if>
+            <if test="direction != null">
+                direction,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="subject != null">
+                subject,
+            </if>
+            <if test="conversationid != null">
+                conversationId,
+            </if>
+            <if test="body != null">
+                body,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="messageid != null">
+                #{messageid,jdbcType=BIGINT},
+            </if>
+            <if test="time != null">
+                #{time,jdbcType=BIGINT},
+            </if>
+            <if test="direction != null">
+                #{direction,jdbcType=CHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=CHAR},
+            </if>
+            <if test="subject != null">
+                #{subject,jdbcType=VARCHAR},
+            </if>
+            <if test="conversationid != null">
+                #{conversationid,jdbcType=BIGINT},
+            </if>
+            <if test="body != null">
+                #{body,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.baodanyun.websocket.model.ArchiveMessages">
+        update archiveMessages
+        <set>
+            <if test="time != null">
+                time = #{time,jdbcType=BIGINT},
+            </if>
+            <if test="direction != null">
+                direction = #{direction,jdbcType=CHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=CHAR},
+            </if>
+            <if test="subject != null">
+                subject = #{subject,jdbcType=VARCHAR},
+            </if>
+            <if test="conversationid != null">
+                conversationId = #{conversationid,jdbcType=BIGINT},
+            </if>
+            <if test="body != null">
+                body = #{body,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where messageId = #{messageid,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.baodanyun.websocket.model.ArchiveMessages">
+    update archiveMessages
+    set time = #{time,jdbcType=BIGINT},
+      direction = #{direction,jdbcType=CHAR},
+      type = #{type,jdbcType=CHAR},
+      subject = #{subject,jdbcType=VARCHAR},
+      conversationId = #{conversationid,jdbcType=BIGINT},
+      body = #{body,jdbcType=LONGVARCHAR}
+    where messageId = #{messageid,jdbcType=BIGINT}
+  </update>
+    <update id="updateByPrimaryKey" parameterType="com.baodanyun.websocket.model.ArchiveMessages">
+    update archiveMessages
+    set time = #{time,jdbcType=BIGINT},
+      direction = #{direction,jdbcType=CHAR},
+      type = #{type,jdbcType=CHAR},
+      subject = #{subject,jdbcType=VARCHAR},
+      conversationId = #{conversationid,jdbcType=BIGINT}
+    where messageId = #{messageid,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,60 @@
+/* chat-source */
+
+.chat-source {
+  border-bottom: $chat-border;
+  line-height: $chat-source-height;
+  padding: 0 $space / 2;
+  color: $gray-light;
+  position: relative;
+  background-color: #fff;
+  .ip {
+    float: right;
+    margin-right: 20px;
+  }
+  .chat-source-detail-btn {
+    position: absolute;
+    top: 7px;
+    right: 20px;
+    width: 0;
+    height: 0;
+    text-indent: -999em;
+    cursor: pointer;
+    &:before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: block;
+      content: ' ';
+      width: 10px;
+      height: 10px;
+      background-color: $purple;
+      transform: rotate(45deg);
+    }
+    &:after {
+      position: absolute;
+      top: -2px;
+      left: 0;
+      display: block;
+      content: ' ';
+      width: 10px;
+      height: 10px;
+      background-color: #fff;
+      transform: rotate(45deg);
+    }
+  }
+  .chat-source-detail {
+    display: none;
+  }
+}
+
+.open > .chat-source-detail-btn {
+  top: 14px;
+  &:before {
+    transform: rotate(-45deg);
+    top: -2px;
+  }
+  &:after {
+    transform: rotate(-45deg);
+    top: 0px;
+  }
+}

@@ -1,0 +1,135 @@
+.base-open-envelop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+    display: none;
+}
+
+.base-open-envelop .wrap {
+    width: 13.312rem;
+    height: 19.24266667rem;
+    background-color: #a44436;
+    position: absolute;
+    left: 50%;
+    margin-left: -6.656rem;
+    border-radius: 0.17066667rem;
+    top: 50%;
+    margin-top: -10.688rem;
+    overflow-y: hidden;
+}
+
+.base-open-envelop .wrap:before {
+    content: '';
+    width: 25.17333333rem;
+    height: 25.17333333rem;
+    position: absolute;
+    left: 50%;
+    margin-left: -12.58666667rem;
+    bottom: 5.54666667rem;
+    background-color: #be4d3b;
+    border-radius: 25.17333333rem;
+    box-shadow: 0 0 0.10666667rem #903e30;
+}
+
+.base-open-envelop .wrap .close {
+    width: 0.85333333rem;
+    height: 0.85333333rem;
+    position: absolute;
+    left: 0.53333333rem;
+    top: 0.53333333rem;
+}
+
+.base-open-envelop .wrap .close:before,
+.base-open-envelop .wrap .close:after {
+    content: '';
+    height: 0.08533333rem;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -0.04266667rem;
+    background-color: #73241a;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    border-radius: 0.08533333rem;
+}
+
+.base-open-envelop .wrap .close:after {
+    -webkit-transform: rotate(135deg);
+    -ms-transform: rotate(135deg);
+    transform: rotate(135deg);
+}
+
+.base-open-envelop .wrap .avatar {
+    width: 2.47466667rem;
+    height: 2.47466667rem;
+    position: absolute;
+    left: 50%;
+    margin-left: -1.23733333rem;
+    top: 1.664rem;
+    border-radius: 2.47466667rem;
+    overflow: hidden;
+}
+
+.base-open-envelop .wrap .avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 2.47466667rem;
+    display: block;
+}
+
+.base-open-envelop .wrap .name {
+    width: 100%;
+    position: absolute;
+    font-size: 0.896rem;
+    font-weight: 300;
+    color: #fff;
+    text-align: center;
+    height: 1.06666667rem;
+    line-height: 1.06666667rem;
+    top: 4.736rem;
+}
+
+.base-open-envelop .wrap .tips {
+    width: 100%;
+    position: absolute;
+    font-size: 0.59733333rem;
+    font-weight: 300;
+    color: #e3a694;
+    text-align: center;
+    height: 1.06666667rem;
+    line-height: 1.06666667rem;
+    top: 6.22933333rem;
+}
+
+.base-open-envelop .wrap .desc {
+    width: 100%;
+    position: absolute;
+    font-size: 0.896rem;
+    font-weight: 300;
+    color: #fff;
+    text-align: center;
+    line-height: 1.06666667rem;
+    top: 8.14933333rem;
+}
+
+.base-open-envelop .wrap .open {
+    width: 4.52266667rem;
+    height: 4.52266667rem;
+    border-radius: 4.52266667rem;
+    background-color: #ffaa3b;
+    position: absolute;
+    left: 50%;
+    margin-left: -2.26133333rem;
+    line-height: 4.52266667rem;
+    text-align: center;
+    font-size: 0.85333333rem;
+    color: #fff;
+    bottom: 3.41333333rem;
+    box-shadow: 0 0.21333333rem 0 #903e30;
+}
