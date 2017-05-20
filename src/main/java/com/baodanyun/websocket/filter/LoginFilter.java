@@ -31,7 +31,7 @@ public class LoginFilter implements Filter {
             if (uri.startsWith(req.getContextPath() + "/api/customer_chat") && null == req.getSession().getAttribute(Common.USER_KEY)) {
                 logger.info("req.getSession().getAttribute(Common.USER_KEY) is null");
                 ServletUtil.redirect(resp,req.getContextPath() + "/customerlogin");
-            } else {
+            }else {
                 chain.doFilter(request, response);
             }
         }

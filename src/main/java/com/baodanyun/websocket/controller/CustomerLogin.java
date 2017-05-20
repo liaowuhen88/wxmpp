@@ -67,7 +67,7 @@ public class CustomerLogin extends BaseController {
     public void api(LoginModel user, HttpServletRequest request, HttpServletResponse response) {
         //客服必须填写用户名 和 密码
         logger.info("user" + JSONUtil.toJson(user));
-        AcsessCustomer au =  new AcsessCustomer();
+        Customer au =  new Customer();
         try {
             customerInit(au,user);
             boolean flag = userLifeCycleService.login(au);
@@ -145,7 +145,7 @@ public class CustomerLogin extends BaseController {
                 }
             }
 
-            customer.setTo(visitor.getLoginUsername());
+            customer.setTo(visitor.getId());
             request.getSession().setAttribute(Common.USER_KEY, customer);
             us.online(visitor);
             mv.addObject("user", JSONUtil.toJson(customer));

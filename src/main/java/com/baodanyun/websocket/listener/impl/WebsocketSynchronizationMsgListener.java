@@ -41,7 +41,7 @@ public class WebsocketSynchronizationMsgListener extends AbstarctEventBusListene
                                         try {
                                             if (null != sme.getMsg()) {
                                                 Map<String, WebSocketSession> map = webSocketService.getWebSocketSession(sme.getFromJid());
-                                                if (null != map && map.size() > 1) {
+                                                if (null != map && map.size() > 0) {
                                                     String to = XMPPUtil.jidToName(sme.getMsg().getTo());
                                                     AbstractUser visitor = userCacheServer.getVisitorByUidOrOpenID(to);
                                                     if (null != visitor) {

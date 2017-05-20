@@ -1,10 +1,13 @@
 package com.baodanyun.websocket.core.handle;
 
+import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.AcsessCustomer;
 import com.baodanyun.websocket.core.common.Common;
+import com.baodanyun.websocket.event.SynchronizationMsgEvent;
 import com.baodanyun.websocket.service.UserLifeCycleService;
 import com.baodanyun.websocket.service.WebSocketService;
+import com.baodanyun.websocket.util.EventBusUtils;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.springframework.web.socket.CloseStatus;
@@ -36,13 +39,13 @@ public class CustomerSimpleWebSocketHandler extends AbstractWebSocketHandler {
             logger.info("webSocket receive message:" + JSONUtil.toJson(message));
             String content = message.getPayload();
 
-           /* Msg msg = Msg.handelMsg(content);
+            Msg msg = Msg.handelMsg(content);
 
-         *//*   SynchronizationMsgEvent sme = new SynchronizationMsgEvent();
+            SynchronizationMsgEvent sme = new SynchronizationMsgEvent();
             sme.setMsg(msg);
             sme.setSessionID(session.getId());
             sme.setFromJid(au.getId());
-            EventBusUtils.post(sme);*/
+            EventBusUtils.post(sme);
 
             userLifeCycleService.receiveMessage(au, content);
         } catch (Exception e) {

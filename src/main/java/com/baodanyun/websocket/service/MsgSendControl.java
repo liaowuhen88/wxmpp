@@ -71,7 +71,7 @@ public class MsgSendControl {
             if(webSocketService.hasH5Connected(key)){
                 Msg cloneMsg = SerializationUtils.clone(msg);
                 cloneMsg.setTo(key);
-                webSocketService.produce(msg);
+                webSocketService.produce(cloneMsg);
             }
 
         } else {
