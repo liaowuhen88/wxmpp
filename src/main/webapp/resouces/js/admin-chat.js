@@ -242,10 +242,14 @@ xchat.sendImgEventBind = function () {
 xchat.sendEvent = function (msg) {
     if (msg) {
         $("#enterChat").val("");
+        var icon;
+        if (window.user) {
+            icon = window.user.icon;
+        }
         xchat.normalSend({
             "content": msg,
             "to": window.destJid,
-            "icon": window.user.icon || this.controls.default_kf_icon,
+            "icon": icon || this.controls.default_kf_icon,
             "from": window.currentId,
             "timeOutCall": function (o) {
                 o.removeClass("sending").addClass("timeOut");
@@ -258,7 +262,11 @@ xchat.sendEvent = function (msg) {
 xchat.sendMsgHandelEvent = function (data) {
     data.time = myUtils.formatDate(new Date(data.ct));
     data.src = data.to;
-    data.icon = window.user.icon || this.controls.default_kf_icon;
+    var icon = null;
+    if (window.user) {
+        icon = window.user;
+    }
+    data.icon = icon || this.controls.default_kf_icon;
     myUtils.storage(data);
 
     if (data.contentType == 'image') {

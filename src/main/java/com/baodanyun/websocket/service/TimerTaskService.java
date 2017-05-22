@@ -35,7 +35,7 @@ public class TimerTaskService {
     //需要注意@Scheduled这个注解，它可配置多个属性：cron\fixedDelay\fixedRate
     public void test() {
         try {
-            las.search();
+            //las.search();
         } catch (Exception e) {
             logger.error("操作失败", e);
         }

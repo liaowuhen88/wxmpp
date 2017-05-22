@@ -2,7 +2,6 @@ package com.baodanyun.websocket.service;
 
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.VCardUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.JSONUtil;
@@ -45,9 +44,9 @@ public class MsgSendControl {
 
         if (webSocketService.hasH5Connected(msg.getTo())) {
 
-            VCardUser vcard = null;
+            AbstractUser vcard = null;
             try {
-                vcard = vcardService.getVCardUser(msg.getFrom(), msg.getTo());
+                vcard = vcardService.getVCardUser(msg.getFrom(), msg.getTo(), AbstractUser.class);
                 if (null != vcard) {
                     if (!StringUtils.isEmpty(vcard.getIcon())) {
                         logger.info("msg.getFrom() " + msg.getFrom() + "----------user icon is null");

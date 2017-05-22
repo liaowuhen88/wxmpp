@@ -6,10 +6,19 @@ package com.baodanyun.websocket.model;
 public class LoginModel {
     private String username;
     private String password;
+    private String accessType;
     private String type;
     private String to;
     private String ic;
     private String nk;
+
+    public String getAccessType() {
+        return accessType;
+    }
+
+    public void setAccessType(String accessType) {
+        this.accessType = accessType;
+    }
 
     public String getUsername() {
         return username;

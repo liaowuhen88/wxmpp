@@ -1,19 +1,14 @@
 package com.baodanyun.websocket.service;
 
 import com.baodanyun.websocket.bean.LastSendMessage;
-import com.baodanyun.websocket.bean.user.Visitor;
-import com.baodanyun.websocket.model.Transferlog;
 import com.baodanyun.websocket.util.DateUtils;
 import com.baodanyun.websocket.util.PropertiesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -36,7 +31,7 @@ public class LastVisitorSendMessageService {
     @Autowired
     private UserCacheServer userCacheServer;
 
-    public void search() {
+    /*public void search() {
         if (!CollectionUtils.isEmpty(map)) {
             Set<Map.Entry<String, LastSendMessage>> set = map.entrySet();
             Iterator<Map.Entry<String, LastSendMessage>> it = set.iterator();
@@ -74,7 +69,7 @@ public class LastVisitorSendMessageService {
             logger.info("map is null");
 
         }
-    }
+    }*/
 
     public void add(String jid, String cid) {
         LastSendMessage la = new LastSendMessage();

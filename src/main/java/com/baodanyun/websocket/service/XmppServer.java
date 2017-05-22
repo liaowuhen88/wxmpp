@@ -55,6 +55,9 @@ public class XmppServer {
     @Autowired
     private WebSocketService webSocketService;
 
+    @Autowired
+    private VcardService vcardService;
+
 
     public RosterGroup getGroup(String jid, String groupName) throws XMPPException, IOException, SmackException, BusinessException {
         Roster roster = Roster.getInstanceFor(this.getXMPPConnectionAuthenticated(jid));
@@ -230,6 +233,7 @@ public class XmppServer {
                 logger.info("创建用户:" + user.getLoginUsername());
                 AccountManager accountManager = AccountManager.getInstance(xmppConnection);
                 accountManager.createAccount(user.getLoginUsername(), user.getPassWord());
+
             }
             xmppConnection.login(user.getLoginUsername(), user.getPassWord());
             isLoginDone = true;

@@ -13,6 +13,8 @@ public interface CustomerDispatcherService {
 
     AbstractUser getCustomer(String openId) throws BusinessException;
 
+    AbstractUser getCustomerByJid(String jid) throws BusinessException;
+
     AbstractUser saveCustomer(AbstractUser customer);
 
     AbstractUser deleteCustomer(AbstractUser customer);

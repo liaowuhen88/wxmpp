@@ -5,16 +5,11 @@ import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.AcsessCustomer;
 import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.bean.user.Visitor;
-import com.baodanyun.websocket.bean.userInterface.user.WeiXinUser;
 import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.dao.OfuserMapper;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.LoginModel;
-import com.baodanyun.websocket.model.Ofuser;
-import com.baodanyun.websocket.service.UserCacheServer;
-import com.baodanyun.websocket.service.UserLifeCycleService;
-import com.baodanyun.websocket.service.UserServer;
-import com.baodanyun.websocket.service.XmppServer;
+import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.service.impl.PersonalServiceImpl;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
@@ -30,7 +25,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * Created by yutao on 2016/10/4.
@@ -63,16 +57,26 @@ public class CustomerLogin extends BaseController {
     @Qualifier("wcUserLifeCycleService")
     private UserLifeCycleService userLifeCycleService;
 
+    @Autowired
+    private CustomerDispatcherService customerDispatcherService;
+
     @RequestMapping(value = "loginApi", method = RequestMethod.POST)
     public void api(LoginModel user, HttpServletRequest request, HttpServletResponse response) {
         //客服必须填写用户名 和 密码
         logger.info("user" + JSONUtil.toJson(user));
-        Customer au =  new Customer();
+        Customer au = new Customer();
+        // au.setAccessType(user.getAccessType());
         try {
-            customerInit(au,user);
+            customerInit(au, user);
             boolean flag = userLifeCycleService.login(au);
 
             if (flag) {
+
+                if (user.getAccessType().equals("2")) {
+                    customerDispatcherService.saveCustomer(au);
+                } else {
+                    logger.info("不接入用户");
+                }
                 request.getSession().setAttribute(Common.USER_KEY, au);
             }
         } catch (Exception e) {
@@ -101,48 +105,22 @@ public class CustomerLogin extends BaseController {
                 throw new BusinessException("to 参数不能为空");
             }
             AcsessCustomer customer = new AcsessCustomer();
-            customerInit(customer,user);
+
+            customerInit(customer, user);
             if (!xmppServer.isAuthenticated(customer.getId())) {
                 throw new BusinessException("客服未登录");
             }
             Visitor visitor = userServer.InitByUidOrNameOrPhone(user.getTo());
 
             logger.info(JSONUtil.toJson(visitor));
+            visitor.setCustomer(customer);
+            userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customer.getId());
 
-            Ofuser ofuser = null;
-
-            if (!StringUtils.isEmpty(visitor.getLoginUsername())) {
-                ofuser = ofuserMapper.selectByPrimaryKey(visitor.getLoginUsername());
-            }
-            if (null == ofuser) {
-                throw new BusinessException("用户不存在");
-            } else {
-                logger.info(JSONUtil.toJson(ofuser));
-
-                logger.info("ofuser.getName() [" + ofuser.getUsername() + "] not  login");
-
-                if (StringUtils.isEmpty(visitor.getOpenId())) {
-                    List<WeiXinUser> infos = personalService.getWeiXinUser(visitor.getUserName(), visitor.getLoginUsername(), null);
-                    logger.info(JSONUtil.toJson(infos));
-                    if (null != infos) {
-                        for (WeiXinUser vu : infos) {
-                            if (vu.getUid().equals(visitor.getUid() + "")) {
-                                visitor.setOpenId(vu.getOpenId());
-                                break;
-                            }
-                        }
-                    }
-
-                    visitor.setCustomer(customer);
-                    userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customer.getId());
-
-                    userCacheServer.saveVisitorByUidOrOpenID(user.getTo(), visitor);
-                    logger.info(JSONUtil.toJson(visitor));
-                    boolean login = us.login(visitor);
-                    if (!login) {
-                        throw new BusinessException("无法接入用户");
-                    }
-                }
+            userCacheServer.saveVisitorByUidOrOpenID(user.getTo(), visitor);
+            logger.info(JSONUtil.toJson(visitor));
+            boolean login = us.login(visitor);
+            if (!login) {
+                throw new BusinessException("无法接入用户");
             }
 
             customer.setTo(visitor.getId());
@@ -184,7 +162,7 @@ public class CustomerLogin extends BaseController {
      */
 
 
-    public void customerInit(Customer customer,LoginModel user) throws BusinessException {
+    public void customerInit(Customer customer, LoginModel user) throws BusinessException {
         if (StringUtils.isBlank(user.getUsername())) {
             throw new BusinessException("[username]参数用户名不能为空");
         } else {

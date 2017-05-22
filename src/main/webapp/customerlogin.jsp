@@ -6,12 +6,15 @@
     <meta charset="UTF-8"/>
     <title>登录</title>
     <meta name="Access-Control-Allow-Origin" content="*">
+
     <script>
         window.base = '<%=request.getContextPath()%>';
     </script>
     <!-- 公用头部 -->
     <jsp:include page="tpl/common/commonjs.jsp"/>
     <jsp:include page="./WEB-INF/views/admin/common/common.jsp"/>
+    <script src=""></script>
+
 </head>
 <script>
     $(function () {
@@ -41,6 +44,11 @@
             }
         });
         $signBtn.on('click', function () {
+            var accessType = $("#accessType").val();
+            if (!accessType) {
+                alert("请选择是否接入用户");
+                return false;
+            }
             var $btn = $(this).button('loading');
             myUtils.ajaxSubmit("signInBtnForm", "signInBtn", window.base + "/api/loginApi", {}, function () {
                 $btn.button('reset');
@@ -72,6 +80,15 @@
         <label>
             <input type="password" name="password" value="111111" id="password" placeholder="密码">
         </label>
+
+        <label>
+            <select id="accessType" name="accessType">
+                <option value="">请选择是否接入用户</option>
+                <option value="1">不接入用户</option>
+                <option value="2">接入用户</option>
+            </select>
+        </label>
+
         <button type="button" class="sign-btn" id="signInBtn" autocomplete="off" data-loading-text="Loading...">登录
         </button>
     </form>

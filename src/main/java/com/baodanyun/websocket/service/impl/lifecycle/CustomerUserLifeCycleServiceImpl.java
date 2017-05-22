@@ -3,11 +3,9 @@ package com.baodanyun.websocket.service.impl.lifecycle;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
-import com.baodanyun.websocket.service.CustomerDispatcherService;
 import com.baodanyun.websocket.util.CommonConfig;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -18,13 +16,10 @@ import java.io.IOException;
 @Service
 public abstract  class CustomerUserLifeCycleServiceImpl extends UserLifeCycleServiceImpl {
 
-    @Autowired
-    private CustomerDispatcherService customerDispatcherService;
 
     @Override
     public boolean login(AbstractUser user) throws IOException, XMPPException, SmackException, BusinessException, InterruptedException {
         boolean flag = super.login(user);
-        customerDispatcherService.saveCustomer(user);
 
         return flag;
     }

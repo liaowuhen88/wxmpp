@@ -26,6 +26,7 @@ public interface UserServer {
 
     Visitor InitByUidOrNameOrPhone(String to) throws BusinessException;
 
+    Visitor InitByOpenIdOrPhone(String to) throws BusinessException;
 
     Visitor initVisitor(String openId) throws BusinessException;
 

@@ -1,14 +1,13 @@
 package com.baodanyun.websocket.bean.userInterface.user;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.VCardUser;
 
 /**
  * Created by liaowuhen on 2017/3/31.
  */
 public class VcardUserRes {
     private AbstractUser user;
-    private VCardUser vcard;
+    private AbstractUser vcard;
 
     public AbstractUser getUser() {
         return user;
@@ -18,11 +17,11 @@ public class VcardUserRes {
         this.user = user;
     }
 
-    public VCardUser getVcard() {
+    public AbstractUser getVcard() {
         return vcard;
     }
 
-    public void setVcard(VCardUser vcard) {
+    public void setVcard(AbstractUser vcard) {
         this.vcard = vcard;
     }
 }

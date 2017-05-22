@@ -3,7 +3,7 @@ package com.baodanyun.websocket.controller;
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.UserSetPW;
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.VCardUser;
+import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.bean.userInterface.user.VcardUserRes;
 import com.baodanyun.websocket.bean.userInterface.user.WeiXinListUser;
@@ -114,7 +114,7 @@ public class CustomerApi extends BaseController {
                 response.setSuccess(false);
                 response.setMsg("用户id不能为空");
             } else {
-                VCardUser vcard = vcardService.getVCardUser(au.getId(), au.getId());
+                Customer vcard = vcardService.getVCardUser(au.getId(), au.getId(), Customer.class);
 
                 if (!StringUtils.isEmpty(user.getDesc())) {
                     flag = true;
@@ -295,8 +295,13 @@ public class CustomerApi extends BaseController {
             tm.setTransferfrom(fromJid);
             tm.setVisitorjid(vjid);
             tm.setCause("客服主动转接");
-            Visitor visitor = userCacheServer.getUserVisitor(fromJid);
+
+            String from = XMPPUtil.jidToName(fromJid);
+
+            Visitor visitor = userServer.InitByOpenIdOrPhone(from);
+
             boolean flag = transferServer.changeVisitorTo(tm, visitor);
+
             response.setSuccess(flag);
         } catch (Exception e) {
             logger.error(e);
@@ -382,9 +387,9 @@ public class CustomerApi extends BaseController {
     public ModelAndView chat(HttpServletRequest request, HttpServletResponse httpServletResponse, String from) throws BusinessException, InterruptedException {
         ModelAndView mv = new ModelAndView();
         AbstractUser au = (AbstractUser) request.getSession().getAttribute(Common.USER_KEY);
-        VCardUser vcard = null;
+        AbstractUser vcard = null;
         try {
-            vcard = vcardService.getVCardUser(au.getId(), au.getId());
+            vcard = vcardService.getVCardUser(au.getId(), au.getId(), AbstractUser.class);
         } catch (Exception e) {
             logger.error(e);
         }

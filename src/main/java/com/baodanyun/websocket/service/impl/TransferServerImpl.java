@@ -85,7 +85,7 @@ public class TransferServerImpl implements TransferServer {
                             throw new BusinessException("加入到目标客服失败");
                         }
                     } else {
-                        visitor.setCustomer(customer);
+                        visitor.setCustomer(customerTo);
                         userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customerTo.getId());
                         try {
                             us.login(visitor);

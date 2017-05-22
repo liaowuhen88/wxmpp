@@ -44,9 +44,9 @@
 				<weiXin.callback>http://localhost:8095</weiXin.callback>
 				<jdbc_driverClassName>com.mysql.jdbc.Driver</jdbc_driverClassName>
 				<jdbc_username>root</jdbc_username>
-				<jdbc_password>liaowuhen</jdbc_password>
+				<jdbc_password>banma123</jdbc_password>
 				<jdbc_url>
-					<![CDATA[jdbc:mysql://localhost:3306/openfire?useUnicode=true&amp;characterEncoding=UTF-8]]></jdbc_url>
+					<![CDATA[jdbc:mysql://10.3.2.123:3306/openfire?useUnicode=true&amp;characterEncoding=UTF-8]]></jdbc_url>
 				<!--客服总台jid-->
 				<control.id>zwv11132</control.id>
 

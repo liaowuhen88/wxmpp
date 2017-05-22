@@ -1,6 +1,6 @@
 package com.baodanyun.websocket.service.impl;
 
-import com.baodanyun.websocket.bean.user.VCardUser;
+import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.service.VcardService;
@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service("vcardService")
 public class VcardServiceImpl implements VcardService {
-    private static final Map<String, VCardUser> vcards = new ConcurrentHashMap<>();
+    private static final Map<String, AbstractUser> vcards = new ConcurrentHashMap<>();
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private XmppServer xmppServer;
@@ -37,14 +37,14 @@ public class VcardServiceImpl implements VcardService {
      * @return
      */
 
-    private VCardUser getBaseVCard(String key, String jid, String xmppId) throws Exception {
+    private <T> T getBaseVCard(String key, String jid, String xmppId, Class<T> c) throws Exception {
         VCard vcard = loadVCard(xmppId, jid);
-        return getBaseVCard(key, vcard);
+        return getBaseVCard(key, vcard, c);
 
     }
 
-    private VCardUser getBaseVCard(String jid, String xmppId) throws Exception {
-        return getBaseVCard(Common.userVcard, jid, xmppId);
+    private <T> T getBaseVCard(String jid, String xmppId, Class<T> c) throws Exception {
+        return getBaseVCard(Common.userVcard, jid, xmppId, c);
 
     }
 
@@ -55,27 +55,28 @@ public class VcardServiceImpl implements VcardService {
      * @return
      */
 
-    private VCardUser getBaseVCard(String key, VCard vcard) throws Exception {
+    private <T> T getBaseVCard(String key, VCard vcard, Class<T> c) throws Exception {
         if (vcard == null) {
             return null;
         } else {
             String js = vcard.getField(key);
             logger.info(js);
-            return JSONUtil.toObject(VCardUser.class, js);
+            return JSONUtil.toObject(c, js);
         }
     }
 
     @Override
-    public VCardUser getVCardUser(String jid, String xmppId) throws Exception {
-        VCardUser vu = vcards.get(jid);
+    public <T> T getVCardUser(String jid, String xmppId, Class<T> c) throws Exception {
+        AbstractUser vu = vcards.get(jid);
         if (null == vu) {
-            vu = getBaseVCard(jid, xmppId);
-            if (null == vu) {
-                vu = new VCardUser();
+            T t = getBaseVCard(jid, xmppId, c);
+            if (null != t) {
+                vcards.put(jid, (AbstractUser) t);
+                return t;
             }
-            vcards.put(jid, vu);
+
         }
-        return vu;
+        return (T) new AbstractUser();
     }
 
     /**
@@ -88,7 +89,7 @@ public class VcardServiceImpl implements VcardService {
      */
 
     @Override
-    public boolean updateBaseVCard(String jid, String key, VCardUser cu) {
+    public boolean updateBaseVCard(String jid, String key, AbstractUser cu) {
         try {
             VCard vcard = new VCard();
             vcard.setField(key, JSONUtil.toJson(cu));
@@ -105,7 +106,7 @@ public class VcardServiceImpl implements VcardService {
     }
 
     @Override
-    public boolean updateBaseVCard(String jid, VCardUser cu) {
+    public boolean updateBaseVCard(String jid, AbstractUser cu) {
 
         return updateBaseVCard(jid, Common.userVcard, cu);
     }

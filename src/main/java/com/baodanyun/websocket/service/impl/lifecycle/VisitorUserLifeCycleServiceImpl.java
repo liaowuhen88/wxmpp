@@ -19,6 +19,8 @@ import org.jivesoftware.smack.XMPPException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
 /**
  * Created by liaowuhen on 2017/3/6.
  */
@@ -31,6 +33,26 @@ public abstract class VisitorUserLifeCycleServiceImpl extends UserLifeCycleServi
 
     @Autowired
     protected VisitorJoinListener visitorJoinListener;
+
+    @Override
+    public boolean login(AbstractUser user) throws IOException, XMPPException, SmackException, BusinessException, InterruptedException {
+
+        boolean flag = super.login(user);
+        AbstractUser vCard = null;
+        try {
+            vCard = vcardService.getVCardUser(user.getId(), user.getId(), AbstractUser.class);
+        } catch (Exception e) {
+            logger.error(e);
+        }
+
+        if (null == vCard) {
+            vcardService.updateBaseVCard(user.getId(), user);
+        }
+
+        return flag;
+
+    }
+
 
     @Override
     public boolean online(AbstractUser user) throws InterruptedException, BusinessException, SmackException.NotLoggedInException, XMPPException.XMPPErrorException, SmackException.NotConnectedException, SmackException.NoResponseException {

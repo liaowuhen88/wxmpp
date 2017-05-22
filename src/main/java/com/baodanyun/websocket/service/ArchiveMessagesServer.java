@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -39,6 +38,9 @@ public class ArchiveMessagesServer {
                 HistoryMsg me = it.next();
 
                 try {
+                    if (null == me || null == me.getFromCard()) {
+                        return;
+                    }
                     List<Element> els = XmllUtil.xmlElements(me.getFromCard());
                     if (!CollectionUtils.isEmpty(els)) {
                         Iterator<Element> eit = els.iterator();

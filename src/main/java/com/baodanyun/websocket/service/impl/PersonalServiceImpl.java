@@ -337,11 +337,10 @@ public class PersonalServiceImpl implements PersonalService {
 
         if (StringUtils.isBlank(hrUser)) {
             hrUser = kdtApiClient.postJson(KdtApiClient.APiMethods.getUidByOpenId.getValue(), requestBean);
-            if ("-1".equals(hrUser)) {
-                hrUser = null;
-            }
         }
-
+        if ("-1".equals(hrUser)) {
+            hrUser = null;
+        }
         logger.info("hruser:" + hrUser);
         HrUser user = null;
         try {

@@ -2,6 +2,7 @@ package com.baodanyun.websocket.service.impl;
 
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.bean.userInterface.user.PersonalInfo;
+import com.baodanyun.websocket.bean.userInterface.user.WeiXinUser;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.service.UserServer;
 import com.baodanyun.websocket.util.JSONUtil;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,6 +34,7 @@ public class UserServerImpl implements UserServer {
     @Override
     public Visitor InitByUidOrNameOrPhone(String to) throws BusinessException {
         Visitor visitor = new Visitor();
+        String phone = null;
         if (!isMobileNO(to)) {
 
             PersonalInfo pe = null;
@@ -44,13 +47,26 @@ public class UserServerImpl implements UserServer {
 
             if (null != pe) {
                 visitor.setUserName(pe.getPname());
+                phone = pe.getMobile();
                 visitor.setNickName(pe.getPname());
                 visitor.setLoginUsername(pe.getMobile());
             }
 
         } else {
             visitor.setLoginUsername(to);
+            phone = to;
 
+        }
+
+        List<WeiXinUser> infos = personalService.getWeiXinUser(visitor.getUserName(), phone, null);
+        logger.info(JSONUtil.toJson(infos));
+        if (null != infos) {
+            for (WeiXinUser vu : infos) {
+                if (vu.getUid().equals(visitor.getUid() + "")) {
+                    visitor.setOpenId(vu.getOpenId());
+                    break;
+                }
+            }
         }
 
         String pwd = "00818863ff056f1d66c8427836f94a87";
@@ -58,6 +74,15 @@ public class UserServerImpl implements UserServer {
         visitor.setId(XMPPUtil.nameToJid(visitor.getLoginUsername()));
         visitor.setLoginTime(System.currentTimeMillis());
         return visitor;
+    }
+
+    @Override
+    public Visitor InitByOpenIdOrPhone(String to) throws BusinessException {
+        if (!isMobileNO(to)) {
+            return InitByUidOrNameOrPhone(to);
+        } else {
+            return InitUserByOpenId(to);
+        }
     }
 
 

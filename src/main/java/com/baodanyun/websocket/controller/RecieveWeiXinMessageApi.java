@@ -65,6 +65,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
             AbstractUser customer = customerDispatcherService.getCustomer(visitor.getOpenId());
             visitor.setType(1);
             visitor.setCustomer(customer);
+            logger.info(JSONUtil.toJson(visitor));
             userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customer.getId());
             msg.setTo(customer.getId());
             logger.info(JSONUtil.toJson(visitor));

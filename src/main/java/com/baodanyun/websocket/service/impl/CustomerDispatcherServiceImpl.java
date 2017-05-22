@@ -41,10 +41,26 @@ public class CustomerDispatcherServiceImpl implements CustomerDispatcherService 
 
         logger.info("openid:[" + openId + "]--------cid[" + cid + "]");
         if (!StringUtils.isEmpty(cid) && xmppServer.isAuthenticated(cid)) {
-            return customers.get(cid);
+            AbstractUser customer = userCacheServer.getUserCustomer(cid);
+
+            if (null != customer) {
+                return customer;
+            }
         }
 
         return getDispatcher(openId);
+    }
+
+    @Override
+    public AbstractUser getCustomerByJid(String jid) throws BusinessException {
+        if (!StringUtils.isEmpty(jid) && xmppServer.isAuthenticated(jid)) {
+            AbstractUser customer = customers.get(jid);
+
+            if (null != customer) {
+                return customer;
+            }
+        }
+        return null;
     }
 
     @Override

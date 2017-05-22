@@ -3,7 +3,6 @@ package com.baodanyun.websocket.controller;
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.Tags;
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.VCardUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.bean.userInterface.PersonalDetail;
 import com.baodanyun.websocket.core.common.Common;
@@ -87,7 +86,7 @@ public class VisitorApi extends BaseController {
 
         try {
             if (!StringUtils.isEmpty(id)) {
-                VCardUser vCard = vcardService.getVCardUser(id, au.getId());
+                AbstractUser vCard = vcardService.getVCardUser(id, au.getId(), AbstractUser.class);
                 Map<String, Object> map = new HashMap<>();
                 map.put("vCard", vCard);
 
@@ -132,7 +131,7 @@ public class VisitorApi extends BaseController {
                 response.setSuccess(false);
                 response.setMsg("参数cjid不能为空");
             } else {
-                VCardUser vCard = vcardService.getVCardUser(user.getCjid(), user.getCjid());
+                Visitor vCard = vcardService.getVCardUser(user.getCjid(), user.getCjid(), Visitor.class);
 
                 if (!StringUtils.isEmpty(user.getDesc())) {
                     vCard.setDesc(user.getDesc().trim());

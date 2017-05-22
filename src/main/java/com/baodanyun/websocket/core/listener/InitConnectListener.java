@@ -39,7 +39,7 @@ public class InitConnectListener implements ConnectionListener {
 
     @Override
     public void connectionClosed() {
-        logger.error(user.getLoginUsername() + ":connectionClosed");
+        logger.info(user.getLoginUsername() + ":connectionClosed");
     }
 
     @Override
