@@ -38,36 +38,42 @@ public class ArchiveMessagesServer {
                 HistoryMsg me = it.next();
 
                 try {
-                    if (null == me || null == me.getFromCard()) {
+                    if (null == me) {
                         return;
                     }
-                    List<Element> els = XmllUtil.xmlElements(me.getFromCard());
-                    if (!CollectionUtils.isEmpty(els)) {
-                        Iterator<Element> eit = els.iterator();
-                        while (eit.hasNext()) {
-                            Element e = eit.next();
-                            if (e.getName().equals("key")) {
-                                String json = e.getText();
-                                Visitor u = JSONUtil.toObject(Visitor.class, json);
-                                me.setFromName(u.getNickName());
-                                me.setIcon(u.getIcon());
+
+                    if (null != me.getFromCard()) {
+                        List<Element> els = XmllUtil.xmlElements(me.getFromCard());
+                        if (!CollectionUtils.isEmpty(els)) {
+                            Iterator<Element> eit = els.iterator();
+                            while (eit.hasNext()) {
+                                Element e = eit.next();
+                                if (e.getName().equals("key")) {
+                                    String json = e.getText();
+                                    Visitor u = JSONUtil.toObject(Visitor.class, json);
+                                    me.setFromName(u.getNickName());
+                                    me.setIcon(u.getIcon());
+                                }
                             }
                         }
                     }
 
-                    List<Element> elsto = XmllUtil.xmlElements(me.getToCard());
-                    if (!CollectionUtils.isEmpty(elsto)) {
-                        Iterator<Element> eit = elsto.iterator();
-                        while (eit.hasNext()) {
-                            Element e = eit.next();
-                            if (e.getName().equals("key")) {
-                                String json = e.getText();
-                                Visitor u = JSONUtil.toObject(Visitor.class, json);
-                                me.setToName(u.getNickName());
-                                me.setToIcon(u.getIcon());
+                    if (null != me.getToCard()) {
+                        List<Element> elsto = XmllUtil.xmlElements(me.getToCard());
+                        if (!CollectionUtils.isEmpty(elsto)) {
+                            Iterator<Element> eit = elsto.iterator();
+                            while (eit.hasNext()) {
+                                Element e = eit.next();
+                                if (e.getName().equals("key")) {
+                                    String json = e.getText();
+                                    Visitor u = JSONUtil.toObject(Visitor.class, json);
+                                    me.setToName(u.getNickName());
+                                    me.setToIcon(u.getIcon());
+                                }
                             }
                         }
                     }
+
 
                 } catch (Exception e) {
                     logger.error("vcard 解析异常", e);

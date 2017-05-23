@@ -3,7 +3,6 @@ package com.baodanyun.websocket.controller;
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.UserSetPW;
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.bean.userInterface.user.VcardUserRes;
 import com.baodanyun.websocket.bean.userInterface.user.WeiXinListUser;
@@ -114,7 +113,7 @@ public class CustomerApi extends BaseController {
                 response.setSuccess(false);
                 response.setMsg("用户id不能为空");
             } else {
-                Customer vcard = vcardService.getVCardUser(au.getId(), au.getId(), Customer.class);
+                AbstractUser vcard = vcardService.getVCardUser(au.getId(), au.getId(), AbstractUser.class);
 
                 if (!StringUtils.isEmpty(user.getDesc())) {
                     flag = true;
@@ -296,9 +295,9 @@ public class CustomerApi extends BaseController {
             tm.setVisitorjid(vjid);
             tm.setCause("客服主动转接");
 
-            String from = XMPPUtil.jidToName(fromJid);
+            String jid = XMPPUtil.jidToName(vjid);
 
-            Visitor visitor = userServer.InitByOpenIdOrPhone(from);
+            Visitor visitor = userServer.InitByOpenIdOrPhone(jid);
 
             boolean flag = transferServer.changeVisitorTo(tm, visitor);
 
@@ -328,10 +327,10 @@ public class CustomerApi extends BaseController {
                 if (null != infos && infos.size() > 0) {
                     for (WeiXinUser info : infos) {
                         WeiXinListUser wu = new WeiXinListUser();
-                        Visitor visitor = userServer.initVisitor(info.getOpenId());
-                        AbstractUser customer = userCacheServer.getCustomerByVisitorOpenId(visitor.getOpenId());
+                        //Visitor visitor = userServer.initVisitor(info.getOpenId());
+                        AbstractUser customer = userCacheServer.getCustomerByVisitorOpenId(info.getOpenId());
                         wu.setInfo(info);
-                        wu.setUser(visitor);
+                        //wu.setUser(info);
                         wu.setCustomer(customer);
                         visitors.add(wu);
                     }

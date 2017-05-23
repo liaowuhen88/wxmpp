@@ -264,7 +264,7 @@ xchat.sendMsgHandelEvent = function (data) {
     data.src = data.to;
     var icon = null;
     if (window.user) {
-        icon = window.user;
+        icon = window.user.icon;
     }
     data.icon = icon || this.controls.default_kf_icon;
     myUtils.storage(data);

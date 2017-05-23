@@ -109,6 +109,9 @@ public class VisitorLogin extends BaseController {
         // 客服在线
         ModelAndView mv = new ModelAndView();
 
+        if (null == card.getId()) {
+            card.setId("-1");
+        }
         mv.addObject("statue", true);
         mv.addObject("customerIsOnline", true);
         mv.addObject("visitor", visitor);

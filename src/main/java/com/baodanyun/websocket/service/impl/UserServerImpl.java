@@ -35,8 +35,12 @@ public class UserServerImpl implements UserServer {
     public Visitor InitByUidOrNameOrPhone(String to) throws BusinessException {
         Visitor visitor = new Visitor();
         String phone = null;
-        if (!isMobileNO(to)) {
+        if (isMobileNO(to)) {
 
+            visitor.setLoginUsername(to);
+            phone = to;
+
+        } else {
             PersonalInfo pe = null;
             if (StringUtils.isNumeric(to)) {
                 visitor.setUid(Long.valueOf(to));
@@ -45,16 +49,16 @@ public class UserServerImpl implements UserServer {
                 pe = personalService.getPersonalInfo(to);
             }
 
+            logger.info(JSONUtil.toJson(pe));
+
             if (null != pe) {
                 visitor.setUserName(pe.getPname());
                 phone = pe.getMobile();
+                visitor.setUid(pe.getId());
                 visitor.setNickName(pe.getPname());
                 visitor.setLoginUsername(pe.getMobile());
             }
 
-        } else {
-            visitor.setLoginUsername(to);
-            phone = to;
 
         }
 
@@ -63,6 +67,11 @@ public class UserServerImpl implements UserServer {
         if (null != infos) {
             for (WeiXinUser vu : infos) {
                 if (vu.getUid().equals(visitor.getUid() + "")) {
+                    visitor.setOpenId(vu.getOpenId());
+                    break;
+                }
+
+                if (vu.getMobile().equals(phone)) {
                     visitor.setOpenId(vu.getOpenId());
                     break;
                 }
@@ -78,7 +87,8 @@ public class UserServerImpl implements UserServer {
 
     @Override
     public Visitor InitByOpenIdOrPhone(String to) throws BusinessException {
-        if (!isMobileNO(to)) {
+        logger.info(to);
+        if (isMobileNO(to)) {
             return InitByUidOrNameOrPhone(to);
         } else {
             return InitUserByOpenId(to);
