@@ -1,3 +1,4 @@
+/*
 package com.baodanyun.websocket.service.impl.lifecycle;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
@@ -10,9 +11,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+*/
 /**
  * Created by liaowuhen on 2017/3/6.
- */
+ *//*
+
 @Service
 public abstract  class CustomerUserLifeCycleServiceImpl extends UserLifeCycleServiceImpl {
 
@@ -37,3 +40,4 @@ public abstract  class CustomerUserLifeCycleServiceImpl extends UserLifeCycleSer
     }
 
 }
+*/

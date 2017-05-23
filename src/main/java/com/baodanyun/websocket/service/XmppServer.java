@@ -8,6 +8,7 @@ import com.baodanyun.websocket.core.listener.InitConnectListener;
 import com.baodanyun.websocket.dao.OfuserMapper;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.Ofuser;
+import com.baodanyun.websocket.node.xmpp.XmppNode;
 import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.XMPPUtil;
@@ -190,6 +191,36 @@ public class XmppServer {
     }
 
 
+    public AbstractXMPPConnection getXMPPConnectionNew(XmppNode xmppNode) throws IOException, XMPPException, SmackException {
+        XMPPTCPConnectionConfiguration.Builder builder = XMPPTCPConnectionConfiguration.builder();
+        builder.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);
+        builder.setSendPresence(false);
+
+
+        XMPPTCPConnectionConfiguration config = builder.setServiceName(Config.xmppdomain).setHost(Config.xmppurl).setPort(Integer.valueOf(Config.xmppport)).build();
+        AbstractXMPPConnection connection = new XMPPTCPConnection(config);
+
+
+        ReconnectionManager reconnectionManager = ReconnectionManager.getInstanceFor(connection);
+        reconnectionManager.setFixedDelay(10);
+        reconnectionManager.setReconnectionPolicy(ReconnectionManager.ReconnectionPolicy.FIXED_DELAY);
+        reconnectionManager.enableAutomaticReconnection();
+
+
+        Roster.getInstanceFor(connection).setRosterLoadedAtLogin(false);
+
+        // 增加消息监听
+        ChatManager chatmanager = ChatManager.getInstanceFor(connection);
+        chatmanager.addChatListener(xmppNode);
+
+        //初始化的连接监听器
+        connection.addConnectionListener(xmppNode);
+
+        connection.connect();
+
+        return connection;
+    }
+
     public AbstractXMPPConnection getXMPPConnectionNew(AbstractUser user) throws IOException, XMPPException, SmackException {
         XMPPTCPConnectionConfiguration.Builder builder = XMPPTCPConnectionConfiguration.builder();
         builder.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);
@@ -246,6 +277,33 @@ public class XmppServer {
 
         return isLoginDone;
     }
+
+
+    public synchronized boolean login(XmppNode xmppNode) throws SmackException, XMPPException, IOException {
+        boolean isLoginDone = false;
+        boolean is = isAuthenticated(xmppNode.getAbstractUser().getId());
+        if (!is) {
+            Ofuser ofuser = ofuserMapper.selectByPrimaryKey(xmppNode.getAbstractUser().getLoginUsername());
+
+            AbstractXMPPConnection xmppConnection = getXMPPConnectionNew(xmppNode);
+            if (null == ofuser) {
+                logger.info("创建用户:" + xmppNode.getAbstractUser().getLoginUsername());
+                AccountManager accountManager = AccountManager.getInstance(xmppConnection);
+                accountManager.createAccount(xmppNode.getAbstractUser().getLoginUsername(), xmppNode.getAbstractUser().getPassWord());
+
+            }
+            xmppConnection.login(xmppNode.getAbstractUser().getLoginUsername(), xmppNode.getAbstractUser().getPassWord());
+            isLoginDone = true;
+
+            if (isLoginDone) {
+                logger.info("id:[" + xmppNode.getAbstractUser().getId() + "] login success");
+                this.saveXMPPConnection(xmppNode.getAbstractUser().getId(), xmppConnection);
+            }
+        }
+
+        return isLoginDone;
+    }
+
 
     public void roster(String vjid, String cjid) throws BusinessException, SmackException.NotLoggedInException, XMPPException.XMPPErrorException, SmackException.NotConnectedException, SmackException.NoResponseException {
         AbstractXMPPConnection createAccountConn = this.getXMPPConnectionAuthenticated(vjid);

@@ -1,8 +1,10 @@
 package com.baodanyun.websocket.core.handle;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.core.common.Common;
-import com.baodanyun.websocket.service.UserLifeCycleService;
+import com.baodanyun.websocket.node.NodeManager;
+import com.baodanyun.websocket.node.WebSocketCustomerNode;
 import com.baodanyun.websocket.service.WebSocketService;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
@@ -16,14 +18,14 @@ import org.springframework.web.socket.WebSocketSession;
  */
 public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
     public WebSocketService webSocketService = SpringContextUtil.getBean("webSocketServiceImpl", WebSocketService.class);
-    UserLifeCycleService userLifeCycleService = SpringContextUtil.getBean("wcUserLifeCycleService", UserLifeCycleService.class);
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         webSocketService.saveSession(au.getId(), session);
         //获取一个customerNode节点
-        userLifeCycleService.online(au);
+        WebSocketCustomerNode wn = NodeManager.getWebSocketCustomerNode((Customer) au);
+        wn.onlinePush();
 
     }
 
@@ -33,7 +35,8 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
             AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
             logger.info("webSocket receive message:" + JSONUtil.toJson(message));
             String content = message.getPayload();
-            userLifeCycleService.receiveMessage(au, content);
+            WebSocketCustomerNode wn = NodeManager.getWebSocketCustomerNode((Customer) au);
+            wn.receiveMessage(content);
         }catch (Exception e){
             logger.info(e);
         }
@@ -49,8 +52,8 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
 
         if (!flag) {
             logger.info("userLifeCycleService.logout(customer): id[" + au.getId() + "]" + status);
-
-            userLifeCycleService.logout(au);
+            WebSocketCustomerNode wn = NodeManager.getWebSocketCustomerNode((Customer) au);
+            wn.logout();
         }
 
     }

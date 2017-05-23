@@ -9,7 +9,13 @@ import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.dao.OfuserMapper;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.LoginModel;
-import com.baodanyun.websocket.service.*;
+import com.baodanyun.websocket.node.AccessVisitorNode;
+import com.baodanyun.websocket.node.NodeManager;
+import com.baodanyun.websocket.node.WebSocketCustomerNode;
+import com.baodanyun.websocket.service.CustomerDispatcherService;
+import com.baodanyun.websocket.service.UserCacheServer;
+import com.baodanyun.websocket.service.UserServer;
+import com.baodanyun.websocket.service.XmppServer;
 import com.baodanyun.websocket.service.impl.PersonalServiceImpl;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
@@ -17,7 +23,6 @@ import com.baodanyun.websocket.util.XMPPUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,14 +55,6 @@ public class CustomerLogin extends BaseController {
     private PersonalServiceImpl personalService;
 
     @Autowired
-    @Qualifier("accessUserLifeCycleService")
-    private UserLifeCycleService us;
-
-    @Autowired
-    @Qualifier("wcUserLifeCycleService")
-    private UserLifeCycleService userLifeCycleService;
-
-    @Autowired
     private CustomerDispatcherService customerDispatcherService;
 
     @RequestMapping(value = "loginApi", method = RequestMethod.POST)
@@ -68,7 +65,10 @@ public class CustomerLogin extends BaseController {
         // au.setAccessType(user.getAccessType());
         try {
             customerInit(au, user);
-            boolean flag = userLifeCycleService.login(au);
+
+            WebSocketCustomerNode wn = NodeManager.getWebSocketCustomerNode(au);
+
+            boolean flag = wn.login();
 
             if (flag) {
 
@@ -110,22 +110,25 @@ public class CustomerLogin extends BaseController {
             if (!xmppServer.isAuthenticated(customer.getId())) {
                 throw new BusinessException("客服未登录");
             }
-            Visitor visitor = userServer.InitByUidOrNameOrPhone(user.getTo());
 
-            logger.info(JSONUtil.toJson(visitor));
+            Visitor visitor = userServer.InitByUidOrNameOrPhone(user.getTo());
             visitor.setCustomer(customer);
+            logger.info(JSONUtil.toJson(visitor));
             userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customer.getId());
 
+            AccessVisitorNode wn = NodeManager.getAccessVisitorNode(visitor);
+
             userCacheServer.saveVisitorByUidOrOpenID(user.getTo(), visitor);
+
             logger.info(JSONUtil.toJson(visitor));
-            boolean login = us.login(visitor);
+            boolean login = wn.login();
             if (!login) {
                 throw new BusinessException("无法接入用户");
             }
 
             customer.setTo(visitor.getId());
             request.getSession().setAttribute(Common.USER_KEY, customer);
-            us.online(visitor);
+            wn.onlinePush();
             mv.addObject("user", JSONUtil.toJson(customer));
             mv.addObject("to", user.getTo() + "@126xmpp");
             mv.setViewName("/customerSimple");
@@ -179,6 +182,7 @@ public class CustomerLogin extends BaseController {
 
         customer.setLoginUsername(user.getUsername());
         customer.setLoginTime(System.currentTimeMillis());
+        customer.setOpenId(user.getUsername());
         customer.setId(jid);
 
     }

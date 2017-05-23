@@ -7,6 +7,7 @@ import com.baodanyun.websocket.listener.VisitorListener;
 import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.service.WebSocketService;
 import com.baodanyun.websocket.service.XmppServer;
+import com.baodanyun.websocket.util.JSONUtil;
 import com.google.common.eventbus.Subscribe;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class VisitorLogoutListener extends AbstarctEventBusListener<VisitorLogou
     @Override
     @Subscribe
     public boolean processExpiringEvent(final VisitorLogoutEvent ve) {
-        logger.info(ve);
+        logger.info(JSONUtil.toJson(ve));
 
         executorService.execute(new Runnable() {
                                     @Override

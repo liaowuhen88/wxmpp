@@ -49,6 +49,7 @@ public class PersonalServiceImpl implements PersonalService {
             java.lang.reflect.Type userInfoType = new TypeToken<List<PersonalInfo>>() {
             }.getType();
 
+            logger.info("uid[" + uid + "]getPersonalInfos[" + userInfo + "]");
             List<PersonalInfo> userinfoList = JSONUtil.fromJson(userInfo, userInfoType);
             return userinfoList;
         } else {
@@ -103,7 +104,10 @@ public class PersonalServiceImpl implements PersonalService {
         }
 
         if (!StringUtils.isEmpty(userAccount)) {
-            return JSONUtil.toObject(Map.class, userAccount);
+            logger.info("getPersonalUserAccount [" + userAccount + "]");
+            Map map = JSONUtil.toObject(Map.class, userAccount);
+
+            return map;
         } else {
             return null;
         }
@@ -359,7 +363,7 @@ public class PersonalServiceImpl implements PersonalService {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info(e);
         }
 
         return null;

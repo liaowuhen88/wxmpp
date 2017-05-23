@@ -9,7 +9,7 @@ import com.baodanyun.websocket.service.MsgSendService;
 public class VisitorJoinEvent {
     private AbstractUser visitor;
     private AbstractUser customer;
-    private MsgSendService msgSendService;
+    private transient MsgSendService msgSendService;
 
     public VisitorJoinEvent(AbstractUser visitor, AbstractUser customer, MsgSendService msgSendService) {
         this.visitor = visitor;

@@ -1,3 +1,4 @@
+/*
 package com.baodanyun.websocket.service.impl.lifecycle;
 
 import com.baodanyun.websocket.bean.msg.Msg;
@@ -20,9 +21,11 @@ import org.springframework.util.CollectionUtils;
 import java.io.IOException;
 import java.util.List;
 
+*/
 /**
  * Created by liaowuhen on 2017/3/6.
- */
+ *//*
+
 public abstract class UserLifeCycleServiceImpl implements UserLifeCycleService {
     public static final Logger logger = Logger.getLogger(UserLifeCycleServiceImpl.class);
 
@@ -128,3 +131,4 @@ public abstract class UserLifeCycleServiceImpl implements UserLifeCycleService {
 
 
 }
+*/

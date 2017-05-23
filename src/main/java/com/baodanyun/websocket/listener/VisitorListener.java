@@ -63,10 +63,10 @@ public class VisitorListener {
         }
     }
 
-    public void chat(String mark, AbstractUser visitor, AbstractUser customer) {
+    public void chat(String mark, AbstractUser visitor, AbstractUser customer, String evnetNum) {
         try{
             LogUserEvents le = getByLogUserEvents(visitor, customer);
-            le.setEvt(CommonConfig.MSG_BIZ_KF_CHAT);
+            le.setEvt(evnetNum);
             le.setMark(mark);
             se.sendToEventCenter(le);
         }catch (Exception e){

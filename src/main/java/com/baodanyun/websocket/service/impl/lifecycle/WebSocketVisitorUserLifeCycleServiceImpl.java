@@ -1,3 +1,4 @@
+/*
 package com.baodanyun.websocket.service.impl.lifecycle;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
@@ -11,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+*/
 /**
  * Created by liaowuhen on 2017/3/6.
- */
+ *//*
+
 @Service("wvUserLifeCycleService")
 public class WebSocketVisitorUserLifeCycleServiceImpl extends VisitorUserLifeCycleServiceImpl {
     private static final Logger logger = Logger.getLogger(WebSocketVisitorUserLifeCycleServiceImpl.class);
@@ -36,3 +39,4 @@ public class WebSocketVisitorUserLifeCycleServiceImpl extends VisitorUserLifeCyc
         return msgSendService;
     }
 }
+*/

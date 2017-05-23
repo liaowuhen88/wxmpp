@@ -88,6 +88,11 @@ public class CustomerDispatcherServiceImpl implements CustomerDispatcherService 
 
             if (xmppServer.isAuthenticated(cid)) {
                 logger.info(cid);
+                try {
+                    userCacheServer.addVisitorCustomerOpenId(openId, cid);
+                } catch (BusinessException e) {
+                    logger.error(e);
+                }
                 return customers.get(cid);
             } else {
                 deleteCustomer(customers.get(cid));

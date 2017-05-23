@@ -29,6 +29,5 @@ public class InitChatManagerListener implements ChatManagerListener {
         ChatMessageListener chatMessageListener = new InitChatMessageListener(user, msgSendControl);
         chat.addMessageListener(chatMessageListener);
 
-
     }
 }

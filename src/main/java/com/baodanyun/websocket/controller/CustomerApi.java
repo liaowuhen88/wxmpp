@@ -12,6 +12,7 @@ import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.PageModel;
 import com.baodanyun.websocket.model.Transferlog;
 import com.baodanyun.websocket.model.UserModel;
+import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.util.CommonConfig;
 import com.baodanyun.websocket.util.JSONUtil;
@@ -21,7 +22,6 @@ import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -56,9 +56,6 @@ public class CustomerApi extends BaseController {
     @Autowired
     private MessageSendToWeixin messageSendToWeixin;
 
-    @Autowired
-    @Qualifier("wcUserLifeCycleService")
-    private UserLifeCycleService userLifeCycleService;
     @Autowired
     private PersonalService personalService;
     @Autowired
@@ -220,7 +217,7 @@ public class CustomerApi extends BaseController {
             response.setSuccess(true);
 
             // 关闭node
-            userLifeCycleService.logout(customer);
+            XmppNodeManager.getCustomerXmppNode(customer).logout();
 
         } catch (Exception e) {
             logger.error(e);
@@ -356,7 +353,7 @@ public class CustomerApi extends BaseController {
         // 获取当前客服
         // from 为openId
         AbstractUser au = (AbstractUser) httpServletRequest.getSession().getAttribute(Common.USER_KEY);
-        Visitor visitor = userServer.initVisitor(from);
+        Visitor visitor = userServer.initUserByOpenId(from);
         AbstractUser customerFrom = userCacheServer.getCustomerByVisitorOpenId(visitor.getOpenId());
 
         Transferlog tm = new Transferlog();
@@ -419,7 +416,8 @@ public class CustomerApi extends BaseController {
             user.setCustomer(au);
             userCacheServer.delete(CommonConfig.USER_ONLINE, au.getId(), user);
 
-            userLifeCycleService.logout(user);
+            XmppNodeManager.getVisitorXmppNode(user).logout();
+
             response.setSuccess(true);
 
         } catch (Exception e) {

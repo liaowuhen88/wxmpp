@@ -9,12 +9,22 @@ public class VisitorReciveMsgEvent {
     private AbstractUser user;
     private AbstractUser customer;
     private String content;
+    private String eventNum;
 
 
-    public VisitorReciveMsgEvent(AbstractUser user, AbstractUser customer, String content) {
+    public VisitorReciveMsgEvent(AbstractUser user, AbstractUser customer, String content, String eventNum) {
         this.user = user;
         this.customer = customer;
         this.content = content;
+        this.eventNum = eventNum;
+    }
+
+    public String getEventNum() {
+        return eventNum;
+    }
+
+    public void setEventNum(String eventNum) {
+        this.eventNum = eventNum;
     }
 
     public String getContent() {

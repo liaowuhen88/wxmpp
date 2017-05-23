@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +29,12 @@ import java.util.regex.Pattern;
 public class UserServerImpl implements UserServer {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    // key  用户openID
+    private final Map<String, Visitor> visitors = new ConcurrentHashMap<>();
+
+    // key uid  value openid
+    private final Map<Long, String> uidOpenid = new ConcurrentHashMap<>();
+
     @Autowired
     private PersonalServiceImpl personalService;
 
@@ -36,7 +43,6 @@ public class UserServerImpl implements UserServer {
         Visitor visitor = new Visitor();
         String phone = null;
         if (isMobileNO(to)) {
-
             visitor.setLoginUsername(to);
             phone = to;
 
@@ -91,7 +97,7 @@ public class UserServerImpl implements UserServer {
         if (isMobileNO(to)) {
             return InitByUidOrNameOrPhone(to);
         } else {
-            return InitUserByOpenId(to);
+            return initUserByOpenId(to);
         }
     }
 
@@ -102,72 +108,62 @@ public class UserServerImpl implements UserServer {
         return m.matches();
     }
 
-    private Visitor InitUserByOpenId(String openId) {
-
-        Visitor visitor = new Visitor();
-        visitor.setOpenId(openId);
-        visitor.setLoginUsername(openId.toLowerCase());
-        visitor.setUserName(openId.toLowerCase());
-        visitor.setNickName("游客");
-        visitor.setId(XMPPUtil.nameToJid(openId.toLowerCase()));
-
-
-        Map account = null;
-        PersonalInfo pe = null;
-        try {
-            Long uid = personalService.getUidByOpenId(openId);
-
-            account = personalService.getPersonalUserAccount(uid);
-
-            if (null != account && null != account.get("icon")) {
-                visitor.setIcon(account.get("icon").toString());
-            }
-
-            pe = personalService.getPersonalInfo(uid);
-
-            if (null != pe) {
-                visitor.setLoginUsername(pe.getMobile());
-                visitor.setUserName(pe.getMobile());
-                visitor.setNickName(pe.getPname());
-                visitor.setId(XMPPUtil.nameToJid(pe.getMobile()));
-                visitor.setUid(pe.getUseraccountid());
-
-            }
-
-        } catch (Exception e) {
-            logger.error("personalService.getPersonalUserAccount(openId) error", e);
-        }
-
-        logger.info("getPersonalUserAccount:---->" + JSONUtil.toJson(account));
-
-        return visitor;
-    }
-
-
-    /**
-     * 第三方接口初始化用户信息
-     *
-     * @param accessId openid 微信唯一标识符
-     * @return
-     * @throws BusinessException
-     */
-
     @Override
-    public Visitor initVisitor(String accessId) throws BusinessException {
-        if (StringUtils.isBlank(accessId)) {
-            throw new BusinessException("accessId 参数不能为空");
+    public Visitor initUserByOpenId(String openId) throws BusinessException {
+
+        if (StringUtils.isBlank(openId)) {
+            throw new BusinessException("openId 不能为空");
         } else {
-            Visitor visitor = this.InitUserByOpenId(accessId);
-            String pwd = "00818863ff056f1d66c8427836f94a87";
-            visitor.setPassWord(pwd);
-            visitor.setLoginTime(new Date().getTime());
+
+            Visitor visitor = visitors.get(openId);
+
+            if (null == visitor) {
+
+
+                visitor = new Visitor();
+
+                visitor.setOpenId(openId);
+                visitor.setLoginUsername(openId.toLowerCase());
+                visitor.setUserName(openId.toLowerCase());
+                visitor.setNickName("游客");
+                visitor.setId(XMPPUtil.nameToJid(openId.toLowerCase()));
+                String pwd = "00818863ff056f1d66c8427836f94a87";
+                visitor.setPassWord(pwd);
+                visitor.setLoginTime(new Date().getTime());
+
+                try {
+
+                    Long uid = personalService.getUidByOpenId(openId);
+
+                    PersonalInfo pe = personalService.getPersonalInfo(uid);
+
+                    if (null != pe) {
+                        visitor.setLoginUsername(pe.getMobile());
+                        visitor.setUserName(pe.getMobile());
+                        visitor.setNickName(pe.getPname());
+                        visitor.setId(XMPPUtil.nameToJid(pe.getMobile()));
+                        visitor.setUid(pe.getUseraccountid());
+
+                    }
+
+                    Map account = personalService.getPersonalUserAccount(uid);
+
+                    if (null != account && null != account.get("icon")) {
+                        visitor.setIcon(account.get("icon").toString());
+                    }
+
+                } catch (Exception e) {
+                    logger.error("personalService.getPersonalUserAccount(openId) error", e);
+                }
+
+                visitors.put(openId, visitor);
+
+                logger.info("openid[" + openId + "]---visitor[" + JSONUtil.toJson(visitor) + "]");
+                return visitor;
+            }
             return visitor;
         }
-    }
 
-    @Override
-    public Visitor initVisitor(Long uid) throws BusinessException {
-        return null;
     }
 
     @Override
@@ -177,6 +173,12 @@ public class UserServerImpl implements UserServer {
         visitor.setLoginTime(new Date().getTime());
         return visitor;
 
+    }
+
+    @Override
+    public Visitor initVisitorByUid(Long uid) throws BusinessException {
+
+        return null;
     }
 
 }

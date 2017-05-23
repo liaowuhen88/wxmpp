@@ -3,9 +3,11 @@ package com.baodanyun.websocket.core.handle;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.AcsessCustomer;
+import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.event.SynchronizationMsgEvent;
-import com.baodanyun.websocket.service.UserLifeCycleService;
+import com.baodanyun.websocket.node.AccessCustomerNode;
+import com.baodanyun.websocket.node.NodeManager;
 import com.baodanyun.websocket.service.WebSocketService;
 import com.baodanyun.websocket.util.EventBusUtils;
 import com.baodanyun.websocket.util.JSONUtil;
@@ -20,8 +22,6 @@ import org.springframework.web.socket.WebSocketSession;
  */
 public class CustomerSimpleWebSocketHandler extends AbstractWebSocketHandler {
     public WebSocketService webSocketService = SpringContextUtil.getBean("webSocketServiceImpl", WebSocketService.class);
-    UserLifeCycleService userLifeCycleService = SpringContextUtil.getBean("accessCustomerUserLifeCycleService", UserLifeCycleService.class);
-
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         AcsessCustomer customer = (AcsessCustomer) session.getHandshakeAttributes().get(Common.USER_KEY);
@@ -47,7 +47,9 @@ public class CustomerSimpleWebSocketHandler extends AbstractWebSocketHandler {
             sme.setFromJid(au.getId());
             EventBusUtils.post(sme);
 
-            userLifeCycleService.receiveMessage(au, content);
+            AccessCustomerNode wn = NodeManager.getAccessCustomerNode((Customer) au);
+
+            wn.receiveMessage(content);
         } catch (Exception e) {
             logger.info(e);
         }

@@ -1,3 +1,4 @@
+/*
 package com.baodanyun.websocket.service.impl.lifecycle;
 
 import com.baodanyun.websocket.bean.msg.Msg;
@@ -10,6 +11,7 @@ import com.baodanyun.websocket.event.VisitorReciveMsgEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.listener.impl.VisitorJoinListener;
 import com.baodanyun.websocket.listener.impl.VisitorLoginListener;
+import com.baodanyun.websocket.util.CommonConfig;
 import com.baodanyun.websocket.util.EventBusUtils;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.apache.commons.lang.StringUtils;
@@ -21,9 +23,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+*/
 /**
  * Created by liaowuhen on 2017/3/6.
- */
+ *//*
+
 @Service
 public abstract class VisitorUserLifeCycleServiceImpl extends UserLifeCycleServiceImpl {
     private static final Logger logger = Logger.getLogger(VisitorUserLifeCycleServiceImpl.class);
@@ -77,13 +81,15 @@ public abstract class VisitorUserLifeCycleServiceImpl extends UserLifeCycleServi
 
     }
 
-    /**
+    */
+/**
      * 参数为访客
      *
      * @param user
      * @return
      * @throws InterruptedException
-     */
+ *//*
+
     @Override
     public boolean uninstallVisitor(AbstractUser user) throws InterruptedException {
 
@@ -130,13 +136,14 @@ public abstract class VisitorUserLifeCycleServiceImpl extends UserLifeCycleServi
     @Override
     public Msg receiveMessage(AbstractUser user, String content) throws InterruptedException, SmackException.NotConnectedException, BusinessException {
         Msg msg = super.receiveMessage(user, content);
-        VisitorReciveMsgEvent vme = new VisitorReciveMsgEvent(user, ((Visitor) user).getCustomer(), msg.getContent());
+        VisitorReciveMsgEvent vme = new VisitorReciveMsgEvent(user, ((Visitor) user).getCustomer(), msg.getContent(), CommonConfig.MSG_BIZ_KF_WX_CHAT);
 
         EventBusUtils.post(vme);
         return msg;
     }
 
-   /* @Override
+   */
+/* @Override
     public boolean sendMessage(AbstractUser user, Msg msg) throws InterruptedException {
         vcardService.getVCardUser(user.getId());
         StatusMsg mg = this.getMsgSendService().getSMMsgSendTOVisitor(user, visitor.getCustomer());
@@ -146,5 +153,7 @@ public abstract class VisitorUserLifeCycleServiceImpl extends UserLifeCycleServi
 
         this.getMsgSendService().produce(mg);
         return true;
-    }*/
+    }*//*
+
 }
+*/

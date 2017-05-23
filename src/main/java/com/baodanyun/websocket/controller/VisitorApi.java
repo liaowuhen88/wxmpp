@@ -9,14 +9,12 @@ import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.model.UserModel;
 import com.baodanyun.websocket.service.PersonalService;
 import com.baodanyun.websocket.service.UserCacheServer;
-import com.baodanyun.websocket.service.UserLifeCycleService;
 import com.baodanyun.websocket.service.VcardService;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,10 +42,6 @@ public class VisitorApi extends BaseController {
 
     @Autowired
     private UserCacheServer userCacheServer;
-
-    @Autowired
-    @Qualifier("wvUserLifeCycleService")
-    private UserLifeCycleService userLifeCycleService;
 
     /**
      * 获取访客节点信息

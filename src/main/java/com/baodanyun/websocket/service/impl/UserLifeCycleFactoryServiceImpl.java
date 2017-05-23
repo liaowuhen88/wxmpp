@@ -1,3 +1,4 @@
+/*
 package com.baodanyun.websocket.service.impl;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
@@ -8,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+*/
 /**
  * Created by liaowuhen on 2017/4/17.
- */
+ *//*
+
 
 @Service
 public class UserLifeCycleFactoryServiceImpl implements UserLifeCycleFactoryService {
@@ -33,3 +36,4 @@ public class UserLifeCycleFactoryServiceImpl implements UserLifeCycleFactoryServ
         return wxUserLifeCycleService;
     }
 }
+*/

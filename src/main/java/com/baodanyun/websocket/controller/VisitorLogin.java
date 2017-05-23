@@ -4,6 +4,8 @@ import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.exception.BusinessException;
+import com.baodanyun.websocket.node.NodeManager;
+import com.baodanyun.websocket.node.WebSocketVisitorNode;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.XMPPUtil;
@@ -12,7 +14,6 @@ import org.jivesoftware.smack.XMPPException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,49 +49,40 @@ public class VisitorLogin extends BaseController {
     @Autowired
     private CustomerDispatcherService customerDispatcherService;
 
-
-    @Autowired
-    @Qualifier("wvUserLifeCycleService")
-    private UserLifeCycleService userLifeCycleService;
-
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView visitor(HttpServletRequest request, HttpServletResponse response) throws IOException, XMPPException, SmackException {
         ModelAndView mv = new ModelAndView();
         String openId = request.getParameter(LOGIN_USER);
-        Visitor visitor = null;
         AbstractUser cCard;
-        AbstractUser customer;
         logger.info("accessId:[" + openId + "]");
 
         try {
-            if (null == visitor) {
-                visitor = userServer.initVisitor(openId);
-            }
+            Visitor visitor = userServer.initUserByOpenId(openId);
+            AbstractUser customer = customerDispatcherService.getCustomer(visitor.getOpenId());
+            visitor.setCustomer(customer);
+            logger.info(JSONUtil.toJson(visitor));
 
-            if (null != visitor) {
-                customer = customerDispatcherService.getCustomer(visitor.getOpenId());
-                visitor.setCustomer(customer);
-                logger.info(JSONUtil.toJson(visitor));
-                userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customer.getId());
-                if (null != customer) {
-                    boolean flag = customerOnline(customer.getId());
-                    if (flag) {
-                        boolean login = userLifeCycleService.login(visitor);
-                        if (login) {
-                            cCard = vcardService.getVCardUser(customer.getId(), visitor.getId(), AbstractUser.class);
-                            mv = getOnline(visitor, customer.getId(), cCard);
-                            request.getSession().setAttribute(Common.USER_KEY, visitor);
-                        } else {
-                            throw new BusinessException("接入失败");
-                        }
+            WebSocketVisitorNode wn = NodeManager.getWebSocketVisitorNode(visitor);
 
+            if (null != customer) {
+                boolean flag = customerOnline(customer.getId());
+                if (flag) {
+
+                    boolean login = wn.login();
+                    if (login) {
+                        cCard = vcardService.getVCardUser(customer.getId(), visitor.getId(), AbstractUser.class);
+                        mv = getOnline(visitor, customer.getId(), cCard);
+                        request.getSession().setAttribute(Common.USER_KEY, visitor);
                     } else {
-                        //客服不在线
-                        mv = getOffline(visitor, customer.getId());
+                        throw new BusinessException("接入失败");
                     }
+
                 } else {
-                    throw new BusinessException("客服不存在");
+                    //客服不在线
+                    mv = getOffline(visitor, customer.getId());
                 }
+            } else {
+                throw new BusinessException("客服不存在");
             }
 
 

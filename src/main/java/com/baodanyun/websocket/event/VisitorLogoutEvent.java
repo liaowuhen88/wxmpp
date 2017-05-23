@@ -9,7 +9,7 @@ import com.baodanyun.websocket.service.MsgSendService;
 public class VisitorLogoutEvent {
     private AbstractUser user;
     private AbstractUser customer;
-    private MsgSendService msgSendService;
+    private transient MsgSendService msgSendService;
 
 
     public VisitorLogoutEvent(AbstractUser user, AbstractUser customer, MsgSendService msgSendService) {

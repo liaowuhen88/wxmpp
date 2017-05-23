@@ -1,3 +1,4 @@
+/*
 package com.baodanyun.websocket.service.impl.lifecycle;
 
 import com.baodanyun.websocket.bean.msg.Msg;
@@ -14,9 +15,11 @@ import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 
+*/
 /**
  * Created by liaowuhen on 2017/3/6.
- */
+ *//*
+
 @Service("wcUserLifeCycleService")
 public class WebSocketCustomerUserLifeCycleServiceImpl extends CustomerUserLifeCycleServiceImpl {
     @Autowired
@@ -45,14 +48,16 @@ public class WebSocketCustomerUserLifeCycleServiceImpl extends CustomerUserLifeC
 
         customerDispatcherService.deleteCustomer(customer);
 
-       /* Set<AbstractUser> onlineQueue = userCacheServer.get(CommonConfig.USER_ONLINE, customer.getId());
+       */
+/* Set<AbstractUser> onlineQueue = userCacheServer.get(CommonConfig.USER_ONLINE, customer.getId());
 
         if(null != onlineQueue){
             for(AbstractUser visitor:onlineQueue){
                 // 通知用户
                 userLifeCycleService.logout(visitor);
             }
-        }*/
+        }*//*
+
 
     }
 
@@ -86,3 +91,4 @@ public class WebSocketCustomerUserLifeCycleServiceImpl extends CustomerUserLifeC
        return null;
     }
 }
+*/

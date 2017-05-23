@@ -2,8 +2,10 @@ package com.baodanyun.websocket.core.handle;
 
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.core.common.Common;
-import com.baodanyun.websocket.service.UserLifeCycleService;
+import com.baodanyun.websocket.node.NodeManager;
+import com.baodanyun.websocket.node.WebSocketVisitorNode;
 import com.baodanyun.websocket.service.WebSocketService;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
@@ -18,14 +20,15 @@ import org.springframework.web.socket.WebSocketSession;
 public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
 
     WebSocketService webSocketService = SpringContextUtil.getBean("webSocketServiceImpl", WebSocketService.class);
-    UserLifeCycleService userLifeCycleService = SpringContextUtil.getBean("wvUserLifeCycleService", UserLifeCycleService.class);
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         webSocketService.saveSession(au.getId(), session);
         logger.info("session is open --- ip:[" + session.getLocalAddress() + "]------visitorId:[" + au.getId() + "] ---- sessionId:[" + session.getId() + "]  ");
-        userLifeCycleService.online(au);
+
+        WebSocketVisitorNode wn = NodeManager.getWebSocketVisitorNode((Visitor) au);
+        wn.onlinePush();
 
     }
 
@@ -36,7 +39,9 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
             AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
 
             String content = message.getPayload();
-            userLifeCycleService.receiveMessage(au, content);
+            WebSocketVisitorNode wn = NodeManager.getWebSocketVisitorNode((Visitor) au);
+
+            wn.receiveMessage(content);
         }catch (Exception e){
             logger.info(e);
         }
@@ -47,8 +52,8 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         logger.info("session is closed  ------visitorId:[" + au.getId() + "] ---- sessionId:[" + session.getId() + "]  ----------status:[ " + status + "]");
         webSocketService.removeSession(au.getId(), session);
-        userLifeCycleService.logout(au);
-
+        WebSocketVisitorNode wn = NodeManager.getWebSocketVisitorNode((Visitor) au);
+        wn.logout();
 
     }
 

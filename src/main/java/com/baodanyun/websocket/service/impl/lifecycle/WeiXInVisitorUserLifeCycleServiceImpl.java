@@ -1,3 +1,4 @@
+/*
 package com.baodanyun.websocket.service.impl.lifecycle;
 
 import com.baodanyun.websocket.bean.msg.Msg;
@@ -17,9 +18,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+*/
 /**
  * Created by liaowuhen on 2017/3/6.
- */
+ *//*
+
 @Service("wxUserLifeCycleService")
 public class WeiXInVisitorUserLifeCycleServiceImpl extends VisitorUserLifeCycleServiceImpl {
     private static final Logger logger = Logger.getLogger(WeiXInVisitorUserLifeCycleServiceImpl.class);
@@ -58,3 +61,4 @@ public class WeiXInVisitorUserLifeCycleServiceImpl extends VisitorUserLifeCycleS
         return msgSendService;
     }
 }
+*/

@@ -5,6 +5,8 @@ import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.Transferlog;
+import com.baodanyun.websocket.node.xmpp.VisitorXmppNode;
+import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.apache.commons.lang.StringUtils;
@@ -31,9 +33,6 @@ public class TransferServerImpl implements TransferServer {
 
     @Autowired
     private UserCacheServer userCacheServer;
-
-    @Autowired
-    private UserLifeCycleFactoryService userLifeCycleFactoryService;
 
     @Autowired
     private MsgSendControl msgSendControl;
@@ -72,16 +71,16 @@ public class TransferServerImpl implements TransferServer {
 
                     boolean vflag = xmppServer.isAuthenticated(tm.getVisitorjid());
 
-                    UserLifeCycleService us = userLifeCycleFactoryService.getUserLifeCycleService(visitor);
+                    VisitorXmppNode node = XmppNodeManager.getVisitorXmppNode(visitor);
 
                     if (vflag) {
-                        if (!us.uninstallVisitor(visitor)) {
+                        if (!node.uninstall()) {
                             throw new BusinessException("从当前客服卸载失败");
                         }
-                        visitor.setCustomer(customer);
+                        visitor.setCustomer(customerTo);
                         userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customerTo.getId());
 
-                        if (!us.joinQueue(visitor)) {
+                        if (!node.joinQueue()) {
                             throw new BusinessException("加入到目标客服失败");
                         }
                     } else {
@@ -92,8 +91,8 @@ public class TransferServerImpl implements TransferServer {
                             logger.info(JSONUtil.toJson(visitor));
                             String pwd = "00818863ff056f1d66c8427836f94a87";
                             visitor.setPassWord(pwd);
-                            us.login(visitor);
-                            us.online(visitor);
+                            node.login();
+                            node.onlinePush();
                         } catch (Exception e) {
                             logger.error("", e);
                         }

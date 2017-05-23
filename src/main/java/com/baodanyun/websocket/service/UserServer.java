@@ -28,10 +28,10 @@ public interface UserServer {
 
     Visitor InitByOpenIdOrPhone(String to) throws BusinessException;
 
-    Visitor initVisitor(String openId) throws BusinessException;
-
-    Visitor initVisitor(Long uid) throws BusinessException;
+    Visitor initVisitorByUid(Long uid) throws BusinessException;
 
     Visitor initVisitor() throws BusinessException;
+
+    Visitor initUserByOpenId(String openId) throws BusinessException;
 
 }

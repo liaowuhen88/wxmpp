@@ -13,6 +13,8 @@ public class CommonConfig {
     //用户交互事件的事件类型   event
     public static final String MSG_BIZ_KF_ENTER = "0101"; //进入客服
     public static final String MSG_BIZ_KF_CHAT = "010101"; //与客服聊天
+    public static final String MSG_BIZ_KF_WX_CHAT = "010103"; //与客服聊天
+
     public static final String MSG_BIZ_KF_QUIT = "0102"; //退出客服
     public static final String MSG_BIZ_KF_LEAVE_MESSAGE = "0103"; //用户留言
 

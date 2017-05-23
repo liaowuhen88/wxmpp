@@ -4,6 +4,7 @@ import com.baodanyun.websocket.event.VisitorReciveMsgEvent;
 import com.baodanyun.websocket.listener.EventBusListener;
 import com.baodanyun.websocket.listener.VisitorListener;
 import com.baodanyun.websocket.service.UserCacheServer;
+import com.baodanyun.websocket.util.JSONUtil;
 import com.google.common.eventbus.Subscribe;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +26,13 @@ public class VisitorReciveMsgListener extends AbstarctEventBusListener<VisitorRe
     @Override
     @Subscribe
     public boolean processExpiringEvent(final VisitorReciveMsgEvent ve) {
-        logger.info(ve);
+        logger.info(JSONUtil.toJson(ve));
 
         executorService.execute(new Runnable() {
                                     @Override
                                     public void run() {
                                         try {
-                                            visitorListener.chat(ve.getContent(), ve.getUser(), ve.getCustomer());
+                                            visitorListener.chat(ve.getContent(), ve.getUser(), ve.getCustomer(), ve.getEventNum());
                                         } catch (Exception e) {
                                             logger.error(e);
                                         }

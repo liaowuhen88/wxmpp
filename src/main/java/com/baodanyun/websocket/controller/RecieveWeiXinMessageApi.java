@@ -5,12 +5,13 @@ import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.exception.BusinessException;
+import com.baodanyun.websocket.node.NodeManager;
+import com.baodanyun.websocket.node.WeChatNode;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,10 +38,6 @@ public class RecieveWeiXinMessageApi extends BaseController {
     private XmppUserOnlineServer xmppUserOnlineServer;
 
     @Autowired
-    @Qualifier("wxUserLifeCycleService")
-    private UserLifeCycleService userLifeCycleService;
-
-    @Autowired
     private CustomerDispatcherService customerDispatcherService;
 
     @Autowired
@@ -61,24 +58,22 @@ public class RecieveWeiXinMessageApi extends BaseController {
         try {
             String body = HttpServletRequestUtils.getBody(request);
             Msg msg = msg(body);
-            Visitor visitor = userServer.initVisitor(msg.getFrom());
+            Visitor visitor = userServer.initUserByOpenId(msg.getFrom());
             AbstractUser customer = customerDispatcherService.getCustomer(visitor.getOpenId());
-            visitor.setType(1);
             visitor.setCustomer(customer);
-            logger.info(JSONUtil.toJson(visitor));
-            userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customer.getId());
-            msg.setTo(customer.getId());
+
             logger.info(JSONUtil.toJson(visitor));
 
+            WeChatNode wn = NodeManager.getWeChatNode(visitor);
 
             if (!StringUtils.isEmpty(msg.getContent()) && msg.getContent().startsWith(keywords)) {
                 response = getBindCustomerResponse(visitor, msg);
             } else {
-                if (null != customer) {
+                if (null != customer && null != customer.getId()) {
 
                     boolean cFlag = xmppServer.isAuthenticated(customer.getId());
                     if (!cFlag) {
-                        cFlag = xmppUserOnlineServer.isOnline(msg.getTo());
+                        cFlag = xmppUserOnlineServer.isOnline(customer.getLoginUsername());
                     }
                     logger.info(cFlag);
                     // 客服不在线
@@ -86,14 +81,14 @@ public class RecieveWeiXinMessageApi extends BaseController {
                         String url = request.getRequestURL().toString();
                         response = getLeaveMessageResponse(customer, url, msg);
                     } else {
-                        boolean flag = xmppServer.isAuthenticated(visitor.getId());
+                        boolean flag = wn.getXmppNode().isOnline();
 
                         if (!flag) {
-                            userLifeCycleService.login(visitor);
-                            userLifeCycleService.online(visitor);
+                            wn.login();
+                            wn.onlinePush();
                         }
 
-                        userLifeCycleService.receiveMessage(visitor, JSONUtil.toJson(msg));
+                        wn.receiveMessage(JSONUtil.toJson(msg));
 
                         response = getOnlineResponse();
                     }
