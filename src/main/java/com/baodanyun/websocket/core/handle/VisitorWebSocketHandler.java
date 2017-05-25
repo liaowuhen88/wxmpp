@@ -26,9 +26,9 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         webSocketService.saveSession(au.getId(), session);
         logger.info("session is open --- ip:[" + session.getLocalAddress() + "]------visitorId:[" + au.getId() + "] ---- sessionId:[" + session.getId() + "]  ");
+        WebSocketVisitorNode wn = NodeManager.getWebSocketVisitorNode(session, (Visitor) au);
 
-        WebSocketVisitorNode wn = NodeManager.getWebSocketVisitorNode((Visitor) au);
-        wn.onlinePush();
+        wn.online();
 
     }
 
@@ -39,9 +39,9 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
             AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
 
             String content = message.getPayload();
-            WebSocketVisitorNode wn = NodeManager.getWebSocketVisitorNode((Visitor) au);
+            WebSocketVisitorNode wn = NodeManager.getWebSocketVisitorNode(session, (Visitor) au);
 
-            wn.receiveMessage(content);
+            wn.receiveFromGod(content);
         }catch (Exception e){
             logger.info(e);
         }
@@ -52,8 +52,8 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         logger.info("session is closed  ------visitorId:[" + au.getId() + "] ---- sessionId:[" + session.getId() + "]  ----------status:[ " + status + "]");
         webSocketService.removeSession(au.getId(), session);
-        WebSocketVisitorNode wn = NodeManager.getWebSocketVisitorNode((Visitor) au);
-        wn.logout();
+        WebSocketVisitorNode wn = NodeManager.getWebSocketVisitorNode(session, (Visitor) au);
+        wn.getXmppNode().getNodes().remove(wn);
 
     }
 

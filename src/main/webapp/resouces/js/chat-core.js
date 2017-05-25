@@ -79,6 +79,7 @@ var xChat = function (options) {
     //ws关闭
     this.wsClose = function () {
         console.log("wsClose")
+        window.location.href = window.base + "/api/customer_chat";
         //disConnect();
     };
     //接收到服务器对消息的回执

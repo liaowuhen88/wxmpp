@@ -1,23 +1,28 @@
 package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.msg.Msg;
+import com.baodanyun.websocket.bean.msg.status.StatusMsg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
-import com.baodanyun.websocket.event.VisitorJoinEvent;
+import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.event.VisitorLoginEvent;
+import com.baodanyun.websocket.event.VisitorReciveMsgEvent;
 import com.baodanyun.websocket.exception.BusinessException;
+import com.baodanyun.websocket.node.dispatcher.VisitorDispather;
+import com.baodanyun.websocket.node.xmpp.VisitorXmppNode;
+import com.baodanyun.websocket.util.CommonConfig;
+import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.EventBusUtils;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.apache.log4j.Logger;
 import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.XMPPException;
 
-import java.io.IOException;
+import java.util.Date;
 
 /**
  * Created by liaowuhen on 2017/5/23.
  */
-public abstract class VisitorNode extends AbstractNode {
+public abstract class VisitorNode extends AbstractNode implements VisitorDispather {
     private static final Logger logger = Logger.getLogger(VisitorNode.class);
     private Visitor visitor;
 
@@ -30,51 +35,75 @@ public abstract class VisitorNode extends AbstractNode {
         return visitor;
     }
 
-    @Override
-    public boolean login() throws IOException, XMPPException, SmackException, BusinessException {
-        return this.getXmppNode().login();
+
+    public StatusMsg getSMMsgSendTOVisitor(AbstractUser visitor, MsgStatus status) {
+        StatusMsg statusSysMsg = StatusMsg.buildStatus(Msg.Type.status);
+        if (null != visitor) {
+            statusSysMsg.setToName(visitor.getNickName());
+            statusSysMsg.setTo(visitor.getId());
+            statusSysMsg.setLoginUsername(visitor.getLoginUsername());
+            statusSysMsg.setCt(new Date().getTime());
+            statusSysMsg.setOpenId(visitor.getOpenId());
+        }
+        statusSysMsg.setStatus(status);
+        return statusSysMsg;
     }
 
     @Override
-    public void logout() throws InterruptedException {
-        this.getXmppNode().getNodes().remove(this);
+    public void receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
+        super.receiveFromGod(msg);
+
+        VisitorReciveMsgEvent vme = new VisitorReciveMsgEvent(this.getAbstractUser(), ((Visitor) this.getAbstractUser()).getCustomer(), msg.getContent(), CommonConfig.MSG_BIZ_KF_WX_CHAT);
+
+        EventBusUtils.post(vme);
 
     }
 
-
     @Override
-    public Msg receiveMessage(String content) throws InterruptedException, SmackException.NotConnectedException, BusinessException {
-        Msg msg = super.receiveMessage(content);
+    public void online() throws InterruptedException {
+        VisitorLoginEvent vl = new VisitorLoginEvent(this.getAbstractUser(), ((Visitor) this.getAbstractUser()).getCustomer(), null);
 
-        return msg;
+        EventBusUtils.post(vl);
     }
 
+    public Msg getMsgHelloToVisitor(Visitor user) {
+        logger.info("user--->" + JSONUtil.toJson(user));
+        String body = Config.greetingWord;
+        Msg sendMsg = new Msg(body);
+        String from;
 
-    @Override
-    public Msg receiveMessage(Msg msg) throws InterruptedException, SmackException.NotConnectedException, BusinessException {
-        return null;
+        String to = user.getId();
+
+        String type = Msg.Type.msg.toString();
+        Long ct = new Date().getTime();
+
+        sendMsg.setType(type);
+        sendMsg.setContentType(Msg.MsgContentType.text.toString());
+
+        from = visitor.getCustomer().getId();
+        sendMsg.setFrom(from);
+        sendMsg.setIcon(visitor.getCustomer().getIcon());
+        sendMsg.setFromName(visitor.getCustomer().getNickName());
+
+
+        sendMsg.setTo(to);
+        sendMsg.setCt(ct);
+
+        return sendMsg;
     }
 
     @Override
     public boolean joinQueue() throws InterruptedException {
-        VisitorJoinEvent ve = new VisitorJoinEvent(visitor, visitor.getCustomer(), this.getMsgSendService());
-
-        EventBusUtils.post(ve);
-
-        return true;
+        logger.info("保存到缓存--->" + userCacheServer.add(CommonConfig.USER_VISITOR, this.getAbstractUser()));
+        return ((VisitorXmppNode) this.getXmppNode()).joinQueue();
     }
 
     @Override
     public boolean uninstall() throws InterruptedException {
-        return false;
+        return ((VisitorXmppNode) this.getXmppNode()).uninstall();
     }
 
-    @Override
-    public boolean isOnline() {
-        return true;
-    }
-
-    @Override
+    /*@Override
     public void onlinePush() throws BusinessException, InterruptedException {
         VisitorLoginEvent vl = new VisitorLoginEvent(visitor, visitor.getCustomer(), this.getMsgSendService());
 
@@ -85,19 +114,6 @@ public abstract class VisitorNode extends AbstractNode {
 
         pushOfflineMsg();
 
-    }
-
-    @Override
-    public Msg getMsg(String content) {
-        try {
-            Msg msg = JSONUtil.toObject(Msg.class, content);
-            msg.setTo(visitor.getCustomer().getId());
-            msg.setFrom(visitor.getId());
-            return msg;
-        } catch (Exception e) {
-            logger.error(e);
-        }
-        return null;
-    }
+    }*/
 
 }

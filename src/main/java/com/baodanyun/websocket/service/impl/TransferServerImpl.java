@@ -5,6 +5,8 @@ import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.Transferlog;
+import com.baodanyun.websocket.node.NodeManager;
+import com.baodanyun.websocket.node.WeChatNode;
 import com.baodanyun.websocket.node.xmpp.VisitorXmppNode;
 import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
 import com.baodanyun.websocket.service.*;
@@ -45,6 +47,46 @@ public class TransferServerImpl implements TransferServer {
     }
 
     @Override
+    public boolean bindVisitor(AbstractUser customerFrom, AbstractUser customer, Visitor visitor) {
+        boolean flag = false;
+        try {
+            if (null == visitor) {
+                throw new BusinessException("访客未在线");
+            }
+            WeChatNode wn = NodeManager.getWeChatNode(visitor);
+
+            if (wn.getXmppNode().isOnline()) {
+                if (!wn.uninstall()) {
+                    throw new BusinessException("从当前客服卸载失败");
+                }
+                visitor.setCustomer(customer);
+                userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customer.getId());
+
+                if (!wn.joinQueue()) {
+                    throw new BusinessException("加入到目标客服失败");
+                }
+            } else {
+                visitor.setCustomer(customer);
+                userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customer.getId());
+                try {
+                    logger.info(JSONUtil.toJson(visitor));
+                    String pwd = "00818863ff056f1d66c8427836f94a87";
+                    visitor.setPassWord(pwd);
+                    wn.login();
+                    wn.joinQueue();
+                } catch (Exception e) {
+                    logger.error("", e);
+                }
+            }
+
+        } catch (Exception e) {
+            logger.error("", e);
+        } finally {
+        }
+        return flag;
+    }
+
+    @Override
     public boolean changeVisitorTo(Transferlog tm, Visitor visitor, Customer customer) throws BusinessException {
         boolean flag = false;
         try {
@@ -71,6 +113,7 @@ public class TransferServerImpl implements TransferServer {
 
                     boolean vflag = xmppServer.isAuthenticated(tm.getVisitorjid());
 
+
                     VisitorXmppNode node = XmppNodeManager.getVisitorXmppNode(visitor);
 
                     if (vflag) {
@@ -92,7 +135,7 @@ public class TransferServerImpl implements TransferServer {
                             String pwd = "00818863ff056f1d66c8427836f94a87";
                             visitor.setPassWord(pwd);
                             node.login();
-                            node.onlinePush();
+                            node.joinQueue();
                         } catch (Exception e) {
                             logger.error("", e);
                         }

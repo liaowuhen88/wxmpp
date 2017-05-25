@@ -124,7 +124,7 @@ public class PersonalServiceImpl implements PersonalService {
     }
 
     @Override
-    public List<WeiXinUser> getWeiXinUser(String userName, String phone, String nickName) {
+    public List<WeiXinUser> getWeiXinUser(String uid, String userName, String phone, String nickName) {
         /*if (!Config.bdyEnv.equals("online")) {
             List<WeiXinUser> li = new ArrayList<>();
             WeiXinUser info = new WeiXinUser();
@@ -136,7 +136,7 @@ public class PersonalServiceImpl implements PersonalService {
             return li;
         }*/
         Map map = new HashMap();
-        if (StringUtils.isEmpty(userName) && StringUtils.isEmpty(phone) && StringUtils.isEmpty(nickName)) {
+        if (StringUtils.isEmpty(userName) && StringUtils.isEmpty(phone) && StringUtils.isEmpty(nickName) && StringUtils.isEmpty(uid)) {
             throw new RuntimeException("参数不能都为空");
         } else if (!StringUtils.isEmpty(phone)) {
             map.put("mobile", phone);
@@ -144,6 +144,8 @@ public class PersonalServiceImpl implements PersonalService {
             map.put("pname", userName);
         } else if (!StringUtils.isEmpty(nickName)) {
             map.put("nickName", nickName);
+        } else if (!StringUtils.isEmpty(uid)) {
+            map.put("uid", uid);
         }
         String PersonalInfo = KdtApiClient.postJson(KdtApiClient.APiMethods.getUserByPhone.getValue(), map);
 

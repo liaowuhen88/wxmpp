@@ -5,6 +5,7 @@ import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.node.xmpp.CustomerXmppNode;
 import com.baodanyun.websocket.node.xmpp.VisitorXmppNode;
 import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
+import org.springframework.web.socket.WebSocketSession;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,43 +19,46 @@ public class NodeManager {
     public static final Map<String, Node> nodes = new ConcurrentHashMap<>();
 
     public static WeChatNode getWeChatNode(Visitor visitor) {
-        Node node = nodes.get(visitor.getOpenId());
+        String key = "WeChat" + "_" + visitor.getId();
+        Node node = nodes.get(key);
         if (null == node) {
             node = new WeChatNode(visitor);
             VisitorXmppNode vn = XmppNodeManager.getVisitorXmppNode(visitor);
             vn.addNode(node);
             node.setXmppNode(vn);
 
-            nodes.put(visitor.getOpenId(), node);
+            nodes.put(key, node);
         }
 
         return (WeChatNode) node;
     }
 
 
-    public static WebSocketVisitorNode getWebSocketVisitorNode(Visitor visitor) {
-        Node node = nodes.get(visitor.getOpenId());
+    public static WebSocketVisitorNode getWebSocketVisitorNode(WebSocketSession session, Visitor visitor) {
+        String key = session.getId();
+        Node node = nodes.get(key);
         if (null == node) {
             node = new WebSocketVisitorNode(visitor);
             VisitorXmppNode vn = XmppNodeManager.getVisitorXmppNode(visitor);
             vn.addNode(node);
             node.setXmppNode(vn);
-
-            nodes.put(visitor.getOpenId(), node);
+            ((WebSocketVisitorNode) node).setSession(session);
+            nodes.put(key, node);
         }
 
         return (WebSocketVisitorNode) node;
     }
 
     public static AccessVisitorNode getAccessVisitorNode(Visitor visitor) {
-        Node node = nodes.get(visitor.getOpenId());
+        String key = "WeChat" + "_" + visitor.getId();
+        Node node = nodes.get(key);
         if (null == node) {
             node = new AccessVisitorNode(visitor);
             VisitorXmppNode vn = XmppNodeManager.getVisitorXmppNode(visitor);
             vn.addNode(node);
             node.setXmppNode(vn);
 
-            nodes.put(visitor.getOpenId(), node);
+            nodes.put(key, node);
 
         }
 
@@ -62,29 +66,33 @@ public class NodeManager {
     }
 
 
-    public static WebSocketCustomerNode getWebSocketCustomerNode(Customer customer) {
-        Node node = nodes.get(customer.getOpenId());
+    public static WebSocketCustomerNode getWebSocketCustomerNode(WebSocketSession session, Customer customer) {
+        String key = session.getId();
+        Node node = nodes.get(key);
         if (null == node) {
             node = new WebSocketCustomerNode(customer);
             CustomerXmppNode vn = XmppNodeManager.getCustomerXmppNode(customer);
             vn.addNode(node);
             node.setXmppNode(vn);
-
-            nodes.put(customer.getOpenId(), node);
+            ((WebSocketCustomerNode) node).setSession(session);
+            nodes.put(key, node);
         }
 
         return (WebSocketCustomerNode) node;
     }
 
 
-    public static AccessCustomerNode getAccessCustomerNode(Customer customer) {
-        Node node = nodes.get(customer.getOpenId());
+    public static AccessCustomerNode getAccessCustomerNode(WebSocketSession session, Customer customer) {
+        String key = session.getId();
+
+        Node node = nodes.get(key);
         if (null == node) {
             node = new AccessCustomerNode(customer);
             CustomerXmppNode vn = XmppNodeManager.getCustomerXmppNode(customer);
             vn.addNode(node);
-            nodes.put(customer.getOpenId(), node);
-            //node.setXmppNode(vn);
+            node.setXmppNode(vn);
+            ((AccessCustomerNode) node).setSession(session);
+            nodes.put(key, node);
         }
 
         return (AccessCustomerNode) node;

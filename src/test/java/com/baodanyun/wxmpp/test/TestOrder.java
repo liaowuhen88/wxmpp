@@ -3,6 +3,7 @@ package com.baodanyun.wxmpp.test;
 //import com.baodanyun.websocket.service.order.QDOrderHelper;
 
 import com.baodanyun.websocket.util.DesUtil;
+import com.baodanyun.websocket.util.PhoneUtils;
 import org.junit.Test;
 
 import javax.crypto.BadPaddingException;
@@ -30,7 +31,8 @@ public class TestOrder {
         ///String content ="0wKaCW/5dqqOsOailGeX30gMo6T31G2h64R2HtIvP42xb7TViL4NkvljhYX/ypwNpSFYjc1ftjvWhOOWaAvEUngIcxKoqI27+vDe+ONIBi7+LZpKavgxcC7kx0eXGqrm647ZZnwmWKzAwJY/PisLfmhR0Ut4NrUyytdh9YyJKlADPcArz3/sQTkEjkZPCEHVMabZ933/I2AVeTAwREqBdRCx0UWLv5NlFxzipHt1/fJ7iK84WBRC87u1e3q+kXeobdTOAxXw2omT5RlecZOF0vklyB9+1tM4BitvlblDO4wGk//IY3Zh/CoPwJclE+DRh/dhu1QQgoZ37xzUEcJaaXSvVEPHhi3whc4hLZx7gJn5/k9x1xRjoWoikT9DEJskJ+p0FDcM7KLiG4B4TowQa0gscGJ8iGiYMW8jF96ftM8KHWDrLtPLJ2A0b0ph0NTW79jGOgZQo9Rhf1iFUZG82Ln19LEjNPxuBpM4DMVMdauyn9vJfNIPKPkcD6DJdgh+";
 
         // 个人信息
-        String content= "ptVwTYmU4DHjSjXBpWtdckW/gxzCW7jpo1JEGEFfG+WEZEOIlOvvbqDByyKFIG3tyHmmQJUXEVNnz2nPLKGEtruecvEYam0EJOmcaYc7jLmjhKIrkq58bInj6ocgywMJDxUKPmca48RUZ4p/ca249/cZY1gCJEp2IeUz8PsnvFf7kh8k3QudEcYXdKED4eAODhXaeyWqDEcxMHN4HpgFj0e1/a5P1MjMLUcvnTId6lNUkjyaH9Yrj8SnePefF0oHosgUzoskaqtkbgOjhKF/Hw==";
+        String content = "hF33slqh9dYkrfPMnCfgfbNuXY/vF9C+J6QoLufTB47+Jfl4PKVSViN8+wI3Thirl6NCG8u7VggyGCBePusESZv4rCehfBkLmdQQQ9JQe5LDiyFjYSvc7ZYUtbM44J5zf/HKChMgioGr/k5elZDMIaK9bfeVwHSFo0bxOX2tEqCJX1lug9rGGiO6b12Kmh4+eK2ng7lM2LJ466vYNnEvgOpq14mf650zYQUCeLPjG4HuwsFMa9UhzoIpF4SzpUnB8LJ3TeR8VcZ6jvADFzFdnO/YxjoGUKPUgxaUEhVdUNvEm7xsOJVg63g7CRfzKuFj";
+
 
         String mm = DesUtil.decryptECB("_(&%#!_L",content);
 
@@ -50,6 +52,13 @@ public class TestOrder {
         String base = url.substring(0,end);
 
         System.out.print(base);
+    }
+
+    @Test
+    public void isPhone() {
+
+
+        System.out.print(PhoneUtils.isMobile("18649041578"));
     }
 
 }

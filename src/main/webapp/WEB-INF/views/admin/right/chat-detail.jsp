@@ -91,7 +91,7 @@
             <li class="chat-tab-content-info active" id="home" style="overflow: auto">
                 <section class="chat-tag">
                     <div class="section-title">快捷按钮</div>
-                    <div class="btn" id="examReportBtn">体检报告</div>
+                    <div class="btn" id="examReportBtn">个人详情</div>
                     <%-- <div class="btn" id="chatClaimsBtn">理赔</div>
                      <div class="btn" id="chatContractsBtn">合同</div>
                      <div class="btn" id="chatOrderBtn">订单</div>--%>

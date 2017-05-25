@@ -3,36 +3,41 @@ package com.baodanyun.websocket.node;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.exception.BusinessException;
+import com.baodanyun.websocket.node.dispatcher.Dispatcher;
 import com.baodanyun.websocket.node.xmpp.XmppNode;
-import com.baodanyun.websocket.service.MsgSendService;
 import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.XMPPException;
-
-import java.io.IOException;
+import org.jivesoftware.smack.packet.Message;
 
 /**
  * Created by liaowuhen on 2017/5/23.
  */
-public interface Node {
+public interface Node extends Dispatcher {
 
-    boolean login() throws IOException, XMPPException, SmackException, BusinessException;
+    /**
+     * 发送消息到Xmpp
+     *
+     * @param
+     * @return
+     * @throws InterruptedException
+     * @throws SmackException.NotConnectedException
+     * @throws BusinessException
+     */
 
-    void logout() throws InterruptedException;
+    void sendMessageTOXmpp(Message message) throws InterruptedException, SmackException.NotConnectedException, BusinessException;
 
-    Msg receiveMessage(String content) throws InterruptedException, SmackException.NotConnectedException, BusinessException;
+    /**
+     * 发送消息到用户
+     * @param msg
+     */
 
-    Msg receiveMessage(Msg msg) throws InterruptedException, SmackException.NotConnectedException, BusinessException;
+    boolean sendMsgToGod(Msg msg);
 
-    void sendMsg(Msg msgBean);
+    void receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException;
 
-    boolean joinQueue() throws InterruptedException;
+    void receiveFromGod(String msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException;
 
-    boolean uninstall() throws InterruptedException;
+    void receiveFromXmpp(Message message);
 
-    boolean isOnline();
-
-    // 上线后的push信息
-    void onlinePush() throws BusinessException, InterruptedException;
 
     XmppNode getXmppNode();
 
@@ -40,9 +45,11 @@ public interface Node {
 
     AbstractUser getAbstractUser();
 
-    /**
+    void online() throws InterruptedException;
+
+   /* *//**
      * 获取消息通知器
-     */
-    MsgSendService getMsgSendService();
+     *//*
+    MsgSendService getMsgSendService();*/
 
 }

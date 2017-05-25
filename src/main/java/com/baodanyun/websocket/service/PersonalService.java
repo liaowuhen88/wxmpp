@@ -38,7 +38,7 @@ public interface PersonalService {
      */
     PersonalInfo getPersonalInfo(String openId) throws BusinessException;
 
-    List<WeiXinUser> getWeiXinUser(String userName, String phone, String nickName);
+    List<WeiXinUser> getWeiXinUser(String uid, String userName, String phone, String nickName);
 
 
     PersonalInfo getPersonalInfo(Long uids);

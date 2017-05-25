@@ -24,9 +24,8 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         webSocketService.saveSession(au.getId(), session);
         //获取一个customerNode节点
-        WebSocketCustomerNode wn = NodeManager.getWebSocketCustomerNode((Customer) au);
-        wn.onlinePush();
-
+        WebSocketCustomerNode wn = NodeManager.getWebSocketCustomerNode(session, (Customer) au);
+        wn.online();
     }
 
     @Override
@@ -35,8 +34,8 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
             AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
             logger.info("webSocket receive message:" + JSONUtil.toJson(message));
             String content = message.getPayload();
-            WebSocketCustomerNode wn = NodeManager.getWebSocketCustomerNode((Customer) au);
-            wn.receiveMessage(content);
+            WebSocketCustomerNode wn = NodeManager.getWebSocketCustomerNode(session, (Customer) au);
+            wn.receiveFromGod(content);
         }catch (Exception e){
             logger.info(e);
         }
@@ -52,9 +51,8 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
 
         if (!flag) {
             logger.info("userLifeCycleService.logout(customer): id[" + au.getId() + "]" + status);
-            WebSocketCustomerNode wn = NodeManager.getWebSocketCustomerNode((Customer) au);
+            WebSocketCustomerNode wn = NodeManager.getWebSocketCustomerNode(session, (Customer) au);
             wn.logout();
         }
-
     }
 }

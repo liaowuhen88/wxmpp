@@ -64,7 +64,7 @@ public class CustomerDispatcherServiceImpl implements CustomerDispatcherService 
     }
 
     @Override
-    public AbstractUser saveCustomer(AbstractUser customer) {
+    public synchronized AbstractUser saveCustomer(AbstractUser customer) {
         cids.add(customer.getId());
         customers.put(customer.getId(), customer);
         return customer;

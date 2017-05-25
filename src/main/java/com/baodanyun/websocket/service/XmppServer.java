@@ -297,7 +297,9 @@ public class XmppServer {
 
             if (isLoginDone) {
                 logger.info("id:[" + xmppNode.getAbstractUser().getId() + "] login success");
+
                 this.saveXMPPConnection(xmppNode.getAbstractUser().getId(), xmppConnection);
+                xmppNode.setXmppConnection(xmppConnection);
             }
         }
 

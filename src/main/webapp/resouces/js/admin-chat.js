@@ -262,7 +262,7 @@ xchat.sendEvent = function (msg) {
 xchat.sendMsgHandelEvent = function (data) {
     data.time = myUtils.formatDate(new Date(data.ct));
     data.src = data.to;
-    var icon = null;
+    var icon;
     if (window.user) {
         icon = window.user.icon;
     }

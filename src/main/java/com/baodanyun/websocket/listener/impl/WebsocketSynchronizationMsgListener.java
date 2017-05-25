@@ -3,19 +3,14 @@ package com.baodanyun.websocket.listener.impl;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.event.SynchronizationMsgEvent;
 import com.baodanyun.websocket.listener.EventBusListener;
+import com.baodanyun.websocket.node.Node;
 import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.service.WebSocketService;
-import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.XMPPUtil;
 import com.google.common.eventbus.Subscribe;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.socket.WebSocketSession;
-
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by liaowuhen on 2017/5/15.
@@ -33,14 +28,14 @@ public class WebsocketSynchronizationMsgListener extends AbstarctEventBusListene
     @Override
     @Subscribe
     public boolean processExpiringEvent(final SynchronizationMsgEvent sme) {
-        logger.info(JSONUtil.toJson(sme));
+        logger.info(sme);
 
         executorService.execute(new Runnable() {
                                     @Override
                                     public void run() {
                                         try {
                                             if (null != sme.getMsg()) {
-                                                Map<String, WebSocketSession> map = webSocketService.getWebSocketSession(sme.getFromJid());
+                                               /* Map<String, WebSocketSession> map = webSocketService.getWebSocketSession(sme.getFromJid());
                                                 if (null != map && map.size() > 0) {
                                                     String to = XMPPUtil.jidToName(sme.getMsg().getTo());
                                                     AbstractUser visitor = userCacheServer.getVisitorByUidOrOpenID(to);
@@ -60,6 +55,20 @@ public class WebsocketSynchronizationMsgListener extends AbstarctEventBusListene
 
                                                     }
 
+                                                }*/
+
+                                                for (Node node : sme.getNode().getXmppNode().getNodes()) {
+                                                    if (!node.equals(sme.getNode())) {
+                                                        String to = XMPPUtil.jidToName(sme.getMsg().getTo());
+                                                        AbstractUser visitor = userCacheServer.getVisitorByUidOrOpenID(to);
+                                                        if (null != visitor) {
+                                                            sme.getMsg().setTo(visitor.getId());
+                                                        }
+
+                                                        node.sendMsgToGod(sme.getMsg());
+                                                    } else {
+                                                        logger.info("相同客户端忽略");
+                                                    }
                                                 }
                                             }
                                         } catch (Exception e) {

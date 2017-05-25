@@ -4,8 +4,8 @@ import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.exception.BusinessException;
-import com.baodanyun.websocket.node.NodeManager;
-import com.baodanyun.websocket.node.WebSocketVisitorNode;
+import com.baodanyun.websocket.node.xmpp.XmppNode;
+import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.XMPPUtil;
@@ -58,17 +58,20 @@ public class VisitorLogin extends BaseController {
 
         try {
             Visitor visitor = userServer.initUserByOpenId(openId);
-            AbstractUser customer = customerDispatcherService.getCustomer(visitor.getOpenId());
-            visitor.setCustomer(customer);
+            AbstractUser customer;
+            XmppNode wn = XmppNodeManager.getVisitorXmppNode(visitor);
+            boolean login = wn.login();
+            if (login) {
+                customer = customerDispatcherService.getDispatcher(visitor.getOpenId());
+            } else {
+                customer = customerDispatcherService.getCustomer(visitor.getOpenId());
+            }
             logger.info(JSONUtil.toJson(visitor));
-
-            WebSocketVisitorNode wn = NodeManager.getWebSocketVisitorNode(visitor);
 
             if (null != customer) {
                 boolean flag = customerOnline(customer.getId());
                 if (flag) {
 
-                    boolean login = wn.login();
                     if (login) {
                         cCard = vcardService.getVCardUser(customer.getId(), visitor.getId(), AbstractUser.class);
                         mv = getOnline(visitor, customer.getId(), cCard);
@@ -88,6 +91,7 @@ public class VisitorLogin extends BaseController {
 
         } catch (Exception e) {
             logger.error("", e);
+
             mv.addObject("statue", false);
             mv.addObject("customerIsOnline", false);
             mv.addObject("msg", e.getMessage());

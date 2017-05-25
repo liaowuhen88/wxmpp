@@ -13,7 +13,6 @@
     <!-- 公用头部 -->
     <jsp:include page="tpl/common/commonjs.jsp"/>
     <jsp:include page="./WEB-INF/views/admin/common/common.jsp"/>
-    <script src=""></script>
 
 </head>
 <script>
@@ -44,7 +43,7 @@
             }
         });
         $signBtn.on('click', function () {
-            var accessType = $("#accessType").val();
+            var accessType = $('#accessType').val();
             if (!accessType) {
                 alert("请选择是否接入用户");
                 return false;

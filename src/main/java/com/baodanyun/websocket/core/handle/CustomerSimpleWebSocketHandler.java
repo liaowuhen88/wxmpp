@@ -1,15 +1,12 @@
 package com.baodanyun.websocket.core.handle;
 
-import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.AcsessCustomer;
 import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.core.common.Common;
-import com.baodanyun.websocket.event.SynchronizationMsgEvent;
 import com.baodanyun.websocket.node.AccessCustomerNode;
 import com.baodanyun.websocket.node.NodeManager;
 import com.baodanyun.websocket.service.WebSocketService;
-import com.baodanyun.websocket.util.EventBusUtils;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.springframework.web.socket.CloseStatus;
@@ -26,10 +23,10 @@ public class CustomerSimpleWebSocketHandler extends AbstractWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         AcsessCustomer customer = (AcsessCustomer) session.getHandshakeAttributes().get(Common.USER_KEY);
         // from_to
-        String key = customer.getId()+"_"+customer.getTo();
-
-        logger.info(key);
-        webSocketService.saveSession(key, session);
+        AccessCustomerNode wn = NodeManager.getAccessCustomerNode(session, (Customer) customer);
+        wn.setSession(session);
+        wn.online();
+        //webSocketService.saveSession(key, session);
     }
 
     @Override
@@ -39,17 +36,18 @@ public class CustomerSimpleWebSocketHandler extends AbstractWebSocketHandler {
             logger.info("webSocket receive message:" + JSONUtil.toJson(message));
             String content = message.getPayload();
 
-            Msg msg = Msg.handelMsg(content);
+            /*Msg msg = Msg.handelMsg(content);*/
 
-            SynchronizationMsgEvent sme = new SynchronizationMsgEvent();
+          /*  SynchronizationMsgEvent sme = new SynchronizationMsgEvent();
             sme.setMsg(msg);
             sme.setSessionID(session.getId());
             sme.setFromJid(au.getId());
-            EventBusUtils.post(sme);
+            EventBusUtils.post(sme);*/
 
-            AccessCustomerNode wn = NodeManager.getAccessCustomerNode((Customer) au);
 
-            wn.receiveMessage(content);
+            AccessCustomerNode wn = NodeManager.getAccessCustomerNode(session, (Customer) au);
+
+            wn.receiveFromGod(content);
         } catch (Exception e) {
             logger.info(e);
         }
@@ -59,6 +57,8 @@ public class CustomerSimpleWebSocketHandler extends AbstractWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         AbstractUser customer = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         webSocketService.removeSession(customer.getId(), session);
+        AccessCustomerNode wn = NodeManager.getAccessCustomerNode(session, (Customer) customer);
+        logger.info(wn.getXmppNode().getNodes().remove(wn));
 
     }
 }

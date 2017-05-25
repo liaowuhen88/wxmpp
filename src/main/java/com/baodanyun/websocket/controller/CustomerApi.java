@@ -4,6 +4,7 @@ import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.UserSetPW;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
+import com.baodanyun.websocket.bean.userInterface.PersonalDetail;
 import com.baodanyun.websocket.bean.userInterface.user.VcardUserRes;
 import com.baodanyun.websocket.bean.userInterface.user.WeiXinListUser;
 import com.baodanyun.websocket.bean.userInterface.user.WeiXinUser;
@@ -14,10 +15,7 @@ import com.baodanyun.websocket.model.Transferlog;
 import com.baodanyun.websocket.model.UserModel;
 import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
 import com.baodanyun.websocket.service.*;
-import com.baodanyun.websocket.util.CommonConfig;
-import com.baodanyun.websocket.util.JSONUtil;
-import com.baodanyun.websocket.util.Render;
-import com.baodanyun.websocket.util.XMPPUtil;
+import com.baodanyun.websocket.util.*;
 import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -30,10 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by yutao on 2016/10/10.
@@ -62,7 +57,7 @@ public class CustomerApi extends BaseController {
     private UserServer userServer;
 
     @Autowired
-    private XmppServer  xmppServer;
+    private XmppServer xmppServer;
 
     @Autowired
     private WebSocketService webSocketService;
@@ -258,11 +253,11 @@ public class CustomerApi extends BaseController {
         try {
             Collection<AbstractUser> freeCustomerNodeList = userCacheServer.getCustomers().values();
 
-            if(null != freeCustomerNodeList){
+            if (null != freeCustomerNodeList) {
                 Iterator<AbstractUser> it = freeCustomerNodeList.iterator();
-                while(it.hasNext()){
-                    AbstractUser au =  it.next();
-                    if(!xmppServer.isAuthenticated(au.getId())){
+                while (it.hasNext()) {
+                    AbstractUser au = it.next();
+                    if (!xmppServer.isAuthenticated(au.getId())) {
                         it.remove();
                     }
                 }
@@ -286,7 +281,7 @@ public class CustomerApi extends BaseController {
         Response response = new Response();
         try {
             Transferlog tm = new Transferlog();
-            logger.info("vjid["+vjid+"]----fromJid["+fromJid+"]----toJid["+toJid+"]");
+            logger.info("vjid[" + vjid + "]----fromJid[" + fromJid + "]----toJid[" + toJid + "]");
             tm.setTransferto(toJid);
             tm.setTransferfrom(fromJid);
             tm.setVisitorjid(vjid);
@@ -294,7 +289,13 @@ public class CustomerApi extends BaseController {
 
             String jid = XMPPUtil.jidToName(vjid);
 
-            Visitor visitor = userServer.InitByOpenIdOrPhone(jid);
+            Visitor visitor = null;
+            if (PhoneUtils.isMobile(jid)) {
+                visitor = userServer.initByPhone(jid);
+            } else {
+                visitor = userServer.initUserByOpenId(jid);
+            }
+
 
             boolean flag = transferServer.changeVisitorTo(tm, visitor);
 
@@ -311,34 +312,30 @@ public class CustomerApi extends BaseController {
      * @param httpServletResponse
      */
     @RequestMapping(value = "weiXinVisitorList")
-    public void weiXinVisitorList(String name, String phone, String nickName, HttpServletRequest request, HttpServletResponse httpServletResponse) {
+    public void weiXinVisitorList(String name, String phone, String nickName, String uid, HttpServletRequest request, HttpServletResponse httpServletResponse) {
         Response response = new Response();
-        if (StringUtils.isEmpty(name) && StringUtils.isEmpty(phone) && StringUtils.isEmpty(nickName)) {
-            response.setSuccess(false);
-            response.setMsg("参数不能都为空");
-        } else {
+
+        try {
             List<WeiXinListUser> visitors = new ArrayList<>();
-            List<WeiXinUser> infos = personalService.getWeiXinUser(name, phone, nickName);
+            List<WeiXinUser> infos = personalService.getWeiXinUser(uid, name, phone, nickName);
 
-            try {
-                if (null != infos && infos.size() > 0) {
-                    for (WeiXinUser info : infos) {
-                        WeiXinListUser wu = new WeiXinListUser();
-                        //Visitor visitor = userServer.initVisitor(info.getOpenId());
-                        AbstractUser customer = userCacheServer.getCustomerByVisitorOpenId(info.getOpenId());
-                        wu.setInfo(info);
-                        //wu.setUser(info);
-                        wu.setCustomer(customer);
-                        visitors.add(wu);
-                    }
+            if (null != infos && infos.size() > 0) {
+                for (WeiXinUser info : infos) {
+                    WeiXinListUser wu = new WeiXinListUser();
+                    //Visitor visitor = userServer.initVisitor(info.getOpenId());
+                    AbstractUser customer = userCacheServer.getCustomerByVisitorOpenId(info.getOpenId());
+                    wu.setInfo(info);
+                    //wu.setUser(info);
+                    wu.setCustomer(customer);
+                    visitors.add(wu);
                 }
-                response.setData(visitors);
-                response.setSuccess(true);
-
-            } catch (Exception e) {
-                logger.error(e);
-                response.setSuccess(false);
             }
+            response.setData(visitors);
+            response.setSuccess(true);
+
+        } catch (Exception e) {
+            logger.error(e);
+            response.setSuccess(false);
         }
 
         Render.r(httpServletResponse, JSONUtil.toJson(response));
@@ -355,26 +352,54 @@ public class CustomerApi extends BaseController {
         AbstractUser au = (AbstractUser) httpServletRequest.getSession().getAttribute(Common.USER_KEY);
         Visitor visitor = userServer.initUserByOpenId(from);
         AbstractUser customerFrom = userCacheServer.getCustomerByVisitorOpenId(visitor.getOpenId());
-
-        Transferlog tm = new Transferlog();
-        tm.setTransferto(au.getId());
-
-        if (null != customerFrom) {
-            tm.setTransferfrom(customerFrom.getId());
-        }
-
-        tm.setVisitorjid(visitor.getId());
-        tm.setMustDo(true);
-        tm.setCause("BindCustomer");
-
-        transferServer.changeVisitorTo(tm, visitor);
-
+        transferServer.bindVisitor(customerFrom, au, visitor);
         Response response = new Response();
         response.setData(au);
         response.setSuccess(true);
 
         Render.r(httpServletResponse, JSONUtil.toJson(response));
     }
+
+    /**
+     * 获取当前访客详情
+     *
+     * @param httpServletResponse
+     */
+    @RequestMapping(value = "visitorDetail")
+    public void visitorDetail(String openid, String id, HttpServletRequest request, HttpServletResponse httpServletResponse) {
+        Response response = new Response();
+        AbstractUser customer = (AbstractUser) request.getSession().getAttribute(Common.USER_KEY);
+        try {
+            if (!StringUtils.isEmpty(id)) {
+                AbstractUser vCard = vcardService.getVCardUser(id, customer.getId(), AbstractUser.class);
+                Map<String, Object> map = new HashMap<>();
+                map.put("vCard", vCard);
+
+                if (!StringUtils.isEmpty(openid)) {
+                    try {
+                        PersonalDetail personalDetail = personalService.getPersonalDetail(openid);
+                        map.put("basic", personalDetail);
+                    } catch (Exception e) {
+                        logger.error("第三方接口获取数据出出错", e);
+                        response.setMsg("第三方接口获取数据出出错");
+                    }
+                } else {
+                    response.setMsg("openid不能为空");
+                }
+
+                response.setData(map);
+                response.setSuccess(true);
+            } else {
+                response.setSuccess(false);
+                response.setMsg("用户id不能为空");
+            }
+        } catch (Exception e) {
+            logger.error(e);
+            response.setSuccess(false);
+        }
+        Render.r(httpServletResponse, JSONUtil.toJson(response));
+    }
+
 
     /**
      *

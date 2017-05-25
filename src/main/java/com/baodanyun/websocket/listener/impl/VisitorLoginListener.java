@@ -1,6 +1,5 @@
 package com.baodanyun.websocket.listener.impl;
 
-import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.event.VisitorLoginEvent;
 import com.baodanyun.websocket.listener.EventBusListener;
 import com.baodanyun.websocket.listener.VisitorListener;
@@ -33,9 +32,9 @@ public class VisitorLoginListener extends AbstarctEventBusListener<VisitorLoginE
                                     @Override
                                     public void run() {
                                         try {
-                                            ve.getMsgSendService().sendSMMsgToVisitor(ve.getUser(), ve.getCustomer(), MsgStatus.loginSuccess);
+                                           /* ve.getMsgSendService().sendSMMsgToVisitor(ve.getUser(), ve.getCustomer(), MsgStatus.loginSuccess);
 
-                                            ve.getMsgSendService().sendSMMsgToVisitor(ve.getUser(), ve.getCustomer(), MsgStatus.initSuccess);
+                                            ve.getMsgSendService().sendSMMsgToVisitor(ve.getUser(), ve.getCustomer(), MsgStatus.initSuccess);*/
 
                                             visitorListener.login(ve.getUser(), ve.getCustomer());
                                         } catch (Exception e) {

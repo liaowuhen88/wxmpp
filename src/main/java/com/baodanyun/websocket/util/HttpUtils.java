@@ -187,7 +187,7 @@ public class HttpUtils {
     }
 
     public static String postJson(String url, String json) throws Exception {
-        logger.info("请求url地址url:[" + url + "]------[json:"+json+"]");
+        logger.info("请求url地址url:[" + url + "]------[json:" + json + "]");
         DefaultHttpClient httpClient;
         if (isHttpsRequest(url)) {
             httpClient = new SSLClient();
@@ -221,16 +221,12 @@ public class HttpUtils {
 
     public static String send(String messagesUrl, Msg baseMsg) throws Exception {
         String content = JSONObject.toJSONString(baseMsg);
-        logger.info(content);
-        try {
-            Header[] headers = {new BasicHeader("Content-Type", "application/json")};
-            String result = HttpUtils.post(messagesUrl, content, headers);
-            logger.info(result);
-            return result;
-        } catch (IOException e) {
-            logger.info("消息发送失败", e);
-        }
+        //logger.info(content);
 
-        return null;
+        Header[] headers = {new BasicHeader("Content-Type", "application/json")};
+        String result = HttpUtils.post(messagesUrl, content, headers);
+        //logger.info(result);
+        return result;
+
     }
 }

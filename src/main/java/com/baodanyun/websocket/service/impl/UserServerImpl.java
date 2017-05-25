@@ -17,8 +17,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by liaowuhen on 2016/11/11.
@@ -33,80 +31,11 @@ public class UserServerImpl implements UserServer {
     private final Map<String, Visitor> visitors = new ConcurrentHashMap<>();
 
     // key uid  value openid
-    private final Map<Long, String> uidOpenid = new ConcurrentHashMap<>();
+    /*private final Map<Long, String> uidOpenid = new ConcurrentHashMap<>();*/
 
     @Autowired
     private PersonalServiceImpl personalService;
 
-    @Override
-    public Visitor InitByUidOrNameOrPhone(String to) throws BusinessException {
-        Visitor visitor = new Visitor();
-        String phone = null;
-        if (isMobileNO(to)) {
-            visitor.setLoginUsername(to);
-            phone = to;
-
-        } else {
-            PersonalInfo pe = null;
-            if (StringUtils.isNumeric(to)) {
-                visitor.setUid(Long.valueOf(to));
-                pe = personalService.getPersonalInfo(Long.valueOf(to));
-            } else {
-                pe = personalService.getPersonalInfo(to);
-            }
-
-            logger.info(JSONUtil.toJson(pe));
-
-            if (null != pe) {
-                visitor.setUserName(pe.getPname());
-                phone = pe.getMobile();
-                visitor.setUid(pe.getId());
-                visitor.setNickName(pe.getPname());
-                visitor.setLoginUsername(pe.getMobile());
-            }
-
-
-        }
-
-        List<WeiXinUser> infos = personalService.getWeiXinUser(visitor.getUserName(), phone, null);
-        logger.info(JSONUtil.toJson(infos));
-        if (null != infos) {
-            for (WeiXinUser vu : infos) {
-                if (vu.getUid().equals(visitor.getUid() + "")) {
-                    visitor.setOpenId(vu.getOpenId());
-                    break;
-                }
-
-                if (vu.getMobile().equals(phone)) {
-                    visitor.setOpenId(vu.getOpenId());
-                    break;
-                }
-            }
-        }
-
-        String pwd = "00818863ff056f1d66c8427836f94a87";
-        visitor.setPassWord(pwd);
-        visitor.setId(XMPPUtil.nameToJid(visitor.getLoginUsername()));
-        visitor.setLoginTime(System.currentTimeMillis());
-        return visitor;
-    }
-
-    @Override
-    public Visitor InitByOpenIdOrPhone(String to) throws BusinessException {
-        logger.info(to);
-        if (isMobileNO(to)) {
-            return InitByUidOrNameOrPhone(to);
-        } else {
-            return initUserByOpenId(to);
-        }
-    }
-
-
-    public boolean isMobileNO(String mobiles) {
-        Pattern p = Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0-9]))\\d{8}$");
-        Matcher m = p.matcher(mobiles);
-        return m.matches();
-    }
 
     @Override
     public Visitor initUserByOpenId(String openId) throws BusinessException {
@@ -114,11 +43,8 @@ public class UserServerImpl implements UserServer {
         if (StringUtils.isBlank(openId)) {
             throw new BusinessException("openId 不能为空");
         } else {
-
             Visitor visitor = visitors.get(openId);
-
             if (null == visitor) {
-
 
                 visitor = new Visitor();
 
@@ -176,9 +102,33 @@ public class UserServerImpl implements UserServer {
     }
 
     @Override
-    public Visitor initVisitorByUid(Long uid) throws BusinessException {
+    public Visitor initByPhone(String phone) throws BusinessException {
+        List<WeiXinUser> infos = personalService.getWeiXinUser(null, null, phone, null);
+        logger.info(JSONUtil.toJson(infos));
+        String openid = null;
+        if (null != infos) {
+            for (WeiXinUser vu : infos) {
+                if (vu.getMobile().equals(phone)) {
+                    openid = vu.getOpenId();
+                }
+            }
+        }
+        return initUserByOpenId(openid);
+    }
 
-        return null;
+    @Override
+    public Visitor initVisitorByUid(Long uid) throws BusinessException {
+        List<WeiXinUser> infos = personalService.getWeiXinUser(uid + "", null, null, null);
+        logger.info(JSONUtil.toJson(infos));
+        String openid = null;
+        if (null != infos) {
+            for (WeiXinUser vu : infos) {
+                if (vu.getUid().equals(uid + "")) {
+                    openid = vu.getOpenId();
+                }
+            }
+        }
+        return initUserByOpenId(openid);
     }
 
 }

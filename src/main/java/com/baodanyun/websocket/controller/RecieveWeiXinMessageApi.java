@@ -59,12 +59,19 @@ public class RecieveWeiXinMessageApi extends BaseController {
             String body = HttpServletRequestUtils.getBody(request);
             Msg msg = msg(body);
             Visitor visitor = userServer.initUserByOpenId(msg.getFrom());
-            AbstractUser customer = customerDispatcherService.getCustomer(visitor.getOpenId());
+            WeChatNode wn = NodeManager.getWeChatNode(visitor);
+            boolean xmppFlag = wn.getXmppNode().isOnline();
+            AbstractUser customer;
+            if (xmppFlag) {
+                customer = customerDispatcherService.getDispatcher(visitor.getOpenId());
+            } else {
+                customer = customerDispatcherService.getCustomer(visitor.getOpenId());
+            }
             visitor.setCustomer(customer);
-
+            msg.setTo(customer.getId());
             logger.info(JSONUtil.toJson(visitor));
 
-            WeChatNode wn = NodeManager.getWeChatNode(visitor);
+
 
             if (!StringUtils.isEmpty(msg.getContent()) && msg.getContent().startsWith(keywords)) {
                 response = getBindCustomerResponse(visitor, msg);
@@ -85,10 +92,10 @@ public class RecieveWeiXinMessageApi extends BaseController {
 
                         if (!flag) {
                             wn.login();
-                            wn.onlinePush();
+                            wn.joinQueue();
                         }
 
-                        wn.receiveMessage(JSONUtil.toJson(msg));
+                        wn.receiveFromGod(msg);
 
                         response = getOnlineResponse();
                     }

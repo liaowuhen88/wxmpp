@@ -1,5 +1,6 @@
 package com.baodanyun.websocket.service;
 
+import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.exception.BusinessException;
@@ -11,6 +12,8 @@ import com.baodanyun.websocket.model.Transferlog;
 public interface TransferServer {
 
      boolean changeVisitorTo(Transferlog tm, Visitor visitor) throws BusinessException;
+
+     boolean bindVisitor(AbstractUser customerFrom, AbstractUser customer, Visitor visitor);
 
      boolean changeVisitorTo(Transferlog tm, Visitor visitor, Customer customer) throws BusinessException;
 

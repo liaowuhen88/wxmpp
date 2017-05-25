@@ -11,7 +11,8 @@ import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.LoginModel;
 import com.baodanyun.websocket.node.AccessVisitorNode;
 import com.baodanyun.websocket.node.NodeManager;
-import com.baodanyun.websocket.node.WebSocketCustomerNode;
+import com.baodanyun.websocket.node.xmpp.CustomerXmppNode;
+import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
 import com.baodanyun.websocket.service.CustomerDispatcherService;
 import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.service.UserServer;
@@ -66,12 +67,10 @@ public class CustomerLogin extends BaseController {
         try {
             customerInit(au, user);
 
-            WebSocketCustomerNode wn = NodeManager.getWebSocketCustomerNode(au);
+            CustomerXmppNode cx = XmppNodeManager.getCustomerXmppNode(au);
 
-            boolean flag = wn.login();
-
+            boolean flag = cx.login();
             if (flag) {
-
                 if (user.getAccessType().equals("2")) {
                     customerDispatcherService.saveCustomer(au);
                 } else {
@@ -111,7 +110,7 @@ public class CustomerLogin extends BaseController {
                 throw new BusinessException("客服未登录");
             }
 
-            Visitor visitor = userServer.InitByUidOrNameOrPhone(user.getTo());
+            Visitor visitor = userServer.initVisitorByUid(Long.valueOf(user.getTo()));
             visitor.setCustomer(customer);
             logger.info(JSONUtil.toJson(visitor));
             userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customer.getId());
@@ -128,7 +127,7 @@ public class CustomerLogin extends BaseController {
 
             customer.setTo(visitor.getId());
             request.getSession().setAttribute(Common.USER_KEY, customer);
-            wn.onlinePush();
+            wn.joinQueue();
             mv.addObject("user", JSONUtil.toJson(customer));
             mv.addObject("to", user.getTo() + "@126xmpp");
             mv.setViewName("/customerSimple");

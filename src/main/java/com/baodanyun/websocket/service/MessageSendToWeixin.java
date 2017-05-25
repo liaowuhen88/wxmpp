@@ -7,7 +7,7 @@ import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.HttpUtils;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,8 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 
 public class MessageSendToWeixin {
-    private static Logger logger = Logger.getLogger(MessageSendToWeixin.class);
-
+    private static Logger logger = org.slf4j.LoggerFactory.getLogger(MessageSendToWeixin.class);
     public void send(Msg sendMsg, AbstractUser user) {
         send(sendMsg,user.getOpenId(),user.getId());
     }
@@ -33,7 +32,7 @@ public class MessageSendToWeixin {
             }
             logger.info("id [" + id + "] send message to weiXin openid ["+openId+"]:" +  JSONObject.toJSONString(sendMsg) + "----result:" + JSONUtil.toJson(result));
         } catch (Exception e) {
-            logger.error("", e);
+            logger.error("发送失败", e);
         }
 
     }

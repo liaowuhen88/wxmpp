@@ -41,19 +41,19 @@ public class QueueApi extends BaseController {
     public void backupQueue(@PathVariable("q") String q, HttpServletRequest request, HttpServletResponse response) {
         Response msgResponse = new Response();
         try {
-            AbstractUser au = (AbstractUser) request.getSession().getAttribute(Common.USER_KEY);
-            if (null != au) {
+            AbstractUser customer = (AbstractUser) request.getSession().getAttribute(Common.USER_KEY);
+            if (null != customer) {
 
                 Set<Friend> friendList = new HashSet<>();
 
                 if (QueueName.online.getValue().equals(QueueName.getQueueNameByKey(q))) {
 
-                    Set<AbstractUser> onlineQueue = userCacheServer.get(CommonConfig.USER_ONLINE, au.getId());
+                    Set<AbstractUser> onlineQueue = userCacheServer.get(CommonConfig.USER_ONLINE, customer.getId());
 
                     if (!CollectionUtils.isEmpty(onlineQueue)) {
                         for (AbstractUser visitor : onlineQueue) {
 
-                            Friend friend = getFriend(visitor, au);
+                            Friend friend = getFriend(visitor, customer);
                             if (null != friend) {
                                 friendList.add(friend);
                             }
@@ -95,17 +95,19 @@ public class QueueApi extends BaseController {
             } else {
                 friend.setOnlineStatus(MsgStatus.changeOffline);
             }
+
+            friend.setNickname(visitor.getNickName() == null ? visitor.getUserName() == null ? "未知" : visitor.getUserName() : visitor.getNickName());
+            friend.setIcon(visitor.getIcon());
+            friend.setNickname(visitor.getNickName());
+            friend.setLoginUsername(visitor.getLoginUsername());
+            friend.setOpenId(visitor.getOpenId());
+            friend.setLoginTime(visitor.getLoginTime());
+
+
         } catch (BusinessException e) {
-            logger.equals(e);
+            logger.error(e);
         }
 
-
-        friend.setNickname(visitor.getNickName() == null ? visitor.getUserName() == null ? "未知" : visitor.getUserName() : visitor.getNickName());
-        friend.setIcon(visitor.getIcon());
-        friend.setNickname(visitor.getNickName());
-        friend.setLoginUsername(visitor.getLoginUsername());
-        friend.setOpenId(visitor.getOpenId());
-        friend.setLoginTime(visitor.getLoginTime());
 
         return friend;
 

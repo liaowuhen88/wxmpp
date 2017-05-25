@@ -24,9 +24,7 @@ public interface UserServer {
      *   to 为openId 或者Uid  或者手机号
      */
 
-    Visitor InitByUidOrNameOrPhone(String to) throws BusinessException;
-
-    Visitor InitByOpenIdOrPhone(String to) throws BusinessException;
+    Visitor initByPhone(String to) throws BusinessException;
 
     Visitor initVisitorByUid(Long uid) throws BusinessException;
 
