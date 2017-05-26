@@ -110,7 +110,13 @@ public class CustomerLogin extends BaseController {
                 throw new BusinessException("客服未登录");
             }
 
-            Visitor visitor = userServer.initVisitorByUid(Long.valueOf(user.getTo()));
+            Visitor visitor;
+            if (StringUtils.isNumeric(user.getTo())) {
+                visitor = userServer.initVisitorByUid(Long.parseLong(user.getTo()));
+            } else {
+                visitor = userServer.initUserByOpenId(user.getTo());
+            }
+
             visitor.setCustomer(customer);
             logger.info(JSONUtil.toJson(visitor));
             userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customer.getId());
