@@ -25,7 +25,7 @@ public class PresenceTypeApi extends BaseController {
     private XmppServer xmppServer;
 
     @RequestMapping(value = "GetPresenceType")
-    public void GetPresenceType(String jid, String to, HttpServletResponse httpServletResponse) {
+    public void getPresenceType(String jid, String to, HttpServletResponse httpServletResponse) {
         Response response = new Response();
         try {
             XMPPConnection conn = xmppServer.getXMPPConnection(jid);

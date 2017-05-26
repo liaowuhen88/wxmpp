@@ -11,19 +11,19 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SpringContextUtil implements ApplicationContextAware {
-    protected static Logger logger = Logger.getLogger(SpringContextUtil.class);
+    protected static final Logger logger = Logger.getLogger(SpringContextUtil.class);
     // Spring应用上下文环境
     private static ApplicationContext applicationContext;
+
+    public static ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
 
     /**
      * 实现ApplicationContextAware接口的回调方法，设置上下文环境
      */
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         SpringContextUtil.applicationContext = applicationContext;
-    }
-
-    public static ApplicationContext getApplicationContext() {
-        return applicationContext;
     }
 
     /**

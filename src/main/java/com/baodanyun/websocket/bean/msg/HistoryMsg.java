@@ -4,6 +4,7 @@ package com.baodanyun.websocket.bean.msg;
  * Created by liaowuhen on 2016/11/23.
  */
 public class HistoryMsg extends Msg {
+    private static final long serialVersionUID = 113623413329536376L;
     private transient String toCard;
     private transient String fromCard;
     private String toIcon;

@@ -1,28 +1,9 @@
 package com.baodanyun.wxmpp.test;
 
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-
 import com.baodanyun.websocket.util.Config;
 import org.jivesoftware.smack.AbstractXMPPConnection;
-import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
+import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.SmackException.NoResponseException;
 import org.jivesoftware.smack.SmackException.NotConnectedException;
@@ -46,6 +27,16 @@ import org.jivesoftware.smackx.xdata.Form;
 import org.jivesoftware.smackx.xdata.FormField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.util.*;
+import java.util.List;
 
 public class XMPPConnectionTest extends JFrame {
     protected static final Logger logger = LoggerFactory.getLogger(XMPPConnectionTest.class);
@@ -211,7 +202,7 @@ public class XMPPConnectionTest extends JFrame {
     public void connect() {
         XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
                 .setServiceName(Config.xmppdomain).setHost(Config.xmppurl)
-                .setPort(Integer.valueOf(Config.xmppport)).setCompressionEnabled(true).setSecurityMode(SecurityMode.disabled).build();
+                .setPort(Integer.parseInt(Config.xmppport)).setCompressionEnabled(true).setSecurityMode(SecurityMode.disabled).build();
 
         conn = new XMPPTCPConnection(config);
         try {

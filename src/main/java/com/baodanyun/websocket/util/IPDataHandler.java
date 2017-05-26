@@ -1,23 +1,18 @@
 package com.baodanyun.websocket.util;
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+
+import java.io.*;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class IPDataHandler {
     private static Resource RESOUCE = new ClassPathResource("17monipdb.dat");
@@ -151,7 +146,7 @@ public class IPDataHandler {
         try {
             //TODO add 总是不等于null
             if (add == null) {
-                cacheMap.put(ip, new String("no data found!!"));
+                cacheMap.put(ip, "no data found!!");
             } else {
                 cacheMap.put(ip, new String(add, "UTF-8"));
             }

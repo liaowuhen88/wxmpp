@@ -15,8 +15,8 @@ import java.net.URLEncoder;
  * Created by 峥桂 on 2016/11/15.
  */
 public class QDOrderHelper {
-    protected static Logger logger = Logger.getLogger(QDOrderHelper.class);
-    protected static String httpurl_port = Config.mallInfoInterface;
+    protected static final Logger logger = Logger.getLogger(QDOrderHelper.class);
+    protected static final String httpurl_port = Config.mallInfoInterface;
 
     public static void main(String[] args) {
         System.out.println(findDataJsonByUid(306l));

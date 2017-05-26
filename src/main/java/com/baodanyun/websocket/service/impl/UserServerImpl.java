@@ -1,7 +1,6 @@
 package com.baodanyun.websocket.service.impl;
 
 import com.baodanyun.websocket.bean.user.Visitor;
-import com.baodanyun.websocket.bean.userInterface.user.PersonalInfo;
 import com.baodanyun.websocket.bean.userInterface.user.WeiXinUser;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.service.UserServer;
@@ -43,11 +42,15 @@ public class UserServerImpl implements UserServer {
         if (StringUtils.isBlank(openId)) {
             throw new BusinessException("openId 不能为空");
         } else {
-            Visitor visitor = visitors.get(openId);
+            Visitor visitor = null;
+            Long uid = personalService.getUidByOpenId(openId);
+            if (null != uid && uid != -1) {
+                visitor = initVisitorByUid(uid);
+            }
+
             if (null == visitor) {
 
                 visitor = new Visitor();
-
                 visitor.setOpenId(openId);
                 visitor.setLoginUsername(openId.toLowerCase());
                 visitor.setUserName(openId.toLowerCase());
@@ -55,35 +58,6 @@ public class UserServerImpl implements UserServer {
                 visitor.setId(XMPPUtil.nameToJid(openId.toLowerCase()));
                 String pwd = "00818863ff056f1d66c8427836f94a87";
                 visitor.setPassWord(pwd);
-                visitor.setLoginTime(new Date().getTime());
-
-                try {
-
-                    Long uid = personalService.getUidByOpenId(openId);
-
-                    PersonalInfo pe = personalService.getPersonalInfo(uid);
-
-                    if (null != pe) {
-                        visitor.setLoginUsername(pe.getMobile());
-                        visitor.setUserName(pe.getMobile());
-                        visitor.setNickName(pe.getPname());
-                        visitor.setId(XMPPUtil.nameToJid(pe.getMobile()));
-                        visitor.setUid(pe.getUseraccountid());
-
-                    }
-
-                    Map account = personalService.getPersonalUserAccount(uid);
-
-                    if (null != account && null != account.get("icon")) {
-                        visitor.setIcon(account.get("icon").toString());
-                    }
-
-                } catch (Exception e) {
-                    logger.error("personalService.getPersonalUserAccount(openId) error", e);
-                }
-
-                visitors.put(openId, visitor);
-
                 logger.info("openid[" + openId + "]---visitor[" + JSONUtil.toJson(visitor) + "]");
                 return visitor;
             }
@@ -105,30 +79,47 @@ public class UserServerImpl implements UserServer {
     public Visitor initByPhone(String phone) throws BusinessException {
         List<WeiXinUser> infos = personalService.getWeiXinUser(null, null, phone, null);
         logger.info(JSONUtil.toJson(infos));
-        String openid = null;
         if (null != infos) {
             for (WeiXinUser vu : infos) {
                 if (vu.getMobile().equals(phone)) {
-                    openid = vu.getOpenId();
+                    return initByWeiXinUser(vu);
                 }
             }
         }
-        return initUserByOpenId(openid);
+        return null;
     }
 
     @Override
     public Visitor initVisitorByUid(Long uid) throws BusinessException {
         List<WeiXinUser> infos = personalService.getWeiXinUser(uid + "", null, null, null);
         logger.info(JSONUtil.toJson(infos));
-        String openid = null;
         if (null != infos) {
             for (WeiXinUser vu : infos) {
                 if (vu.getUid().equals(uid + "")) {
-                    openid = vu.getOpenId();
+                    return initByWeiXinUser(vu);
                 }
             }
         }
-        return initUserByOpenId(openid);
+        return null;
     }
 
+
+    Visitor initByWeiXinUser(WeiXinUser vu) {
+        Visitor visitor = visitors.get(vu.getUid());
+        if (null == visitor) {
+            visitor = new Visitor();
+            visitor.setLoginUsername(vu.getMobile());
+            visitor.setUserName(vu.getMobile());
+            visitor.setNickName(vu.getPname());
+            visitor.setId(XMPPUtil.nameToJid(vu.getMobile()));
+            visitor.setUid(Long.valueOf(vu.getUid()));
+            String pwd = "00818863ff056f1d66c8427836f94a87";
+            visitor.setPassWord(pwd);
+            visitor.setLoginTime(new Date().getTime());
+            visitor.setOpenId(vu.getOpenId());
+            visitors.put(vu.getUid(), visitor);
+        }
+
+        return visitor;
+    }
 }

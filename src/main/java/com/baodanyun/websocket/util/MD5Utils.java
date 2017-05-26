@@ -50,10 +50,10 @@ public class MD5Utils {
         return sBuffer.toString();
     }
 
-    public static String GetMD5Code(String strObj) {
+    public static String getMD5Code(String strObj) {
         String resultString = null;
         try {
-            resultString = new String(strObj);
+            resultString = strObj;
             MessageDigest md = MessageDigest.getInstance("MD5");
             // md.digest() 该函数返回值为存放哈希值结果的byte数组
             resultString = byteToString(md.digest(strObj.getBytes()));
@@ -65,6 +65,6 @@ public class MD5Utils {
 
     public static void main(String[] args) {
         MD5Utils getMD5 = new MD5Utils();
-        System.out.println(getMD5.GetMD5Code("000000"));
+        System.out.println(getMD5.getMD5Code("000000"));
     }
 }

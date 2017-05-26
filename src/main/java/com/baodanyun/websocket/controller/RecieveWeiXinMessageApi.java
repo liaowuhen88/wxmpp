@@ -63,9 +63,9 @@ public class RecieveWeiXinMessageApi extends BaseController {
             boolean xmppFlag = wn.getXmppNode().isOnline();
             AbstractUser customer;
             if (xmppFlag) {
-                customer = customerDispatcherService.getDispatcher(visitor.getOpenId());
-            } else {
                 customer = customerDispatcherService.getCustomer(visitor.getOpenId());
+            } else {
+                customer = customerDispatcherService.getDispatcher(visitor.getOpenId());
             }
             visitor.setCustomer(customer);
             msg.setTo(customer.getId());

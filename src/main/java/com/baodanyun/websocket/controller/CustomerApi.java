@@ -346,7 +346,7 @@ public class CustomerApi extends BaseController {
      * 修改用户指定的客服
      */
     @RequestMapping(value = "bindCustomer")
-    public void BindCustomer(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, String from) throws BusinessException, InterruptedException {
+    public void bindCustomer(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, String from) throws BusinessException, InterruptedException {
         // 获取当前客服
         // from 为openId
         AbstractUser au = (AbstractUser) httpServletRequest.getSession().getAttribute(Common.USER_KEY);

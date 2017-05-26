@@ -20,7 +20,7 @@ public class LoginCheckHandel {
 
     protected static Logger logger = Logger.getLogger(LoginCheckHandel.class);
 
-    //System.out.println(MD5Utils.GetMD5Code("17doubao.com"));
+    //System.out.println(MD5Utils.getMD5Code("17doubao.com"));
     private static final String VISITOR_DEFAULT_PWD = "00818863ff056f1d66c8427836f94a87";
 
     private LoginCheckHandel() {

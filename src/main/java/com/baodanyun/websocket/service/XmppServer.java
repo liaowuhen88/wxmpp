@@ -197,7 +197,7 @@ public class XmppServer {
         builder.setSendPresence(false);
 
 
-        XMPPTCPConnectionConfiguration config = builder.setServiceName(Config.xmppdomain).setHost(Config.xmppurl).setPort(Integer.valueOf(Config.xmppport)).build();
+        XMPPTCPConnectionConfiguration config = builder.setServiceName(Config.xmppdomain).setHost(Config.xmppurl).setPort(Integer.parseInt(Config.xmppport)).build();
         AbstractXMPPConnection connection = new XMPPTCPConnection(config);
 
 
@@ -227,7 +227,7 @@ public class XmppServer {
         builder.setSendPresence(false);
 
 
-        XMPPTCPConnectionConfiguration config = builder.setServiceName(Config.xmppdomain).setHost(Config.xmppurl).setPort(Integer.valueOf(Config.xmppport)).build();
+        XMPPTCPConnectionConfiguration config = builder.setServiceName(Config.xmppdomain).setHost(Config.xmppurl).setPort(Integer.parseInt(Config.xmppport)).build();
         AbstractXMPPConnection connection = new XMPPTCPConnection(config);
 
 

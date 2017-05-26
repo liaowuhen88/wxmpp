@@ -7,12 +7,8 @@ import java.io.Serializable;
  */
 public class AbstractUser implements Serializable {
 
+    private static final long serialVersionUID = -1049614187759631302L;
     public UserType userType;
-
-    public enum UserType{
-        visitor, customer
-    }
-
     /**
      * 因为xmpp发送消息的时候是带后缀，id代表一个xmpp唯一发送地址
      */
@@ -25,7 +21,6 @@ public class AbstractUser implements Serializable {
     private String nickName;
     private String userName;// 真实姓名
     private String loginUsername;// 登录用户名
-
     private transient String passWord;
     private Long loginTime;//登录时间
     private Long logoutTime;//离线时间
@@ -33,10 +28,6 @@ public class AbstractUser implements Serializable {
     private String desc;  // 详细信息
     private String remark;  // 备注信息
     private String workNumber;
-
-    public void setUserType(UserType userType) {
-        this.userType = userType;
-    }
 
     public String getId() {
         return id;
@@ -48,6 +39,10 @@ public class AbstractUser implements Serializable {
 
     public UserType getUserType() {
         return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 
     public String getIcon() {
@@ -177,5 +172,9 @@ public class AbstractUser implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public enum UserType {
+        visitor, customer
     }
 }

@@ -2,10 +2,12 @@ package com.baodanyun.websocket.bean.user;
 
 import com.baodanyun.websocket.enums.MsgStatus;
 
+import java.io.Serializable;
+
 /**
  * Created by liaowuhen on 2017/3/8.
  */
-public class Friend {
+public class Friend implements Serializable {
 
     String id;
     String name;

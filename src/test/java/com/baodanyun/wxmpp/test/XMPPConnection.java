@@ -20,7 +20,7 @@ public class XMPPConnection {
     public static AbstractXMPPConnection connect() throws IOException, XMPPException, SmackException {
         XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
                 .setServiceName(Config.xmppdomain).setHost(Config.xmppurl)
-                .setPort(Integer.valueOf(Config.xmppport)).setCompressionEnabled(true).setSecurityMode(SecurityMode.disabled).build();
+                .setPort(Integer.parseInt(Config.xmppport)).setCompressionEnabled(true).setSecurityMode(SecurityMode.disabled).build();
 
         AbstractXMPPConnection conn = new XMPPTCPConnection(config);
 

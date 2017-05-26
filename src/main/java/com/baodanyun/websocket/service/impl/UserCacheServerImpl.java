@@ -211,11 +211,9 @@ public class UserCacheServerImpl implements UserCacheServer {
         Object map = cacheService.get(key);
         if (null != map) {
             HashMap<String, Set<AbstractUser>> ma = (HashMap<String, Set<AbstractUser>>) map;
-            if (null != ma) {
-                Set<AbstractUser> set = ma.get(cid);
-                if (null != set) {
-                    set.remove(visitorUser);
-                }
+            Set<AbstractUser> set = ma.get(cid);
+            if (null != set) {
+                set.remove(visitorUser);
             }
 
         }

@@ -62,10 +62,11 @@ public class VisitorLogin extends BaseController {
             XmppNode wn = XmppNodeManager.getVisitorXmppNode(visitor);
             boolean login = wn.login();
             if (login) {
-                customer = customerDispatcherService.getDispatcher(visitor.getOpenId());
-            } else {
                 customer = customerDispatcherService.getCustomer(visitor.getOpenId());
+            } else {
+                customer = customerDispatcherService.getDispatcher(visitor.getOpenId());
             }
+            visitor.setCustomer(customer);
             logger.info(JSONUtil.toJson(visitor));
 
             if (null != customer) {

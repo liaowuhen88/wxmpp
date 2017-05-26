@@ -1,9 +1,5 @@
 package com.baodanyun.websocket.util;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -11,10 +7,16 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 
 public class HttpRequestUtils {
-
+	public static final Logger logger = LoggerFactory.getLogger(HttpRequestUtils.class);
 	private static final String APPLICATION_JSON = "application/json";
 	private static final String CONTENT_TYPE_TEXT_JSON = "text/json";
 	private static final String HTTPS = "https";
@@ -54,12 +56,22 @@ public class HttpRequestUtils {
 	}
 
 	public static String getResponseStr(HttpResponse response) throws IOException {
-		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 		StringBuffer result = new StringBuffer();
-		String line = "";
-		while ((line = bufferedReader.readLine()) != null) {
-			result.append(line);
+		BufferedReader bufferedReader = null;
+		try {
+			bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+			String line = "";
+			while ((line = bufferedReader.readLine()) != null) {
+				result.append(line);
+			}
+		} catch (Exception e) {
+			logger.error("  ", e);
+		} finally {
+			if (null != bufferedReader) {
+				bufferedReader.close();
+			}
 		}
+
 		return result.toString();
 	}
 }

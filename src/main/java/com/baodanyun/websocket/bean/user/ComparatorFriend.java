@@ -1,11 +1,12 @@
 package com.baodanyun.websocket.bean.user;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
  * Created by liaowuhen on 2017/3/8.
  */
-public class ComparatorFriend implements Comparator<Friend> {
+public class ComparatorFriend implements Comparator<Friend>, Serializable {
 
     @Override
     public int compare(Friend o1, Friend o2) {
