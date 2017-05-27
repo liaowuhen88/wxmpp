@@ -28,7 +28,7 @@ public class CustomerXmppNode extends AbstarctXmppNode implements CustomerDispat
     @Override
     public boolean logout() throws BusinessException, IOException, XMPPException, SmackException {
 
-        customerDispatcherService.deleteCustomer(this.getAbstractUser());
+        customerDispatcherService.deleteCustomer(this.getAbstractUser().getId());
 
         return super.logout();
     }

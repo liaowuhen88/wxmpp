@@ -17,7 +17,7 @@ public interface CustomerDispatcherService {
 
     AbstractUser saveCustomer(AbstractUser customer);
 
-    AbstractUser deleteCustomer(AbstractUser customer);
+    AbstractUser deleteCustomer(String cJid);
 
     AbstractUser getDispatcher(String openId);
 

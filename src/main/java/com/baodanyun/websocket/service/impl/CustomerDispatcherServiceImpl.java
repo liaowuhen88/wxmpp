@@ -71,9 +71,9 @@ public class CustomerDispatcherServiceImpl implements CustomerDispatcherService 
     }
 
     @Override
-    public AbstractUser deleteCustomer(AbstractUser customer) {
-        cids.remove(customer.getId());
-        return customers.remove(customer.getId());
+    public AbstractUser deleteCustomer(String cJid) {
+        cids.remove(cJid);
+        return customers.remove(cJid);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class CustomerDispatcherServiceImpl implements CustomerDispatcherService 
                 }
                 return customers.get(cid);
             } else {
-                deleteCustomer(customers.get(cid));
+                deleteCustomer(cid);
                 return getDispatcher(openId);
             }
 
