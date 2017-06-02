@@ -55,6 +55,12 @@ public abstract class CustomerNode extends AbstractNode implements CustomerDispa
         return true;
     }
 
+    @Override
+    public boolean uninstall(AbstractUser abstractUser) throws InterruptedException {
+        userCacheServer.delete(CommonConfig.USER_ONLINE, this.getAbstractUser().getId(), abstractUser);
+        return true;
+    }
+
 
     /* @Override
     public void onlinePush() throws InterruptedException, BusinessException {

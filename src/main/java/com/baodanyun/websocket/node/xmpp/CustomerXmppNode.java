@@ -1,6 +1,7 @@
 package com.baodanyun.websocket.node.xmpp;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.CustomerNode;
 import com.baodanyun.websocket.node.Node;
@@ -54,6 +55,23 @@ public class CustomerXmppNode extends AbstarctXmppNode implements CustomerDispat
             for (Node node : getNodes()) {
                 try {
                     ((CustomerNode) node).uninstall(abstractUser);
+                } catch (InterruptedException e) {
+                    logger.error(e);
+                }
+            }
+        } else {
+            logger.info("joinQueue getNodes() is null");
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws InterruptedException {
+        if (null != getNodes()) {
+            for (Node node : getNodes()) {
+                try {
+                    ((CustomerNode) node).messageCallBack(abstractUser, msgStatus);
                 } catch (InterruptedException e) {
                     logger.error(e);
                 }

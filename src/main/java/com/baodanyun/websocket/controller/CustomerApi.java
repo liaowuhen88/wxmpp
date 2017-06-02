@@ -13,6 +13,7 @@ import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.PageModel;
 import com.baodanyun.websocket.model.Transferlog;
 import com.baodanyun.websocket.model.UserModel;
+import com.baodanyun.websocket.node.xmpp.VisitorXmppNode;
 import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.util.*;
@@ -439,9 +440,11 @@ public class CustomerApi extends BaseController {
             Visitor user = new Visitor();
             user.setId(vjid);
             user.setCustomer(au);
-            userCacheServer.delete(CommonConfig.USER_ONLINE, au.getId(), user);
 
-            XmppNodeManager.getVisitorXmppNode(user).logout();
+            VisitorXmppNode vn = XmppNodeManager.getVisitorXmppNode(user);
+            vn.uninstall();
+
+            vn.logout();
 
             response.setSuccess(true);
 

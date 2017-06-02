@@ -38,7 +38,11 @@ public class VisitorXmppNode extends AbstarctXmppNode implements VisitorDispathe
     @Override
     public boolean uninstall() throws InterruptedException {
         AbstractUser customer = ((Visitor) this.getAbstractUser()).getCustomer();
-        return XmppNodeManager.getCustomerXmppNode(customer).uninstall(this.getAbstractUser());
+        if (null != customer) {
+            return XmppNodeManager.getCustomerXmppNode(customer).uninstall(this.getAbstractUser());
+        }
+
+        return true;
     }
 
 

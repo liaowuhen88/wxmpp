@@ -20,14 +20,14 @@ public class WeChatSendUtils {
     public static boolean send(Msg sendMsg) {
         try {
             String result = HttpUtils.send(Config.weiXinCallback + "/wechatDoubao/callback", sendMsg);
-            logger.info("send message to weiXin openid [" + sendMsg.getFrom() + "]:" + JSONObject.toJSONString(sendMsg) + "----result:" + JSONUtil.toJson(result));
+            logger.info("send message to weiXin openid [" + sendMsg.getTo() + "]:" + JSONObject.toJSONString(sendMsg) + "----result:" + result);
             if (!StringUtils.isEmpty(result)) {
                 Map map = JSONUtil.toObject(Map.class, result);
                 if (null != map && null != map.get("accept")) {
                     return Boolean.valueOf((String) map.get("accept"));
                 }
             }
-            return true;
+            return false;
         } catch (Exception e) {
             logger.error("发送失败", e);
         }

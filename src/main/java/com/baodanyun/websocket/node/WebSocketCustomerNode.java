@@ -61,6 +61,13 @@ public class WebSocketCustomerNode extends CustomerNode {
     }
 
     @Override
+    public boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws InterruptedException {
+        StatusMsg msg = getSMMsgSendTOCustomer(msgStatus);
+        SessionSendUtils.send(getSession(), msg);
+        return false;
+    }
+
+    @Override
     public void online() throws InterruptedException {
         StatusMsg msg = getSMMsgSendTOCustomer(MsgStatus.loginSuccess);
         StatusMsg initSuccess = getSMMsgSendTOCustomer(MsgStatus.initSuccess);
@@ -71,9 +78,4 @@ public class WebSocketCustomerNode extends CustomerNode {
         logger.info("保存到缓存[USER_CUSTOMER][" + this.getAbstractUser().getId() + "]--->" + userCacheServer.add(CommonConfig.USER_CUSTOMER, this.getAbstractUser()));
     }
 
-
-    @Override
-    public boolean uninstall(AbstractUser abstractUser) throws InterruptedException {
-        return false;
-    }
 }

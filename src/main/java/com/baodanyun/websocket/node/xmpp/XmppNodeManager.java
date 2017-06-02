@@ -31,4 +31,8 @@ public class XmppNodeManager {
         return (CustomerXmppNode) xmppNode;
     }
 
+    public static void removeXmppNode(String jid) {
+        xmppNodes.remove(jid);
+    }
+
 }

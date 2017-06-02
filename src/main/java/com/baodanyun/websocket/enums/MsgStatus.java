@@ -35,5 +35,10 @@ public enum MsgStatus {
     //进入队列失败状态
     onlineQueueError,//进入线上队列失败
     waitQueueError,//进入等待队列失败
-    backUpQueueError//进入backup队列失败
+    backUpQueueError,//进入backup队列失败
+
+    // 消息发送状态
+
+    msgSuccess,
+    msgFail
 }

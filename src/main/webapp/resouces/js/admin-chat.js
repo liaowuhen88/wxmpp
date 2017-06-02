@@ -98,6 +98,12 @@ xchat.initSuccessQueueStatusHandelEvent = function () {
 xchat.initErrorStatusHandelEvent = function () {
     window.location.href = window.base + "/customer/chat";
 };
+
+// 消息发送失败
+xchat.msgFailEvent = function () {
+    alert("发送失败");
+};
+
 //登录失败
 xchat.loginErrorStatusHandelEvent = function () {
     window.location.href = window.base + "/customerlogin";

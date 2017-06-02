@@ -64,48 +64,55 @@ public class CustomerDispatcherServiceImpl implements CustomerDispatcherService 
     }
 
     @Override
-    public synchronized AbstractUser saveCustomer(AbstractUser customer) {
-        cids.add(customer.getId());
-        customers.put(customer.getId(), customer);
-        return customer;
+    public AbstractUser saveCustomer(AbstractUser customer) {
+        synchronized (cids) {
+            cids.add(customer.getId());
+            customers.put(customer.getId(), customer);
+            return customer;
+        }
     }
 
     @Override
     public AbstractUser deleteCustomer(String cJid) {
-        cids.remove(cJid);
-        return customers.remove(cJid);
+        synchronized (cids) {
+            cids.remove(cJid);
+            return customers.remove(cJid);
+        }
     }
 
     @Override
-    public synchronized AbstractUser getDispatcher(String openId) {
-        if (cids.size() > 0) {
-            count++;
-            if (count >= cids.size()) {
-                count = count - cids.size();
-            }
-
-            String cid = cids.get(count);
-
-            if (xmppServer.isAuthenticated(cid)) {
-                logger.info(cid);
-                try {
-                    userCacheServer.addVisitorCustomerOpenId(openId, cid);
-                } catch (BusinessException e) {
-                    logger.error(e);
+    public AbstractUser getDispatcher(String openId) {
+        synchronized (cids) {
+            if (cids.size() > 0) {
+                count++;
+                if (count >= cids.size()) {
+                    count = count - cids.size();
                 }
-                return customers.get(cid);
+
+                String cid = cids.get(count);
+
+                if (xmppServer.isAuthenticated(cid)) {
+                    logger.info(cid);
+                    try {
+                        userCacheServer.addVisitorCustomerOpenId(openId, cid);
+                    } catch (BusinessException e) {
+                        logger.error(e);
+                    }
+                    return customers.get(cid);
+                } else {
+                    deleteCustomer(cid);
+                    return getDispatcher(openId);
+                }
+
             } else {
-                deleteCustomer(cid);
-                return getDispatcher(openId);
+                Customer cu = new Customer();
+                cu.setLoginUsername(Config.controlId);
+                cu.setId(XMPPUtil.nameToJid(Config.controlId));
+
+                return cu;
             }
-
-        } else {
-            Customer cu = new Customer();
-            cu.setLoginUsername(Config.controlId);
-            cu.setId(XMPPUtil.nameToJid(Config.controlId));
-
-            return cu;
         }
+
     }
 
 

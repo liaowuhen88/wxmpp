@@ -54,6 +54,7 @@ public class UserServerImpl implements UserServer {
                 visitor.setOpenId(openId);
                 visitor.setLoginUsername(openId.toLowerCase());
                 visitor.setUserName(openId.toLowerCase());
+                visitor.setLoginTime(System.currentTimeMillis());
                 visitor.setNickName("游客");
                 visitor.setId(XMPPUtil.nameToJid(openId.toLowerCase()));
                 String pwd = "00818863ff056f1d66c8427836f94a87";

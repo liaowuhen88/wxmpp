@@ -113,18 +113,13 @@ public class AbstarctXmppNode implements XmppNode {
         if (!StringUtils.isEmpty(user.getId()) && xmppServer.isAuthenticated(user.getId())) {
             return true;
         }
-        boolean flag = false;
+        boolean flag;
         try {
             flag = xmppServer.login(this);
-
-
         } catch (Exception e) {
+            XmppNodeManager.removeXmppNode(user.getId());
             logger.error(e);
-            flag = false;
-        }
-
-        if (!flag) {
-            this.setAbstractUser(null);
+            throw e;
         }
         return flag;
     }

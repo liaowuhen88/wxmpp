@@ -2,7 +2,9 @@ package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.Visitor;
+import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.node.sendUtils.WeChatSendUtils;
+import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -19,10 +21,20 @@ public class WeChatNode extends VisitorNode {
     public boolean sendMsgToGod(Msg msg) {
         boolean flag = false;
         try {
+            String from = msg.getFrom();
             msg.setType("text");
             msg.setFrom(this.getAbstractUser().getOpenId());
             flag = WeChatSendUtils.send(msg);
 
+            if (!flag) {
+                XmppNodeManager.getCustomerXmppNode(((Visitor) getAbstractUser()).getCustomer()).messageCallBack(this.getAbstractUser(), MsgStatus.msgFail);
+
+                // 发送失败记录
+                msg.setFrom(msg.getTo());
+                msg.setTo(from);
+                msg.setContent("系统消息,微信接口不通，消息发送失败");
+                receiveFromGod(msg);
+            }
         } catch (Exception e) {
             logger.error("", e);
         }

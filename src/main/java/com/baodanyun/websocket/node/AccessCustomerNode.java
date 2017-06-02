@@ -1,9 +1,11 @@
 package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.msg.Msg;
+import com.baodanyun.websocket.bean.msg.status.StatusMsg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.AcsessCustomer;
 import com.baodanyun.websocket.bean.user.Customer;
+import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.sendUtils.SessionSendUtils;
 import com.baodanyun.websocket.service.UserServer;
@@ -64,15 +66,16 @@ public class AccessCustomerNode extends CustomerNode {
         return true;
     }
 
-
-    @Override
-    public boolean uninstall(AbstractUser abstractUser) throws InterruptedException {
-        return false;
-    }
-
     @Override
     public void online() throws InterruptedException {
 
+    }
+
+    @Override
+    public boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws InterruptedException {
+        StatusMsg msg = getSMMsgSendTOCustomer(msgStatus);
+        SessionSendUtils.send(getSession(), msg);
+        return false;
     }
 
 

@@ -7,7 +7,6 @@ import java.io.Serializable;
  */
 public class AbstractUser implements Serializable {
 
-    private static final long serialVersionUID = -1049614187759631302L;
     public UserType userType;
     /**
      * 因为xmpp发送消息的时候是带后缀，id代表一个xmpp唯一发送地址

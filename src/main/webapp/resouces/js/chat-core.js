@@ -73,6 +73,9 @@ var xChat = function (options) {
     //在临时队列中
     this.backUpStatusHandelEvent = function () {
     };
+    // 消息发送失败
+    this.msgFailEvent = function () {
+    };
     //离开临时队列
     this.offlineBackUpStatusHandelEvent = function () {
     };
@@ -427,7 +430,9 @@ var xChat = function (options) {
                 {"backUpQueueSuccess": _this.backUpStatusHandelEvent},
                 {"offlineBackUpQueueSuccess": _this.offlineBackUpStatusHandelEvent},
                 {"serverACK": _this.sendACKStatusHandelEvent},
-                {"customerOffline": _this.customerOfflineStatusHandelEvent}
+                {"customerOffline": _this.customerOfflineStatusHandelEvent},
+                {"msgFail": _this.msgFailEvent}
+
             ]
         }
     };
