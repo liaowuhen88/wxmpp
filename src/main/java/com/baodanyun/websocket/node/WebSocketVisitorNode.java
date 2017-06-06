@@ -3,6 +3,7 @@ package com.baodanyun.websocket.node;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.enums.MsgStatus;
+import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.sendUtils.SessionSendUtils;
 import org.apache.log4j.Logger;
 import org.springframework.web.socket.WebSocketSession;
@@ -33,7 +34,7 @@ public class WebSocketVisitorNode extends VisitorNode {
     }
 
     @Override
-    public void online() throws InterruptedException {
+    public void online() throws InterruptedException, BusinessException {
         super.online();
         Msg loginSuccess = getSMMsgSendTOVisitor(getAbstractUser(), MsgStatus.loginSuccess);
 
@@ -47,7 +48,7 @@ public class WebSocketVisitorNode extends VisitorNode {
     }
 
     @Override
-    public boolean joinQueue() throws InterruptedException {
+    public boolean joinQueue() throws InterruptedException, BusinessException {
         Msg onlineQueueSuccess = getSMMsgSendTOVisitor(getAbstractUser(), MsgStatus.onlineQueueSuccess);
 
         Msg hello = getMsgHelloToVisitor(((Visitor) getAbstractUser()));

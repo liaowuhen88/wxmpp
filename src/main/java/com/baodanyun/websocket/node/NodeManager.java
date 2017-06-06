@@ -18,7 +18,7 @@ public class NodeManager {
     // key id
     public static final Map<String, Node> nodes = new ConcurrentHashMap<>();
 
-    public static WeChatNode getWeChatNode(Visitor visitor) {
+    public static VisitorNode getWeChatNode(Visitor visitor) {
         String key = "WeChat" + "_" + visitor.getId();
         Node node = nodes.get(key);
         if (null == node) {
@@ -30,11 +30,11 @@ public class NodeManager {
             nodes.put(key, node);
         }
 
-        return (WeChatNode) node;
+        return (VisitorNode) node;
     }
 
 
-    public static WebSocketVisitorNode getWebSocketVisitorNode(WebSocketSession session, Visitor visitor) {
+    public static VisitorNode getWebSocketVisitorNode(WebSocketSession session, Visitor visitor) {
         String key = session.getId();
         Node node = nodes.get(key);
         if (null == node) {
@@ -46,11 +46,11 @@ public class NodeManager {
             nodes.put(key, node);
         }
 
-        return (WebSocketVisitorNode) node;
+        return (VisitorNode) node;
     }
 
-    public static AccessVisitorNode getAccessVisitorNode(Visitor visitor) {
-        String key = "WeChat" + "_" + visitor.getId();
+    public static VisitorNode getAccessVisitorNode(Visitor visitor) {
+        String key = "access" + "_" + visitor.getId();
         Node node = nodes.get(key);
         if (null == node) {
             node = new AccessVisitorNode(visitor);
@@ -62,11 +62,11 @@ public class NodeManager {
 
         }
 
-        return (AccessVisitorNode) node;
+        return (VisitorNode) node;
     }
 
 
-    public static WebSocketCustomerNode getWebSocketCustomerNode(WebSocketSession session, Customer customer) {
+    public static CustomerNode getWebSocketCustomerNode(WebSocketSession session, Customer customer) {
         String key = session.getId();
         Node node = nodes.get(key);
         if (null == node) {
@@ -78,11 +78,11 @@ public class NodeManager {
             nodes.put(key, node);
         }
 
-        return (WebSocketCustomerNode) node;
+        return (CustomerNode) node;
     }
 
 
-    public static AccessCustomerNode getAccessCustomerNode(WebSocketSession session, Customer customer) {
+    public static CustomerNode getAccessCustomerNode(WebSocketSession session, Customer customer) {
         String key = session.getId();
 
         Node node = nodes.get(key);
@@ -95,7 +95,7 @@ public class NodeManager {
             nodes.put(key, node);
         }
 
-        return (AccessCustomerNode) node;
+        return (CustomerNode) node;
     }
 
 

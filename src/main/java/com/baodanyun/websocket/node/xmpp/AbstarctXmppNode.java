@@ -42,10 +42,6 @@ public class AbstarctXmppNode implements XmppNode {
         return abstractUser;
     }
 
-    void setAbstractUser(AbstractUser abstractUser) {
-        this.abstractUser = abstractUser;
-    }
-
     @Override
     public List<Node> getNodes() {
         logger.info(this.getAbstractUser().getId() + "getNodes[" + nodes.size() + "]");

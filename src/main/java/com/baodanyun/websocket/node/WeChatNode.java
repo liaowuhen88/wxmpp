@@ -3,6 +3,7 @@ package com.baodanyun.websocket.node;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.enums.MsgStatus;
+import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.sendUtils.WeChatSendUtils;
 import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
 import org.apache.log4j.Logger;
@@ -42,7 +43,7 @@ public class WeChatNode extends VisitorNode {
     }
 
     @Override
-    public void online() throws InterruptedException {
+    public void online() throws InterruptedException, BusinessException {
         super.online();
         Msg hello = getMsgHelloToVisitor(((Visitor) getAbstractUser()));
         hello.setFrom(this.getAbstractUser().getOpenId());

@@ -6,7 +6,7 @@ import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.NodeManager;
-import com.baodanyun.websocket.node.WeChatNode;
+import com.baodanyun.websocket.node.VisitorNode;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.util.*;
 import org.apache.commons.lang.StringUtils;
@@ -59,7 +59,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
             String body = HttpServletRequestUtils.getBody(request);
             Msg msg = msg(body);
             Visitor visitor = userServer.initUserByOpenId(msg.getFrom());
-            WeChatNode wn = NodeManager.getWeChatNode(visitor);
+            VisitorNode wn = NodeManager.getWeChatNode(visitor);
             boolean xmppFlag = wn.getXmppNode().isOnline();
             AbstractUser customer;
             if (xmppFlag) {
@@ -92,7 +92,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
 
                         if (!flag) {
                             wn.login();
-                            wn.joinQueue();
+                            wn.online();
                         }
 
                         wn.receiveFromGod(msg);

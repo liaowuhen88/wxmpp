@@ -5,7 +5,7 @@ import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.node.NodeManager;
-import com.baodanyun.websocket.node.WebSocketVisitorNode;
+import com.baodanyun.websocket.node.VisitorNode;
 import com.baodanyun.websocket.service.WebSocketService;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
@@ -26,7 +26,7 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         webSocketService.saveSession(au.getId(), session);
         logger.info("session is open --- ip:[" + session.getLocalAddress() + "]------visitorId:[" + au.getId() + "] ---- sessionId:[" + session.getId() + "]  ");
-        WebSocketVisitorNode wn = NodeManager.getWebSocketVisitorNode(session, (Visitor) au);
+        VisitorNode wn = NodeManager.getWebSocketVisitorNode(session, (Visitor) au);
 
         wn.online();
 
@@ -39,7 +39,7 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
             AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
 
             String content = message.getPayload();
-            WebSocketVisitorNode wn = NodeManager.getWebSocketVisitorNode(session, (Visitor) au);
+            VisitorNode wn = NodeManager.getWebSocketVisitorNode(session, (Visitor) au);
 
             wn.receiveFromGod(content);
         }catch (Exception e){
@@ -52,7 +52,7 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         logger.info("session is closed  ------visitorId:[" + au.getId() + "] ---- sessionId:[" + session.getId() + "]  ----------status:[ " + status + "]");
         webSocketService.removeSession(au.getId(), session);
-        WebSocketVisitorNode wn = NodeManager.getWebSocketVisitorNode(session, (Visitor) au);
+        VisitorNode wn = NodeManager.getWebSocketVisitorNode(session, (Visitor) au);
         wn.getXmppNode().getNodes().remove(wn);
 
     }

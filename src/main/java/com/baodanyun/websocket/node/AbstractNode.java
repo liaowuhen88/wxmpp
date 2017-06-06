@@ -9,11 +9,15 @@ import com.baodanyun.websocket.util.XMPPUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smackx.offline.OfflineMessageManager;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by liaowuhen on 2017/5/23.
@@ -35,7 +39,7 @@ public abstract class AbstractNode implements Node {
         this.xmppNode = xmppNode;
     }
 
-    /*public boolean pushOfflineMsg() throws BusinessException {
+    public boolean pushOfflineMsg() throws BusinessException {
         //加载离线记录
         XMPPConnection xmppConnection = this.getXmppNode().getXMPPConnection();
         OfflineMessageManager offlineManager = new OfflineMessageManager(xmppConnection);
@@ -43,19 +47,8 @@ public abstract class AbstractNode implements Node {
             List<Message> msgList = offlineManager.getMessages();
             if (!CollectionUtils.isEmpty(msgList)) {
                 for (Message message : msgList) {
-                    String body = message.getBody();
-                    if (StringUtils.isNotBlank(body)) {
-                        Msg msgBean = Msg.handelMsg(body);
-                        if (msgBean != null) {
-                            //只接收文本,图片类型消息
-                            if (msgBean instanceof TextMsg || msgBean instanceof ImgMsg) {
-                                getMsgSendService().produce(msgBean);
-                                //只有接受到消息后 才删除离线消息
-                                offlineManager.deleteMessages();
-
-                            }
-                        }
-                    }
+                    receiveFromXmpp(message);
+                    offlineManager.deleteMessages();
                 }
             }
         } catch (Exception e) {
@@ -63,7 +56,7 @@ public abstract class AbstractNode implements Node {
         }
 
         return true;
-    }*/
+    }
 
     @Override
     public void sendMessageTOXmpp(Message message) throws InterruptedException, SmackException.NotConnectedException, BusinessException {

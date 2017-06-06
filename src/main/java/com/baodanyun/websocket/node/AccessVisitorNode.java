@@ -1,6 +1,7 @@
 package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.user.Visitor;
+import com.baodanyun.websocket.exception.BusinessException;
 import org.apache.log4j.Logger;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -25,7 +26,7 @@ public class AccessVisitorNode extends WeChatNode {
     }
 
     @Override
-    public void online() throws InterruptedException {
+    public void online() throws InterruptedException, BusinessException {
         super.online();
         joinQueue();
     }

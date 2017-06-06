@@ -6,7 +6,7 @@ import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.Transferlog;
 import com.baodanyun.websocket.node.NodeManager;
-import com.baodanyun.websocket.node.WeChatNode;
+import com.baodanyun.websocket.node.VisitorNode;
 import com.baodanyun.websocket.node.xmpp.VisitorXmppNode;
 import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
 import com.baodanyun.websocket.service.*;
@@ -53,7 +53,7 @@ public class TransferServerImpl implements TransferServer {
             if (null == visitor) {
                 throw new BusinessException("访客未在线");
             }
-            WeChatNode wn = NodeManager.getWeChatNode(visitor);
+            VisitorNode wn = NodeManager.getWeChatNode(visitor);
 
             if (wn.getXmppNode().isOnline()) {
                 if (!wn.uninstall()) {

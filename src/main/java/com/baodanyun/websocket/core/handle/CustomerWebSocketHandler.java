@@ -3,8 +3,8 @@ package com.baodanyun.websocket.core.handle;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.core.common.Common;
+import com.baodanyun.websocket.node.Node;
 import com.baodanyun.websocket.node.NodeManager;
-import com.baodanyun.websocket.node.WebSocketCustomerNode;
 import com.baodanyun.websocket.service.WebSocketService;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
@@ -24,7 +24,7 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         webSocketService.saveSession(au.getId(), session);
         //获取一个customerNode节点
-        WebSocketCustomerNode wn = NodeManager.getWebSocketCustomerNode(session, (Customer) au);
+        Node wn = NodeManager.getWebSocketCustomerNode(session, (Customer) au);
         wn.online();
     }
 
@@ -34,7 +34,7 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
             AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
             logger.info("webSocket receive message:" + JSONUtil.toJson(message));
             String content = message.getPayload();
-            WebSocketCustomerNode wn = NodeManager.getWebSocketCustomerNode(session, (Customer) au);
+            Node wn = NodeManager.getWebSocketCustomerNode(session, (Customer) au);
             wn.receiveFromGod(content);
         }catch (Exception e){
             logger.info(e);
@@ -51,7 +51,7 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
 
         if (!flag) {
             logger.info("userLifeCycleService.logout(customer): id[" + au.getId() + "]" + status);
-            WebSocketCustomerNode wn = NodeManager.getWebSocketCustomerNode(session, (Customer) au);
+            Node wn = NodeManager.getWebSocketCustomerNode(session, (Customer) au);
             wn.logout();
         }
     }

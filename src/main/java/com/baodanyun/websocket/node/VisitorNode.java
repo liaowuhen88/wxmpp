@@ -60,7 +60,7 @@ public abstract class VisitorNode extends AbstractNode implements VisitorDispath
     }
 
     @Override
-    public void online() throws InterruptedException {
+    public void online() throws InterruptedException, BusinessException {
         VisitorLoginEvent vl = new VisitorLoginEvent(this.getAbstractUser(), ((Visitor) this.getAbstractUser()).getCustomer(), null);
 
         EventBusUtils.post(vl);
@@ -93,9 +93,11 @@ public abstract class VisitorNode extends AbstractNode implements VisitorDispath
     }
 
     @Override
-    public boolean joinQueue() throws InterruptedException {
+    public boolean joinQueue() throws InterruptedException, BusinessException {
         logger.info("保存到缓存--->" + userCacheServer.add(CommonConfig.USER_VISITOR, this.getAbstractUser()));
-        return ((VisitorXmppNode) this.getXmppNode()).joinQueue();
+        boolean flag = ((VisitorXmppNode) this.getXmppNode()).joinQueue();
+        pushOfflineMsg();
+        return flag;
     }
 
     @Override

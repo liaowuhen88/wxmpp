@@ -9,8 +9,8 @@ import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.dao.OfuserMapper;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.LoginModel;
-import com.baodanyun.websocket.node.AccessVisitorNode;
 import com.baodanyun.websocket.node.NodeManager;
+import com.baodanyun.websocket.node.VisitorNode;
 import com.baodanyun.websocket.node.xmpp.CustomerXmppNode;
 import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
 import com.baodanyun.websocket.service.CustomerDispatcherService;
@@ -121,7 +121,7 @@ public class CustomerLogin extends BaseController {
             logger.info(JSONUtil.toJson(visitor));
             userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customer.getId());
 
-            AccessVisitorNode wn = NodeManager.getAccessVisitorNode(visitor);
+            VisitorNode wn = NodeManager.getAccessVisitorNode(visitor);
 
             userCacheServer.saveVisitorByUidOrOpenID(user.getTo(), visitor);
 

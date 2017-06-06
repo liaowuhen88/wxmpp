@@ -15,6 +15,7 @@ import java.util.List;
 /**
  * Created by liaowuhen on 2017/5/23.
  */
+
 public interface XmppNode extends ChatManagerListener, ChatMessageListener, ConnectionListener, Dispatcher {
 
     /**
@@ -22,8 +23,8 @@ public interface XmppNode extends ChatManagerListener, ChatMessageListener, Conn
      *
      * @return
      */
-    boolean isOnline();
 
+    boolean isOnline();
 
     /**
      * 获取用户

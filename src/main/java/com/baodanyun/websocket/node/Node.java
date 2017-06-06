@@ -45,7 +45,7 @@ public interface Node extends Dispatcher {
 
     AbstractUser getAbstractUser();
 
-    void online() throws InterruptedException;
+    void online() throws InterruptedException, BusinessException;
 
    /* *//**
      * 获取消息通知器
