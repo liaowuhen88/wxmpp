@@ -102,19 +102,19 @@ public class AbstarctXmppNode implements XmppNode {
     @Override
     public boolean login() throws BusinessException, IOException, XMPPException, SmackException {
         AbstractUser user = getAbstractUser();
-        if (StringUtils.isBlank(user.getLoginUsername())) {
-            throw new BusinessException("用户名不能为空");
-        }
-
-        if (StringUtils.isBlank(user.getPassWord())) {
-            throw new BusinessException("密码不能为空");
-        }
-
-        if (!StringUtils.isEmpty(user.getId()) && xmppServer.isAuthenticated(user.getId())) {
-            return true;
-        }
         boolean flag;
         try {
+            if (StringUtils.isBlank(user.getLoginUsername())) {
+                throw new BusinessException("用户名不能为空");
+            }
+
+            if (StringUtils.isBlank(user.getPassWord())) {
+                throw new BusinessException("密码不能为空");
+            }
+
+            if (!StringUtils.isEmpty(user.getId()) && xmppServer.isAuthenticated(user.getId())) {
+                return true;
+            }
             flag = xmppServer.login(this);
         } catch (Exception e) {
             XmppNodeManager.removeXmppNode(user.getId());
