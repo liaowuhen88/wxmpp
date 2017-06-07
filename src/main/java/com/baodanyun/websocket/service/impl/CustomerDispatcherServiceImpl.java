@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by liaowuhen on 2017/4/25.
@@ -27,7 +28,7 @@ public class CustomerDispatcherServiceImpl implements CustomerDispatcherService 
     private static final Map<String, AbstractUser> customers = new ConcurrentHashMap();
 
     private static final Vector<String> cids = new Vector<>();
-    private static Integer count = 0;
+    private static AtomicInteger count = new AtomicInteger();
 
     @Autowired
     private UserCacheServer userCacheServer;
@@ -84,12 +85,12 @@ public class CustomerDispatcherServiceImpl implements CustomerDispatcherService 
     public AbstractUser getDispatcher(String openId) {
         synchronized (cids) {
             if (cids.size() > 0) {
-                count++;
-                if (count >= cids.size()) {
-                    count = count - cids.size();
+                count.getAndIncrement();
+                while (count.get() >= cids.size()) {
+                    count.getAndAdd(-cids.size());
                 }
 
-                String cid = cids.get(count);
+                String cid = cids.get(count.get());
 
                 if (xmppServer.isAuthenticated(cid)) {
                     logger.info(cid);
