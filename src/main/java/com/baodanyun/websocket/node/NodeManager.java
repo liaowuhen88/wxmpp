@@ -50,7 +50,7 @@ public class NodeManager {
     }
 
     public static VisitorNode getAccessVisitorNode(Visitor visitor) {
-        String key = "access" + "_" + visitor.getId();
+        String key = "WeChat" + "_" + visitor.getId();
         Node node = nodes.get(key);
         if (null == node) {
             node = new AccessVisitorNode(visitor);

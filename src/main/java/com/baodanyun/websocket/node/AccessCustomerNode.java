@@ -11,6 +11,7 @@ import com.baodanyun.websocket.node.sendUtils.SessionSendUtils;
 import com.baodanyun.websocket.service.UserServer;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import com.baodanyun.websocket.util.XMPPUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.packet.Message;
@@ -42,7 +43,13 @@ public class AccessCustomerNode extends CustomerNode {
 
         try {
             String to = XMPPUtil.jidToName(message.getTo());
-            AbstractUser visitor = userServer.initVisitorByUid(Long.valueOf(to));
+            AbstractUser visitor;
+            if (StringUtils.isNumeric(to)) {
+                visitor = userServer.initVisitorByUid(Long.parseLong(to));
+            } else {
+                visitor = userServer.initUserByOpenId(to);
+            }
+
             if (null != visitor) {
                 message.setTo(visitor.getId());
             }

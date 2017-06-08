@@ -48,7 +48,7 @@ public class CustomerSimpleWebSocketHandler extends AbstractWebSocketHandler {
 
             wn.receiveFromGod(content);
         } catch (Exception e) {
-            logger.info(e);
+            logger.error(e);
         }
     }
 
