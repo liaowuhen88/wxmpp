@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baodanyun.websocket.dao.OfpropertyMapper">
+    <resultMap id="BaseResultMap" type="com.baodanyun.websocket.model.Ofproperty">
+        <id column="name" property="name" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.baodanyun.websocket.model.Ofproperty" extends="BaseResultMap">
+        <result column="propValue" property="propvalue" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        name
+    </sql>
+    <sql id="Blob_Column_List">
+        propValue
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from ofproperty
+        where name = #{name,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from ofproperty
+    where name = #{name,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.baodanyun.websocket.model.Ofproperty">
+        insert into ofproperty (name, propValue)
+        values (#{name,jdbcType=VARCHAR}, #{propvalue,jdbcType=LONGVARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.baodanyun.websocket.model.Ofproperty">
+        insert into ofproperty
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                name,
+            </if>
+            <if test="propvalue != null">
+                propValue,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="propvalue != null">
+                #{propvalue,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.baodanyun.websocket.model.Ofproperty">
+        update ofproperty
+        <set>
+            <if test="propvalue != null">
+                propValue = #{propvalue,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where name = #{name,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.baodanyun.websocket.model.Ofproperty">
+    update ofproperty
+    set propValue = #{propvalue,jdbcType=LONGVARCHAR}
+    where name = #{name,jdbcType=VARCHAR}
+  </update>
+</mapper>
