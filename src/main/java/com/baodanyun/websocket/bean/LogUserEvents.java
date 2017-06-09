@@ -5,11 +5,20 @@ package com.baodanyun.websocket.bean;
  */
 public class LogUserEvents {
     private String myUid;
+    private String openid;
     private Integer otype;
     private String evt;
     private String oid;
     // 备注信息
     private String mark;
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
 
     public Integer getOtype() {
         return otype;

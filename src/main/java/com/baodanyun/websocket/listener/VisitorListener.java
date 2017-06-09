@@ -87,9 +87,10 @@ public class VisitorListener {
         if(null != visitor.getUid()){
             le.setMyUid(visitor.getUid()+"");
         }else {
-            le.setMyUid(visitor.getId());
+            le.setMyUid(visitor.getOpenId());
         }
 
+        le.setOpenid(visitor.getOpenId());
         if (null != cid) {
             le.setOid(cid);
         }

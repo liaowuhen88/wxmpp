@@ -13,6 +13,8 @@ public class UserEventList implements Serializable {
      */
     private String userid;
 
+    private String openid;
+
     /**
      * 初期以月为单位存储每个用户的时间，处理为evt_yyyyMM00，若以后改为按天那么把00改为dd就可以。
      */
@@ -25,6 +27,13 @@ public class UserEventList implements Serializable {
 
     private List<UserEvent> array;
 
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
 
     public String getUserid() {
         return userid;

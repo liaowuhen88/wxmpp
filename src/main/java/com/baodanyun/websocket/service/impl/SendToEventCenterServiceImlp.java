@@ -33,6 +33,7 @@ public class SendToEventCenterServiceImlp implements SendToEventCenterService {
         List<UserEvent> li = new ArrayList<>();
 
         ul.setUserid(le.getMyUid());
+        ul.setOpenid(le.getOpenid());
         ul.setEventTime(time);
 
         UserEvent ue = new UserEvent();
