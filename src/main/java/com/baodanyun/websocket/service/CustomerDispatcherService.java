@@ -3,6 +3,8 @@ package com.baodanyun.websocket.service;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.exception.BusinessException;
 
+import java.util.Collection;
+
 /**
  * Created by liaowuhen on 2017/4/25.
  */
@@ -20,6 +22,8 @@ public interface CustomerDispatcherService {
     AbstractUser deleteCustomer(String cJid);
 
     AbstractUser getDispatcher(String openId);
+
+    Collection getCustomerAccept();
 
 
 }

@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
@@ -75,6 +76,7 @@ public class CustomerDispatcherServiceImpl implements CustomerDispatcherService 
 
     @Override
     public AbstractUser deleteCustomer(String cJid) {
+        logger.info("deleteCustomer[" + cJid + "]");
         synchronized (cids) {
             cids.remove(cJid);
             return customers.remove(cJid);
@@ -116,5 +118,9 @@ public class CustomerDispatcherServiceImpl implements CustomerDispatcherService 
 
     }
 
+    @Override
+    public Collection getCustomerAccept() {
+        return customers.values();
+    }
 
 }

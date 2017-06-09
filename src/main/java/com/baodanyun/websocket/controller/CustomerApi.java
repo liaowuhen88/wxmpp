@@ -16,7 +16,10 @@ import com.baodanyun.websocket.model.UserModel;
 import com.baodanyun.websocket.node.xmpp.VisitorXmppNode;
 import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
 import com.baodanyun.websocket.service.*;
-import com.baodanyun.websocket.util.*;
+import com.baodanyun.websocket.util.JSONUtil;
+import com.baodanyun.websocket.util.PhoneUtils;
+import com.baodanyun.websocket.util.Render;
+import com.baodanyun.websocket.util.XMPPUtil;
 import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -62,6 +65,9 @@ public class CustomerApi extends BaseController {
 
     @Autowired
     private WebSocketService webSocketService;
+
+    @Autowired
+    private CustomerDispatcherService customerDispatcherService;
 
     /**
      * 获取客服的信息
@@ -195,6 +201,27 @@ public class CustomerApi extends BaseController {
 
 
     /**
+     * 当前在线可接入用户客服
+     *
+     * @param httpServletRequest
+     * @param httpServletResponse
+     */
+    @RequestMapping(value = "customerListAccept")
+    public void customerListAccept(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        Response response = new Response();
+        Gson gson = new Gson();
+        try {
+            Collection collection = customerDispatcherService.getCustomerAccept();
+            response.setData(collection);
+            response.setSuccess(true);
+        } catch (Exception e) {
+            logger.error(e);
+            response.setSuccess(false);
+        }
+        Render.r(httpServletResponse, gson.toJson(response));
+    }
+
+    /**
      * 客服退出
      *
      * @param httpServletRequest
@@ -208,12 +235,11 @@ public class CustomerApi extends BaseController {
             logger.info("customerLogout");
             // 清楚session缓存
             AbstractUser customer = (AbstractUser) httpServletRequest.getSession().getAttribute(Common.USER_KEY);
-            httpServletRequest.getSession().invalidate();
-
             response.setSuccess(true);
 
             // 关闭node
             XmppNodeManager.getCustomerXmppNode(customer).logout();
+            httpServletRequest.getSession().invalidate();
 
         } catch (Exception e) {
             logger.error(e);
