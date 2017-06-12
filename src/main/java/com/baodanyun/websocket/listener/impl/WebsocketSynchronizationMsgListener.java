@@ -35,27 +35,6 @@ public class WebsocketSynchronizationMsgListener extends AbstarctEventBusListene
                                     public void run() {
                                         try {
                                             if (null != sme.getMsg()) {
-                                               /* Map<String, WebSocketSession> map = webSocketService.getWebSocketSession(sme.getFromJid());
-                                                if (null != map && map.size() > 0) {
-                                                    String to = XMPPUtil.jidToName(sme.getMsg().getTo());
-                                                    AbstractUser visitor = userCacheServer.getVisitorByUidOrOpenID(to);
-                                                    if (null != visitor) {
-                                                        sme.getMsg().setTo(visitor.getId());
-                                                    }
-                                                    Set<Map.Entry<String, WebSocketSession>> entries = map.entrySet();
-                                                    Iterator<Map.Entry<String, WebSocketSession>> it = entries.iterator();
-                                                    while (it.hasNext()) {
-                                                        Map.Entry<String, WebSocketSession> mapEntry = it.next();
-                                                        String id = mapEntry.getKey();
-                                                        WebSocketSession webSocketSession = mapEntry.getValue();
-
-                                                        if (!id.equals(sme.getSessionID())) {
-                                                            webSocketService.synchronizationMsg(webSocketSession, sme.getMsg());
-                                                        }
-
-                                                    }
-
-                                                }*/
 
                                                 for (Node node : sme.getNode().getXmppNode().getNodes()) {
                                                     if (!node.equals(sme.getNode())) {

@@ -40,7 +40,7 @@ public abstract class CustomerNode extends AbstractNode implements CustomerDispa
         super.receiveFromGod(msg);
         SynchronizationMsgEvent sme = new SynchronizationMsgEvent();
         Msg clone = (Msg) SerializationUtils.clone(msg);
-
+        clone.setIcon(null);
         sme.setMsg(clone);
         sme.setNode(this);
         sme.setFromJid(this.getAbstractUser().getId());

@@ -1,8 +1,8 @@
 package com.baodanyun.websocket.listener.impl;
 
-import com.baodanyun.websocket.dao.WechatMsgMapper;
 import com.baodanyun.websocket.event.SendMsgToWeChatEvent;
 import com.baodanyun.websocket.listener.EventBusListener;
+import com.baodanyun.websocket.service.WechatMsgService;
 import com.google.common.eventbus.Subscribe;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class SendMsgToWeChatListener extends AbstarctEventBusListener<SendMsgToW
     private static Logger logger = Logger.getLogger(SendMsgToWeChatListener.class);
 
     @Autowired
-    public WechatMsgMapper wechatMsgMapper;
+    public WechatMsgService wechatMsgService;
 
     @Override
     @Subscribe
@@ -29,7 +29,7 @@ public class SendMsgToWeChatListener extends AbstarctEventBusListener<SendMsgToW
                                     public void run() {
                                         try {
                                             if (null != ve.getWechatMsg()) {
-                                                wechatMsgMapper.insert(ve.getWechatMsg());
+                                                wechatMsgService.insert(ve.getWechatMsg());
                                             }
 
 

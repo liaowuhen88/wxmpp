@@ -201,51 +201,10 @@ public class AbstarctXmppNode implements XmppNode {
         }
     }
 
-
-   /* public void sendMessage(Msg msg) throws SmackException.NotConnectedException {
-        Message xmppMsg = new Message();
-
-
-        xmppMsg.setFrom(msg.getFrom());
-        xmppMsg.setTo(msg.getTo());
-        xmppMsg.setType(Message.Type.chat);
-        xmppMsg.setBody(msg.getContent().toString());
-        xmppMsg.setSubject(msg.getContentType());
-
-        sendMessage(xmppMsg);
-
-    }*/
-
     @Override
     public void sendMessage(Message xmppMsg) throws SmackException.NotConnectedException {
         logger.info("xmpp send message:" + JSONUtil.toJson(xmppMsg));
         xmppConnection.sendStanza(xmppMsg);
     }
 
-
-
-   /* private Msg getMsg(Message msg) {
-        Msg sendMsg = null;
-        String body = msg.getBody();
-        if (StringUtils.isNotBlank(body)) {
-            sendMsg = new Msg(body);
-            String from = XMPPUtil.removeSource(msg.getFrom());
-            String to = XMPPUtil.removeSource(msg.getTo());
-            String type = Msg.Type.msg.toString();
-            Long ct = new Date().getTime();
-
-            sendMsg.setType(type);
-            sendMsg.setFrom(from);
-            sendMsg.setTo(to);
-            sendMsg.setCt(ct);
-            sendMsg.setOpenId(user.getOpenId());
-
-            if (StringUtils.isEmpty(msg.getSubject())) {
-                sendMsg.setContentType("text");
-            } else {
-                sendMsg.setContentType(msg.getSubject());
-            }
-        }
-        return sendMsg;
-    }*/
 }

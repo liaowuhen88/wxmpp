@@ -12,6 +12,17 @@
     <resultMap id="ResultMapWithBLOBs" type="com.baodanyun.websocket.model.WechatMsg" extends="BaseResultMap">
         <result column="content" property="content" jdbcType="LONGVARCHAR"/>
     </resultMap>
+
+    <resultMap id="statisticsResultMap" type="com.baodanyun.websocket.bean.response.WeChatMsgStatistics">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="msg_to" property="msgTo" jdbcType="VARCHAR"/>
+        <result column="msg_status" property="msgStatus" jdbcType="TINYINT"/>
+        <result column="msg_from" property="msgFrom" jdbcType="VARCHAR"/>
+        <result column="from_count" property="fromCount" jdbcType="VARCHAR"/>
+        <result column="to_count" property="toCount" jdbcType="VARCHAR"/>
+        <result column="ct" property="sendTime" jdbcType="VARCHAR"/>
+    </resultMap>
+
     <sql id="Base_Column_List">
         id, msg_to, msg_status, msg_from, ct, type
     </sql>
@@ -26,6 +37,22 @@
         from wechat_msg
         where id = #{id,jdbcType=INTEGER}
     </select>
+
+    <select id="statistics" resultMap="statisticsResultMap">
+        SELECT * FROM (SELECT *,COUNT(*) from_count FROM  wechat_msg m1
+
+        WHERE m1.msg_from = #{jid,jdbcType=VARCHAR}
+        AND m1.ct > #{startDate,jdbcType=VARCHAR}
+        AND #{endDate,jdbcType=VARCHAR} > m1.ct GROUP BY msg_to,msg_status ORDER BY m1.ct) x1
+        LEFT JOIN
+        (SELECT COUNT(*) to_count,msg_from FROM wechat_msg
+        WHERE msg_to =#{jid,jdbcType=VARCHAR}
+        AND ct > #{startDate,jdbcType=VARCHAR}
+        AND #{endDate,jdbcType=VARCHAR} > ct GROUP BY msg_from) x2
+        ON x1.`msg_to` = x2.msg_from ;
+    </select>
+
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from wechat_msg
     where id = #{id,jdbcType=INTEGER}
