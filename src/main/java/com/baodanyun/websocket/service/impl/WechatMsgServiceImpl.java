@@ -39,11 +39,11 @@ public class WechatMsgServiceImpl implements WechatMsgService {
         }
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        String endDate = DateFormatUtils.format(calendar.getTimeInMillis(), DateFormatUtils.ISO_DATE_FORMAT.getPattern());
+        String startDate = DateFormatUtils.format(calendar.getTimeInMillis(), DateFormatUtils.ISO_DATE_FORMAT.getPattern());
 
         calendar.setTime(date);
-        calendar.add(Calendar.DATE, -1);
-        String startDate = DateFormatUtils.format(calendar.getTimeInMillis(), DateFormatUtils.ISO_DATE_FORMAT.getPattern());
+        calendar.add(Calendar.DATE, 1);
+        String endDate = DateFormatUtils.format(calendar.getTimeInMillis(), DateFormatUtils.ISO_DATE_FORMAT.getPattern());
 
         return wechatMsgMapper.statistics(jid, startDate, endDate);
     }

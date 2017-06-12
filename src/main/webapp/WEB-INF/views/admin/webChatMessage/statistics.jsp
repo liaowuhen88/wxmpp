@@ -9,61 +9,32 @@
 <head>
     <meta charset="UTF-8"/>
     <title>豆包客服</title>
+    <link rel="stylesheet" type="text/css"
+          href="<%=request.getContextPath()%>/resouces/css/datetimepicker/jquery.datetimepicker.css"/>
+
+
     <script src="<%=request.getContextPath()%>/resouces/js/common.js"></script>
     <script src="<%=request.getContextPath()%>/resouces/js/plugins/jquery.form.js"></script>
     <script src="<%=request.getContextPath()%>/resouces/js/plugins/jquery-migrate-1.1.1.js"></script>
     <script src="<%=request.getContextPath()%>/resouces/js/util.js"></script>
     <script src="<%=request.getContextPath()%>/resouces/js/plugins/mustache.js"></script>
-    <script>
-        window.base = '<%=path%>';
-        function statistics() {
-            var jid = $("#jid").val();
-            var date = $("#date").val();
-            $("#dataView").html("");
-            $.ajax({
-                url: base + '/api/weChatMsg/statistics' + '?jid=' + jid + '&date=' + date,
-                type: 'POST',
-                success: function (res) {
-                    if (res.success) {
-                        for (var index in  res.data) {
-                            // console.log(res.data[json]);
-                            var json = res.data[index];
-                            json.id = index;
-                            json.sendTime = myUtils.formatDate(json.sendTime);
+    <script src="<%=request.getContextPath()%>/resouces/js/datetimepicker/jquery.datetimepicker.full.js"></script>
 
-                            if (json.msgStatus == -1) {
-                                json.msgStatus = "发送失败";
-                                json.toCount = null;
-                            } else if (json.msgStatus == 1) {
-                                json.msgStatus = "发送成功";
-                            }
 
-                            myUtils.renderDivAdd('weChatStatisticsTpl', json, 'dataView');
-                        }
 
-                    }
-                },
-                error: function (res) {
-                    alert('查询失败');
-                    console.log(res);
-                }
-            });
-        }
-
-    </script>
 
 </head>
 
 <body>
-
+<div id="calendar" class="calendar"></div>
 <table>
     <tr>
         <td>客服Jid</td>
         <td><input type="text" value="maqiumeng@126xmpp" id="jid"></td>
         <td>查询时间</td>
-        <td><input type="text" value="2017-06-09" id="date"></td>
+        <td><input type="text" id="datetimepicker"></td>
 
-        <td><input type="button" onclick="statistics()"></td>
+        <td><input type="button" onclick="statistics()" value="查询"></td>
     </tr>
 </table>
 
@@ -85,4 +56,54 @@
     </tbody>
 
 </table>
+
+<script>
+    window.base = '<%=path%>';
+
+    $('#datetimepicker').datetimepicker({
+        //yearOffset:222,
+        lang: 'ch',
+        timepicker: false,
+        format: 'Y-m-d',
+        formatDate: 'Y-m-d'
+        //minDate:'-1970/01/02', // yesterday is minimum date
+        //maxDate:'+1970/01/02' // and tommorow is maximum date calendar
+    });
+
+    function statistics() {
+        var jid = $("#jid").val();
+        var date = $("#datetimepicker").val();
+        $("#dataView").html("");
+        $.ajax({
+            url: base + '/api/weChatMsg/statistics' + '?jid=' + jid + '&date=' + date,
+            type: 'POST',
+            success: function (res) {
+                if (res.success) {
+                    for (var index in  res.data) {
+                        // console.log(res.data[json]);
+                        var json = res.data[index];
+                        json.id = index;
+                        json.sendTime = myUtils.formatDate(json.sendTime);
+
+                        if (json.msgStatus == -1) {
+                            json.msgStatus = "发送失败";
+                            json.toCount = null;
+                        } else if (json.msgStatus == 1) {
+                            json.msgStatus = "发送成功";
+                        }
+
+                        myUtils.renderDivAdd('weChatStatisticsTpl', json, 'dataView');
+                    }
+
+                }
+            },
+            error: function (res) {
+                alert('查询失败');
+                console.log(res);
+            }
+        });
+    }
+
+</script>
+
 </html>
