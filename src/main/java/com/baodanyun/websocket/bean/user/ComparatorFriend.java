@@ -16,7 +16,11 @@ public class ComparatorFriend implements Comparator<Friend>, Serializable {
          */
         int flag=o2.getOnlineStatus().compareTo(o1.getOnlineStatus());
         if(flag==0){
-            return o2.getLoginTime().compareTo(o1.getLoginTime());
+            if (null != o2.getLoginTime()) {
+                return o2.getLoginTime().compareTo(o1.getLoginTime());
+            } else {
+                return flag;
+            }
         }else{
             return flag;
         }

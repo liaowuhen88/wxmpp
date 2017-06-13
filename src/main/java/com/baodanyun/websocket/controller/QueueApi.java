@@ -6,14 +6,14 @@ import com.baodanyun.websocket.bean.user.ComparatorFriend;
 import com.baodanyun.websocket.bean.user.Friend;
 import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.enums.MsgStatus;
-import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.service.XmppServer;
 import com.baodanyun.websocket.util.CommonConfig;
 import com.baodanyun.websocket.util.Render;
 import com.baodanyun.websocket.util.XMPPUtil;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +29,7 @@ import java.util.*;
  */
 @RestController
 public class QueueApi extends BaseController {
-    protected static Logger logger = Logger.getLogger(CustomerApi.class);
+    protected static Log logger = LogFactory.getLog(QueueApi.class);
 
     @Autowired
     private UserCacheServer userCacheServer;
@@ -62,6 +62,7 @@ public class QueueApi extends BaseController {
                 }
 
                 List<Friend> li = new ArrayList<>(friendList);
+                logger.info(li.size());
                 ComparatorFriend comparator=new ComparatorFriend();
                 Collections.sort(li, comparator);
                 msgResponse.setData(li);
@@ -71,7 +72,7 @@ public class QueueApi extends BaseController {
                 msgResponse.setSuccess(false);
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("", e);
             msgResponse.setSuccess(false);
         }
         Render.r(response, XMPPUtil.buildJson(msgResponse));
@@ -80,11 +81,11 @@ public class QueueApi extends BaseController {
     private Friend getFriend(AbstractUser visitor, AbstractUser customer) {
 
         Friend friend = new Friend();
-        friend.setId(visitor.getId());
-
-        friend.setName(visitor.getUserName());
-
         try {
+            friend.setId(visitor.getId());
+
+            friend.setName(visitor.getUserName());
+
             String id = userCacheServer.getCustomerIdByVisitorOpenId(visitor.getOpenId());
             if (customer.getId().equals(id)) {
                 if (!xmppServer.isAuthenticated(visitor.getId())) {
@@ -104,7 +105,7 @@ public class QueueApi extends BaseController {
             friend.setLoginTime(visitor.getLoginTime());
 
 
-        } catch (BusinessException e) {
+        } catch (Exception e) {
             logger.error(e);
         }
 
