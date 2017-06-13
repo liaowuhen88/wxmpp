@@ -30,9 +30,11 @@
 <table>
     <tr>
         <td>客服Jid</td>
-        <td><input type="text" value="maqiumeng@126xmpp" id="jid"></td>
-        <td>查询时间</td>
-        <td><input type="text" id="datetimepicker"></td>
+        <td><input type="text" value="@126xmpp" id="jid"></td>
+        <td>查询开始时间</td>
+        <td><input type="text" id="datetimepickerStart"></td>
+        <td>查询结束时间</td>
+        <td><input type="text" id="datetimepickerEnd"></td>
 
         <td><input type="button" onclick="statistics()" value="查询"></td>
     </tr>
@@ -43,10 +45,10 @@
     <tr>
         <td>编号</td>
         <td>用户openID</td>
-        <td>发送状态</td>
-        <td>时间</td>
-        <td>发送消息条数</td>
-        <td>接收消息条数</td>
+        <td>客服首次发送消息时间</td>
+        <td>客服发送消息成功条数</td>
+        <td>客服发送消息失败条数</td>
+        <td>用户发送消息条数</td>
     </tr>
 
     </thead>
@@ -60,7 +62,7 @@
 <script>
     window.base = '<%=path%>';
 
-    $('#datetimepicker').datetimepicker({
+    $('#datetimepickerStart').datetimepicker({
         //yearOffset:222,
         lang: 'ch',
         timepicker: false,
@@ -69,13 +71,21 @@
         //minDate:'-1970/01/02', // yesterday is minimum date
         //maxDate:'+1970/01/02' // and tommorow is maximum date calendar
     });
+    $('#datetimepickerEnd').datetimepicker({
+        lang: 'ch',
+        timepicker: false,
+        format: 'Y-m-d',
+        formatDate: 'Y-m-d'
+    });
 
     function statistics() {
         var jid = $("#jid").val();
-        var date = $("#datetimepicker").val();
+        var startDate = $("#datetimepickerStart").val();
+        var endDate = $("#datetimepickerEnd").val();
+
         $("#dataView").html("");
         $.ajax({
-            url: base + '/api/weChatMsg/statistics' + '?jid=' + jid + '&date=' + date,
+            url: base + '/api/weChatMsg/statistics' + '?jid=' + jid + '&startDate=' + startDate + '&endDate=' + endDate,
             type: 'POST',
             success: function (res) {
                 if (res.success) {

@@ -1,9 +1,11 @@
 package com.baodanyun.websocket.service;
 
 import com.baodanyun.websocket.bean.response.WeChatMsgStatistics;
+import com.baodanyun.websocket.bean.response.WeChatMsgStatisticsAdapter;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.WechatMsg;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -18,5 +20,9 @@ public interface WechatMsgService {
      */
 
     List<WeChatMsgStatistics> statistics(String jid, Date date) throws BusinessException;
+
+    List<WeChatMsgStatistics> statistics(String jid, String startDate, String endDate) throws BusinessException;
+
+    Collection<WeChatMsgStatisticsAdapter> statisticsAdapter(List<WeChatMsgStatistics> list);
 
 }

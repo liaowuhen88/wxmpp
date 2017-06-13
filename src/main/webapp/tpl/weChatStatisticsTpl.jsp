@@ -4,9 +4,9 @@
         <td>{{id}}</td>
         <td>{{msgTo}}</td>
         <td>{{sendTime}}</td>
-        <td>{{msgStatus}}</td>
-        <td>{{fromCount}}</td>
-        <td>{{toCount}}</td>
+        <td>{{successFromCount}}</td>
+        <td>{{failFromCount}}</td>
+        <td>{{successToCount}}</td>
     </tr>
 
 </script>

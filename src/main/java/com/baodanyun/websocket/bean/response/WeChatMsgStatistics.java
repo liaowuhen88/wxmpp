@@ -9,8 +9,8 @@ public class WeChatMsgStatistics {
     private Long id;
     private String msgTo;
     private String msgFrom;
-    private Byte fromCount;
-    private Byte toCount;
+    private Byte fromCount = 0;
+    private Byte toCount = 0;
     private Date sendTime;
     private Byte msgStatus;
 
