@@ -39,6 +39,11 @@ public class AccessCustomerNode extends CustomerNode {
     }
 
     @Override
+    public String getId() {
+        return this.getSession().getId();
+    }
+
+    @Override
     public void sendMessageTOXmpp(Message message) throws InterruptedException, SmackException.NotConnectedException, BusinessException {
 
         try {

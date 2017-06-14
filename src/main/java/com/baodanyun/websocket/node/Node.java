@@ -13,6 +13,7 @@ import org.jivesoftware.smack.packet.Message;
  */
 public interface Node extends Dispatcher {
 
+    String getId();
     /**
      * 发送消息到Xmpp
      *

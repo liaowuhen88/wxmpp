@@ -68,15 +68,12 @@ public class TransferServerImpl implements TransferServer {
             } else {
                 visitor.setCustomer(customer);
                 userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customer.getId());
-                try {
-                    logger.info(JSONUtil.toJson(visitor));
-                    String pwd = "00818863ff056f1d66c8427836f94a87";
-                    visitor.setPassWord(pwd);
-                    wn.login();
-                    wn.joinQueue();
-                } catch (Exception e) {
-                    logger.error("", e);
-                }
+                logger.info(JSONUtil.toJson(visitor));
+                String pwd = "00818863ff056f1d66c8427836f94a87";
+                visitor.setPassWord(pwd);
+                wn.login();
+                wn.joinQueue();
+
             }
 
         } catch (Exception e) {

@@ -46,12 +46,12 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
 
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         logger.info("customer session is closed: id[" + au.getId() + "]" + session);
-
+        Node wn = NodeManager.getWebSocketCustomerNode(session, (Customer) au);
+        NodeManager.deleteNode(wn);
+        wn.getXmppNode().removeNode(wn);
         boolean flag = webSocketService.hasH5Connected(au.getId(), 1000 * 5L);
-
         if (!flag) {
             logger.info("userLifeCycleService.logout(customer): id[" + au.getId() + "]" + status);
-            Node wn = NodeManager.getWebSocketCustomerNode(session, (Customer) au);
             wn.logout();
         }
     }

@@ -35,15 +35,6 @@ public class CustomerSimpleWebSocketHandler extends AbstractWebSocketHandler {
             logger.info("webSocket receive message:" + JSONUtil.toJson(message));
             String content = message.getPayload();
 
-            /*Msg msg = Msg.handelMsg(content);*/
-
-          /*  SynchronizationMsgEvent sme = new SynchronizationMsgEvent();
-            sme.setMsg(msg);
-            sme.setSessionID(session.getId());
-            sme.setFromJid(au.getId());
-            EventBusUtils.post(sme);*/
-
-
             CustomerNode wn = NodeManager.getAccessCustomerNode(session, (Customer) au);
 
             wn.receiveFromGod(content);
@@ -57,7 +48,7 @@ public class CustomerSimpleWebSocketHandler extends AbstractWebSocketHandler {
         AbstractUser customer = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         webSocketService.removeSession(customer.getId(), session);
         CustomerNode wn = NodeManager.getAccessCustomerNode(session, (Customer) customer);
-        logger.info(wn.getXmppNode().getNodes().remove(wn));
+        wn.getXmppNode().removeNode(wn);
 
     }
 }

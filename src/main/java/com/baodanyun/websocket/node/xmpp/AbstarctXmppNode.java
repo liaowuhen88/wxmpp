@@ -53,6 +53,18 @@ public class AbstarctXmppNode implements XmppNode {
         nodes.add(node);
     }
 
+    @Override
+    public void removeNode(Node node) throws IOException, XMPPException, SmackException, BusinessException {
+        nodes.remove(node);
+        try {
+            Thread.sleep(2000);
+            if (nodes.size() == 0) {
+                this.logout();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void connected(XMPPConnection xmppConnection) {
@@ -112,7 +124,14 @@ public class AbstarctXmppNode implements XmppNode {
                 return true;
             }
             flag = xmppServer.login(this);
+
+            if (flag) {
+                XmppNodeManager.saveXmppNode(this);
+            }
+
+
         } catch (Exception e) {
+
             XmppNodeManager.removeXmppNode(user.getId());
             logger.error(e);
             throw e;
@@ -122,6 +141,7 @@ public class AbstarctXmppNode implements XmppNode {
 
     @Override
     public boolean logout() throws BusinessException, IOException, XMPPException, SmackException {
+        logger.info("[" + this.getAbstractUser().getId() + "]logout ");
         if (null != xmppConnection) {
             if (xmppConnection.isConnected()) {
                 ((AbstractXMPPConnection) xmppConnection).disconnect();

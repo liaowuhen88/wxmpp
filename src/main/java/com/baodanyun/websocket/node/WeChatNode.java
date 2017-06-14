@@ -15,10 +15,15 @@ import org.apache.log4j.Logger;
  * Created by liaowuhen on 2017/5/23.
  */
 public class WeChatNode extends VisitorNode {
+    public static final String key = "weChat_";
     private static final Logger logger = Logger.getLogger(WeChatNode.class);
-
     public WeChatNode(Visitor visitor) {
         super(visitor);
+    }
+
+    @Override
+    public String getId() {
+        return key + this.getAbstractUser().getId();
     }
 
     @Override

@@ -36,6 +36,11 @@ public class WebSocketCustomerNode extends CustomerNode {
 
 
     @Override
+    public String getId() {
+        return getSession().getId();
+    }
+
+    @Override
     public boolean sendMsgToGod(Msg msg) {
         SessionSendUtils.send(getSession(), msg);
         return true;
@@ -68,7 +73,8 @@ public class WebSocketCustomerNode extends CustomerNode {
     }
 
     @Override
-    public void online() throws InterruptedException {
+    public void online() throws InterruptedException, BusinessException {
+        super.online();
         StatusMsg msg = getSMMsgSendTOCustomer(MsgStatus.loginSuccess);
         StatusMsg initSuccess = getSMMsgSendTOCustomer(MsgStatus.initSuccess);
         StatusMsg onlineQueueSuccess = getSMMsgSendTOCustomer(MsgStatus.onlineQueueSuccess);

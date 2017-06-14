@@ -127,6 +127,8 @@ public abstract class AbstractNode implements Node {
         return getXmppNode().login();
     }
 
-
-
+    @Override
+    public void online() throws InterruptedException, BusinessException {
+        NodeManager.saveNode(this);
+    }
 }

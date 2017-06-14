@@ -29,6 +29,11 @@ public class WebSocketVisitorNode extends VisitorNode {
     }
 
     @Override
+    public String getId() {
+        return this.getSession().getId();
+    }
+
+    @Override
     public boolean sendMsgToGod(Msg msg) {
         return SessionSendUtils.send(getSession(), msg);
     }

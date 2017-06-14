@@ -1,15 +1,18 @@
 package com.baodanyun.websocket.node.xmpp;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.Node;
 import com.baodanyun.websocket.node.dispatcher.Dispatcher;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.chat.ChatManagerListener;
 import org.jivesoftware.smack.chat.ChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -45,6 +48,12 @@ public interface XmppNode extends ChatManagerListener, ChatMessageListener, Conn
      * @param node
      */
     void addNode(Node node);
+
+    /**
+     * 增加客户端
+     * @param node
+     */
+    void removeNode(Node node) throws IOException, XMPPException, SmackException, BusinessException;
 
     /**
      * 更新initVcard

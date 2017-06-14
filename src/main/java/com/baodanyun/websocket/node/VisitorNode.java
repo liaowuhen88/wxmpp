@@ -73,6 +73,8 @@ public abstract class VisitorNode extends AbstractNode implements VisitorDispath
 
     @Override
     public void online() throws InterruptedException, BusinessException {
+
+        super.online();
         VisitorLoginEvent vl = new VisitorLoginEvent(this.getAbstractUser(), ((Visitor) this.getAbstractUser()).getCustomer(), null);
 
         EventBusUtils.post(vl);

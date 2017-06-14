@@ -53,7 +53,7 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
         logger.info("session is closed  ------visitorId:[" + au.getId() + "] ---- sessionId:[" + session.getId() + "]  ----------status:[ " + status + "]");
         webSocketService.removeSession(au.getId(), session);
         VisitorNode wn = NodeManager.getWebSocketVisitorNode(session, (Visitor) au);
-        wn.getXmppNode().getNodes().remove(wn);
+        wn.getXmppNode().removeNode(wn);
 
     }
 
