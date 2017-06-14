@@ -51,11 +51,13 @@ public class AbstarctXmppNode implements XmppNode {
     @Override
     public void addNode(Node node) {
         nodes.add(node);
+        logger.info(this.getAbstractUser().getId() + "addNode [" + nodes.size() + "]");
     }
 
     @Override
     public void removeNode(Node node) throws IOException, XMPPException, SmackException, BusinessException {
         nodes.remove(node);
+        logger.info(this.getAbstractUser().getId() + "removeNode [" + nodes.size() + "]");
         try {
             Thread.sleep(2000);
             if (nodes.size() == 0) {

@@ -59,7 +59,7 @@
 			<id>test</id>
 			<properties>
 				<bdy.env>test</bdy.env>
-				<log4j.level>debug</log4j.level>
+				<log4j.level>info</log4j.level>
 				<oss.upload>http://101.200.87.16:9080</oss.upload>
 				<open.msg.debug>true</open.msg.debug>
 				<user.info.interface>https://test.17doubao.com/hr</user.info.interface>

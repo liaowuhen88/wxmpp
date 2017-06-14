@@ -129,6 +129,6 @@ public abstract class AbstractNode implements Node {
 
     @Override
     public void online() throws InterruptedException, BusinessException {
-        NodeManager.saveNode(this);
+
     }
 }

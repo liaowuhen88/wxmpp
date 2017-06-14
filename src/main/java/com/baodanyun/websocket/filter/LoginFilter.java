@@ -43,7 +43,9 @@ public class LoginFilter implements Filter {
     private boolean validate(HttpServletRequest request) {
         String uri = request.getRequestURI();
         if (uri.startsWith(request.getContextPath() + "/resouces")
+                || uri.startsWith(request.getContextPath() + "/api/receiveMsg")
                 || uri.startsWith(request.getContextPath() + "/statistics")
+                || uri.startsWith(request.getContextPath() + "/api/findLoginImage")
                 || uri.startsWith(request.getContextPath() + "/api/loginApi")
                 || uri.startsWith(request.getContextPath() + "/visitorlogin")
                 || uri.startsWith(request.getContextPath() + "/customerlogin")) {

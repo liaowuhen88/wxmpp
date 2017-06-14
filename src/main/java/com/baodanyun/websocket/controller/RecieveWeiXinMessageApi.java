@@ -71,8 +71,6 @@ public class RecieveWeiXinMessageApi extends BaseController {
             msg.setTo(customer.getId());
             logger.info(JSONUtil.toJson(visitor));
 
-
-
             if (!StringUtils.isEmpty(msg.getContent()) && msg.getContent().startsWith(keywords)) {
                 response = getBindCustomerResponse(visitor, msg);
             } else {
@@ -88,15 +86,13 @@ public class RecieveWeiXinMessageApi extends BaseController {
                         String url = request.getRequestURL().toString();
                         response = getLeaveMessageResponse(customer, url, msg);
                     } else {
-                        boolean flag = wn.getXmppNode().isOnline();
 
-                        if (!flag) {
+                        if (!xmppFlag) {
                             wn.login();
                             wn.online();
                         }
 
                         wn.receiveFromGod(msg);
-
                         response = getOnlineResponse();
                     }
 
