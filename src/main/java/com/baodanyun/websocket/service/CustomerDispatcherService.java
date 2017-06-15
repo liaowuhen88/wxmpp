@@ -21,7 +21,7 @@ public interface CustomerDispatcherService {
 
     AbstractUser deleteCustomer(String cJid);
 
-    AbstractUser getDispatcher(String openId);
+    AbstractUser getDispatcher(String openId) throws BusinessException;
 
     Collection getCustomerAccept();
 

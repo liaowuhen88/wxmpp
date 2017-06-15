@@ -84,7 +84,7 @@ public class CustomerDispatcherServiceImpl implements CustomerDispatcherService 
     }
 
     @Override
-    public AbstractUser getDispatcher(String openId) {
+    public AbstractUser getDispatcher(String openId) throws BusinessException {
         synchronized (cids) {
             if (cids.size() > 0) {
                 count.getAndIncrement();
@@ -96,11 +96,9 @@ public class CustomerDispatcherServiceImpl implements CustomerDispatcherService 
 
                 if (xmppServer.isAuthenticated(cid)) {
                     logger.info(cid);
-                    try {
-                        userCacheServer.addVisitorCustomerOpenId(openId, cid);
-                    } catch (BusinessException e) {
-                        logger.error(e);
-                    }
+
+                    userCacheServer.addVisitorCustomerOpenId(openId, cid);
+
                     return customers.get(cid);
                 } else {
                     deleteCustomer(cid);
@@ -111,6 +109,8 @@ public class CustomerDispatcherServiceImpl implements CustomerDispatcherService 
                 Customer cu = new Customer();
                 cu.setLoginUsername(Config.controlId);
                 cu.setId(XMPPUtil.nameToJid(Config.controlId));
+
+                userCacheServer.addVisitorCustomerOpenId(openId, cu.getId());
 
                 return cu;
             }
