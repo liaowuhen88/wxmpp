@@ -9,7 +9,8 @@ import com.baodanyun.websocket.service.XmppServer;
 import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.XMPPUtil;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class CustomerDispatcherServiceImpl implements CustomerDispatcherService {
-    private static final Logger logger = Logger.getLogger(CustomerDispatcherServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(CustomerDispatcherServiceImpl.class);
     private static final Map<String, AbstractUser> customers = new ConcurrentHashMap();
 
     private static final Vector<String> cids = new Vector<>();
