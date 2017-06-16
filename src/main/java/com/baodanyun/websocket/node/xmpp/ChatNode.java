@@ -1,9 +1,10 @@
 package com.baodanyun.websocket.node.xmpp;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.node.Node;
 import com.baodanyun.websocket.node.dispatcher.ChatLifecycle;
-import com.baodanyun.websocket.node.terminal.TerminalMsgDeal;
 import com.baodanyun.websocket.node.dispatcher.XmppNodeMsgDeal;
+import com.baodanyun.websocket.node.terminal.TerminalMsgDeal;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.chat.ChatManagerListener;
 import org.jivesoftware.smack.chat.ChatMessageListener;
@@ -14,6 +15,9 @@ import org.jivesoftware.smack.chat.ChatMessageListener;
 
 public interface ChatNode extends ChatManagerListener, ChatMessageListener, ConnectionListener, ChatLifecycle, TerminalMsgDeal, XmppNodeMsgDeal {
 
+    void addNode(Node node);
+
+    Node getNode(String id);
     /**
      * 获取用户
      *

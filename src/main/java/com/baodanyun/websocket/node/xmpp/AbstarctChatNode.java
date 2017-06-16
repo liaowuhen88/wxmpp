@@ -46,6 +46,15 @@ public class AbstarctChatNode implements ChatNode {
     }
 
 
+    @Override
+    public void addNode(Node node) {
+        nodes.put(node.getId(), node);
+    }
+
+    @Override
+    public Node getNode(String id) {
+        return nodes.get(id);
+    }
 
     @Override
     public void connected(XMPPConnection xmppConnection) {
@@ -107,13 +116,13 @@ public class AbstarctChatNode implements ChatNode {
             flag = xmppServer.login(this);
 
             if (flag) {
-                XmppNodeManager.saveXmppNode(this);
+                ChatNodeManager.saveXmppNode(this);
             }
 
 
         } catch (Exception e) {
 
-            XmppNodeManager.removeXmppNode(user.getId());
+            ChatNodeManager.removeXmppNode(user.getId());
             logger.error("error", e);
             throw e;
         }

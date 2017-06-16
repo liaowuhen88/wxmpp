@@ -7,7 +7,7 @@ import com.baodanyun.websocket.event.SendMsgToWeChatEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.WechatMsg;
 import com.baodanyun.websocket.node.sendUtils.WeChatSendUtils;
-import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
+import com.baodanyun.websocket.node.xmpp.ChatNodeManager;
 import com.baodanyun.websocket.util.EventBusUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +44,7 @@ public class WeChatNode extends VisitorNode {
             we.setMsgStatus((byte) -1);
 
             if (!flag) {
-                XmppNodeManager.getCustomerXmppNode(((Visitor) getAbstractUser()).getCustomer()).messageCallBack(this.getAbstractUser(), MsgStatus.msgFail);
+                ChatNodeManager.getCustomerXmppNode(((Visitor) getAbstractUser()).getCustomer()).messageCallBack(this.getAbstractUser(), MsgStatus.msgFail);
 
                 // 发送失败记录
                 msg.setFrom(msg.getTo());

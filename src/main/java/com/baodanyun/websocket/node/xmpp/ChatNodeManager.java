@@ -11,9 +11,9 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by liaowuhen on 2017/5/23.
  */
-public class XmppNodeManager {
+public class ChatNodeManager {
     private static final Map<String, ChatNode> xmppNodes = new ConcurrentHashMap<>();
-    private static final Logger logger = LoggerFactory.getLogger(XmppNodeManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChatNodeManager.class);
 
     public static ChatNode getXmppNode(AbstractUser visitor) {
         ChatNode chatNode = xmppNodes.get(visitor.getId());

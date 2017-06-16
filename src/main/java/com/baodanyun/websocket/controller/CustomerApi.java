@@ -14,7 +14,7 @@ import com.baodanyun.websocket.model.PageModel;
 import com.baodanyun.websocket.model.Transferlog;
 import com.baodanyun.websocket.model.UserModel;
 import com.baodanyun.websocket.node.xmpp.VisitorChatNode;
-import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
+import com.baodanyun.websocket.node.xmpp.ChatNodeManager;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.PhoneUtils;
@@ -239,7 +239,7 @@ public class CustomerApi extends BaseController {
             response.setSuccess(true);
 
             // 关闭node
-            XmppNodeManager.getCustomerXmppNode(customer).logout();
+            ChatNodeManager.getCustomerXmppNode(customer).logout();
             httpServletRequest.getSession().invalidate();
 
         } catch (Exception e) {
@@ -468,7 +468,7 @@ public class CustomerApi extends BaseController {
             user.setId(vjid);
             user.setCustomer(au);
 
-            VisitorChatNode vn = XmppNodeManager.getVisitorXmppNode(user);
+            VisitorChatNode vn = ChatNodeManager.getVisitorXmppNode(user);
             vn.uninstall();
 
             vn.logout();

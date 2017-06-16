@@ -33,13 +33,13 @@ public class VisitorChatNode extends AbstarctChatNode implements VisitorDispathe
     @Override
     public boolean joinQueue() throws InterruptedException {
         AbstractUser customer = ((Visitor) this.getAbstractUser()).getCustomer();
-        return XmppNodeManager.getCustomerXmppNode(customer).joinQueue(this.getAbstractUser());
+        return ChatNodeManager.getCustomerXmppNode(customer).joinQueue(this.getAbstractUser());
     }
 
     @Override
     public boolean uninstall() throws InterruptedException {
         AbstractUser customer = ((Visitor) this.getAbstractUser()).getCustomer();
-        return null == customer || XmppNodeManager.getCustomerXmppNode(customer).uninstall(this.getAbstractUser());
+        return null == customer || ChatNodeManager.getCustomerXmppNode(customer).uninstall(this.getAbstractUser());
 
     }
 

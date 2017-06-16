@@ -2,7 +2,7 @@ package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.bean.user.Visitor;
-import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
+import com.baodanyun.websocket.node.xmpp.ChatNodeManager;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class NodeManager {
     // key id
     private static final Map<String, Node> nodes = new ConcurrentHashMap<>();
-    private static final Logger logger = LoggerFactory.getLogger(XmppNodeManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChatNodeManager.class);
 
     public synchronized static VisitorNode getWeChatNode(Visitor visitor) {
         String key = WeChatNode.key + visitor.getId();

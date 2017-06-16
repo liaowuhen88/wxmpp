@@ -8,7 +8,7 @@ import com.baodanyun.websocket.model.Transferlog;
 import com.baodanyun.websocket.node.NodeManager;
 import com.baodanyun.websocket.node.VisitorNode;
 import com.baodanyun.websocket.node.xmpp.VisitorChatNode;
-import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
+import com.baodanyun.websocket.node.xmpp.ChatNodeManager;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.apache.commons.lang.StringUtils;
@@ -111,7 +111,7 @@ public class TransferServerImpl implements TransferServer {
                     boolean vflag = xmppServer.isAuthenticated(tm.getVisitorjid());
 
 
-                    VisitorChatNode node = XmppNodeManager.getVisitorXmppNode(visitor);
+                    VisitorChatNode node = ChatNodeManager.getVisitorXmppNode(visitor);
 
                     if (vflag) {
                         if (!node.uninstall()) {

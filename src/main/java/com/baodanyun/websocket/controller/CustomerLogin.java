@@ -12,7 +12,7 @@ import com.baodanyun.websocket.model.LoginModel;
 import com.baodanyun.websocket.node.NodeManager;
 import com.baodanyun.websocket.node.VisitorNode;
 import com.baodanyun.websocket.node.xmpp.CustomerChatNode;
-import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
+import com.baodanyun.websocket.node.xmpp.ChatNodeManager;
 import com.baodanyun.websocket.service.CustomerDispatcherService;
 import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.service.UserServer;
@@ -68,7 +68,7 @@ public class CustomerLogin extends BaseController {
         try {
             customerInit(au, user);
 
-            CustomerChatNode cx = XmppNodeManager.getCustomerXmppNode(au);
+            CustomerChatNode cx = ChatNodeManager.getCustomerXmppNode(au);
 
             boolean flag = cx.login();
             if (flag) {
