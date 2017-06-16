@@ -8,9 +8,10 @@ import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.sendUtils.SessionSendUtils;
 import com.baodanyun.websocket.util.CommonConfig;
-import org.apache.log4j.Logger;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
@@ -19,7 +20,7 @@ import java.io.IOException;
  * Created by liaowuhen on 2017/5/23.
  */
 public class WebSocketCustomerNode extends CustomerNode {
-    private static final Logger logger = Logger.getLogger(WebSocketCustomerNode.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebSocketCustomerNode.class);
     private WebSocketSession session;
 
     public WebSocketCustomerNode(Customer customer) {
@@ -49,6 +50,11 @@ public class WebSocketCustomerNode extends CustomerNode {
     @Override
     public boolean logout() throws BusinessException, IOException, XMPPException, SmackException {
         return super.logout();
+    }
+
+    @Override
+    public boolean isOnline() {
+        return false;
     }
 
     @Override

@@ -9,14 +9,15 @@ import com.baodanyun.websocket.model.WechatMsg;
 import com.baodanyun.websocket.node.sendUtils.WeChatSendUtils;
 import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
 import com.baodanyun.websocket.util.EventBusUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by liaowuhen on 2017/5/23.
  */
 public class WeChatNode extends VisitorNode {
     public static final String key = "weChat_";
-    private static final Logger logger = Logger.getLogger(WeChatNode.class);
+    private static final Logger logger = LoggerFactory.getLogger(WeChatNode.class);
     public WeChatNode(Visitor visitor) {
         super(visitor);
     }
@@ -62,7 +63,7 @@ public class WeChatNode extends VisitorNode {
             SendMsgToWeChatEvent sme = new SendMsgToWeChatEvent(we);
             EventBusUtils.post(sme);
         } catch (Exception e) {
-            logger.error("", e);
+            logger.error("error", "", e);
         }
         return flag;
     }

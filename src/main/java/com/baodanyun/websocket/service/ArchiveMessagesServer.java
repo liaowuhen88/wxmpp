@@ -76,7 +76,7 @@ public class ArchiveMessagesServer {
 
 
                 } catch (Exception e) {
-                    logger.error("vcard 解析异常", e);
+                    logger.error("error", "vcard 解析异常", e);
                 }
 
             }

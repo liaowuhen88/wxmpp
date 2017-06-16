@@ -178,9 +178,9 @@ public class HttpUtils {
             }
             response.close();
         } catch (ClientProtocolException e) {
-            logger.error(e);
+            logger.error("error", e);
         } catch (IOException e) {
-            logger.error(e);
+            logger.error("error", e);
         }
 
         return result;
@@ -206,7 +206,7 @@ public class HttpUtils {
 
             return EntityUtils.toString(result.getEntity());
         } catch (Exception e) {
-            logger.info(e);
+            logger.error("error", e);
         }
         return null;
     }

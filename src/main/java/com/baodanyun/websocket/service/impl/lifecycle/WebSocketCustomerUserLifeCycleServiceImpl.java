@@ -75,10 +75,10 @@ public class WebSocketCustomerUserLifeCycleServiceImpl extends CustomerUserLifeC
             Msg msg = Msg.handelMsg(content);
             if (msg != null) {
                 if (StringUtils.isEmpty(msg.getFrom())) {
-                    logger.error("handleSendMsg from is blank");
+                    logger.error("error","handleSendMsg from is blank");
                 } else {
                     if (StringUtils.isEmpty(msg.getTo())) {
-                        logger.error("handleSendMsg to is blank");
+                        logger.error("error","handleSendMsg to is blank");
                     } else {
                         return msg;
                     }
@@ -86,7 +86,7 @@ public class WebSocketCustomerUserLifeCycleServiceImpl extends CustomerUserLifeC
             }
 
         } else {
-            logger.error("msg is blank");
+            logger.error("error","msg is blank");
         }
        return null;
     }

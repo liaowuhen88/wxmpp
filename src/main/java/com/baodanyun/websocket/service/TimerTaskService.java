@@ -37,7 +37,7 @@ public class TimerTaskService {
         try {
             //las.search();
         } catch (Exception e) {
-            logger.error("操作失败", e);
+            logger.error("error", "操作失败", e);
         }
     }
 

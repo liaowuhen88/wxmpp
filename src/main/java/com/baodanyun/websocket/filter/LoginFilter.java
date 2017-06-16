@@ -2,7 +2,8 @@ package com.baodanyun.websocket.filter;
 
 import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.util.ServletUtil;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +14,7 @@ import java.io.IOException;
  * LoginFilter
  */
 public class LoginFilter implements Filter {
-    private static Logger logger = Logger.getLogger(LoginFilter.class);
+    private static Logger logger = LoggerFactory.getLogger(LoginFilter.class);
 
     public void init(FilterConfig var1) throws ServletException {
 

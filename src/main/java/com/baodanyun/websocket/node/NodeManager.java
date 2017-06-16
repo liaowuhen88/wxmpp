@@ -2,11 +2,10 @@ package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.bean.user.Visitor;
-import com.baodanyun.websocket.node.xmpp.CustomerXmppNode;
-import com.baodanyun.websocket.node.xmpp.VisitorXmppNode;
 import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
 import com.baodanyun.websocket.util.JSONUtil;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.Map;
@@ -18,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class NodeManager {
     // key id
     private static final Map<String, Node> nodes = new ConcurrentHashMap<>();
-    private static final Logger logger = Logger.getLogger(XmppNodeManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(XmppNodeManager.class);
 
     public synchronized static VisitorNode getWeChatNode(Visitor visitor) {
         String key = WeChatNode.key + visitor.getId();
@@ -26,9 +25,6 @@ public class NodeManager {
         if (null == node) {
             logger.info("create WeChatNode [" + JSONUtil.toJson(visitor) + "]");
             node = new WeChatNode(visitor);
-            VisitorXmppNode vn = XmppNodeManager.getVisitorXmppNode(visitor);
-            vn.addNode(node);
-            node.setXmppNode(vn);
             saveNode(node);
         }
 
@@ -51,10 +47,6 @@ public class NodeManager {
         if (null == node) {
             logger.info("create WebSocketVisitorNode [" + JSONUtil.toJson(visitor) + "]");
             node = new WebSocketVisitorNode(visitor);
-            VisitorXmppNode vn = XmppNodeManager.getVisitorXmppNode(visitor);
-            vn.addNode(node);
-            node.setXmppNode(vn);
-            ((WebSocketVisitorNode) node).setSession(session);
             saveNode(node);
         }
 
@@ -67,9 +59,6 @@ public class NodeManager {
         if (null == node) {
             logger.info("create AccessVisitorNode [" + JSONUtil.toJson(visitor) + "]");
             node = new AccessVisitorNode(visitor);
-            VisitorXmppNode vn = XmppNodeManager.getVisitorXmppNode(visitor);
-            vn.addNode(node);
-            node.setXmppNode(vn);
             saveNode(node);
         }
 
@@ -83,9 +72,6 @@ public class NodeManager {
         if (null == node) {
             logger.info("create WebSocketCustomerNode [" + JSONUtil.toJson(customer) + "]");
             node = new WebSocketCustomerNode(customer);
-            CustomerXmppNode vn = XmppNodeManager.getCustomerXmppNode(customer);
-            vn.addNode(node);
-            node.setXmppNode(vn);
             ((WebSocketCustomerNode) node).setSession(session);
             saveNode(node);
         }
@@ -100,9 +86,6 @@ public class NodeManager {
         if (null == node) {
             logger.info("create AccessCustomerNode [" + JSONUtil.toJson(customer) + "]");
             node = new AccessCustomerNode(customer);
-            CustomerXmppNode vn = XmppNodeManager.getCustomerXmppNode(customer);
-            vn.addNode(node);
-            node.setXmppNode(vn);
             ((AccessCustomerNode) node).setSession(session);
             saveNode(node);
         }

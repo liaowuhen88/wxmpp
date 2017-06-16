@@ -6,7 +6,8 @@ import com.baodanyun.websocket.bean.msg.msg.TextMsg;
 import com.baodanyun.websocket.bean.msg.status.StatusMsg;
 import com.baodanyun.websocket.core.common.Common;
 import com.google.gson.Gson;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 
@@ -15,7 +16,7 @@ import java.io.Serializable;
  * 顶层消息 描述了当前消息是动作 还是消息
  */
 public class Msg implements Serializable{
-    private static final Logger logger = Logger.getLogger(Msg.class);
+    private static final Logger logger = LoggerFactory.getLogger(Msg.class);
     // 表示用户从那个入口接入
     //  0 默认h5客服端   1 微信直接聊天入口
     private Integer toType;
@@ -72,7 +73,7 @@ public class Msg implements Serializable{
                 }
             }
         } catch (Exception e) {
-            logger.error("parseMsg msg error" + e.getMessage());
+            logger.error("error", e);
         }
         return msg;
     }

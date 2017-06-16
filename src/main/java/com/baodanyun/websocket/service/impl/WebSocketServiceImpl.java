@@ -144,7 +144,7 @@ public class WebSocketServiceImpl implements WebSocketService {
                 Thread.sleep(waitTime);
             }
         } catch (Exception e) {
-            logger.error(e.toString());
+            logger.error("error", e.toString());
         }
 
         return hasH5Connected(jid);
@@ -233,7 +233,7 @@ public class WebSocketServiceImpl implements WebSocketService {
                 return true;
             }
         } catch (Exception e) {
-            logger.error("webSocketSession send error", e);
+            logger.error("error", "webSocketSession send error", e);
         }
         return false;
     }

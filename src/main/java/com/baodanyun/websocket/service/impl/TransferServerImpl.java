@@ -7,7 +7,7 @@ import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.Transferlog;
 import com.baodanyun.websocket.node.NodeManager;
 import com.baodanyun.websocket.node.VisitorNode;
-import com.baodanyun.websocket.node.xmpp.VisitorXmppNode;
+import com.baodanyun.websocket.node.xmpp.VisitorChatNode;
 import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.util.JSONUtil;
@@ -77,7 +77,7 @@ public class TransferServerImpl implements TransferServer {
             }
 
         } catch (Exception e) {
-            logger.error("", e);
+            logger.error("error", "", e);
         } finally {
         }
         return flag;
@@ -111,7 +111,7 @@ public class TransferServerImpl implements TransferServer {
                     boolean vflag = xmppServer.isAuthenticated(tm.getVisitorjid());
 
 
-                    VisitorXmppNode node = XmppNodeManager.getVisitorXmppNode(visitor);
+                    VisitorChatNode node = XmppNodeManager.getVisitorXmppNode(visitor);
 
                     if (vflag) {
                         if (!node.uninstall()) {
@@ -134,7 +134,7 @@ public class TransferServerImpl implements TransferServer {
                             node.login();
                             node.joinQueue();
                         } catch (Exception e) {
-                            logger.error("", e);
+                            logger.error("error", "", e);
                         }
                     }
                 } else {

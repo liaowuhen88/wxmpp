@@ -2,13 +2,14 @@ package com.baodanyun.websocket.util;
 
 import com.baodanyun.websocket.core.common.Common;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by yutao on 2016/7/12.
  */
 public class XMPPUtil {
-    public static Logger logger = Logger.getLogger(XMPPUtil.class);
+    public static Logger logger = LoggerFactory.getLogger(XMPPUtil.class);
 
     public static String nameToJid(String name) {
         return name + Common.COMMON_XMPP_DOMAIN;

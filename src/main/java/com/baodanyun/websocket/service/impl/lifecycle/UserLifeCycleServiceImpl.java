@@ -9,7 +9,7 @@ import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.listener.VisitorListener;
 import com.baodanyun.websocket.service.*;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
@@ -27,7 +27,7 @@ import java.util.List;
  *//*
 
 public abstract class UserLifeCycleServiceImpl implements UserLifeCycleService {
-    public static final Logger logger = Logger.getLogger(UserLifeCycleServiceImpl.class);
+    public static final Logger logger = LoggerFactory.getLogger(UserLifeCycleServiceImpl.class);
 
     @Autowired
     public LastVisitorSendMessageService lastVisitorSendMessageService;
@@ -90,7 +90,7 @@ public abstract class UserLifeCycleServiceImpl implements UserLifeCycleService {
                 }
             }
         } catch (Exception e) {
-            logger.error("offline msg error");
+            logger.error("error","offline msg error");
         }
 
         return true;

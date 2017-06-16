@@ -24,7 +24,7 @@ public class KdtApiClient {
                 return null;
             }
         } catch (Exception e) {
-            logger.info("post json " + json, e);
+            logger.error("post json " + json, e);
         }
         return null;
     }
@@ -54,7 +54,7 @@ public class KdtApiClient {
             json = HttpUtils.get(url);
             return desc(json);
         } catch (Exception e) {
-            logger.info("post json ["+json+"]", e);
+            logger.error("post json [" + json + "]", e);
         }
         return null;
     }

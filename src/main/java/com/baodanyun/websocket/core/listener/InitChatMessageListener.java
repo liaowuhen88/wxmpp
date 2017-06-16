@@ -4,16 +4,17 @@ import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.service.MsgSendControl;
 import com.baodanyun.websocket.util.JSONUtil;
-import org.apache.log4j.Logger;
 import org.jivesoftware.smack.chat.Chat;
 import org.jivesoftware.smack.chat.ChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by liaowuhen on 2017/5/11.
  */
 public class InitChatMessageListener implements ChatMessageListener {
-    private static Logger logger = Logger.getLogger(InitChatMessageListener.class);
+    private static Logger logger = LoggerFactory.getLogger(InitChatMessageListener.class);
 
     private MsgSendControl msgSendControl;
     private AbstractUser user;
@@ -34,7 +35,7 @@ public class InitChatMessageListener implements ChatMessageListener {
                 msgSendControl.sendMsg(sendMsg);
             }
         } catch (Exception e) {
-            logger.error("msgSendControl.sendMsg error", e);
+            logger.error("error", "msgSendControl.sendMsg error", e);
         }
     }
 }

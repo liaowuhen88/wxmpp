@@ -7,7 +7,8 @@ import com.baodanyun.websocket.listener.VisitorListener;
 import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.util.CommonConfig;
 import com.google.common.eventbus.Subscribe;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class VisitorJoinListener extends AbstarctEventBusListener<VisitorJoinEvent> implements EventBusListener<VisitorJoinEvent> {
-    private static Logger logger = Logger.getLogger(VisitorJoinListener.class);
+    private static Logger logger = LoggerFactory.getLogger(VisitorJoinListener.class);
 
     @Autowired
     public VisitorListener visitorListener;
@@ -27,7 +28,6 @@ public class VisitorJoinListener extends AbstarctEventBusListener<VisitorJoinEve
     @Override
     @Subscribe
     public boolean processExpiringEvent(final VisitorJoinEvent ve) {
-        logger.info(ve);
 
         executorService.execute(new Runnable() {
                                     @Override
@@ -45,7 +45,7 @@ public class VisitorJoinListener extends AbstarctEventBusListener<VisitorJoinEve
 
 
                                         } catch (Exception e) {
-                                            logger.error(e);
+                                            logger.error("error", e);
                                         }
                                     }
                                 }

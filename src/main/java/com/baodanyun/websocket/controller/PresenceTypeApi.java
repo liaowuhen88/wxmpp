@@ -4,10 +4,11 @@ import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.service.XmppServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
-import org.apache.log4j.Logger;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.Roster;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 public class PresenceTypeApi extends BaseController {
-    protected static Logger logger = Logger.getLogger(PresenceTypeApi.class);
+    protected static Logger logger = LoggerFactory.getLogger(PresenceTypeApi.class);
 
     @Autowired
     private XmppServer xmppServer;
@@ -41,7 +42,7 @@ public class PresenceTypeApi extends BaseController {
 
 
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             response.setMsg("update error");
             response.setSuccess(false);
         }

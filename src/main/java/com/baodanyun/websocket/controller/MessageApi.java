@@ -9,7 +9,8 @@ import com.baodanyun.websocket.service.MessageServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +23,7 @@ import java.util.List;
  */
 @RestController
 public class MessageApi extends BaseController {
-    protected static Logger logger = Logger.getLogger(MessageApi.class);
+    protected static Logger logger = LoggerFactory.getLogger(MessageApi.class);
 
     @Autowired
     private MessageServer messageServer;
@@ -61,7 +62,7 @@ public class MessageApi extends BaseController {
 
 
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             response.setMsg("getTagsAll error");
             response.setSuccess(false);
         }
@@ -87,7 +88,7 @@ public class MessageApi extends BaseController {
                 response.setSuccess(true);
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             response.setMsg("getTagsAll error");
             response.setSuccess(false);
         }
@@ -108,7 +109,7 @@ public class MessageApi extends BaseController {
                 response.setSuccess(false);
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             response.setMsg("update error");
             response.setSuccess(false);
         }
@@ -135,7 +136,7 @@ public class MessageApi extends BaseController {
 
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             response.setMsg(e.getMessage());
             response.setSuccess(false);
         }

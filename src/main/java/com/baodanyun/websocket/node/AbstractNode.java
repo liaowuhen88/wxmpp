@@ -2,44 +2,29 @@ package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.exception.BusinessException;
-import com.baodanyun.websocket.node.xmpp.XmppNode;
 import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import com.baodanyun.websocket.util.XMPPUtil;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smackx.offline.OfflineMessageManager;
-import org.springframework.util.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by liaowuhen on 2017/5/23.
  */
 public abstract class AbstractNode implements Node {
-    private static final Logger logger = Logger.getLogger(AbstractNode.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractNode.class);
 
     UserCacheServer userCacheServer = SpringContextUtil.getBean("userCacheServerImpl", UserCacheServer.class);
 
-    private XmppNode xmppNode;
 
-    @Override
-    public XmppNode getXmppNode() {
-        return xmppNode;
-    }
-
-    @Override
-    public void setXmppNode(XmppNode xmppNode) {
-        this.xmppNode = xmppNode;
-    }
-
-    public boolean pushOfflineMsg() throws BusinessException {
+    /*public boolean pushOfflineMsg() throws BusinessException {
         //加载离线记录
         XMPPConnection xmppConnection = this.getXmppNode().getXMPPConnection();
         OfflineMessageManager offlineManager = new OfflineMessageManager(xmppConnection);
@@ -52,33 +37,28 @@ public abstract class AbstractNode implements Node {
                 }
             }
         } catch (Exception e) {
-            logger.error("offline msg error");
+            logger.error("error", "offline msg error");
         }
 
         return true;
-    }
+    }*/
 
     @Override
-    public void sendMessageTOXmpp(Message message) throws InterruptedException, SmackException.NotConnectedException, BusinessException {
-        this.getXmppNode().sendMessage(message);
-    }
-
-    @Override
-    public void receiveFromGod(String content) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
+    public Message receiveFromGod(String content) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
         if (!StringUtils.isEmpty(content)) {
             Msg msg = Msg.handelMsg(content);
             if (msg != null) {
-                receiveFromGod(msg);
+                return receiveFromGod(msg);
             }
         } else {
-            logger.error("msg is blank");
+            logger.error("error", "msg is blank");
         }
 
-
+        return null;
     }
 
     @Override
-    public void receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
+    public Message receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
         Message xmppMsg = new Message();
 
         xmppMsg.setFrom(msg.getFrom());
@@ -86,7 +66,8 @@ public abstract class AbstractNode implements Node {
         xmppMsg.setType(Message.Type.chat);
         xmppMsg.setBody(msg.getContent().toString());
         xmppMsg.setSubject(msg.getContentType());
-        sendMessageTOXmpp(xmppMsg);
+
+        return xmppMsg;
     }
 
     @Override
@@ -119,12 +100,12 @@ public abstract class AbstractNode implements Node {
 
     @Override
     public boolean logout() throws BusinessException, IOException, XMPPException, SmackException {
-        return getXmppNode().logout();
+        return true;
     }
 
     @Override
     public boolean login() throws BusinessException, IOException, XMPPException, SmackException {
-        return getXmppNode().login();
+        return true;
     }
 
     @Override

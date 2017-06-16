@@ -4,7 +4,7 @@ import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.exception.BusinessException;
-import com.baodanyun.websocket.node.xmpp.XmppNode;
+import com.baodanyun.websocket.node.xmpp.ChatNode;
 import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.util.JSONUtil;
@@ -59,7 +59,7 @@ public class VisitorLogin extends BaseController {
         try {
             Visitor visitor = userServer.initUserByOpenId(openId);
             AbstractUser customer;
-            XmppNode wn = XmppNodeManager.getVisitorXmppNode(visitor);
+            ChatNode wn = XmppNodeManager.getVisitorXmppNode(visitor);
             boolean login = wn.login();
             if (login) {
                 customer = customerDispatcherService.getCustomer(visitor.getOpenId());
@@ -91,7 +91,7 @@ public class VisitorLogin extends BaseController {
 
 
         } catch (Exception e) {
-            logger.error("", e);
+            logger.error("error", "", e);
 
             mv.addObject("statue", false);
             mv.addObject("customerIsOnline", false);

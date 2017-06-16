@@ -6,7 +6,8 @@ import com.baodanyun.websocket.listener.VisitorListener;
 import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.google.common.eventbus.Subscribe;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class VisitorReciveMsgListener extends AbstarctEventBusListener<VisitorReciveMsgEvent> implements EventBusListener<VisitorReciveMsgEvent> {
-    private static Logger logger = Logger.getLogger(VisitorReciveMsgListener.class);
+    private static Logger logger = LoggerFactory.getLogger(VisitorReciveMsgListener.class);
 
     @Autowired
     public VisitorListener visitorListener;
@@ -34,7 +35,7 @@ public class VisitorReciveMsgListener extends AbstarctEventBusListener<VisitorRe
                                         try {
                                             visitorListener.chat(ve.getContent(), ve.getUser(), ve.getCustomer(), ve.getEventNum());
                                         } catch (Exception e) {
-                                            logger.error(e);
+                                            logger.error("error", e);
                                         }
                                     }
                                 }

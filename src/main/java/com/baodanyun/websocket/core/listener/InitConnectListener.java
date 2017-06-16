@@ -1,11 +1,12 @@
 package com.baodanyun.websocket.core.listener;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import org.apache.log4j.Logger;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.packet.Presence;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 处理xmpp接收到的消息，并且转换成webSocket消息发给自己
@@ -13,7 +14,7 @@ import org.jivesoftware.smack.packet.Presence;
  */
 public class InitConnectListener implements ConnectionListener {
 
-    private static Logger logger = Logger.getLogger(InitConnectListener.class);
+    private static Logger logger = LoggerFactory.getLogger(InitConnectListener.class);
 
     private AbstractUser user;
 
@@ -33,7 +34,7 @@ public class InitConnectListener implements ConnectionListener {
         try {
             xmppConnection.sendStanza(presence);
         } catch (SmackException.NotConnectedException e) {
-            logger.error(e);
+            logger.error("error", e);
         }
     }
 
@@ -44,7 +45,7 @@ public class InitConnectListener implements ConnectionListener {
 
     @Override
     public void connectionClosedOnError(Exception e) {
-        logger.error(user.getLoginUsername() + ":connectionClosedOnError", e);
+        logger.error("error", user.getLoginUsername() + ":connectionClosedOnError", e);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class InitConnectListener implements ConnectionListener {
 
     @Override
     public void reconnectionFailed(Exception e) {
-        logger.error(user.getLoginUsername() + "reconnectionFailed", e);
+        logger.error("error", user.getLoginUsername() + "reconnectionFailed", e);
 
     }
 }

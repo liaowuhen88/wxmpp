@@ -100,7 +100,7 @@ public class VcardServiceImpl implements VcardService {
 
             return true;
         } catch (Exception e) {
-            logger.error("update vcard error", e);
+            logger.error("error", "update vcard error", e);
         }
         return false;
     }
@@ -120,7 +120,7 @@ public class VcardServiceImpl implements VcardService {
                 }
             }
         } catch (Exception e) {
-            logger.error("", e);
+            logger.error("error", "", e);
             throw new BusinessException("loadVCard error:" + xmppId + "------" + jid);
         }
         return null;

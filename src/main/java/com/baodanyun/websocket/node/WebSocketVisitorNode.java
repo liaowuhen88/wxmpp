@@ -5,14 +5,15 @@ import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.sendUtils.SessionSendUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.WebSocketSession;
 
 /**
  * Created by liaowuhen on 2017/5/23.
  */
 public class WebSocketVisitorNode extends VisitorNode {
-    private static final Logger logger = Logger.getLogger(WeChatNode.class);
+    private static final Logger logger = LoggerFactory.getLogger(WeChatNode.class);
 
     private WebSocketSession session;
 

@@ -6,20 +6,20 @@ import com.baodanyun.websocket.service.TransferlogServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * Created by liaowuhen on 2016/11/11.
  */
 @RestController
 public class TransferlogApi extends BaseController {
-    protected static Logger logger = Logger.getLogger(CustomerApi.class);
+    protected static Logger logger = LoggerFactory.getLogger(CustomerApi.class);
 
     @Autowired
     private TransferlogServer transferlogServer;
@@ -41,7 +41,7 @@ public class TransferlogApi extends BaseController {
             }
 
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             response.setMsg("update error");
             response.setSuccess(false);
         }
@@ -57,7 +57,7 @@ public class TransferlogApi extends BaseController {
             response.setSuccess(true);
 
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error",e);
             response.setMsg(e.getMessage());
             response.setSuccess(false);
         }

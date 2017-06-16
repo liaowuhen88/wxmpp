@@ -57,7 +57,7 @@ public class LastVisitorSendMessageService {
                         }
                         it.remove();
                     } catch (Exception e) {
-                        logger.error("转接异常", e);
+                        logger.error("error","转接异常", e);
                         it.remove();
                     }
                 } else {

@@ -7,7 +7,7 @@ import com.baodanyun.websocket.service.CacheService;
 import com.baodanyun.websocket.service.HistoryUserServer;
 import com.baodanyun.websocket.service.MsgSendService;
 import com.baodanyun.websocket.util.SpringContextUtil;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -22,7 +22,7 @@ import java.util.concurrent.Executors;
 
 public class MulitEventSender {
 
-    protected static Logger logger = Logger.getLogger(MulitEventSender.class);
+    protected static Logger logger = LoggerFactory.getLogger(MulitEventSender.class);
     public HistoryUserServer historyUserServer = SpringContextUtil.getBean("historyUserServer", HistoryUserServer.class);
     public MsgSendService msgSendService = SpringContextUtil.getBean("visitorMsgSendServiceImpl", MsgSendService.class);
 

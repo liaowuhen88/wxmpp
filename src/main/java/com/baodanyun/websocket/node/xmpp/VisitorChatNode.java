@@ -4,19 +4,20 @@ import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.dispatcher.VisitorDispather;
-import org.apache.log4j.Logger;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 /**
  * Created by liaowuhen on 2017/5/23.
  */
-public class VisitorXmppNode extends AbstarctXmppNode implements VisitorDispather {
-    private static final Logger logger = Logger.getLogger(VisitorXmppNode.class);
+public class VisitorChatNode extends AbstarctChatNode implements VisitorDispather {
+    private static final Logger logger = LoggerFactory.getLogger(VisitorChatNode.class);
 
-    public VisitorXmppNode(AbstractUser visitor) {
+    public VisitorChatNode(AbstractUser visitor) {
         super(visitor);
     }
 

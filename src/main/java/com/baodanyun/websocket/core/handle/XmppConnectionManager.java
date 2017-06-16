@@ -7,7 +7,7 @@ import com.baodanyun.websocket.bean.msg.msg.ReceiptMsg;
 import com.baodanyun.websocket.bean.msg.msg.TextMsg;
 import com.baodanyun.websocket.bean.msg.status.StatusMsg;
 import com.google.gson.Gson;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ReconnectionManager;
@@ -38,7 +38,7 @@ public class XmppConnectionManager {
         return CONN;
     }
 
-    private static Logger logger = Logger.getLogger(XmppConnectionManager.class);
+    private static Logger logger = LoggerFactory.getLogger(XmppConnectionManager.class);
 
     //获取一个xmpp连接
     //TODO 如果获取连接过快 会导致关闭异常 需要优化
@@ -83,7 +83,7 @@ public class XmppConnectionManager {
                 }
             }
         } catch (Exception e) {
-            logger.error("parseMsg msg error" + e.getMessage());
+            logger.error("error","parseMsg msg error" + e.getMessage());
         }
         return msg;
     }

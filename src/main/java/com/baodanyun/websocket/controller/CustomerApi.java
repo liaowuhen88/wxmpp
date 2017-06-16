@@ -13,7 +13,7 @@ import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.PageModel;
 import com.baodanyun.websocket.model.Transferlog;
 import com.baodanyun.websocket.model.UserModel;
-import com.baodanyun.websocket.node.xmpp.VisitorXmppNode;
+import com.baodanyun.websocket.node.xmpp.VisitorChatNode;
 import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.util.JSONUtil;
@@ -22,7 +22,8 @@ import com.baodanyun.websocket.util.Render;
 import com.baodanyun.websocket.util.XMPPUtil;
 import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,7 @@ import java.util.*;
 @RestController
 public class CustomerApi extends BaseController {
 
-    protected static Logger logger = Logger.getLogger(CustomerApi.class);
+    protected static Logger logger = LoggerFactory.getLogger(CustomerApi.class);
 
 
     @Autowired
@@ -89,7 +90,7 @@ public class CustomerApi extends BaseController {
                 response.setMsg("客服不存在");
             }
         } catch (Exception e) {
-            logger.error("获取客服错误", e);
+            logger.error("error", "获取客服错误", e);
             response.setSuccess(false);
         }
         Render.r(httpServletResponse, JSONUtil.toJson(response));
@@ -146,7 +147,7 @@ public class CustomerApi extends BaseController {
 
 
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             response.setSuccess(false);
         }
         Render.r(httpServletResponse, JSONUtil.toJson(response));
@@ -191,7 +192,7 @@ public class CustomerApi extends BaseController {
             }
 
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             response.setSuccess(false);
             response.setMsg("系统异常");
         }
@@ -215,7 +216,7 @@ public class CustomerApi extends BaseController {
             response.setData(collection);
             response.setSuccess(true);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             response.setSuccess(false);
         }
         Render.r(httpServletResponse, gson.toJson(response));
@@ -242,7 +243,7 @@ public class CustomerApi extends BaseController {
             httpServletRequest.getSession().invalidate();
 
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             response.setSuccess(false);
         }
         Render.r(httpServletResponse, gson.toJson(response));
@@ -262,7 +263,7 @@ public class CustomerApi extends BaseController {
             response.setData(gson.toJson(freeCustomerNodeList));
             response.setSuccess(true);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             response.setSuccess(false);
         }
         Render.r(httpServletResponse, gson.toJson(response));
@@ -292,7 +293,7 @@ public class CustomerApi extends BaseController {
             response.setData(freeCustomerNodeList);
             response.setSuccess(true);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             response.setSuccess(false);
         }
         Render.r(httpServletResponse, JSONUtil.toJson(response));
@@ -328,7 +329,7 @@ public class CustomerApi extends BaseController {
 
             response.setSuccess(flag);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             response.setMsg(e.getMessage());
             response.setSuccess(false);
         }
@@ -361,7 +362,7 @@ public class CustomerApi extends BaseController {
             response.setSuccess(true);
 
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             response.setSuccess(false);
         }
 
@@ -421,7 +422,7 @@ public class CustomerApi extends BaseController {
                 response.setMsg("用户id不能为空");
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             response.setSuccess(false);
         }
         Render.r(httpServletResponse, JSONUtil.toJson(response));
@@ -439,7 +440,7 @@ public class CustomerApi extends BaseController {
         try {
             vcard = vcardService.getVCardUser(au.getId(), au.getId(), AbstractUser.class);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
         }
         VcardUserRes wu = new VcardUserRes();
         wu.setUser(au);
@@ -467,7 +468,7 @@ public class CustomerApi extends BaseController {
             user.setId(vjid);
             user.setCustomer(au);
 
-            VisitorXmppNode vn = XmppNodeManager.getVisitorXmppNode(user);
+            VisitorChatNode vn = XmppNodeManager.getVisitorXmppNode(user);
             vn.uninstall();
 
             vn.logout();
@@ -475,7 +476,7 @@ public class CustomerApi extends BaseController {
             response.setSuccess(true);
 
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             response.setSuccess(false);
         }
         Render.r(httpServletResponse, JSONUtil.toJson(response));

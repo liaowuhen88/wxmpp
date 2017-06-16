@@ -43,7 +43,7 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
 
             wn.receiveFromGod(content);
         }catch (Exception e){
-            logger.info(e);
+            logger.error("error", e);
         }
     }
 

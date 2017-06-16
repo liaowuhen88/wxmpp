@@ -15,7 +15,7 @@ import com.baodanyun.websocket.service.WebSocketService;
 import com.baodanyun.websocket.service.XmppServer;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.packet.Message;
@@ -38,7 +38,7 @@ import java.util.List;
 
 
 public class NodeNotifyWebSocket implements INodeEvent {
-    protected static Logger logger = Logger.getLogger(LifeCycle.class);
+    protected static Logger logger = LoggerFactory.getLogger(LifeCycle.class);
     public WebSocketService webSocketService = SpringContextUtil.getBean("webSocketService", WebSocketService.class);
     public XmppServer xmppServer = SpringContextUtil.getBean("xmppServer", XmppServer.class);
     private MsgSendControl msgSendControl = SpringContextUtil.getBean("msgSendControl", MsgSendControl.class);
@@ -59,7 +59,7 @@ public class NodeNotifyWebSocket implements INodeEvent {
             try {
                 xmppServer.sendPresence(node.getBindUser().getId(), Presence.Type.available);
             } catch (SmackException.NotConnectedException e) {
-                logger.error(" xmppConnection.sendStanza(presence);", e);
+                logger.error("error"," xmppConnection.sendStanza(presence);", e);
             }
         }
 
@@ -126,7 +126,7 @@ public class NodeNotifyWebSocket implements INodeEvent {
                 }
             }
         } catch (Exception e) {
-            logger.error("offline msg error");
+            logger.error("error","offline msg error");
         }
     }
 

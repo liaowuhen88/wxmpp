@@ -8,21 +8,22 @@ import com.baodanyun.websocket.node.Node;
 import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
 import com.baodanyun.websocket.service.CustomerDispatcherService;
 import com.baodanyun.websocket.util.SpringContextUtil;
-import org.apache.log4j.Logger;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 /**
  * Created by liaowuhen on 2017/5/23.
  */
-public class CustomerXmppNode extends AbstarctXmppNode implements CustomerDispather {
+public class CustomerChatNode extends AbstarctChatNode implements CustomerDispather {
 
-    private static final Logger logger = Logger.getLogger(CustomerXmppNode.class);
+    private static final Logger logger = LoggerFactory.getLogger(CustomerChatNode.class);
     CustomerDispatcherService customerDispatcherService = SpringContextUtil.getBean("customerDispatcherServiceImpl", CustomerDispatcherService.class);
 
-    public CustomerXmppNode(AbstractUser customer) {
+    public CustomerChatNode(AbstractUser customer) {
         super(customer);
     }
 
@@ -36,11 +37,11 @@ public class CustomerXmppNode extends AbstarctXmppNode implements CustomerDispat
 
     public boolean joinQueue(AbstractUser abstractUser) {
         if (null != getNodes()) {
-            for (Node node : getNodes()) {
+            for (Node node : getNodes().values()) {
                 try {
                     ((CustomerNode) node).joinQueue(abstractUser);
                 } catch (InterruptedException e) {
-                    logger.error(e);
+                    logger.error("error", e);
                 }
             }
         } else {
@@ -52,11 +53,11 @@ public class CustomerXmppNode extends AbstarctXmppNode implements CustomerDispat
 
     public boolean uninstall(AbstractUser abstractUser) {
         if (null != getNodes()) {
-            for (Node node : getNodes()) {
+            for (Node node : getNodes().values()) {
                 try {
                     ((CustomerNode) node).uninstall(abstractUser);
                 } catch (InterruptedException e) {
-                    logger.error(e);
+                    logger.error("error", e);
                 }
             }
         } else {
@@ -69,11 +70,11 @@ public class CustomerXmppNode extends AbstarctXmppNode implements CustomerDispat
     @Override
     public boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws InterruptedException {
         if (null != getNodes()) {
-            for (Node node : getNodes()) {
+            for (Node node : getNodes().values()) {
                 try {
                     ((CustomerNode) node).messageCallBack(abstractUser, msgStatus);
                 } catch (InterruptedException e) {
-                    logger.error(e);
+                    logger.error("error", e);
                 }
             }
         } else {

@@ -3,8 +3,8 @@ package com.baodanyun.websocket.core.handle;
 import com.baodanyun.websocket.core.handle.plugin.EventManager;
 import com.baodanyun.websocket.core.handle.plugin.withoutNode.InitEventManager;
 import com.baodanyun.websocket.core.handle.plugin.withoutNode.LoginEventManager;
-import com.baodanyun.websocket.core.handle.plugin.withoutNode.LogoutEventManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by yutao on 2016/9/7.
@@ -13,14 +13,10 @@ import org.apache.log4j.Logger;
  */
 public abstract class LifeCycle implements NodeLifeCycle {
 
-    protected static Logger logger = Logger.getLogger(LifeCycle.class);
+    protected static Logger logger = LoggerFactory.getLogger(LifeCycle.class);
 
     //埋点管理器
     protected EventManager eventManager = EventManager.getInstance();
-
-    public enum CycleStatus {
-        init, run, offline
-    }
 
     //以下是状态描述
     @Override
@@ -45,6 +41,10 @@ public abstract class LifeCycle implements NodeLifeCycle {
     @Override
     public void offline() {
         logger.debug("run Node done");
+    }
+
+    public enum CycleStatus {
+        init, run, offline
     }
 
 }

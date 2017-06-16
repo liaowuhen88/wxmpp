@@ -62,7 +62,7 @@ public class MsgSendControl {
                 }
 
             } catch (Exception e) {
-                logger.error("", e);
+                logger.error("error", "", e);
             }
             webSocketService.produce(msg);
 
@@ -78,7 +78,7 @@ public class MsgSendControl {
                 messageSendToWeixin.send(msg, msg.getOpenId(), msg.getId());
                 logger.info("msg---" + JSONUtil.toJson(msg) + "send to Weixin ");
             } catch (Exception e) {
-                logger.error("", e);
+                logger.error("error", "", e);
             }
         }
         return true;

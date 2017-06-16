@@ -8,7 +8,8 @@ import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.service.WebSocketService;
 import com.baodanyun.websocket.util.XMPPUtil;
 import com.google.common.eventbus.Subscribe;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class WebsocketSynchronizationMsgListener extends AbstarctEventBusListener<SynchronizationMsgEvent> implements EventBusListener<SynchronizationMsgEvent> {
-    private static Logger logger = Logger.getLogger(WebsocketSynchronizationMsgListener.class);
+    private static Logger logger = LoggerFactory.getLogger(WebsocketSynchronizationMsgListener.class);
     @Autowired
     private WebSocketService webSocketService;
     @Autowired
@@ -28,7 +29,7 @@ public class WebsocketSynchronizationMsgListener extends AbstarctEventBusListene
     @Override
     @Subscribe
     public boolean processExpiringEvent(final SynchronizationMsgEvent sme) {
-        logger.info(sme);
+        logger.info(sme.getMsg().toString());
 
         executorService.execute(new Runnable() {
                                     @Override
@@ -51,7 +52,7 @@ public class WebsocketSynchronizationMsgListener extends AbstarctEventBusListene
                                                 }
                                             }
                                         } catch (Exception e) {
-                                            logger.error(e);
+                                            logger.error("error", e);
                                         }
                                     }
                                 }

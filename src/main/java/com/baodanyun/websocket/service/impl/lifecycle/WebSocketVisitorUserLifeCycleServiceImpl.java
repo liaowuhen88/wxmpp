@@ -7,7 +7,7 @@ import com.baodanyun.websocket.event.VisitorLogoutEvent;
 import com.baodanyun.websocket.service.MsgSendService;
 import com.baodanyun.websocket.service.WebSocketService;
 import com.baodanyun.websocket.util.EventBusUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service("wvUserLifeCycleService")
 public class WebSocketVisitorUserLifeCycleServiceImpl extends VisitorUserLifeCycleServiceImpl {
-    private static final Logger logger = Logger.getLogger(WebSocketVisitorUserLifeCycleServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebSocketVisitorUserLifeCycleServiceImpl.class);
 
     @Autowired
     protected WebSocketService webSocketService;

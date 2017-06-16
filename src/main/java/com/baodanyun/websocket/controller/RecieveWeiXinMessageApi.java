@@ -5,12 +5,13 @@ import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.exception.BusinessException;
-import com.baodanyun.websocket.node.NodeManager;
 import com.baodanyun.websocket.node.VisitorNode;
+import com.baodanyun.websocket.node.xmpp.ChatNode;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.util.*;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +27,7 @@ import java.util.Date;
  */
 @RestController
 public class RecieveWeiXinMessageApi extends BaseController {
-    protected static Logger logger = Logger.getLogger(RecieveWeiXinMessageApi.class);
+    protected static Logger logger = LoggerFactory.getLogger(RecieveWeiXinMessageApi.class);
 
     @Autowired
     private UserServer userServer;
@@ -59,7 +60,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
             String body = HttpServletRequestUtils.getBody(request);
             Msg msg = msg(body);
             Visitor visitor = userServer.initUserByOpenId(msg.getFrom());
-            VisitorNode wn = NodeManager.getWeChatNode(visitor);
+            VisitorNode wn = ChatNode.getWeChatNode(visitor);
             boolean xmppFlag = wn.getXmppNode().isOnline();
             AbstractUser customer;
             if (xmppFlag) {
@@ -80,7 +81,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
                     if (!cFlag) {
                         cFlag = xmppUserOnlineServer.isOnline(customer.getLoginUsername());
                     }
-                    logger.info(cFlag);
+                    logger.info("" + cFlag);
                     // 客服不在线
                     if (!cFlag) {
                         String url = request.getRequestURL().toString();
@@ -102,7 +103,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
             }
 
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             response = new Response();
             response.setMsg(e.getMessage());
             response.setSuccess(false);

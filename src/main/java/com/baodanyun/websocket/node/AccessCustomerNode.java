@@ -12,16 +12,17 @@ import com.baodanyun.websocket.service.UserServer;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import com.baodanyun.websocket.util.XMPPUtil;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.packet.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.WebSocketSession;
 
 /**
  * Created by liaowuhen on 2017/5/23.
  */
 public class AccessCustomerNode extends CustomerNode {
-    private static final Logger logger = Logger.getLogger(AccessCustomerNode.class);
+    private static final Logger logger = LoggerFactory.getLogger(AccessCustomerNode.class);
 
     UserServer userServer = SpringContextUtil.getBean("userServerImpl", UserServer.class);
     private WebSocketSession session;
@@ -44,8 +45,18 @@ public class AccessCustomerNode extends CustomerNode {
     }
 
     @Override
-    public void sendMessageTOXmpp(Message message) throws InterruptedException, SmackException.NotConnectedException, BusinessException {
+    public boolean isOnline() {
+        return false;
+    }
 
+    @Override
+    public Message receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
+        return super.receiveFromGod(msg);
+    }
+
+    @Override
+    public Message receiveFromGod(String content) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
+        Message message = super.receiveFromGod(content);
         try {
             String to = XMPPUtil.jidToName(message.getTo());
             AbstractUser visitor;
@@ -59,10 +70,9 @@ public class AccessCustomerNode extends CustomerNode {
                 message.setTo(visitor.getId());
             }
         } catch (BusinessException e) {
-            logger.error("获取用户失败", e);
+            logger.error("error", "获取用户失败", e);
         }
-
-        this.getXmppNode().sendMessage(message);
+        return message;
     }
 
     @Override
@@ -89,40 +99,4 @@ public class AccessCustomerNode extends CustomerNode {
         SessionSendUtils.send(getSession(), msg);
         return false;
     }
-
-
-   /* @Override
-    public Msg getMsg(String content) {
-        if (!StringUtils.isEmpty(content)) {
-            Msg msg = Msg.handelMsg(content);
-            if (msg != null) {
-                if (StringUtils.isEmpty(msg.getFrom())) {
-                    logger.error("handleSendMsg from is blank");
-                } else {
-                    if (StringUtils.isEmpty(msg.getTo())) {
-                        logger.error("handleSendMsg to is blank");
-                    } else {
-                        String to = XMPPUtil.jidToName(msg.getTo());
-
-                        // TODO
-                        AbstractUser visitor = null;
-                        try {
-                            visitor = userServer.InitByUidOrNameOrPhone(to);
-                        } catch (BusinessException e) {
-                            logger.error("获取用户失败", e);
-                        }
-
-                        if (null != visitor) {
-                            msg.setTo(visitor.getId());
-                        }
-                        return msg;
-                    }
-                }
-            }
-
-        } else {
-            logger.error("msg is blank");
-        }
-        return null;
-    }*/
 }

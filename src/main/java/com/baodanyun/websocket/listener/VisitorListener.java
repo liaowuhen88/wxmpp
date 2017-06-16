@@ -5,7 +5,8 @@ import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.service.SendToEventCenterService;
 import com.baodanyun.websocket.util.CommonConfig;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class VisitorListener {
-    private static final Logger logger = Logger.getLogger(VisitorListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(VisitorListener.class);
 
     @Autowired
     private SendToEventCenterService se;
@@ -26,7 +27,7 @@ public class VisitorListener {
             le.setEvt(CommonConfig.MSG_BIZ_KF_ENTER);
             se.sendToEventCenter(le);
         }catch (Exception e){
-            logger.error("error",e);
+            logger.error("error", "error", e);
         }
     }
 
@@ -36,7 +37,7 @@ public class VisitorListener {
             le.setEvt(CommonConfig.MSG_BIZ_KF_QUIT);
             se.sendToEventCenter(le);
         }catch (Exception e){
-            logger.error("error",e);
+            logger.error("error", "error", e);
         }
     }
 
@@ -49,7 +50,7 @@ public class VisitorListener {
             le.setMark(m);
             se.sendToEventCenter(le);
         }catch (Exception e){
-            logger.error("error",e);
+            logger.error("error", "error", e);
         }
     }
 
@@ -59,7 +60,7 @@ public class VisitorListener {
             le.setEvt(CommonConfig.MSG_BIZ_KF_LEAVE_MESSAGE);
             se.sendToEventCenter(le);
         }catch (Exception e){
-            logger.error("error",e);
+            logger.error("error", "error", e);
         }
     }
 
@@ -70,7 +71,7 @@ public class VisitorListener {
             le.setMark(mark);
             se.sendToEventCenter(le);
         }catch (Exception e){
-            logger.error("error",e);
+            logger.error("error", "error", e);
         }
     }
 

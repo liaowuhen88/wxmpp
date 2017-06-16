@@ -46,10 +46,10 @@ public class AccessCustomerUserLifeCycleServiceImpl extends CustomerUserLifeCycl
             Msg msg = Msg.handelMsg(content);
             if (msg != null) {
                 if (StringUtils.isEmpty(msg.getFrom())) {
-                    logger.error("handleSendMsg from is blank");
+                    logger.error("error","handleSendMsg from is blank");
                 } else {
                     if (StringUtils.isEmpty(msg.getTo())) {
-                        logger.error("handleSendMsg to is blank");
+                        logger.error("error","handleSendMsg to is blank");
                     } else {
                         String to = XMPPUtil.jidToName(msg.getTo());
                         AbstractUser visitor = userCacheServer.getVisitorByUidOrOpenID(to);
@@ -62,7 +62,7 @@ public class AccessCustomerUserLifeCycleServiceImpl extends CustomerUserLifeCycl
             }
 
         } else {
-            logger.error("msg is blank");
+            logger.error("error","msg is blank");
         }
         return null;
     }

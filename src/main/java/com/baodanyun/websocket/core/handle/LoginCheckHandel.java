@@ -3,7 +3,7 @@ package com.baodanyun.websocket.core.handle;
 
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.util.MD5Utils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smackx.iqregister.AccountManager;
 
@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class LoginCheckHandel {
 
-    protected static Logger logger = Logger.getLogger(LoginCheckHandel.class);
+    protected static Logger logger = LoggerFactory.getLogger(LoginCheckHandel.class);
 
     //System.out.println(MD5Utils.getMD5Code("17doubao.com"));
     private static final String VISITOR_DEFAULT_PWD = "00818863ff056f1d66c8427836f94a87";
@@ -59,7 +59,7 @@ public class LoginCheckHandel {
             }
             return true;
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error("error",e.getMessage(), e);
         } finally {
             if (conn != null && conn.isConnected()) {
                 try {

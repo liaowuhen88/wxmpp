@@ -37,7 +37,7 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
             Node wn = NodeManager.getWebSocketCustomerNode(session, (Customer) au);
             wn.receiveFromGod(content);
         }catch (Exception e){
-            logger.info(e);
+            logger.error("error", e);
         }
     }
 

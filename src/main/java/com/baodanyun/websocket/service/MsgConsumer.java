@@ -24,7 +24,7 @@ public class MsgConsumer implements Runnable {
                  webSocketService.sendToWebSocket();
 
             } catch (InterruptedException e) {
-                logger.error("失败", e);
+                logger.error("error", "失败", e);
             }
         }
     }

@@ -7,7 +7,8 @@ import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.service.WechatMsgService;
 import com.baodanyun.websocket.util.Render;
 import com.baodanyun.websocket.util.XMPPUtil;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +23,7 @@ import java.util.*;
  */
 @RestController
 public class WeChatMsgApi extends BaseController {
-    protected static Logger logger = Logger.getLogger(WeChatMsgApi.class);
+    protected static Logger logger = LoggerFactory.getLogger(WeChatMsgApi.class);
 
     @Autowired
     private WechatMsgService wechatMsgService;
@@ -64,7 +65,7 @@ public class WeChatMsgApi extends BaseController {
         } catch (Exception e) {
             msgResponse.setSuccess(false);
             msgResponse.setMsg(e.getMessage());
-            logger.error(e);
+            logger.error("error", e);
 
         }
 

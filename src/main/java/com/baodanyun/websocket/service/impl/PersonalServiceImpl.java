@@ -18,7 +18,8 @@ import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.KdtApiClient;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -32,7 +33,7 @@ import java.util.Map;
  */
 @Service
 public class PersonalServiceImpl implements PersonalService {
-    protected static Logger logger = Logger.getLogger(CustomerApi.class);
+    protected static Logger logger = LoggerFactory.getLogger(CustomerApi.class);
     @Autowired
     private CacheService cacheService;
 
@@ -358,14 +359,14 @@ public class PersonalServiceImpl implements PersonalService {
                     throw new BusinessException(openId + "不存在");
                 } else {
                     logger.info("uid:[" + uid + "]--------openId[" + openId + "]");
-                    logger.info(cacheService.setOneMonth(CommonConfig.USER_OPENID_KEY + openId, hrUser));
+                    logger.info("" + cacheService.setOneMonth(CommonConfig.USER_OPENID_KEY + openId, hrUser));
                     return uid;
 
                 }
             }
 
         } catch (Exception e) {
-            logger.info(e);
+            logger.error("error", e);
         }
 
         return null;

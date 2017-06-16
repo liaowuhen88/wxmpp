@@ -1,6 +1,7 @@
 package com.baodanyun.websocket.util;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SpringContextUtil implements ApplicationContextAware {
-    protected static final Logger logger = Logger.getLogger(SpringContextUtil.class);
+    protected static final Logger logger = LoggerFactory.getLogger(SpringContextUtil.class);
     // Spring应用上下文环境
     private static ApplicationContext applicationContext;
 
@@ -38,7 +39,7 @@ public class SpringContextUtil implements ApplicationContextAware {
         try {
             return applicationContext.getBean(beanId, c);
         } catch (Exception e) {
-            logger.error("beanId:" + beanId, e);
+            logger.error("error", "beanId:" + beanId, e);
             throw e;
         }
     }

@@ -11,7 +11,7 @@ import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.LoginModel;
 import com.baodanyun.websocket.node.NodeManager;
 import com.baodanyun.websocket.node.VisitorNode;
-import com.baodanyun.websocket.node.xmpp.CustomerXmppNode;
+import com.baodanyun.websocket.node.xmpp.CustomerChatNode;
 import com.baodanyun.websocket.node.xmpp.XmppNodeManager;
 import com.baodanyun.websocket.service.CustomerDispatcherService;
 import com.baodanyun.websocket.service.UserCacheServer;
@@ -22,7 +22,8 @@ import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
 import com.baodanyun.websocket.util.XMPPUtil;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,7 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 public class CustomerLogin extends BaseController {
 
-    protected static Logger logger = Logger.getLogger(CustomerApi.class);
+    protected static Logger logger = LoggerFactory.getLogger(CustomerApi.class);
     @Autowired
     private OfuserMapper ofuserMapper;
 
@@ -67,7 +68,7 @@ public class CustomerLogin extends BaseController {
         try {
             customerInit(au, user);
 
-            CustomerXmppNode cx = XmppNodeManager.getCustomerXmppNode(au);
+            CustomerChatNode cx = XmppNodeManager.getCustomerXmppNode(au);
 
             boolean flag = cx.login();
             if (flag) {
@@ -79,7 +80,7 @@ public class CustomerLogin extends BaseController {
                 request.getSession().setAttribute(Common.USER_KEY, au);
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             au = null;
         }
 
@@ -138,10 +139,11 @@ public class CustomerLogin extends BaseController {
             mv.addObject("to", user.getTo() + "@126xmpp");
             mv.setViewName("/customerSimple");
         } catch (BusinessException e) {
+            logger.error("error", e);
             mv.setViewName("/index");
             mv.addObject("msg", e.getMessage());
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             mv.setViewName("/index");
             mv.addObject("msg", "系统异常");
         }

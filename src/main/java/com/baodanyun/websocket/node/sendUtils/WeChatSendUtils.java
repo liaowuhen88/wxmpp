@@ -6,7 +6,8 @@ import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.HttpUtils;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import java.util.Map;
  * Created by liaowuhen on 2017/5/24.
  */
 public class WeChatSendUtils {
-    private static Logger logger = Logger.getLogger(WeChatSendUtils.class);
+    private static Logger logger = LoggerFactory.getLogger(WeChatSendUtils.class);
 
 
     public static boolean send(Msg sendMsg) {
@@ -29,7 +30,7 @@ public class WeChatSendUtils {
             }
             return false;
         } catch (Exception e) {
-            logger.error("发送失败", e);
+            logger.error("error", "发送失败", e);
         }
         return false;
     }

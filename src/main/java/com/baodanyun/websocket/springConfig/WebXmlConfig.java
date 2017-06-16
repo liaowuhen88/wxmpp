@@ -3,7 +3,8 @@ package com.baodanyun.websocket.springConfig;
 import com.baodanyun.websocket.filter.LoginFilter;
 import com.baodanyun.websocket.filter.ResReqContentFilter;
 import com.baodanyun.websocket.listener.SessionCounter;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.WebApplicationInitializer;
 
@@ -19,7 +20,7 @@ import java.util.EnumSet;
  */
 @Order(1)
 public class WebXmlConfig implements WebApplicationInitializer {
-    protected static Logger logger = Logger.getLogger(WebXmlConfig.class);
+    protected static Logger logger = LoggerFactory.getLogger(WebXmlConfig.class);
 
     @Override
     public void onStartup(ServletContext servletContext)

@@ -13,7 +13,10 @@ import java.io.IOException;
  * <p/>
  * 用户的退出
  */
-public interface Dispatcher {
+public interface ChatLifecycle {
+
+
+    String getId();
 
     /**
      * 登出
@@ -37,5 +40,15 @@ public interface Dispatcher {
      * @throws SmackException
      */
     boolean login() throws BusinessException, IOException, XMPPException, SmackException;
+
+    /**
+     * 是否在线
+     */
+
+    boolean isOnline();
+
+
+    void online() throws InterruptedException, BusinessException;
+
 
 }

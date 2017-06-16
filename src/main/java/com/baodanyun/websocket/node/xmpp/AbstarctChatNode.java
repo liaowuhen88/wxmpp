@@ -1,5 +1,6 @@
 package com.baodanyun.websocket.node.xmpp;
 
+import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.Node;
@@ -8,7 +9,6 @@ import com.baodanyun.websocket.service.XmppServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
@@ -16,25 +16,28 @@ import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.chat.Chat;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by liaowuhen on 2017/5/23.
  */
-public class AbstarctXmppNode implements XmppNode {
-    private static final Logger logger = Logger.getLogger(AbstarctXmppNode.class);
+public class AbstarctChatNode implements ChatNode {
+    private static final Logger logger = LoggerFactory.getLogger(AbstarctChatNode.class);
 
     XmppServer xmppServer = SpringContextUtil.getBean("xmppServer", XmppServer.class);
     VcardService vcardService = SpringContextUtil.getBean("vcardService", VcardService.class);
 
-    private List<Node> nodes = new ArrayList<>();
+    private Map<String, Node> nodes = new ConcurrentHashMap<>();
+
     private AbstractUser abstractUser;
     private XMPPConnection xmppConnection;
 
-    public AbstarctXmppNode(AbstractUser abstractUser) {
+    public AbstarctChatNode(AbstractUser abstractUser) {
         this.abstractUser = abstractUser;
     }
     @Override
@@ -42,31 +45,7 @@ public class AbstarctXmppNode implements XmppNode {
         return abstractUser;
     }
 
-    @Override
-    public List<Node> getNodes() {
-        logger.info(this.getAbstractUser().getId() + "getNodes[" + nodes.size() + "]");
-        return nodes;
-    }
 
-    @Override
-    public void addNode(Node node) {
-        nodes.add(node);
-        logger.info(this.getAbstractUser().getId() + "addNode [" + nodes.size() + "]");
-    }
-
-    @Override
-    public void removeNode(Node node) throws IOException, XMPPException, SmackException, BusinessException {
-        nodes.remove(node);
-        logger.info(this.getAbstractUser().getId() + "removeNode [" + nodes.size() + "]");
-        try {
-            Thread.sleep(2000);
-            if (nodes.size() == 0) {
-                this.logout();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void connected(XMPPConnection xmppConnection) {
@@ -80,7 +59,7 @@ public class AbstarctXmppNode implements XmppNode {
         try {
             xmppConnection.sendStanza(presence);
         } catch (SmackException.NotConnectedException e) {
-            logger.error(e);
+            logger.error("error", e);
         }
     }
 
@@ -91,7 +70,7 @@ public class AbstarctXmppNode implements XmppNode {
 
     @Override
     public void connectionClosedOnError(Exception e) {
-        logger.error(getAbstractUser().getLoginUsername() + ":connectionClosedOnError", e);
+        logger.error("error", getAbstractUser().getLoginUsername() + ":connectionClosedOnError", e);
     }
 
     @Override
@@ -106,7 +85,7 @@ public class AbstarctXmppNode implements XmppNode {
 
     @Override
     public void reconnectionFailed(Exception e) {
-        logger.error(getAbstractUser().getLoginUsername() + ":reconnectionFailed", e);
+        logger.error("error", getAbstractUser().getLoginUsername() + ":reconnectionFailed", e);
     }
 
     @Override
@@ -135,10 +114,15 @@ public class AbstarctXmppNode implements XmppNode {
         } catch (Exception e) {
 
             XmppNodeManager.removeXmppNode(user.getId());
-            logger.error(e);
+            logger.error("error", e);
             throw e;
         }
         return flag;
+    }
+
+    @Override
+    public void online() throws InterruptedException, BusinessException {
+
     }
 
     @Override
@@ -161,23 +145,16 @@ public class AbstarctXmppNode implements XmppNode {
     }
 
     @Override
+    public String getId() {
+        return this.getAbstractUser().getId();
+    }
+
+    @Override
     public boolean isOnline() {
         if (null != xmppConnection) {
             return xmppConnection.isAuthenticated();
         }
         return false;
-
-    }
-
-
-    @Override
-    public XMPPConnection getXMPPConnection() {
-        return xmppConnection;
-    }
-
-    @Override
-    public void setXmppConnection(XMPPConnection xmppConnection) {
-        this.xmppConnection = xmppConnection;
     }
 
     @Override
@@ -188,38 +165,19 @@ public class AbstarctXmppNode implements XmppNode {
     @Override
     public void processMessage(Chat chat, Message message) {
         try {
-            logger.info(getAbstractUser().getId() + ":xmpp receive message :" + JSONUtil.toJson(message));
+            logger.info(getAbstractUser().getId() + ":xmpp receive message " + JSONUtil.toJson(message));
 
             if (null != getNodes()) {
                 logger.info(this.getAbstractUser().getId() + "getNodes()" + getNodes().size());
-                for (Node node : getNodes()) {
+                for (Node node : getNodes().values()) {
                     node.receiveFromXmpp(message);
                 }
             } else {
                 logger.info("joinQueue getNodes() is null");
             }
 
-
-           /* Msg sendMsg = getMsg(message);
-            if (null != sendMsg) {
-                // 手机app端发送过来的数据subject 为空
-                if (null != getNodes()) {
-                    for (Node node : nodes) {
-                        node.getMsgSendService().produce(sendMsg);
-                    }
-                } else {
-                    logger.info(getNodes());
-                }
-
-                String key = sendMsg.getTo() + "_" + sendMsg.getFrom();
-                if (webSocketService.hasH5Connected(key)) {
-                    Msg cloneMsg = SerializationUtils.clone(sendMsg);
-                    cloneMsg.setTo(key);
-                    webSocketService.produce(cloneMsg);
-                }
-            }*/
         } catch (Exception e) {
-            logger.error("msgSendControl.sendMsg error", e);
+            logger.error("error", "msgSendControl.sendMsg error", e);
         }
     }
 
@@ -229,4 +187,31 @@ public class AbstarctXmppNode implements XmppNode {
         xmppConnection.sendStanza(xmppMsg);
     }
 
+    public Map<String, Node> getNodes() {
+        return nodes;
+    }
+
+    public void setNodes(Map<String, Node> nodes) {
+        this.nodes = nodes;
+    }
+
+    @Override
+    public boolean sendMsgToGod(Msg msg) {
+        return false;
+    }
+
+    @Override
+    public Message receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
+        return null;
+    }
+
+    @Override
+    public Message receiveFromGod(String msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
+        return null;
+    }
+
+    @Override
+    public void receiveFromXmpp(Message message) {
+
+    }
 }

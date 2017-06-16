@@ -1,16 +1,18 @@
 package com.baodanyun.websocket.controller;
 
-import com.baodanyun.websocket.bean.*;
+import com.baodanyun.websocket.bean.ChatHistoryUser;
+import com.baodanyun.websocket.bean.MessageUser;
+import com.baodanyun.websocket.bean.PageResponse;
+import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.msg.HistoryMsg;
-import com.baodanyun.websocket.dao.ArchiveMessagesMapper;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.HistoryMessageModel;
 import com.baodanyun.websocket.model.HistoryMessageUserModel;
-import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.service.ArchiveMessagesServer;
 import com.baodanyun.websocket.service.MessageHistoryService;
-import com.baodanyun.websocket.util.JSONUtil;
 import com.mysql.jdbc.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +27,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("messageHistory")
 public class MessageHistoryApi extends BaseController {
+    protected static Logger logger = LoggerFactory.getLogger(MessageApi.class);
 
     @Autowired
     private MessageHistoryService messageHistoryService;
@@ -82,7 +85,7 @@ public class MessageHistoryApi extends BaseController {
                 re.setData(map);
 
             } catch (BusinessException e) {
-                e.printStackTrace();
+                logger.error("error", e);
             }
         } else {
             re.setSuccess(false);

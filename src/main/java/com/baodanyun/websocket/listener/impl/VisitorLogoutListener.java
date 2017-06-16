@@ -9,7 +9,8 @@ import com.baodanyun.websocket.service.WebSocketService;
 import com.baodanyun.websocket.service.XmppServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.google.common.eventbus.Subscribe;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class VisitorLogoutListener extends AbstarctEventBusListener<VisitorLogoutEvent> implements EventBusListener<VisitorLogoutEvent> {
-    private static Logger logger = Logger.getLogger(VisitorLogoutListener.class);
+    private static Logger logger = LoggerFactory.getLogger(VisitorLogoutListener.class);
 
     @Autowired
     public WebSocketService webSocketService;
@@ -51,7 +52,7 @@ public class VisitorLogoutListener extends AbstarctEventBusListener<VisitorLogou
 
                                             }
                                         } catch (Exception e) {
-                                            logger.error(e);
+                                            logger.error("error", e);
                                         }
                                     }
                                 }

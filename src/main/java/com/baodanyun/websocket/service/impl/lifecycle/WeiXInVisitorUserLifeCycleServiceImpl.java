@@ -9,7 +9,7 @@ import com.baodanyun.websocket.service.MsgSendService;
 import com.baodanyun.websocket.service.WebSocketService;
 import com.baodanyun.websocket.util.CommonConfig;
 import com.baodanyun.websocket.util.JSONUtil;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import java.io.IOException;
 
 @Service("wxUserLifeCycleService")
 public class WeiXInVisitorUserLifeCycleServiceImpl extends VisitorUserLifeCycleServiceImpl {
-    private static final Logger logger = Logger.getLogger(WeiXInVisitorUserLifeCycleServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(WeiXInVisitorUserLifeCycleServiceImpl.class);
 
     @Autowired
     protected WebSocketService webSocketService;
@@ -51,7 +51,7 @@ public class WeiXInVisitorUserLifeCycleServiceImpl extends VisitorUserLifeCycleS
             msg.setFrom(user.getId());
             return msg;
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error",e);
         }
         return null;
     }

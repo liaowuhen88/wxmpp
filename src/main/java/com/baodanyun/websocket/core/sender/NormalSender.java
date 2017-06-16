@@ -4,14 +4,14 @@ package com.baodanyun.websocket.core.sender;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.core.handle.ISender;
 import com.baodanyun.websocket.util.XMPPUtil;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.concurrent.*;
 
 public class NormalSender implements ISender {
-    private static Logger logger = Logger.getLogger(NormalSender.class);
+    private static Logger logger = LoggerFactory.getLogger(NormalSender.class);
 
     private static final ExecutorService SEND_POOL = Executors.newCachedThreadPool();
 
@@ -34,7 +34,7 @@ public class NormalSender implements ISender {
         try {
             return future.get(2000l, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
-            logger.error("发送消息失败", e);
+            logger.error("error","发送消息失败", e);
         }
         return false;
     }
@@ -78,7 +78,7 @@ public class NormalSender implements ISender {
 
             } catch (Exception e) {
                 //TODO
-                logger.error("发送消息失败", e);
+                logger.error("error","发送消息失败", e);
             }
         }
     }
@@ -103,7 +103,7 @@ public class NormalSender implements ISender {
                     return true;
                 }
             } catch (Exception e) {
-                logger.error("message send error");
+                logger.error("error","message send error");
                 return false;
             }
             return false;

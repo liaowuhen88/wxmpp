@@ -15,7 +15,7 @@ import com.baodanyun.websocket.util.CommonConfig;
 import com.baodanyun.websocket.util.EventBusUtils;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ import java.io.IOException;
 
 @Service
 public abstract class VisitorUserLifeCycleServiceImpl extends UserLifeCycleServiceImpl {
-    private static final Logger logger = Logger.getLogger(VisitorUserLifeCycleServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(VisitorUserLifeCycleServiceImpl.class);
 
     @Autowired
     protected VisitorLoginListener visitorLoginListener;
@@ -46,7 +46,7 @@ public abstract class VisitorUserLifeCycleServiceImpl extends UserLifeCycleServi
         try {
             vCard = vcardService.getVCardUser(user.getId(), user.getId(), AbstractUser.class);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error",e);
         }
 
         if (null == vCard) {
@@ -98,7 +98,7 @@ public abstract class VisitorUserLifeCycleServiceImpl extends UserLifeCycleServi
             customer = userCacheServer.getCustomerByVisitorOpenId(user.getOpenId());
             getMsgSendService().sendSMMsgToCustomer(user, customer, MsgStatus.changeOffline);
         } catch (BusinessException e) {
-            logger.error(e);
+            logger.error("error",e);
         }
 
 
@@ -116,7 +116,7 @@ public abstract class VisitorUserLifeCycleServiceImpl extends UserLifeCycleServi
                 destId = userCacheServer.getCustomerIdByVisitorOpenId(visitor.getOpenId());
                 msg.setTo(destId);
             } catch (BusinessException e) {
-                logger.error(e);
+                logger.error("error",e);
             }
 
             msg.setFrom(visitor.getId());
@@ -124,10 +124,10 @@ public abstract class VisitorUserLifeCycleServiceImpl extends UserLifeCycleServi
 
                 return msg;
             } else {
-                logger.error("handleSendMsg from or to is blank" + JSONUtil.toJson(msg));
+                logger.error("error","handleSendMsg from or to is blank" + JSONUtil.toJson(msg));
             }
         } else {
-            logger.error("content is empty");
+            logger.error("error","content is empty");
         }
         return null;
     }

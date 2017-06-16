@@ -35,6 +35,7 @@ public class ComparatorFriend implements Comparator<Friend>, Serializable {
                 return flag;
             }
         } catch (Exception e) {
+            logger.error("error", e);
             return -1;
         }
 

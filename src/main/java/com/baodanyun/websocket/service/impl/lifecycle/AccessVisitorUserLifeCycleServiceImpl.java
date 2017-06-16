@@ -2,7 +2,7 @@
 package com.baodanyun.websocket.service.impl.lifecycle;
 
 import com.baodanyun.websocket.service.MsgSendService;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 @Service("accessUserLifeCycleService")
 public class AccessVisitorUserLifeCycleServiceImpl extends VisitorUserLifeCycleServiceImpl {
-    private static final Logger logger = Logger.getLogger(AccessVisitorUserLifeCycleServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(AccessVisitorUserLifeCycleServiceImpl.class);
 
     @Autowired
     @Qualifier("accessMsgSendService")

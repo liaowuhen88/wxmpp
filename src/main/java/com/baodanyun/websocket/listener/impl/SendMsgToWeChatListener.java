@@ -4,7 +4,8 @@ import com.baodanyun.websocket.event.SendMsgToWeChatEvent;
 import com.baodanyun.websocket.listener.EventBusListener;
 import com.baodanyun.websocket.service.WechatMsgService;
 import com.google.common.eventbus.Subscribe;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SendMsgToWeChatListener extends AbstarctEventBusListener<SendMsgToWeChatEvent> implements EventBusListener<SendMsgToWeChatEvent> {
-    private static Logger logger = Logger.getLogger(SendMsgToWeChatListener.class);
+    private static Logger logger = LoggerFactory.getLogger(SendMsgToWeChatListener.class);
 
     @Autowired
     public WechatMsgService wechatMsgService;
@@ -22,7 +23,7 @@ public class SendMsgToWeChatListener extends AbstarctEventBusListener<SendMsgToW
     @Override
     @Subscribe
     public boolean processExpiringEvent(final SendMsgToWeChatEvent ve) {
-        logger.info(ve);
+        logger.info(ve.toString());
 
         executorService.execute(new Runnable() {
                                     @Override
@@ -34,7 +35,7 @@ public class SendMsgToWeChatListener extends AbstarctEventBusListener<SendMsgToW
 
 
                                         } catch (Exception e) {
-                                            logger.error(e);
+                                            logger.error("error", e);
                                         }
                                     }
                                 }

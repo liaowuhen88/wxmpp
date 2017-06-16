@@ -8,7 +8,7 @@ import com.baodanyun.websocket.core.listener.InitConnectListener;
 import com.baodanyun.websocket.dao.OfuserMapper;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.Ofuser;
-import com.baodanyun.websocket.node.xmpp.XmppNode;
+import com.baodanyun.websocket.node.xmpp.ChatNode;
 import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.XMPPUtil;
@@ -191,7 +191,7 @@ public class XmppServer {
     }
 
 
-    public AbstractXMPPConnection getXMPPConnectionNew(XmppNode xmppNode) throws IOException, XMPPException, SmackException {
+    public AbstractXMPPConnection getXMPPConnectionNew(ChatNode chatNode) throws IOException, XMPPException, SmackException {
         XMPPTCPConnectionConfiguration.Builder builder = XMPPTCPConnectionConfiguration.builder();
         builder.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);
         builder.setSendPresence(false);
@@ -211,10 +211,10 @@ public class XmppServer {
 
         // 增加消息监听
         ChatManager chatmanager = ChatManager.getInstanceFor(connection);
-        chatmanager.addChatListener(xmppNode);
+        chatmanager.addChatListener(chatNode);
 
         //初始化的连接监听器
-        connection.addConnectionListener(xmppNode);
+        connection.addConnectionListener(chatNode);
 
         connection.connect();
 
@@ -279,27 +279,27 @@ public class XmppServer {
     }
 
 
-    public synchronized boolean login(XmppNode xmppNode) throws SmackException, XMPPException, IOException {
+    public synchronized boolean login(ChatNode chatNode) throws SmackException, XMPPException, IOException {
         boolean isLoginDone = false;
-        boolean is = isAuthenticated(xmppNode.getAbstractUser().getId());
+        boolean is = isAuthenticated(chatNode.getAbstractUser().getId());
         if (!is) {
-            Ofuser ofuser = ofuserMapper.selectByPrimaryKey(xmppNode.getAbstractUser().getLoginUsername());
+            Ofuser ofuser = ofuserMapper.selectByPrimaryKey(chatNode.getAbstractUser().getLoginUsername());
 
-            AbstractXMPPConnection xmppConnection = getXMPPConnectionNew(xmppNode);
+            AbstractXMPPConnection xmppConnection = getXMPPConnectionNew(chatNode);
             if (null == ofuser) {
-                logger.info("创建用户:" + xmppNode.getAbstractUser().getLoginUsername());
+                logger.info("创建用户:" + chatNode.getAbstractUser().getLoginUsername());
                 AccountManager accountManager = AccountManager.getInstance(xmppConnection);
-                accountManager.createAccount(xmppNode.getAbstractUser().getLoginUsername(), xmppNode.getAbstractUser().getPassWord());
+                accountManager.createAccount(chatNode.getAbstractUser().getLoginUsername(), chatNode.getAbstractUser().getPassWord());
 
             }
-            xmppConnection.login(xmppNode.getAbstractUser().getLoginUsername(), xmppNode.getAbstractUser().getPassWord());
+            xmppConnection.login(chatNode.getAbstractUser().getLoginUsername(), chatNode.getAbstractUser().getPassWord());
             isLoginDone = true;
 
             if (isLoginDone) {
-                logger.info("id:[" + xmppNode.getAbstractUser().getId() + "] login success");
+                logger.info("id:[" + chatNode.getAbstractUser().getId() + "] login success");
 
-                this.saveXMPPConnection(xmppNode.getAbstractUser().getId(), xmppConnection);
-                xmppNode.setXmppConnection(xmppConnection);
+                this.saveXMPPConnection(chatNode.getAbstractUser().getId(), xmppConnection);
+                chatNode.setXmppConnection(xmppConnection);
             }
         }
 

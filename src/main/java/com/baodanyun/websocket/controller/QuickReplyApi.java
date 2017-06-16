@@ -6,7 +6,8 @@ import com.baodanyun.websocket.service.QuickReplyServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 @RestController
 public class QuickReplyApi extends BaseController {
-    protected static Logger logger = Logger.getLogger(CustomerApi.class);
+    protected static Logger logger = LoggerFactory.getLogger(CustomerApi.class);
 
     @Autowired
     private QuickReplyServer quickReplyServer;
@@ -48,7 +49,7 @@ public class QuickReplyApi extends BaseController {
             }
 
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             response.setMsg("update error");
             response.setSuccess(false);
         }
@@ -69,7 +70,7 @@ public class QuickReplyApi extends BaseController {
             }
 
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
             response.setMsg(e.getMessage());
             response.setSuccess(false);
         }

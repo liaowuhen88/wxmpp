@@ -27,6 +27,17 @@ public class XmppUserOnlineServer {
     private String ip;
     private String domain;
 
+    public static void main(String args[]) {
+        System.out.println(123);
+        XmppUserOnlineServer xs = new XmppUserOnlineServer();
+
+        String main = "<presence id=\"6kro2sgu58\" from=\"maqiumeng@126xmpp/AstraChat-iOS-69111447\"><show>chat</show><priority>-1</priority><nick xmlns=\"http://jabber.org/protocol/nick\">豆包萌萌</nick></presence>";
+
+
+        System.out.println(xs.isOnlineXml(main));
+
+    }
+
     @PostConstruct
     private void init() {
         Map<String, String> map = PropertiesUtil.get(XmppUserOnlineServer.class.getClassLoader(), "config.properties");
@@ -39,7 +50,7 @@ public class XmppUserOnlineServer {
         try {
             return isOnlineByJid(jid);
         } catch (Exception e) {
-            logger.info("",e);
+            logger.error("", e);
         }
         return false;
     }
@@ -83,22 +94,10 @@ public class XmppUserOnlineServer {
             }
 
         } catch (Exception e) {
-            logger.error("xml 解析异常", e);
+            logger.error("error", "xml 解析异常", e);
         }
 
         return false;
-    }
-
-
-    public static void main(String args[]) {
-        System.out.println(123);
-        XmppUserOnlineServer xs = new XmppUserOnlineServer();
-
-        String main = "<presence id=\"6kro2sgu58\" from=\"maqiumeng@126xmpp/AstraChat-iOS-69111447\"><show>chat</show><priority>-1</priority><nick xmlns=\"http://jabber.org/protocol/nick\">豆包萌萌</nick></presence>";
-
-
-        System.out.println(xs.isOnlineXml(main));
-
     }
 
 }

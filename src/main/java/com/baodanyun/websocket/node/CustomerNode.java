@@ -13,8 +13,10 @@ import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.EventBusUtils;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.apache.commons.lang.SerializationUtils;
-import org.apache.log4j.Logger;
 import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.packet.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
@@ -22,7 +24,7 @@ import java.util.Date;
  * Created by liaowuhen on 2017/5/23.
  */
 public abstract class CustomerNode extends AbstractNode implements CustomerDispather {
-    private static final Logger logger = Logger.getLogger(CustomerNode.class);
+    private static final Logger logger = LoggerFactory.getLogger(CustomerNode.class);
     private Customer customer;
 
 
@@ -36,8 +38,8 @@ public abstract class CustomerNode extends AbstractNode implements CustomerDispa
     }
 
     @Override
-    public void receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
-        super.receiveFromGod(msg);
+    public Message receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
+
         SynchronizationMsgEvent sme = new SynchronizationMsgEvent();
         Msg clone = (Msg) SerializationUtils.clone(msg);
         clone.setIcon(null);
@@ -45,6 +47,7 @@ public abstract class CustomerNode extends AbstractNode implements CustomerDispa
         sme.setNode(this);
         sme.setFromJid(this.getAbstractUser().getId());
         EventBusUtils.post(sme);
+        return super.receiveFromGod(msg);
 
     }
 
@@ -60,17 +63,6 @@ public abstract class CustomerNode extends AbstractNode implements CustomerDispa
         userCacheServer.delete(CommonConfig.USER_ONLINE, this.getAbstractUser().getId(), abstractUser);
         return true;
     }
-
-
-    /* @Override
-    public void onlinePush() throws InterruptedException, BusinessException {
-
-        getMsgSendService().sendSMMsgToCustomer(getAbstractUser(), MsgStatus.loginSuccess);
-
-        getMsgSendService().sendSMMsgToCustomer(getAbstractUser(), MsgStatus.initSuccess);
-
-        logger.info("保存到缓存[USER_CUSTOMER][" + getAbstractUser().getId() + "]--->" + userCacheServer.add(CommonConfig.USER_CUSTOMER, getAbstractUser()));
-    }*/
 
     public StatusMsg getSMMsgSendTOCustomer(MsgStatus status) {
         StatusMsg statusSysMsg = StatusMsg.buildStatus(Msg.Type.status);

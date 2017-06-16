@@ -65,7 +65,7 @@ public class HttpRequestUtils {
 				result.append(line);
 			}
 		} catch (Exception e) {
-			logger.error("  ", e);
+			logger.error("error", "  ", e);
 		} finally {
 			if (null != bufferedReader) {
 				bufferedReader.close();

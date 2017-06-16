@@ -6,7 +6,8 @@ import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 public class CloseFriendWindowApi extends BaseController {
 
-    protected static Logger logger = Logger.getLogger(CloseFriendWindowApi.class);
+    protected static Logger logger = LoggerFactory.getLogger(CloseFriendWindowApi.class);
 
     @Autowired
     private UserCacheServer userCacheServer;

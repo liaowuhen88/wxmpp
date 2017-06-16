@@ -32,7 +32,7 @@ public class MessageSendToWeixin {
             }
             logger.info("id [" + id + "] send message to weiXin openid ["+openId+"]:" +  JSONObject.toJSONString(sendMsg) + "----result:" + JSONUtil.toJson(result));
         } catch (Exception e) {
-            logger.error("发送失败", e);
+            logger.error("error", "发送失败", e);
         }
 
     }

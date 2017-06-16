@@ -1,7 +1,8 @@
 package com.baodanyun.websocket.core.handle.plugin;
 
 import com.google.common.eventbus.Subscribe;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by yutao on 2016/10/18.
@@ -9,7 +10,7 @@ import org.apache.log4j.Logger;
  */
 public class PluginEvent implements IEvent {
 
-    protected static Logger logger = Logger.getLogger(PluginEvent.class);
+    protected static Logger logger = LoggerFactory.getLogger(PluginEvent.class);
 
     @Subscribe
     public void handel(IEvent event){

@@ -12,7 +12,7 @@ import com.baodanyun.websocket.service.HistoryUserServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class NodeManager implements INodeManager {
 
-    protected static Logger logger = Logger.getLogger(NodeManager.class);
+    protected static Logger logger = LoggerFactory.getLogger(NodeManager.class);
     HistoryUserServer historyUserServer = SpringContextUtil.getBean("historyUserServer", HistoryUserServer.class);
 
     private static final NodeManager NODE_MANAGER = new NodeManager();

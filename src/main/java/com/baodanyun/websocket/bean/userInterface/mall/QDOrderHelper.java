@@ -6,7 +6,8 @@ import com.baodanyun.websocket.util.HttpRequestUtils;
 import com.baodanyun.websocket.util.JsonObjUtil;
 import org.apache.http.HttpResponse;
 import org.apache.http.protocol.HTTP;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -15,7 +16,7 @@ import java.net.URLEncoder;
  * Created by 峥桂 on 2016/11/15.
  */
 public class QDOrderHelper {
-    protected static final Logger logger = Logger.getLogger(QDOrderHelper.class);
+    protected static final Logger logger = LoggerFactory.getLogger(QDOrderHelper.class);
     protected static final String httpurl_port = Config.mallInfoInterface;
 
     public static void main(String[] args) {
@@ -41,7 +42,7 @@ public class QDOrderHelper {
             result = getResponseStrByJm(re);
             logger.info("result：" + result);
         } catch (Exception e) {
-            logger.info("result error" + e.getMessage(), e);
+            logger.error(" error", e);
         }
         return result;
     }

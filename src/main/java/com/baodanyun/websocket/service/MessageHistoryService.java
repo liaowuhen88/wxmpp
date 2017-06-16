@@ -29,16 +29,11 @@ import java.util.List;
 @Service
 public class MessageHistoryService {
 
-    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     public static String getUserHistoryList = " SELECT time,id,username,vcard FROM ( SELECT from_unixtime(left(startTime, 10), '%Y-%m-%d ') time1,max(from_unixtime(left(startTime, 10), '%Y-%m-%d %H:%m:%s')) time, withJid id FROM archiveConversations WHERE ownerJid = ?  GROUP BY withJid,time1 ORDER BY time desc LIMIT ?,? ) AS USER LEFT JOIN ofVCard v ON CONCAT(v.username, '@126xmpp') = id ORDER BY time desc  ";
-
     public static String getUserHistoryCount = "SELECT COUNT(*) count FROM ( SELECT MAX(startTime) time, withJid id FROM archiveConversations WHERE  ownerJid = ? GROUP BY withJid ORDER BY max(startTime)  ) AS USER LEFT JOIN ofVCard v on CONCAT(v.username,'@126xmpp') = id  ";
-
     public static String getByThreadId = "SELECT am.messageId FROM archiveMessages am LEFT JOIN archiveConversations ac ON ac.conversationId = am.conversationId WHERE ac.thread = ? and direction = 'to'";
-
     public static String getMessageById = "SELECT am.`subject` as 'contentType' ,am.messageId,am.time ct ,am.body content,am.type,ac.withJid as 'to', ac.ownerJid as 'from' FROM archiveMessages am LEFT JOIN archiveConversations ac ON ac.conversationId = am.conversationId WHERE am.messageId = ?  ORDER BY ac.startTime DESC LIMIT   ?,?";
-
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     @Qualifier("jdbcTemplate")
     public JdbcTemplate jdbcTemplate;
@@ -52,7 +47,7 @@ public class MessageHistoryService {
         try {
             msg = jdbcTemplate.queryForObject(getByThreadId, Integer.class, new Object[]{ThreadId});
         } catch (Exception e) {
-            logger.info("查询数据库出错", e);
+            logger.error("查询数据库出错", e);
 
         }
 
@@ -67,7 +62,7 @@ public class MessageHistoryService {
         try {
             return jdbcTemplate.queryForObject(getMessageById, Msg.class, new Object[]{id});
         } catch (Exception e) {
-            logger.info("查询数据库出错", e);
+            logger.error("查询数据库出错", e);
 
         }
         return null;
@@ -88,7 +83,7 @@ public class MessageHistoryService {
             return jdbcTemplate.query(getUserHistoryList, new Object[]{model.getId(), limit, model.getCount()}, new BeanPropertyRowMapper<MessageUser>(MessageUser.class));
 
         } catch (Exception e) {
-            logger.error("", e);
+            logger.error("error", "", e);
             throw new BusinessException("查询数据库异常");
         }
     }
@@ -138,7 +133,7 @@ public class MessageHistoryService {
                             }
                         }
                     } catch (Exception e) {
-                        logger.error("vcard 解析异常", e);
+                        logger.error("error", "vcard 解析异常", e);
                     }
                 }else {
                     ChatHistoryUser cu = new ChatHistoryUser();

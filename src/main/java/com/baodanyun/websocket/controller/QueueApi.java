@@ -72,7 +72,7 @@ public class QueueApi extends BaseController {
                 msgResponse.setSuccess(false);
             }
         } catch (Exception e) {
-            logger.error("", e);
+            logger.error("error", e);
             msgResponse.setSuccess(false);
         }
         Render.r(response, XMPPUtil.buildJson(msgResponse));
@@ -106,7 +106,7 @@ public class QueueApi extends BaseController {
 
 
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("error", e);
         }
 
 

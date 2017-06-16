@@ -11,13 +11,14 @@ import com.baodanyun.websocket.event.VisitorReciveMsgEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.WechatMsg;
 import com.baodanyun.websocket.node.dispatcher.VisitorDispather;
-import com.baodanyun.websocket.node.xmpp.VisitorXmppNode;
 import com.baodanyun.websocket.util.CommonConfig;
 import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.EventBusUtils;
 import com.baodanyun.websocket.util.JSONUtil;
-import org.apache.log4j.Logger;
 import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.packet.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
@@ -25,7 +26,7 @@ import java.util.Date;
  * Created by liaowuhen on 2017/5/23.
  */
 public abstract class VisitorNode extends AbstractNode implements VisitorDispather {
-    private static final Logger logger = Logger.getLogger(VisitorNode.class);
+    private static final Logger logger = LoggerFactory.getLogger(VisitorNode.class);
     private Visitor visitor;
 
     public VisitorNode(Visitor visitor) {
@@ -52,8 +53,8 @@ public abstract class VisitorNode extends AbstractNode implements VisitorDispath
     }
 
     @Override
-    public void receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
-        super.receiveFromGod(msg);
+    public Message receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
+
 
         VisitorReciveMsgEvent vme = new VisitorReciveMsgEvent(this.getAbstractUser(), ((Visitor) this.getAbstractUser()).getCustomer(), msg.getContent(), CommonConfig.MSG_BIZ_KF_WX_CHAT);
 
@@ -69,6 +70,7 @@ public abstract class VisitorNode extends AbstractNode implements VisitorDispath
         SendMsgToWeChatEvent swe = new SendMsgToWeChatEvent(we);
         EventBusUtils.post(swe);
 
+        return super.receiveFromGod(msg);
     }
 
     @Override
@@ -108,15 +110,21 @@ public abstract class VisitorNode extends AbstractNode implements VisitorDispath
 
     @Override
     public boolean joinQueue() throws InterruptedException, BusinessException {
-        logger.info("保存到缓存--->" + userCacheServer.add(CommonConfig.USER_VISITOR, this.getAbstractUser()));
-        boolean flag = ((VisitorXmppNode) this.getXmppNode()).joinQueue();
-        pushOfflineMsg();
-        return flag;
+       /* logger.info("保存到缓存--->" + userCacheServer.add(CommonConfig.USER_VISITOR, this.getAbstractUser()));
+        boolean flag = ((VisitorChatNode) this.getXmppNode()).joinQueue();
+        pushOfflineMsg();*/
+        return true;
     }
 
     @Override
     public boolean uninstall() throws InterruptedException {
-        return ((VisitorXmppNode) this.getXmppNode()).uninstall();
+        //return ((VisitorChatNode) this.getXmppNode()).uninstall();
+        return true;
+    }
+
+    @Override
+    public boolean isOnline() {
+        return false;
     }
 
     /*@Override
