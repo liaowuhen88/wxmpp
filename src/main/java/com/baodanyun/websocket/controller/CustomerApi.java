@@ -469,7 +469,6 @@ public class CustomerApi extends BaseController {
             user.setCustomer(au);
 
             VisitorChatNode vn = ChatNodeManager.getVisitorXmppNode(user);
-            vn.uninstall();
 
             vn.logout();
 

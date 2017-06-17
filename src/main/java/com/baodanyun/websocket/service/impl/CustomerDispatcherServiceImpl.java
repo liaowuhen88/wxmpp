@@ -97,9 +97,6 @@ public class CustomerDispatcherServiceImpl implements CustomerDispatcherService 
 
                 if (xmppServer.isAuthenticated(cid)) {
                     logger.info(cid);
-
-                    userCacheServer.addVisitorCustomerOpenId(openId, cid);
-
                     return customers.get(cid);
                 } else {
                     deleteCustomer(cid);
@@ -110,9 +107,6 @@ public class CustomerDispatcherServiceImpl implements CustomerDispatcherService 
                 Customer cu = new Customer();
                 cu.setLoginUsername(Config.controlId);
                 cu.setId(XMPPUtil.nameToJid(Config.controlId));
-
-                userCacheServer.addVisitorCustomerOpenId(openId, cu.getId());
-
                 return cu;
             }
         }

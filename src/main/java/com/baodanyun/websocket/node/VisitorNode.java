@@ -10,7 +10,7 @@ import com.baodanyun.websocket.event.VisitorLoginEvent;
 import com.baodanyun.websocket.event.VisitorReciveMsgEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.WechatMsg;
-import com.baodanyun.websocket.node.dispatcher.VisitorDispather;
+import com.baodanyun.websocket.node.xmpp.ChatNodeAdaptation;
 import com.baodanyun.websocket.util.CommonConfig;
 import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.EventBusUtils;
@@ -25,17 +25,13 @@ import java.util.Date;
 /**
  * Created by liaowuhen on 2017/5/23.
  */
-public abstract class VisitorNode extends AbstractNode implements VisitorDispather {
+public abstract class VisitorNode extends AbstractNode{
     private static final Logger logger = LoggerFactory.getLogger(VisitorNode.class);
-    private Visitor visitor;
+    private AbstractUser visitor;
 
-    public VisitorNode(Visitor visitor) {
+    public VisitorNode(ChatNodeAdaptation chatNodeAdaptation, AbstractUser visitor) {
+        super(chatNodeAdaptation);
         this.visitor = visitor;
-    }
-
-    @Override
-    public AbstractUser getAbstractUser() {
-        return visitor;
     }
 
 
@@ -96,30 +92,16 @@ public abstract class VisitorNode extends AbstractNode implements VisitorDispath
         sendMsg.setType(type);
         sendMsg.setContentType(Msg.MsgContentType.text.toString());
 
-        from = visitor.getCustomer().getId();
+        from = ((Visitor)visitor).getCustomer().getId();
         sendMsg.setFrom(from);
-        sendMsg.setIcon(visitor.getCustomer().getIcon());
-        sendMsg.setFromName(visitor.getCustomer().getNickName());
+        sendMsg.setIcon(((Visitor)visitor).getCustomer().getIcon());
+        sendMsg.setFromName(((Visitor)visitor).getCustomer().getNickName());
 
 
         sendMsg.setTo(to);
         sendMsg.setCt(ct);
 
         return sendMsg;
-    }
-
-    @Override
-    public boolean joinQueue() throws InterruptedException, BusinessException {
-       /* logger.info("保存到缓存--->" + userCacheServer.add(CommonConfig.USER_VISITOR, this.getAbstractUser()));
-        boolean flag = ((VisitorChatNode) this.getXmppNode()).joinQueue();
-        pushOfflineMsg();*/
-        return true;
-    }
-
-    @Override
-    public boolean uninstall() throws InterruptedException {
-        //return ((VisitorChatNode) this.getXmppNode()).uninstall();
-        return true;
     }
 
     @Override

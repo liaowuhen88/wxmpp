@@ -17,7 +17,7 @@ public class EventBusTest extends BaseTest {
 
         VisitorJoinEvent vj = new VisitorJoinEvent(null, null, null);
 
-        SynchronizationMsgEvent sm = new SynchronizationMsgEvent();
+        SynchronizationMsgEvent sm = new SynchronizationMsgEvent(null,null);
 
         EventBusUtils.post(le);
         EventBusUtils.post(vj);

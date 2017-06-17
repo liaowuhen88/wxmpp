@@ -1,7 +1,9 @@
 package com.baodanyun.websocket.node;
 
+import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.exception.BusinessException;
+import com.baodanyun.websocket.node.xmpp.ChatNodeAdaptation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.WebSocketSession;
@@ -14,8 +16,8 @@ public class AccessVisitorNode extends WeChatNode {
 
     private WebSocketSession session;
 
-    public AccessVisitorNode(Visitor visitor) {
-        super(visitor);
+    public AccessVisitorNode(ChatNodeAdaptation chatNodeAdaptation,AbstractUser visitor, String id) {
+        super(chatNodeAdaptation,visitor,id);
     }
 
     public WebSocketSession getSession() {

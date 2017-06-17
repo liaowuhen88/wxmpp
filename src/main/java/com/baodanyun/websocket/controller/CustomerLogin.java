@@ -9,8 +9,8 @@ import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.dao.OfuserMapper;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.LoginModel;
-import com.baodanyun.websocket.node.NodeManager;
-import com.baodanyun.websocket.node.VisitorNode;
+import com.baodanyun.websocket.node.xmpp.ChatNode;
+import com.baodanyun.websocket.node.xmpp.ChatNodeAdaptation;
 import com.baodanyun.websocket.node.xmpp.CustomerChatNode;
 import com.baodanyun.websocket.node.xmpp.ChatNodeManager;
 import com.baodanyun.websocket.service.CustomerDispatcherService;
@@ -18,6 +18,7 @@ import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.service.UserServer;
 import com.baodanyun.websocket.service.XmppServer;
 import com.baodanyun.websocket.service.impl.PersonalServiceImpl;
+import com.baodanyun.websocket.service.impl.terminal.AccessWeChatTerminalVisitorFactory;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
 import com.baodanyun.websocket.util.XMPPUtil;
@@ -58,6 +59,9 @@ public class CustomerLogin extends BaseController {
 
     @Autowired
     private CustomerDispatcherService customerDispatcherService;
+
+    @Autowired
+    private AccessWeChatTerminalVisitorFactory accessWeChatTerminalVisitorFactory;
 
     @RequestMapping(value = "loginApi", method = RequestMethod.POST)
     public void api(LoginModel user, HttpServletRequest request, HttpServletResponse response) {
@@ -122,7 +126,9 @@ public class CustomerLogin extends BaseController {
             logger.info(JSONUtil.toJson(visitor));
             userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customer.getId());
 
-            VisitorNode wn = NodeManager.getAccessVisitorNode(visitor);
+            ChatNode chatnode = ChatNodeManager.getVisitorXmppNode(visitor);
+            ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatnode);
+            Node wn = accessWeChatTerminalVisitorFactory.getNode(chatNodeAdaptation,visitor);
 
             userCacheServer.saveVisitorByUidOrOpenID(user.getTo(), visitor);
 
@@ -134,7 +140,6 @@ public class CustomerLogin extends BaseController {
 
             customer.setTo(visitor.getId());
             request.getSession().setAttribute(Common.USER_KEY, customer);
-            wn.joinQueue();
             mv.addObject("user", JSONUtil.toJson(customer));
             mv.addObject("to", user.getTo() + "@126xmpp");
             mv.setViewName("/customerSimple");

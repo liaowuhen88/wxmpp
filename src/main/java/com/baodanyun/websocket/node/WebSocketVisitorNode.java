@@ -1,10 +1,12 @@
 package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.msg.Msg;
+import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.sendUtils.SessionSendUtils;
+import com.baodanyun.websocket.node.xmpp.ChatNodeAdaptation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.WebSocketSession;
@@ -17,8 +19,10 @@ public class WebSocketVisitorNode extends VisitorNode {
 
     private WebSocketSession session;
 
-    public WebSocketVisitorNode(Visitor visitor) {
-        super(visitor);
+    public WebSocketVisitorNode(ChatNodeAdaptation chatNodeAdaptation, AbstractUser visitor, WebSocketSession session, String id) {
+        super(chatNodeAdaptation,visitor);
+        this.session = session;
+        this.id =id;
     }
 
     public WebSocketSession getSession() {
@@ -27,11 +31,6 @@ public class WebSocketVisitorNode extends VisitorNode {
 
     public void setSession(WebSocketSession session) {
         this.session = session;
-    }
-
-    @Override
-    public String getId() {
-        return this.getSession().getId();
     }
 
     @Override

@@ -1,12 +1,9 @@
 package com.baodanyun.websocket.listener.impl;
 
-import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.event.SynchronizationMsgEvent;
 import com.baodanyun.websocket.listener.EventBusListener;
-import com.baodanyun.websocket.node.Node;
 import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.service.WebSocketService;
-import com.baodanyun.websocket.util.XMPPUtil;
 import com.google.common.eventbus.Subscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,19 +34,7 @@ public class WebsocketSynchronizationMsgListener extends AbstarctEventBusListene
                                         try {
                                             if (null != sme.getMsg()) {
 
-                                                for (Node node : sme.getNode().getXmppNode().getNodes()) {
-                                                    if (!node.equals(sme.getNode())) {
-                                                        String to = XMPPUtil.jidToName(sme.getMsg().getTo());
-                                                        AbstractUser visitor = userCacheServer.getVisitorByUidOrOpenID(to);
-                                                        if (null != visitor) {
-                                                            sme.getMsg().setTo(visitor.getId());
-                                                        }
-
-                                                        node.sendMsgToGod(sme.getMsg());
-                                                    } else {
-                                                        logger.info("相同客户端忽略");
-                                                    }
-                                                }
+                                                sme.getNode().getChatNodeAdaptation().synchronizationMsg(sme.getNode().getId(),sme.getMsg());
                                             }
                                         } catch (Exception e) {
                                             logger.error("error", e);

@@ -5,11 +5,11 @@ import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.exception.BusinessException;
-import com.baodanyun.websocket.node.NodeManager;
-import com.baodanyun.websocket.node.VisitorNode;
 import com.baodanyun.websocket.node.xmpp.ChatNode;
+import com.baodanyun.websocket.node.xmpp.ChatNodeAdaptation;
 import com.baodanyun.websocket.node.xmpp.ChatNodeManager;
 import com.baodanyun.websocket.service.*;
+import com.baodanyun.websocket.service.impl.terminal.WeChatTerminalVisitorFactory;
 import com.baodanyun.websocket.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -49,6 +49,9 @@ public class RecieveWeiXinMessageApi extends BaseController {
     @Autowired
     private XmppServer xmppServer;
 
+    @Autowired
+    private WeChatTerminalVisitorFactory weChatTerminalVisitorFactory;
+
     private String me = "当前客服不在线，请点击以下链接留言";
     /**
      * 指定客服关键字
@@ -64,9 +67,15 @@ public class RecieveWeiXinMessageApi extends BaseController {
             Visitor visitor = userServer.initUserByOpenId(msg.getFrom());
 
             ChatNode chatnode = ChatNodeManager.getVisitorXmppNode(visitor);
-            VisitorNode wn = NodeManager.getWeChatNode(visitor);
+            String id = weChatTerminalVisitorFactory.getId(visitor);
+            Node node = chatnode.getNode(id);
+            if(null == node){
+                ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatnode);
+                node = weChatTerminalVisitorFactory.getNode(chatNodeAdaptation,visitor);
+                chatnode.addNode(node);
+            }
 
-            boolean xmppFlag = wn.getXmppNode().isOnline();
+            boolean xmppFlag = chatnode.isXmppOnline();
             AbstractUser customer;
             if (xmppFlag) {
                 customer = customerDispatcherService.getCustomer(visitor.getOpenId());
@@ -94,11 +103,11 @@ public class RecieveWeiXinMessageApi extends BaseController {
                     } else {
 
                         if (!xmppFlag) {
-                            wn.login();
-                            wn.online();
+                            chatnode.login();
+                            chatnode.online();
                         }
 
-                        wn.receiveFromGod(msg);
+                        chatnode.receiveFromGod(msg);
                         response = getOnlineResponse();
                     }
 

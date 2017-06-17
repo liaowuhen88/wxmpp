@@ -2,11 +2,14 @@ package com.baodanyun.websocket.core.handle;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.AcsessCustomer;
-import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.core.common.Common;
-import com.baodanyun.websocket.node.CustomerNode;
-import com.baodanyun.websocket.node.NodeManager;
+import com.baodanyun.websocket.node.AbstractNode;
+import com.baodanyun.websocket.node.terminal.WebSocketTerminal;
+import com.baodanyun.websocket.node.xmpp.ChatNode;
+import com.baodanyun.websocket.node.xmpp.ChatNodeAdaptation;
+import com.baodanyun.websocket.node.xmpp.ChatNodeManager;
 import com.baodanyun.websocket.service.WebSocketService;
+import com.baodanyun.websocket.service.impl.terminal.AccessWebSocketTerminalCustomerFactory;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.springframework.web.socket.CloseStatus;
@@ -19,12 +22,25 @@ import org.springframework.web.socket.WebSocketSession;
  */
 public class CustomerSimpleWebSocketHandler extends AbstractWebSocketHandler {
     public WebSocketService webSocketService = SpringContextUtil.getBean("webSocketServiceImpl", WebSocketService.class);
+    AccessWebSocketTerminalCustomerFactory accessWebSocketTerminalCustomerFactory = SpringContextUtil.getBean("accessWebSocketTerminalCustomerFactory", AccessWebSocketTerminalCustomerFactory.class);
+
+
+
+
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        AcsessCustomer customer = (AcsessCustomer) session.getHandshakeAttributes().get(Common.USER_KEY);
+        AcsessCustomer au = (AcsessCustomer) session.getHandshakeAttributes().get(Common.USER_KEY);
         // from_to
-        CustomerNode wn = NodeManager.getAccessCustomerNode(session, (Customer) customer);
-        wn.online();
+        WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
+
+        ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
+        ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
+
+        AbstractNode wn = accessWebSocketTerminalCustomerFactory.getNode(chatNodeAdaptation,webSocketTerminal);
+        chatNode.addNode(wn);
+
+
+        chatNode.online();
         //webSocketService.saveSession(key, session);
     }
 
@@ -35,7 +51,13 @@ public class CustomerSimpleWebSocketHandler extends AbstractWebSocketHandler {
             logger.info("webSocket receive message:" + JSONUtil.toJson(message));
             String content = message.getPayload();
 
-            CustomerNode wn = NodeManager.getAccessCustomerNode(session, (Customer) au);
+            WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
+            ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
+            ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
+
+
+
+            AbstractNode wn = accessWebSocketTerminalCustomerFactory.getNode(chatNodeAdaptation,webSocketTerminal);
 
             wn.receiveFromGod(content);
         } catch (Exception e) {
@@ -45,10 +67,15 @@ public class CustomerSimpleWebSocketHandler extends AbstractWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        AbstractUser customer = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
-        webSocketService.removeSession(customer.getId(), session);
-        CustomerNode wn = NodeManager.getAccessCustomerNode(session, (Customer) customer);
-        wn.getXmppNode().removeNode(wn);
+        AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
+        webSocketService.removeSession(au.getId(), session);
+        WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
+
+        ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
+        ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
+
+
+        AbstractNode wn = accessWebSocketTerminalCustomerFactory.getNode(chatNodeAdaptation,webSocketTerminal);
 
     }
 }

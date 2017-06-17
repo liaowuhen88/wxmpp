@@ -4,7 +4,6 @@ import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.CustomerNode;
-import com.baodanyun.websocket.node.Node;
 import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
 import com.baodanyun.websocket.service.CustomerDispatcherService;
 import com.baodanyun.websocket.util.SpringContextUtil;

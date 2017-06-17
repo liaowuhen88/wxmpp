@@ -1,12 +1,14 @@
 package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.msg.Msg;
+import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.event.SendMsgToWeChatEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.WechatMsg;
 import com.baodanyun.websocket.node.sendUtils.WeChatSendUtils;
+import com.baodanyun.websocket.node.xmpp.ChatNodeAdaptation;
 import com.baodanyun.websocket.node.xmpp.ChatNodeManager;
 import com.baodanyun.websocket.util.EventBusUtils;
 import org.slf4j.Logger;
@@ -16,15 +18,11 @@ import org.slf4j.LoggerFactory;
  * Created by liaowuhen on 2017/5/23.
  */
 public class WeChatNode extends VisitorNode {
-    public static final String key = "weChat_";
-    private static final Logger logger = LoggerFactory.getLogger(WeChatNode.class);
-    public WeChatNode(Visitor visitor) {
-        super(visitor);
-    }
 
-    @Override
-    public String getId() {
-        return key + this.getAbstractUser().getId();
+    private static final Logger logger = LoggerFactory.getLogger(WeChatNode.class);
+    public WeChatNode(ChatNodeAdaptation chatNodeAdaptation, AbstractUser visitor, String id) {
+        super(chatNodeAdaptation,visitor);
+        super.id = id;
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.event.SynchronizationMsgEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
+import com.baodanyun.websocket.node.xmpp.ChatNodeAdaptation;
 import com.baodanyun.websocket.util.CommonConfig;
 import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.EventBusUtils;
@@ -25,27 +26,19 @@ import java.util.Date;
  */
 public abstract class CustomerNode extends AbstractNode implements CustomerDispather {
     private static final Logger logger = LoggerFactory.getLogger(CustomerNode.class);
-    private Customer customer;
 
 
-    public CustomerNode(Customer customer) {
-        this.customer = customer;
-    }
 
-    @Override
-    public AbstractUser getAbstractUser() {
-        return customer;
+    public CustomerNode(ChatNodeAdaptation chatNodeAdaptation,AbstractUser customer) {
+        super(chatNodeAdaptation);
     }
 
     @Override
     public Message receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
-
-        SynchronizationMsgEvent sme = new SynchronizationMsgEvent();
         Msg clone = (Msg) SerializationUtils.clone(msg);
         clone.setIcon(null);
-        sme.setMsg(clone);
-        sme.setNode(this);
-        sme.setFromJid(this.getAbstractUser().getId());
+        SynchronizationMsgEvent sme = new SynchronizationMsgEvent(clone,this);
+
         EventBusUtils.post(sme);
         return super.receiveFromGod(msg);
 
@@ -67,7 +60,7 @@ public abstract class CustomerNode extends AbstractNode implements CustomerDispa
     public StatusMsg getSMMsgSendTOCustomer(MsgStatus status) {
         StatusMsg statusSysMsg = StatusMsg.buildStatus(Msg.Type.status);
         statusSysMsg.setStatus(status);
-        statusSysMsg.setTo(customer.getId());
+        statusSysMsg.setTo(this.getAbstractUser().getId());
         return statusSysMsg;
     }
 
@@ -82,16 +75,16 @@ public abstract class CustomerNode extends AbstractNode implements CustomerDispa
             statusSysMsg.setLoginTime(visitor.getLoginTime());
         }
         statusSysMsg.setStatus(status);
-        statusSysMsg.setTo(customer.getId());
+        statusSysMsg.setTo(this.getAbstractUser().getId());
         return statusSysMsg;
     }
 
 
     public Msg getMsgHelloToCustomer(AbstractUser visitor) {
-        logger.info("user--->" + JSONUtil.toJson(customer));
+        logger.info("user--->" + JSONUtil.toJson(this.getAbstractUser()));
         String body = Config.greetingWord;
         Msg sendMsg = new Msg(body);
-        String to = customer.getId();
+        String to = this.getAbstractUser().getId();
         String from = visitor.getId();
         String type = Msg.Type.msg.toString();
         Long ct = new Date().getTime();
@@ -102,8 +95,8 @@ public abstract class CustomerNode extends AbstractNode implements CustomerDispa
         sendMsg.setFrom(from);
         sendMsg.setCt(ct);
         // 获取发送端用户
-        sendMsg.setIcon(customer.getIcon());
-        sendMsg.setFromName(customer.getNickName());
+        sendMsg.setIcon(this.getAbstractUser().getIcon());
+        sendMsg.setFromName(this.getAbstractUser().getNickName());
 
         return sendMsg;
     }

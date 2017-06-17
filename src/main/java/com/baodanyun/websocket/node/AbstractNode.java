@@ -1,7 +1,11 @@
 package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.msg.Msg;
+import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.exception.BusinessException;
+import com.baodanyun.websocket.node.dispatcher.ChatLifecycle;
+import com.baodanyun.websocket.node.terminal.TerminalMsgDeal;
+import com.baodanyun.websocket.node.xmpp.ChatNodeAdaptation;
 import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import com.baodanyun.websocket.util.XMPPUtil;
@@ -18,11 +22,47 @@ import java.util.Date;
 /**
  * Created by liaowuhen on 2017/5/23.
  */
-public abstract class AbstractNode implements Node {
+public class AbstractNode implements ChatLifecycle, TerminalMsgDeal {
     private static final Logger logger = LoggerFactory.getLogger(AbstractNode.class);
-
+    protected String id ;
+    private ChatNodeAdaptation chatNodeAdaptation ;
     UserCacheServer userCacheServer = SpringContextUtil.getBean("userCacheServerImpl", UserCacheServer.class);
 
+    public AbstractNode(ChatNodeAdaptation chatNodeAdaptation){
+       this.chatNodeAdaptation = chatNodeAdaptation;
+    }
+
+    public  AbstractUser getAbstractUser(){
+        return  getChatNodeAdaptation().getAbstractUser();
+    }
+
+    public ChatNodeAdaptation getChatNodeAdaptation() {
+        return chatNodeAdaptation;
+    }
+
+    /**
+     * 移除访客通知
+     * @return
+     * @throws InterruptedException
+     */
+    boolean uninstall() throws InterruptedException {
+        return false;
+    }
+    /**
+     * 接入通知
+     *
+     * @return
+     * @throws InterruptedException
+     */
+
+    boolean joinQueue() throws InterruptedException, BusinessException {
+        return false;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
 
     /*public boolean pushOfflineMsg() throws BusinessException {
         //加载离线记录
@@ -55,6 +95,11 @@ public abstract class AbstractNode implements Node {
         }
 
         return null;
+    }
+
+    @Override
+    public boolean sendMsgToGod(Msg msg) {
+        return false;
     }
 
     @Override
@@ -106,6 +151,11 @@ public abstract class AbstractNode implements Node {
     @Override
     public boolean login() throws BusinessException, IOException, XMPPException, SmackException {
         return true;
+    }
+
+    @Override
+    public boolean isOnline() {
+        return false;
     }
 
     @Override

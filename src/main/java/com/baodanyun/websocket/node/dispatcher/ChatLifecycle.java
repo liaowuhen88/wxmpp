@@ -47,7 +47,6 @@ public interface ChatLifecycle {
 
     boolean isOnline();
 
-
     void online() throws InterruptedException, BusinessException;
 
 

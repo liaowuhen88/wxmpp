@@ -3,7 +3,7 @@ package com.baodanyun.websocket.node.xmpp;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.exception.BusinessException;
-import com.baodanyun.websocket.node.Node;
+import com.baodanyun.websocket.node.AbstractNode;
 import com.baodanyun.websocket.service.VcardService;
 import com.baodanyun.websocket.service.XmppServer;
 import com.baodanyun.websocket.util.JSONUtil;
@@ -32,14 +32,16 @@ public class AbstarctChatNode implements ChatNode {
     XmppServer xmppServer = SpringContextUtil.getBean("xmppServer", XmppServer.class);
     VcardService vcardService = SpringContextUtil.getBean("vcardService", VcardService.class);
 
-    private Map<String, Node> nodes = new ConcurrentHashMap<>();
+    private Map<String, AbstractNode> nodes = new ConcurrentHashMap<>();
 
     private AbstractUser abstractUser;
     private XMPPConnection xmppConnection;
 
+
     public AbstarctChatNode(AbstractUser abstractUser) {
         this.abstractUser = abstractUser;
     }
+
     @Override
     public AbstractUser getAbstractUser() {
         return abstractUser;
@@ -47,12 +49,22 @@ public class AbstarctChatNode implements ChatNode {
 
 
     @Override
-    public void addNode(Node node) {
+    public void setXmppConnection(XMPPConnection xmppConnection) {
+        this.xmppConnection = xmppConnection;
+    }
+
+    @Override
+    public void addNode(AbstractNode node) {
         nodes.put(node.getId(), node);
     }
 
     @Override
-    public Node getNode(String id) {
+    public AbstractNode removeNode(String id) {
+        return nodes.remove(id);
+    }
+
+    @Override
+    public AbstractNode getNode(String id) {
         return nodes.get(id);
     }
 
@@ -167,6 +179,14 @@ public class AbstarctChatNode implements ChatNode {
     }
 
     @Override
+    public boolean isXmppOnline() {
+        if (null != xmppConnection) {
+            return xmppConnection.isAuthenticated();
+        }
+        return false;
+    }
+
+    @Override
     public void chatCreated(Chat chat, boolean b) {
         chat.addMessageListener(this);
     }
@@ -178,7 +198,7 @@ public class AbstarctChatNode implements ChatNode {
 
             if (null != getNodes()) {
                 logger.info(this.getAbstractUser().getId() + "getNodes()" + getNodes().size());
-                for (Node node : getNodes().values()) {
+                for (AbstractNode node : getNodes().values()) {
                     node.receiveFromXmpp(message);
                 }
             } else {
@@ -196,17 +216,34 @@ public class AbstarctChatNode implements ChatNode {
         xmppConnection.sendStanza(xmppMsg);
     }
 
-    public Map<String, Node> getNodes() {
+    public Map<String, AbstractNode> getNodes() {
         return nodes;
     }
 
-    public void setNodes(Map<String, Node> nodes) {
+    public void setNodes(Map<String, AbstractNode> nodes) {
         this.nodes = nodes;
     }
 
     @Override
     public boolean sendMsgToGod(Msg msg) {
         return false;
+    }
+
+    /**
+     * 同步消息到不同终端
+     * @param msg
+     * @return
+     */
+    @Override
+    public boolean synchronizationMsg(String id,Msg msg) {
+        for (AbstractNode node : nodes.values()) {
+            if (id.equals(node.getId())) {
+                node.sendMsgToGod(msg);
+            } else {
+                logger.info("相同客户端忽略");
+            }
+        }
+        return  true;
     }
 
     @Override

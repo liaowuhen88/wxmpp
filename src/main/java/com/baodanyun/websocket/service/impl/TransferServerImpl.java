@@ -7,15 +7,20 @@ import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.Transferlog;
 import com.baodanyun.websocket.node.NodeManager;
 import com.baodanyun.websocket.node.VisitorNode;
-import com.baodanyun.websocket.node.xmpp.VisitorChatNode;
-import com.baodanyun.websocket.node.xmpp.ChatNodeManager;
+import com.baodanyun.websocket.node.xmpp.*;
 import com.baodanyun.websocket.service.*;
+import com.baodanyun.websocket.service.impl.terminal.AccessWeChatTerminalVisitorFactory;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.apache.commons.lang.StringUtils;
+import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.chat.Chat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 /**
  * Created by liaowuhen on 2016/11/11.
@@ -39,7 +44,10 @@ public class TransferServerImpl implements TransferServer {
     @Autowired
     private MsgSendControl msgSendControl;
 
-    public boolean changeVisitorTo(Transferlog tm, Visitor visitor) throws BusinessException {
+    @Autowired
+    private AccessWeChatTerminalVisitorFactory accessWeChatTerminalVisitorFactory;
+
+    public boolean changeVisitorTo(Transferlog tm, Visitor visitor) throws BusinessException, XMPPException, IOException, SmackException {
         Customer customer = userCacheServer.getUserCustomer(tm.getTransferto());
 
         return changeVisitorTo(tm, visitor, customer);
@@ -53,28 +61,18 @@ public class TransferServerImpl implements TransferServer {
             if (null == visitor) {
                 throw new BusinessException("访客未在线");
             }
-            VisitorNode wn = NodeManager.getWeChatNode(visitor);
+            VisitorChatNode chatNode = ChatNodeManager.getVisitorXmppNode(visitor);
+            ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
+            accessWeChatTerminalVisitorFactory.getNode(chatNodeAdaptation,visitor);
+            chatNode.login();
+            chatNode.online();
 
-            if (wn.getXmppNode().isOnline()) {
-                if (!wn.uninstall()) {
-                    throw new BusinessException("从当前客服卸载失败");
-                }
-                visitor.setCustomer(customer);
-                userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customer.getId());
 
-                if (!wn.joinQueue()) {
-                    throw new BusinessException("加入到目标客服失败");
-                }
-            } else {
-                visitor.setCustomer(customer);
-                userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customer.getId());
-                logger.info(JSONUtil.toJson(visitor));
-                String pwd = "00818863ff056f1d66c8427836f94a87";
-                visitor.setPassWord(pwd);
-                wn.login();
-                wn.joinQueue();
+            CustomerChatNode chatNodeFrom = ChatNodeManager.getCustomerXmppNode(customerFrom);
+            CustomerChatNode chatNodeTo = ChatNodeManager.getCustomerXmppNode(customer);
 
-            }
+            chatNode.setCurrentChatNode(chatNodeFrom);
+            chatNode.changeCurrentChatNode(chatNodeTo);
 
         } catch (Exception e) {
             logger.error("error", "", e);
@@ -84,7 +82,7 @@ public class TransferServerImpl implements TransferServer {
     }
 
     @Override
-    public boolean changeVisitorTo(Transferlog tm, Visitor visitor, Customer customer) throws BusinessException {
+    public boolean changeVisitorTo(Transferlog tm, Visitor visitor, Customer customerFrom) throws BusinessException, XMPPException, IOException, SmackException {
         boolean flag = false;
         try {
 
@@ -101,42 +99,26 @@ public class TransferServerImpl implements TransferServer {
                 if (StringUtils.isEmpty(tm.getTransferto())) {
                     throw new BusinessException("被转接客服账号id为空");
                 }
+                AbstractUser customerTo = userCacheServer.getUserCustomer(tm.getTransferto());
+
+
 
                 boolean toflag = xmppServer.isAuthenticated(tm.getTransferto());
 
                 if (toflag) {
 
-                    AbstractUser customerTo = userCacheServer.getUserCustomer(tm.getTransferto());
+                    VisitorChatNode chatNode = ChatNodeManager.getVisitorXmppNode(visitor);
+                    ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
+                    accessWeChatTerminalVisitorFactory.getNode(chatNodeAdaptation,visitor);
+                    chatNode.login();
+                    chatNode.online();
 
-                    boolean vflag = xmppServer.isAuthenticated(tm.getVisitorjid());
 
+                    CustomerChatNode chatNodeFrom = ChatNodeManager.getCustomerXmppNode(customerFrom);
+                    CustomerChatNode chatNodeTo = ChatNodeManager.getCustomerXmppNode(customerTo);
 
-                    VisitorChatNode node = ChatNodeManager.getVisitorXmppNode(visitor);
-
-                    if (vflag) {
-                        if (!node.uninstall()) {
-                            throw new BusinessException("从当前客服卸载失败");
-                        }
-                        visitor.setCustomer(customerTo);
-                        userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customerTo.getId());
-
-                        if (!node.joinQueue()) {
-                            throw new BusinessException("加入到目标客服失败");
-                        }
-                    } else {
-                        visitor.setCustomer(customerTo);
-
-                        userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customerTo.getId());
-                        try {
-                            logger.info(JSONUtil.toJson(visitor));
-                            String pwd = "00818863ff056f1d66c8427836f94a87";
-                            visitor.setPassWord(pwd);
-                            node.login();
-                            node.joinQueue();
-                        } catch (Exception e) {
-                            logger.error("error", "", e);
-                        }
-                    }
+                    chatNode.setCurrentChatNode(chatNodeFrom);
+                    chatNode.changeCurrentChatNode(chatNodeTo);
                 } else {
                     throw new BusinessException("转出客服已经下线");
                 }

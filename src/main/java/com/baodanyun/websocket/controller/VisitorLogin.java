@@ -57,13 +57,18 @@ public class VisitorLogin extends BaseController {
         logger.info("accessId:[" + openId + "]");
 
         try {
+            // 初始化用户
             Visitor visitor = userServer.initUserByOpenId(openId);
             AbstractUser customer;
-            ChatNode wn = ChatNodeManager.getVisitorXmppNode(visitor);
-            boolean login = wn.login();
+
+            // 根据用户是否已经在线，获取服务客服
+            ChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
+            boolean login = visitorChatNode.isXmppOnline();
             if (login) {
+                // 在线获取上次服务客服
                 customer = customerDispatcherService.getCustomer(visitor.getOpenId());
             } else {
+                // 非在线随机获取客服
                 customer = customerDispatcherService.getDispatcher(visitor.getOpenId());
             }
             visitor.setCustomer(customer);
@@ -72,8 +77,7 @@ public class VisitorLogin extends BaseController {
             if (null != customer) {
                 boolean flag = customerOnline(customer.getId());
                 if (flag) {
-
-                    if (login) {
+                    if (visitorChatNode.login()) {
                         cCard = vcardService.getVCardUser(customer.getId(), visitor.getId(), AbstractUser.class);
                         mv = getOnline(visitor, customer.getId(), cCard);
                         request.getSession().setAttribute(Common.USER_KEY, visitor);

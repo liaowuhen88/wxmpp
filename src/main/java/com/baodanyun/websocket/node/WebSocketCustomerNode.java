@@ -7,6 +7,7 @@ import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.sendUtils.SessionSendUtils;
+import com.baodanyun.websocket.node.xmpp.ChatNodeAdaptation;
 import com.baodanyun.websocket.util.CommonConfig;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
@@ -23,8 +24,10 @@ public class WebSocketCustomerNode extends CustomerNode {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketCustomerNode.class);
     private WebSocketSession session;
 
-    public WebSocketCustomerNode(Customer customer) {
-        super(customer);
+    public WebSocketCustomerNode(ChatNodeAdaptation chatNodeAdaptation, AbstractUser customer, WebSocketSession session, String id) {
+        super(chatNodeAdaptation,customer);
+        this.session = session;
+        this.id = id;
     }
 
     public WebSocketSession getSession() {
@@ -33,12 +36,6 @@ public class WebSocketCustomerNode extends CustomerNode {
 
     public void setSession(WebSocketSession session) {
         this.session = session;
-    }
-
-
-    @Override
-    public String getId() {
-        return getSession().getId();
     }
 
     @Override

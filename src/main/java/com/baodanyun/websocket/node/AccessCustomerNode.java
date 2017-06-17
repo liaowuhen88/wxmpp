@@ -8,6 +8,7 @@ import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.sendUtils.SessionSendUtils;
+import com.baodanyun.websocket.node.xmpp.ChatNodeAdaptation;
 import com.baodanyun.websocket.service.UserServer;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import com.baodanyun.websocket.util.XMPPUtil;
@@ -27,8 +28,10 @@ public class AccessCustomerNode extends CustomerNode {
     UserServer userServer = SpringContextUtil.getBean("userServerImpl", UserServer.class);
     private WebSocketSession session;
 
-    public AccessCustomerNode(Customer customer) {
-        super(customer);
+    public AccessCustomerNode(ChatNodeAdaptation chatNodeAdaptation,AbstractUser customer, WebSocketSession session, String id) {
+        super(chatNodeAdaptation,customer);
+        this.session = session;
+        this.id = id;
     }
 
     public WebSocketSession getSession() {
@@ -37,11 +40,6 @@ public class AccessCustomerNode extends CustomerNode {
 
     public void setSession(WebSocketSession session) {
         this.session = session;
-    }
-
-    @Override
-    public String getId() {
-        return this.getSession().getId();
     }
 
     @Override
