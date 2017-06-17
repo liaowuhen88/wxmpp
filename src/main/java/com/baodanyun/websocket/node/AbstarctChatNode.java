@@ -1,9 +1,8 @@
-package com.baodanyun.websocket.node.xmpp;
+package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.exception.BusinessException;
-import com.baodanyun.websocket.node.AbstractNode;
 import com.baodanyun.websocket.service.VcardService;
 import com.baodanyun.websocket.service.XmppServer;
 import com.baodanyun.websocket.util.JSONUtil;
@@ -32,7 +31,7 @@ public class AbstarctChatNode implements ChatNode {
     XmppServer xmppServer = SpringContextUtil.getBean("xmppServer", XmppServer.class);
     VcardService vcardService = SpringContextUtil.getBean("vcardService", VcardService.class);
 
-    private Map<String, AbstractNode> nodes = new ConcurrentHashMap<>();
+    private Map<String, AbstractTerminal> nodes = new ConcurrentHashMap<>();
 
     private AbstractUser abstractUser;
     private XMPPConnection xmppConnection;
@@ -54,17 +53,28 @@ public class AbstarctChatNode implements ChatNode {
     }
 
     @Override
-    public void addNode(AbstractNode node) {
+    public void addNode(AbstractTerminal node) {
         nodes.put(node.getId(), node);
     }
 
     @Override
-    public AbstractNode removeNode(String id) {
-        return nodes.remove(id);
+    public AbstractTerminal removeNode(String id) throws IOException, XMPPException, SmackException, BusinessException {
+        AbstractTerminal at = nodes.remove(id);
+
+        try {
+            Thread.sleep(1000*2);
+        } catch (InterruptedException e) {
+            logger.error("error",e);
+        }
+
+        if (nodes.size() < 1) {
+            this.logout();
+        }
+        return at;
     }
 
     @Override
-    public AbstractNode getNode(String id) {
+    public AbstractTerminal getNode(String id) {
         return nodes.get(id);
     }
 
@@ -142,11 +152,6 @@ public class AbstarctChatNode implements ChatNode {
     }
 
     @Override
-    public void online() throws InterruptedException, BusinessException {
-
-    }
-
-    @Override
     public boolean logout() throws BusinessException, IOException, XMPPException, SmackException {
         logger.info("[" + this.getAbstractUser().getId() + "]logout ");
         if (null != xmppConnection) {
@@ -179,6 +184,12 @@ public class AbstarctChatNode implements ChatNode {
     }
 
     @Override
+    public void online(AbstractTerminal node) throws InterruptedException, BusinessException {
+         addNode(node);
+         node.online();
+    }
+
+    @Override
     public boolean isXmppOnline() {
         if (null != xmppConnection) {
             return xmppConnection.isAuthenticated();
@@ -198,7 +209,7 @@ public class AbstarctChatNode implements ChatNode {
 
             if (null != getNodes()) {
                 logger.info(this.getAbstractUser().getId() + "getNodes()" + getNodes().size());
-                for (AbstractNode node : getNodes().values()) {
+                for (AbstractTerminal node : getNodes().values()) {
                     node.receiveFromXmpp(message);
                 }
             } else {
@@ -211,23 +222,20 @@ public class AbstarctChatNode implements ChatNode {
     }
 
     @Override
-    public void sendMessage(Message xmppMsg) throws SmackException.NotConnectedException {
-        logger.info("xmpp send message:" + JSONUtil.toJson(xmppMsg));
+    public void sendMessageTOXmpp(Message xmppMsg) throws SmackException.NotConnectedException {
         xmppConnection.sendStanza(xmppMsg);
+        logger.info("xmpp send message:" + JSONUtil.toJson(xmppMsg));
+
     }
 
-    public Map<String, AbstractNode> getNodes() {
+    public Map<String, AbstractTerminal> getNodes() {
         return nodes;
     }
 
-    public void setNodes(Map<String, AbstractNode> nodes) {
+    public void setNodes(Map<String, AbstractTerminal> nodes) {
         this.nodes = nodes;
     }
 
-    @Override
-    public boolean sendMsgToGod(Msg msg) {
-        return false;
-    }
 
     /**
      * 同步消息到不同终端
@@ -236,7 +244,7 @@ public class AbstarctChatNode implements ChatNode {
      */
     @Override
     public boolean synchronizationMsg(String id,Msg msg) {
-        for (AbstractNode node : nodes.values()) {
+        for (AbstractTerminal node : nodes.values()) {
             if (id.equals(node.getId())) {
                 node.sendMsgToGod(msg);
             } else {
@@ -247,17 +255,22 @@ public class AbstarctChatNode implements ChatNode {
     }
 
     @Override
-    public Message receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
-        return null;
+    public boolean sendMsgToGod(AbstractTerminal abstractTerminal, Msg msg) {
+        return abstractTerminal.sendMsgToGod(msg);
     }
 
     @Override
-    public Message receiveFromGod(String msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
-        return null;
+    public void receiveFromGod(AbstractTerminal abstractTerminal, Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
+        abstractTerminal.receiveFromGod(msg);
     }
 
     @Override
-    public void receiveFromXmpp(Message message) {
+    public void receiveFromGod(AbstractTerminal abstractTerminal, String msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
+        abstractTerminal.receiveFromGod(msg);
+    }
 
+    @Override
+    public void receiveFromXmpp(AbstractTerminal abstractTerminal, Message message) {
+        abstractTerminal.receiveFromXmpp(message);
     }
 }

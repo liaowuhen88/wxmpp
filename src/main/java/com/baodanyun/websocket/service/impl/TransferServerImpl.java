@@ -5,16 +5,13 @@ import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.Transferlog;
-import com.baodanyun.websocket.node.NodeManager;
-import com.baodanyun.websocket.node.VisitorNode;
-import com.baodanyun.websocket.node.xmpp.*;
+import com.baodanyun.websocket.node.*;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.service.impl.terminal.AccessWeChatTerminalVisitorFactory;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.chat.Chat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,9 +60,9 @@ public class TransferServerImpl implements TransferServer {
             }
             VisitorChatNode chatNode = ChatNodeManager.getVisitorXmppNode(visitor);
             ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
-            accessWeChatTerminalVisitorFactory.getNode(chatNodeAdaptation,visitor);
+            AbstractTerminal at = accessWeChatTerminalVisitorFactory.getNode(chatNodeAdaptation,visitor);
             chatNode.login();
-            chatNode.online();
+            chatNode.online(at);
 
 
             CustomerChatNode chatNodeFrom = ChatNodeManager.getCustomerXmppNode(customerFrom);
@@ -109,9 +106,9 @@ public class TransferServerImpl implements TransferServer {
 
                     VisitorChatNode chatNode = ChatNodeManager.getVisitorXmppNode(visitor);
                     ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
-                    accessWeChatTerminalVisitorFactory.getNode(chatNodeAdaptation,visitor);
+                    AbstractTerminal at =accessWeChatTerminalVisitorFactory.getNode(chatNodeAdaptation,visitor);
                     chatNode.login();
-                    chatNode.online();
+                    chatNode.online(at);
 
 
                     CustomerChatNode chatNodeFrom = ChatNodeManager.getCustomerXmppNode(customerFrom);

@@ -8,7 +8,7 @@ import com.baodanyun.websocket.core.listener.InitConnectListener;
 import com.baodanyun.websocket.dao.OfuserMapper;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.Ofuser;
-import com.baodanyun.websocket.node.xmpp.ChatNode;
+import com.baodanyun.websocket.node.ChatNode;
 import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.XMPPUtil;

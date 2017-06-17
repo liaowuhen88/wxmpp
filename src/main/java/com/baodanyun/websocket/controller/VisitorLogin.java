@@ -4,8 +4,10 @@ import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.exception.BusinessException;
-import com.baodanyun.websocket.node.xmpp.ChatNode;
-import com.baodanyun.websocket.node.xmpp.ChatNodeManager;
+import com.baodanyun.websocket.node.ChatNode;
+import com.baodanyun.websocket.node.ChatNodeManager;
+import com.baodanyun.websocket.node.CustomerChatNode;
+import com.baodanyun.websocket.node.VisitorChatNode;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.XMPPUtil;
@@ -62,7 +64,7 @@ public class VisitorLogin extends BaseController {
             AbstractUser customer;
 
             // 根据用户是否已经在线，获取服务客服
-            ChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
+            VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
             boolean login = visitorChatNode.isXmppOnline();
             if (login) {
                 // 在线获取上次服务客服
@@ -72,25 +74,24 @@ public class VisitorLogin extends BaseController {
                 customer = customerDispatcherService.getDispatcher(visitor.getOpenId());
             }
             visitor.setCustomer(customer);
+
+            CustomerChatNode customerChatNode = ChatNodeManager.getCustomerXmppNode(customer);
+            visitorChatNode.changeCurrentChatNode(customerChatNode);
+
             logger.info(JSONUtil.toJson(visitor));
-
-            if (null != customer) {
-                boolean flag = customerOnline(customer.getId());
-                if (flag) {
-                    if (visitorChatNode.login()) {
-                        cCard = vcardService.getVCardUser(customer.getId(), visitor.getId(), AbstractUser.class);
-                        mv = getOnline(visitor, customer.getId(), cCard);
-                        request.getSession().setAttribute(Common.USER_KEY, visitor);
-                    } else {
-                        throw new BusinessException("接入失败");
-                    }
-
+            boolean flag = customerOnline(customer.getId());
+            if (flag) {
+                if (visitorChatNode.login()) {
+                    cCard = vcardService.getVCardUser(customer.getId(), visitor.getId(), AbstractUser.class);
+                    mv = getOnline(visitor, customer.getId(), cCard);
+                    request.getSession().setAttribute(Common.USER_KEY, visitor);
                 } else {
-                    //客服不在线
-                    mv = getOffline(visitor, customer.getId());
+                    throw new BusinessException("接入失败");
                 }
+
             } else {
-                throw new BusinessException("客服不存在");
+                //客服不在线
+                mv = getOffline(visitor, customer.getId());
             }
 
 

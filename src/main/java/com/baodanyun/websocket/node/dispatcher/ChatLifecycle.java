@@ -1,6 +1,7 @@
 package com.baodanyun.websocket.node.dispatcher;
 
 import com.baodanyun.websocket.exception.BusinessException;
+import com.baodanyun.websocket.node.AbstractTerminal;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 
@@ -41,13 +42,14 @@ public interface ChatLifecycle {
      */
     boolean login() throws BusinessException, IOException, XMPPException, SmackException;
 
+
+
     /**
-     * 是否在线
+     * 上线
+     * @throws InterruptedException
+     * @throws BusinessException
      */
-
-    boolean isOnline();
-
-    void online() throws InterruptedException, BusinessException;
+    void online(AbstractTerminal node) throws InterruptedException, BusinessException;
 
 
 }

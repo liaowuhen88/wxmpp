@@ -10,13 +10,11 @@ import com.baodanyun.websocket.event.VisitorLoginEvent;
 import com.baodanyun.websocket.event.VisitorReciveMsgEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.WechatMsg;
-import com.baodanyun.websocket.node.xmpp.ChatNodeAdaptation;
 import com.baodanyun.websocket.util.CommonConfig;
 import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.EventBusUtils;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.packet.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,11 +23,11 @@ import java.util.Date;
 /**
  * Created by liaowuhen on 2017/5/23.
  */
-public abstract class VisitorNode extends AbstractNode{
-    private static final Logger logger = LoggerFactory.getLogger(VisitorNode.class);
+public abstract class VisitorTerminal extends AbstractTerminal {
+    private static final Logger logger = LoggerFactory.getLogger(VisitorTerminal.class);
     private AbstractUser visitor;
 
-    public VisitorNode(ChatNodeAdaptation chatNodeAdaptation, AbstractUser visitor) {
+    VisitorTerminal(ChatNodeAdaptation chatNodeAdaptation, AbstractUser visitor) {
         super(chatNodeAdaptation);
         this.visitor = visitor;
     }
@@ -49,7 +47,7 @@ public abstract class VisitorNode extends AbstractNode{
     }
 
     @Override
-    public Message receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
+    public void receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
 
 
         VisitorReciveMsgEvent vme = new VisitorReciveMsgEvent(this.getAbstractUser(), ((Visitor) this.getAbstractUser()).getCustomer(), msg.getContent(), CommonConfig.MSG_BIZ_KF_WX_CHAT);
@@ -66,7 +64,7 @@ public abstract class VisitorNode extends AbstractNode{
         SendMsgToWeChatEvent swe = new SendMsgToWeChatEvent(we);
         EventBusUtils.post(swe);
 
-        return super.receiveFromGod(msg);
+        receiveFromGod(msg);
     }
 
     @Override
@@ -102,11 +100,6 @@ public abstract class VisitorNode extends AbstractNode{
         sendMsg.setCt(ct);
 
         return sendMsg;
-    }
-
-    @Override
-    public boolean isOnline() {
-        return false;
     }
 
     /*@Override

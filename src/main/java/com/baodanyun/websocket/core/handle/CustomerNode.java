@@ -26,7 +26,7 @@ import java.util.Set;
  * 如果客服节点上线，访客节点会收到订阅消息
  *//*
 
-public class CustomerNode extends Node {
+public class CustomerTerminal extends Node {
     //每个客服 有属于自己的一个锁
     public HistoryUserServer historyUserServer = SpringContextUtil.getBean("historyUserServer", HistoryUserServer.class);
 
@@ -39,7 +39,7 @@ public class CustomerNode extends Node {
     //客服回调事件
 
 
-    public CustomerNode(Customer customer) {
+    public CustomerTerminal(Customer customer) {
         super(customer);
         this.mulitEventSender = new MulitEventSender(this);
     }
@@ -60,7 +60,7 @@ public class CustomerNode extends Node {
      *//*
 
 
-    protected boolean uninstallVisitorNode(VisitorNode visitorNode) throws InterruptedException {
+    protected boolean uninstallVisitorNode(VisitorTerminal visitorNode) throws InterruptedException {
         AbstractUser visitor = visitorNode.getBindUser();
         Set<AbstractUser> set =  historyUserServer.get(CacheService.USER_ONLINE,bindUser.getId());
         boolean uninstalled = true;

@@ -27,7 +27,7 @@ import java.util.Queue;
 
 @Service
 @Scope("prototype")
-public class VisitorNode extends Node {
+public class VisitorTerminal extends Node {
     protected XmppUserOnlineServer xmppUserOnlineServer = SpringContextUtil.getBean("xmppUserOnlineServer", XmppUserOnlineServer.class);
 
     public HistoryUserServer historyUserServer = SpringContextUtil.getBean("historyUserServer", HistoryUserServer.class);
@@ -41,9 +41,9 @@ public class VisitorNode extends Node {
     //访客回调事件
     protected VisitorEventHandelWebSocket visitorEvent = null;
 
-    private CustomerNode bindCustomerNode = null;
+    private CustomerTerminal bindCustomerNode = null;
 
-    public VisitorNode(Visitor visitor) {
+    public VisitorTerminal(Visitor visitor) {
         super(visitor);
         this.visitorEvent = new VisitorEventHandelWebSocket();
     }
@@ -63,7 +63,7 @@ public class VisitorNode extends Node {
 
     public boolean customerIsOnline() throws BusinessException {
         Visitor visitor = (Visitor) this.getBindUser();
-        CustomerNode customerNode = NodeManager.getCustomerNodeMap().get(visitor.getCustomerJid());
+        CustomerTerminal customerNode = NodeManager.getCustomerNodeMap().get(visitor.getCustomerJid());
         boolean customerIsOnline;
         if (null != customerNode && customerNode.isOnline()) {
             logger.info("客服id[" + visitor.getCustomerJid() + "] pc 端online");
@@ -168,7 +168,7 @@ public class VisitorNode extends Node {
 
     public void onlineInit(Visitor visitor) throws BusinessException {
 
-        CustomerNode customerNode = NodeManager.getCustomerNodeMap().get(visitor.getCustomerJid());
+        CustomerTerminal customerNode = NodeManager.getCustomerNodeMap().get(visitor.getCustomerJid());
         this.getDestSet().add(visitor.getCustomerJid());
 
 
@@ -178,11 +178,11 @@ public class VisitorNode extends Node {
             this.setBindCustomerNode(customerNode);
         } else {
             //非pc登录   需判断是否是登录状态
-            CustomerNode cn = NodeManager.getCustomerNodeMap().get(visitor.getCustomerJid());
+            CustomerTerminal cn = NodeManager.getCustomerNodeMap().get(visitor.getCustomerJid());
             if (cn == null) {
                 Customer customer = new Customer();
                 customer.setId(visitor.getCustomerJid());
-                cn = new CustomerNode(customer);
+                cn = new CustomerTerminal(customer);
                 cn.offline();
                 NodeManager.getCustomerNodeMap().put(visitor.getCustomerJid(), cn);
             }
@@ -197,7 +197,7 @@ public class VisitorNode extends Node {
         try {
             synchronized (bindCustomerNode.getLock()) {
                 //获取自己的客服
-                CustomerNode myCustomerNode = this.bindCustomerNode;
+                CustomerTerminal myCustomerNode = this.bindCustomerNode;
                 //在队列中卸载当前对象
                 myCustomerNode.uninstallVisitorNode(this);
                 //获取备份队列
@@ -264,11 +264,11 @@ public class VisitorNode extends Node {
         return nwg;
     }
 
-    public CustomerNode getBindCustomerNode() {
+    public CustomerTerminal getBindCustomerNode() {
         return bindCustomerNode;
     }
 
-    public void setBindCustomerNode(CustomerNode bindCustomerNode) {
+    public void setBindCustomerNode(CustomerTerminal bindCustomerNode) {
         this.bindCustomerNode = bindCustomerNode;
     }
 }

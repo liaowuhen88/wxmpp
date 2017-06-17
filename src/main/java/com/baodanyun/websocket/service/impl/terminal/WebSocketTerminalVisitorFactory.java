@@ -1,9 +1,9 @@
 package com.baodanyun.websocket.service.impl.terminal;
 
-import com.baodanyun.websocket.node.AbstractNode;
-import com.baodanyun.websocket.node.WebSocketVisitorNode;
+import com.baodanyun.websocket.node.AbstractTerminal;
+import com.baodanyun.websocket.node.WebSocketVisitorTerminal;
 import com.baodanyun.websocket.node.terminal.WebSocketTerminal;
-import com.baodanyun.websocket.node.xmpp.ChatNodeAdaptation;
+import com.baodanyun.websocket.node.ChatNodeAdaptation;
 import com.baodanyun.websocket.service.TerminalFactory;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.slf4j.Logger;
@@ -24,9 +24,9 @@ public class WebSocketTerminalVisitorFactory implements TerminalFactory<WebSocke
     }
 
     @Override
-    public AbstractNode getNode(ChatNodeAdaptation chatNodeAdaptation, WebSocketTerminal webSocketTerminal) {
-        logger.info("create WebSocketVisitorNode [" + JSONUtil.toJson(webSocketTerminal.getAbstractUser()) + "]");
-        return new WebSocketVisitorNode(chatNodeAdaptation,webSocketTerminal.getAbstractUser(),webSocketTerminal.getSession(),getId(webSocketTerminal));
+    public AbstractTerminal getNode(ChatNodeAdaptation chatNodeAdaptation, WebSocketTerminal webSocketTerminal) {
+        logger.info("create WebSocketVisitorTerminal [" + JSONUtil.toJson(webSocketTerminal.getAbstractUser()) + "]");
+        return new WebSocketVisitorTerminal(chatNodeAdaptation,webSocketTerminal.getAbstractUser(),webSocketTerminal.getSession(),getId(webSocketTerminal));
 
     }
 }

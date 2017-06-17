@@ -2,6 +2,7 @@ package com.baodanyun.websocket.node.terminal;
 
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.exception.BusinessException;
+import com.baodanyun.websocket.node.AbstractTerminal;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.packet.Message;
 
@@ -16,13 +17,13 @@ public interface TerminalMsgDeal {
      * @param msg
      */
 
-    boolean sendMsgToGod(Msg msg);
+    boolean sendMsgToGod(AbstractTerminal abstractTerminal , Msg msg);
 
-    Message receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException;
+    void receiveFromGod(AbstractTerminal abstractTerminal ,Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException;
 
-    Message receiveFromGod(String msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException;
+    void receiveFromGod(AbstractTerminal abstractTerminal ,String msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException;
 
-    void receiveFromXmpp(Message message);
+    void receiveFromXmpp(AbstractTerminal abstractTerminal ,Message message);
 
 
 }

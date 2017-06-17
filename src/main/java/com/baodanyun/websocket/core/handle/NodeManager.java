@@ -40,8 +40,8 @@ public class NodeManager implements INodeManager {
 
     //限制最大接入的客服量
     // key 为id
-    private static final Map<String, CustomerNode> CUSTOMER_NODE_MAP = new ConcurrentHashMap<>();
-    private static final Map<String, VisitorNode> VISITOR_NODE_MAP = new ConcurrentHashMap<>();
+    private static final Map<String, CustomerTerminal> CUSTOMER_NODE_MAP = new ConcurrentHashMap<>();
+    private static final Map<String, VisitorTerminal> VISITOR_NODE_MAP = new ConcurrentHashMap<>();
 
 
     */
@@ -52,12 +52,12 @@ public class NodeManager implements INodeManager {
      * @return
      *//*
 
-    public List<CustomerNode> freeCustomerNode() {
-        List<CustomerNode> freeNodes = new ArrayList<>();
+    public List<CustomerTerminal> freeCustomerNode() {
+        List<CustomerTerminal> freeNodes = new ArrayList<>();
 
-        Collection<CustomerNode> customerNodes = CUSTOMER_NODE_MAP.values();
+        Collection<CustomerTerminal> customerNodes = CUSTOMER_NODE_MAP.values();
         if (!CollectionUtils.isEmpty(customerNodes)) {
-            for (CustomerNode customerNode : customerNodes) {
+            for (CustomerTerminal customerNode : customerNodes) {
                 if (customerNode.isOnline()) {
                     CustomerConf customerConf = (CustomerConf) customerNode.getConf();
                     Set<AbstractUser> set =  historyUserServer.get(CacheService.USER_ONLINE,customerNode.getBindUser().getId());
@@ -80,10 +80,10 @@ public class NodeManager implements INodeManager {
      * @return
      *//*
 
-    public synchronized CustomerNode getMyCustomerNode(Customer customer) {
-        CustomerNode retCustomerNode = CUSTOMER_NODE_MAP.get(customer.getId());
+    public synchronized CustomerTerminal getMyCustomerNode(Customer customer) {
+        CustomerTerminal retCustomerNode = CUSTOMER_NODE_MAP.get(customer.getId());
         if (retCustomerNode == null) {
-            retCustomerNode = new CustomerNode(customer);
+            retCustomerNode = new CustomerTerminal(customer);
         }
         return retCustomerNode;
     }
@@ -97,7 +97,7 @@ public class NodeManager implements INodeManager {
      * @return
      *//*
 
-    public synchronized CustomerNode getMyCustomerNode(VisitorNode visitorNode) {
+    public synchronized CustomerTerminal getMyCustomerNode(VisitorTerminal visitorNode) {
         Visitor visitor = (Visitor) visitorNode.getBindUser();
         return CUSTOMER_NODE_MAP.get(visitor.getCustomerJid());
     }
@@ -115,7 +115,7 @@ public class NodeManager implements INodeManager {
      * @return
      *//*
 
-    public static CustomerNode getCustomerNodeByJid(String customerNodeId) {
+    public static CustomerTerminal getCustomerNodeByJid(String customerNodeId) {
         return CUSTOMER_NODE_MAP.get(customerNodeId);
     }
 
@@ -128,7 +128,7 @@ public class NodeManager implements INodeManager {
      * @return
      *//*
 
-    public static VisitorNode getVisitorNodeByJid(String visitorNodeId) {
+    public static VisitorTerminal getVisitorNodeByJid(String visitorNodeId) {
         return VISITOR_NODE_MAP.get(visitorNodeId);
     }
 
@@ -141,7 +141,7 @@ public class NodeManager implements INodeManager {
 */
 /*
     public boolean updateNodeToBackUpQueue(String visitorNodeId) {
-        VisitorNode visitorNode = getVisitorNodeByJid(visitorNodeId);
+        VisitorTerminal visitorNode = getVisitorNodeByJid(visitorNodeId);
         if (visitorNode != null) {
             return visitorNode.updateNodeToBackUp();
         }
@@ -159,7 +159,7 @@ public class NodeManager implements INodeManager {
      *//*
 
     public boolean updateNodeQueue(String customerNodeId, int onlineSize) {
-        CustomerNode customerNode = getCustomerNodeByJid(customerNodeId);
+        CustomerTerminal customerNode = getCustomerNodeByJid(customerNodeId);
         if (customerNode != null) {
             CustomerConf customerConf = (CustomerConf) customerNode.getConf();
             if (customerConf != null) {
@@ -178,7 +178,7 @@ public class NodeManager implements INodeManager {
      *//*
 
     public void customerLogout(String customerJid) throws InterruptedException {
-        CustomerNode customerNode = getCustomerNodeByJid(customerJid);
+        CustomerTerminal customerNode = getCustomerNodeByJid(customerJid);
         if (customerNode != null) {
             customerNode.logout();
         }
@@ -194,7 +194,7 @@ public class NodeManager implements INodeManager {
 
 
     public AbstractUser getVisitor(String vjid) {
-        VisitorNode visitorNode = getVisitorNodeByJid(vjid);
+        VisitorTerminal visitorNode = getVisitorNodeByJid(vjid);
         if (visitorNode != null) {
             return visitorNode.getBindUser();
         }
@@ -213,7 +213,7 @@ public class NodeManager implements INodeManager {
 
 
     public AbstractUser getCustomer(String customerJid) {
-        CustomerNode customerNode = getCustomerNodeByJid(customerJid);
+        CustomerTerminal customerNode = getCustomerNodeByJid(customerJid);
         if (customerNode != null) {
             return customerNode.getBindUser();
         }
@@ -230,7 +230,7 @@ public class NodeManager implements INodeManager {
      *//*
 
     public void visitorOff(String visitorJid) throws InterruptedException {
-        VisitorNode visitorNode = VISITOR_NODE_MAP.get(visitorJid);
+        VisitorTerminal visitorNode = VISITOR_NODE_MAP.get(visitorJid);
         if (visitorNode != null) {
             visitorNode.logout();
         }
@@ -259,14 +259,14 @@ public class NodeManager implements INodeManager {
             throw new BusinessException("转出客服账号id为空");
         }
 
-        VisitorNode visitorNode = getVisitorNodeByJid(tm.getVisitorjid());
+        VisitorTerminal visitorNode = getVisitorNodeByJid(tm.getVisitorjid());
 
         if (visitorNode == null) {
             throw new BusinessException("手机端用户不在线");
         } else {
             if (visitorNode.isOnline()) {
-                CustomerNode fromNode = getCustomerNodeByJid(tm.getTransferfrom());
-                CustomerNode toNode = getCustomerNodeByJid(tm.getTransferto());
+                CustomerTerminal fromNode = getCustomerNodeByJid(tm.getTransferfrom());
+                CustomerTerminal toNode = getCustomerNodeByJid(tm.getTransferto());
                 if (null != toNode) {
                     if (toNode.isOnline()) {
                         visitorNode.setBindCustomerNode(toNode);
@@ -304,9 +304,9 @@ public class NodeManager implements INodeManager {
 
     public List<AbstractUser> onlineCustomerList() {
         List<AbstractUser> nodes = new ArrayList<>();
-        Collection<CustomerNode> customerNodes = CUSTOMER_NODE_MAP.values();
+        Collection<CustomerTerminal> customerNodes = CUSTOMER_NODE_MAP.values();
         if (!CollectionUtils.isEmpty(customerNodes)) {
-            for (CustomerNode customerNode : customerNodes) {
+            for (CustomerTerminal customerNode : customerNodes) {
                 if (customerNode.isOnline()) {
                     nodes.add(customerNode.getBindUser());
                 }
@@ -326,11 +326,11 @@ public class NodeManager implements INodeManager {
     }
 
 
-    public static Map<String, CustomerNode> getCustomerNodeMap() {
+    public static Map<String, CustomerTerminal> getCustomerNodeMap() {
         return CUSTOMER_NODE_MAP;
     }
 
-    public static Map<String, VisitorNode> getVisitorNodeMap() {
+    public static Map<String, VisitorTerminal> getVisitorNodeMap() {
         return VISITOR_NODE_MAP;
     }
 }

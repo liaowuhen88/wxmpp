@@ -5,9 +5,10 @@ import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.exception.BusinessException;
-import com.baodanyun.websocket.node.xmpp.ChatNode;
-import com.baodanyun.websocket.node.xmpp.ChatNodeAdaptation;
-import com.baodanyun.websocket.node.xmpp.ChatNodeManager;
+import com.baodanyun.websocket.node.AbstractTerminal;
+import com.baodanyun.websocket.node.ChatNode;
+import com.baodanyun.websocket.node.ChatNodeAdaptation;
+import com.baodanyun.websocket.node.ChatNodeManager;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.service.impl.terminal.WeChatTerminalVisitorFactory;
 import com.baodanyun.websocket.util.*;
@@ -68,7 +69,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
 
             ChatNode chatnode = ChatNodeManager.getVisitorXmppNode(visitor);
             String id = weChatTerminalVisitorFactory.getId(visitor);
-            Node node = chatnode.getNode(id);
+            AbstractTerminal node = chatnode.getNode(id);
             if(null == node){
                 ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatnode);
                 node = weChatTerminalVisitorFactory.getNode(chatNodeAdaptation,visitor);
@@ -104,10 +105,10 @@ public class RecieveWeiXinMessageApi extends BaseController {
 
                         if (!xmppFlag) {
                             chatnode.login();
-                            chatnode.online();
+                            chatnode.online(node);
                         }
 
-                        chatnode.receiveFromGod(msg);
+                        chatnode.receiveFromGod(node,msg);
                         response = getOnlineResponse();
                     }
 

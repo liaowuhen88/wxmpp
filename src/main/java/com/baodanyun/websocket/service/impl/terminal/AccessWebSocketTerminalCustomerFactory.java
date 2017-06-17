@@ -1,9 +1,9 @@
 package com.baodanyun.websocket.service.impl.terminal;
 
-import com.baodanyun.websocket.node.AbstractNode;
-import com.baodanyun.websocket.node.AccessCustomerNode;
+import com.baodanyun.websocket.node.AbstractTerminal;
+import com.baodanyun.websocket.node.AccessCustomerTerminal;
 import com.baodanyun.websocket.node.terminal.WebSocketTerminal;
-import com.baodanyun.websocket.node.xmpp.ChatNodeAdaptation;
+import com.baodanyun.websocket.node.ChatNodeAdaptation;
 import com.baodanyun.websocket.service.TerminalFactory;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.slf4j.Logger;
@@ -25,9 +25,9 @@ public class AccessWebSocketTerminalCustomerFactory implements TerminalFactory<W
     }
 
     @Override
-    public AbstractNode getNode(ChatNodeAdaptation chatNodeAdaptation, WebSocketTerminal webSocketTerminal) {
+    public AbstractTerminal getNode(ChatNodeAdaptation chatNodeAdaptation, WebSocketTerminal webSocketTerminal) {
         logger.info("create AccessWebSocketTerminalCustomerFactory [" + JSONUtil.toJson(webSocketTerminal.getAbstractUser()) + "]");
-        return new AccessCustomerNode(chatNodeAdaptation,webSocketTerminal.getAbstractUser(),webSocketTerminal.getSession(),getId(webSocketTerminal));
+        return new AccessCustomerTerminal(chatNodeAdaptation,webSocketTerminal.getAbstractUser(),webSocketTerminal.getSession(),getId(webSocketTerminal));
 
     }
 }

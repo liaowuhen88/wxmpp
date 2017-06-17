@@ -28,9 +28,9 @@ public class MulitEventSender {
 
     private ExecutorService cachedThreadPool = Executors.newFixedThreadPool(10);
 
-    private CustomerNode customerNode;
+    private CustomerTerminal customerNode;
 
-    public MulitEventSender(CustomerNode customerNode) {
+    public MulitEventSender(CustomerTerminal customerNode) {
         this.customerNode = customerNode;
     }
 
@@ -41,7 +41,7 @@ public class MulitEventSender {
                 while (it.hasNext()) {
                     AbstractUser visitor = it.next();
                     if (null != visitor) {
-                        VisitorNode visitorNode = NodeManager.getVisitorNodeMap().get(visitor.getId());
+                        VisitorTerminal visitorNode = NodeManager.getVisitorNodeMap().get(visitor.getId());
                         if (online) {
                             try {
                                 msgSendService.sendSMMsgToVisitor(visitorNode.bindUser,customerNode.bindUser, StatusMsg.Status.customerOnline);

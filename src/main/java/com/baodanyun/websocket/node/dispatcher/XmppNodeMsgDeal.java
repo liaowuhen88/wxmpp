@@ -25,5 +25,5 @@ public interface XmppNodeMsgDeal {
      * @throws SmackException.NotConnectedException
      */
 
-    void sendMessage(Message xmppMsg) throws SmackException.NotConnectedException;
+    void sendMessageTOXmpp(Message xmppMsg) throws SmackException.NotConnectedException;
 }

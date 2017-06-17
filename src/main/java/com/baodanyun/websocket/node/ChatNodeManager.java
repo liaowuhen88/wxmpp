@@ -1,4 +1,4 @@
-package com.baodanyun.websocket.node.xmpp;
+package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.util.JSONUtil;

@@ -8,17 +8,17 @@ package com.baodanyun.websocket.core.handle;
  *//*
 
 public interface IVisitorNodeEvent{
-    void visitorAtWaitQueueSuccess(CustomerNode customerNode,VisitorNode visitorNode) throws InterruptedException;
-    void visitorAtWaitQueueFail(CustomerNode customerNode,VisitorNode visitorNode) throws InterruptedException;
+    void visitorAtWaitQueueSuccess(CustomerTerminal customerNode,VisitorTerminal visitorNode) throws InterruptedException;
+    void visitorAtWaitQueueFail(CustomerTerminal customerNode,VisitorTerminal visitorNode) throws InterruptedException;
 
-    void visitorAtOnlineQueueFail(CustomerNode customerNode, VisitorNode visitorNode) throws InterruptedException;
-    void visitorAtOnlineQueueSuccess(CustomerNode customerNode,VisitorNode visitorNode) throws InterruptedException;
-    void visitorAtBackUpQueueSuccess(CustomerNode customerNode,VisitorNode visitorNode) throws InterruptedException;
+    void visitorAtOnlineQueueFail(CustomerTerminal customerNode, VisitorTerminal visitorNode) throws InterruptedException;
+    void visitorAtOnlineQueueSuccess(CustomerTerminal customerNode,VisitorTerminal visitorNode) throws InterruptedException;
+    void visitorAtBackUpQueueSuccess(CustomerTerminal customerNode,VisitorTerminal visitorNode) throws InterruptedException;
 
-    void visitorAtBackUpQueueFail(CustomerNode customerNode, VisitorNode visitorNode) throws InterruptedException;
-    void visitorAtOfflineBackUpQueueSuccess(CustomerNode customerNode,VisitorNode visitorNode) throws InterruptedException;
-    void visitorAtWaitQueueOffline(CustomerNode customerNode, VisitorNode visitorNode) throws InterruptedException;
-    void customerOffline(CustomerNode customerNode,VisitorNode visitorNode) throws InterruptedException;
-    void customerOnline(CustomerNode customerNode,VisitorNode visitorNode) throws InterruptedException;
+    void visitorAtBackUpQueueFail(CustomerTerminal customerNode, VisitorTerminal visitorNode) throws InterruptedException;
+    void visitorAtOfflineBackUpQueueSuccess(CustomerTerminal customerNode,VisitorTerminal visitorNode) throws InterruptedException;
+    void visitorAtWaitQueueOffline(CustomerTerminal customerNode, VisitorTerminal visitorNode) throws InterruptedException;
+    void customerOffline(CustomerTerminal customerNode,VisitorTerminal visitorNode) throws InterruptedException;
+    void customerOnline(CustomerTerminal customerNode,VisitorTerminal visitorNode) throws InterruptedException;
 }
 */

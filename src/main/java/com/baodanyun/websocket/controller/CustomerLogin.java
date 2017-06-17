@@ -9,10 +9,11 @@ import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.dao.OfuserMapper;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.LoginModel;
-import com.baodanyun.websocket.node.xmpp.ChatNode;
-import com.baodanyun.websocket.node.xmpp.ChatNodeAdaptation;
-import com.baodanyun.websocket.node.xmpp.CustomerChatNode;
-import com.baodanyun.websocket.node.xmpp.ChatNodeManager;
+import com.baodanyun.websocket.node.AbstractTerminal;
+import com.baodanyun.websocket.node.ChatNode;
+import com.baodanyun.websocket.node.ChatNodeAdaptation;
+import com.baodanyun.websocket.node.CustomerChatNode;
+import com.baodanyun.websocket.node.ChatNodeManager;
 import com.baodanyun.websocket.service.CustomerDispatcherService;
 import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.service.UserServer;
@@ -128,12 +129,12 @@ public class CustomerLogin extends BaseController {
 
             ChatNode chatnode = ChatNodeManager.getVisitorXmppNode(visitor);
             ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatnode);
-            Node wn = accessWeChatTerminalVisitorFactory.getNode(chatNodeAdaptation,visitor);
+            AbstractTerminal wn = accessWeChatTerminalVisitorFactory.getNode(chatNodeAdaptation,visitor);
 
             userCacheServer.saveVisitorByUidOrOpenID(user.getTo(), visitor);
 
             logger.info(JSONUtil.toJson(visitor));
-            boolean login = wn.login();
+            boolean login = chatnode.login();
             if (!login) {
                 throw new BusinessException("无法接入用户");
             }

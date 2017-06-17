@@ -1,10 +1,8 @@
-package com.baodanyun.websocket.node.xmpp;
+package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.service.UserCacheServer;
-import com.baodanyun.websocket.service.impl.terminal.WebSocketTerminalVisitorFactory;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.jivesoftware.smack.SmackException;
@@ -27,7 +25,7 @@ public class VisitorChatNode extends AbstarctChatNode {
         super(visitor);
     }
 
-    public ChatNode getCurrentChatNode() {
+    public CustomerChatNode getCurrentChatNode() {
         return currentChatNode;
     }
 
@@ -36,9 +34,20 @@ public class VisitorChatNode extends AbstarctChatNode {
         userCacheServer.addVisitorCustomerOpenId(this.getAbstractUser().getOpenId(), currentChatNode.getAbstractUser().getId());
     }
 
+
+    @Override
+    public void online(AbstractTerminal node) throws InterruptedException, BusinessException {
+        super.online(node);
+        this.getCurrentChatNode().joinQueue(this.getAbstractUser());
+    }
+
+
     public ChatNode changeCurrentChatNode(CustomerChatNode currentChatNode) throws BusinessException {
         CustomerChatNode old =  this.currentChatNode;
 
+        if(old.getId().equals(currentChatNode.getId())){
+            return currentChatNode;
+        }
         if (this.isXmppOnline()) {
             if(null != old){
                 if (!old.uninstall(this.getAbstractUser())) {

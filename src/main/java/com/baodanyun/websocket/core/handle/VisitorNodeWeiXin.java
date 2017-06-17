@@ -17,7 +17,7 @@ import java.io.IOException;
  * 如果访客节点上线，客服节点会收到订阅消息
  *//*
 
-public class VisitorNodeWeiXin extends VisitorNode {
+public class VisitorNodeWeiXin extends VisitorTerminal {
     public MsgSendService msgSendService = SpringContextUtil.getBean("WeiXInMsgSendServiceImpl", MsgSendService.class);
 
     //访客回调事件

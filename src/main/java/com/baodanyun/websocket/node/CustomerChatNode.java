@@ -1,9 +1,8 @@
-package com.baodanyun.websocket.node.xmpp;
+package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
-import com.baodanyun.websocket.node.CustomerNode;
 import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
 import com.baodanyun.websocket.service.CustomerDispatcherService;
 import com.baodanyun.websocket.util.SpringContextUtil;
@@ -36,9 +35,9 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
 
     public boolean joinQueue(AbstractUser abstractUser) {
         if (null != getNodes()) {
-            for (Node node : getNodes().values()) {
+            for (AbstractTerminal node : getNodes().values()) {
                 try {
-                    ((CustomerNode) node).joinQueue(abstractUser);
+                    ((CustomerTerminal) node).joinQueue(abstractUser);
                 } catch (InterruptedException e) {
                     logger.error("error", e);
                 }
@@ -52,9 +51,9 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
 
     public boolean uninstall(AbstractUser abstractUser) {
         if (null != getNodes()) {
-            for (Node node : getNodes().values()) {
+            for (AbstractTerminal node : getNodes().values()) {
                 try {
-                    ((CustomerNode) node).uninstall(abstractUser);
+                    ((CustomerTerminal) node).uninstall(abstractUser);
                 } catch (InterruptedException e) {
                     logger.error("error", e);
                 }
@@ -69,9 +68,9 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
     @Override
     public boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws InterruptedException {
         if (null != getNodes()) {
-            for (Node node : getNodes().values()) {
+            for (AbstractTerminal node : getNodes().values()) {
                 try {
-                    ((CustomerNode) node).messageCallBack(abstractUser, msgStatus);
+                    ((CustomerTerminal) node).messageCallBack(abstractUser, msgStatus);
                 } catch (InterruptedException e) {
                     logger.error("error", e);
                 }

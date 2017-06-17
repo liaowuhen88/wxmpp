@@ -12,13 +12,13 @@ import java.util.List;
 
 public interface INodeManager {
 
-//    boolean addCustomerNode(CustomerNode customerNode);
+//    boolean addCustomerNode(CustomerTerminal customerNode);
 
-    List<CustomerNode> freeCustomerNode();
+    List<CustomerTerminal> freeCustomerNode();
 
-    CustomerNode getMyCustomerNode(Customer customer);
+    CustomerTerminal getMyCustomerNode(Customer customer);
 
-    CustomerNode getMyCustomerNode(VisitorNode visitorNode);
+    CustomerTerminal getMyCustomerNode(VisitorTerminal visitorNode);
 
     boolean updateNodeToBackUpQueue(String visitorNodeId);
 

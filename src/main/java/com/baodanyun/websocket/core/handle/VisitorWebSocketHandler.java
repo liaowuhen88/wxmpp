@@ -3,11 +3,11 @@ package com.baodanyun.websocket.core.handle;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.core.common.Common;
-import com.baodanyun.websocket.node.AbstractNode;
+import com.baodanyun.websocket.node.AbstractTerminal;
 import com.baodanyun.websocket.node.terminal.WebSocketTerminal;
-import com.baodanyun.websocket.node.xmpp.ChatNode;
-import com.baodanyun.websocket.node.xmpp.ChatNodeAdaptation;
-import com.baodanyun.websocket.node.xmpp.ChatNodeManager;
+import com.baodanyun.websocket.node.ChatNode;
+import com.baodanyun.websocket.node.ChatNodeAdaptation;
+import com.baodanyun.websocket.node.ChatNodeManager;
 import com.baodanyun.websocket.service.WebSocketService;
 import com.baodanyun.websocket.service.impl.terminal.WebSocketTerminalVisitorFactory;
 import com.baodanyun.websocket.util.JSONUtil;
@@ -36,10 +36,8 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
         ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
         ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
 
-        AbstractNode wn = webSocketTerminalVisitorFactory.getNode(chatNodeAdaptation,webSocketTerminal);
-        chatNode.addNode(wn);
-
-        chatNode.online();
+        AbstractTerminal wn = webSocketTerminalVisitorFactory.getNode(chatNodeAdaptation,webSocketTerminal);
+        chatNode.online(wn);
 
     }
 
@@ -50,12 +48,11 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
             AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
 
             String content = message.getPayload();
-            WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
             ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
-            ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
-            AbstractNode wn = webSocketTerminalVisitorFactory.getNode(chatNodeAdaptation,webSocketTerminal);
+            WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
+            AbstractTerminal wn = chatNode.getNode(webSocketTerminalVisitorFactory.getId(webSocketTerminal));
+            chatNode.receiveFromGod(wn,content);
 
-            wn.receiveFromGod(content);
         }catch (Exception e){
             logger.error("error", e);
         }
@@ -69,10 +66,7 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
 
         ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
         WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
-        ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
-
-        AbstractNode wn = webSocketTerminalVisitorFactory.getNode(chatNodeAdaptation,webSocketTerminal);
-
+        AbstractTerminal wn = chatNode.getNode(webSocketTerminalVisitorFactory.getId(webSocketTerminal));
         chatNode.removeNode(wn.getId());
 
     }

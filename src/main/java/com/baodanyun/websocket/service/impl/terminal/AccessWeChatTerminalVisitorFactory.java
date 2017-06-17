@@ -1,9 +1,9 @@
 package com.baodanyun.websocket.service.impl.terminal;
 
 import com.baodanyun.websocket.bean.user.Visitor;
-import com.baodanyun.websocket.node.AbstractNode;
-import com.baodanyun.websocket.node.AccessVisitorNode;
-import com.baodanyun.websocket.node.xmpp.ChatNodeAdaptation;
+import com.baodanyun.websocket.node.AbstractTerminal;
+import com.baodanyun.websocket.node.AccessVisitorTerminal;
+import com.baodanyun.websocket.node.ChatNodeAdaptation;
 import com.baodanyun.websocket.service.TerminalFactory;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.slf4j.Logger;
@@ -24,8 +24,8 @@ public class AccessWeChatTerminalVisitorFactory implements TerminalFactory<Visit
     }
 
     @Override
-    public AbstractNode getNode(ChatNodeAdaptation chatNodeAdaptation, Visitor visitor) {
-        logger.info("create WeChatNode [" + JSONUtil.toJson(visitor) + "]");
-        return new AccessVisitorNode(chatNodeAdaptation,visitor,getId(visitor));
+    public AbstractTerminal getNode(ChatNodeAdaptation chatNodeAdaptation, Visitor visitor) {
+        logger.info("create WeChatTerminal [" + JSONUtil.toJson(visitor) + "]");
+        return new AccessVisitorTerminal(chatNodeAdaptation,visitor,getId(visitor));
     }
 }

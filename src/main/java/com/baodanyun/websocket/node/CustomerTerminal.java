@@ -3,19 +3,16 @@ package com.baodanyun.websocket.node;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.msg.status.StatusMsg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.event.SynchronizationMsgEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
-import com.baodanyun.websocket.node.xmpp.ChatNodeAdaptation;
 import com.baodanyun.websocket.util.CommonConfig;
 import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.EventBusUtils;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.apache.commons.lang.SerializationUtils;
 import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.packet.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,23 +21,23 @@ import java.util.Date;
 /**
  * Created by liaowuhen on 2017/5/23.
  */
-public abstract class CustomerNode extends AbstractNode implements CustomerDispather {
-    private static final Logger logger = LoggerFactory.getLogger(CustomerNode.class);
+public abstract class CustomerTerminal extends AbstractTerminal implements CustomerDispather {
+    private static final Logger logger = LoggerFactory.getLogger(CustomerTerminal.class);
 
 
 
-    public CustomerNode(ChatNodeAdaptation chatNodeAdaptation,AbstractUser customer) {
+    CustomerTerminal(ChatNodeAdaptation chatNodeAdaptation, AbstractUser customer) {
         super(chatNodeAdaptation);
     }
 
     @Override
-    public Message receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
+    public void receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
         Msg clone = (Msg) SerializationUtils.clone(msg);
         clone.setIcon(null);
         SynchronizationMsgEvent sme = new SynchronizationMsgEvent(clone,this);
 
         EventBusUtils.post(sme);
-        return super.receiveFromGod(msg);
+        super.receiveFromGod(msg);
 
     }
 
