@@ -101,7 +101,7 @@ xchat.initErrorStatusHandelEvent = function () {
 
 // 消息发送失败
 xchat.msgFailEvent = function () {
-    alert("发送失败");
+    alert("发送失败,请刷新重试");
 };
 
 //登录失败
