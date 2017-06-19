@@ -72,7 +72,7 @@ public class WebSocketCustomerTerminal extends CustomerTerminal {
     @Override
     void offline() throws InterruptedException, BusinessException {
         super.offline();
-        StatusMsg offline = getSMMsgSendTOCustomer(MsgStatus.offline);
+        StatusMsg offline = getSMMsgSendTOCustomer(MsgStatus.loginError);
 
         SessionSendUtils.send(getSession(), offline);
     }

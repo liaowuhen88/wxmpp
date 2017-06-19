@@ -5,7 +5,6 @@ import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.node.*;
 import com.baodanyun.websocket.node.terminal.WebSocketTerminal;
-import com.baodanyun.websocket.service.WebSocketService;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.springframework.web.socket.CloseStatus;
@@ -18,7 +17,6 @@ import org.springframework.web.socket.WebSocketSession;
  */
 public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
 
-    WebSocketService webSocketService = SpringContextUtil.getBean("webSocketServiceImpl", WebSocketService.class);
     WebSocketTerminalVisitorFactory webSocketTerminalVisitorFactory = SpringContextUtil.getBean("webSocketTerminalVisitorFactory", WebSocketTerminalVisitorFactory.class);
 
 
@@ -40,16 +38,19 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         logger.info("sessionId--->" + session.getId() + "webSocket receive message:" + JSONUtil.toJson(message));
+        ChatNode chatNode = null;
+        AbstractTerminal wn = null;
         try{
             AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
 
             String content = message.getPayload();
-            ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
+            chatNode = ChatNodeManager.getVisitorXmppNode(au);
             WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
-            AbstractTerminal wn = chatNode.getNode(webSocketTerminalVisitorFactory.getId(webSocketTerminal));
+            wn = chatNode.getNode(webSocketTerminalVisitorFactory.getId(webSocketTerminal));
             chatNode.receiveFromGod(wn,content);
 
         }catch (Exception e){
+            chatNode.sendToXmppError(wn);
             logger.error("error", e);
         }
     }
@@ -58,7 +59,6 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         logger.info("session is closed  ------visitorId:[" + au.getId() + "] ---- sessionId:[" + session.getId() + "]  ----------status:[ " + status + "]");
-        webSocketService.removeSession(au.getId(), session);
 
         ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
         WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);

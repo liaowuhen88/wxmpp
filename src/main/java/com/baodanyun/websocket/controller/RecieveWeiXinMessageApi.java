@@ -66,16 +66,16 @@ public class RecieveWeiXinMessageApi extends BaseController {
             Msg msg = msg(body);
             Visitor visitor = userServer.initUserByOpenId(msg.getFrom());
 
-            ChatNode chatnode = ChatNodeManager.getVisitorXmppNode(visitor);
+            VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
             String id = weChatTerminalVisitorFactory.getId(visitor);
-            AbstractTerminal node = chatnode.getNode(id);
+            AbstractTerminal node = visitorChatNode.getNode(id);
             if(null == node){
-                ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatnode);
+                ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(visitorChatNode);
                 node = weChatTerminalVisitorFactory.getNode(chatNodeAdaptation,visitor);
-                chatnode.addNode(node);
+                visitorChatNode.addNode(node);
             }
 
-            boolean xmppFlag = chatnode.isXmppOnline();
+            boolean xmppFlag = visitorChatNode.isXmppOnline();
             AbstractUser customer;
             if (xmppFlag) {
                 customer = customerDispatcherService.getCustomer(visitor.getOpenId());
@@ -84,6 +84,8 @@ public class RecieveWeiXinMessageApi extends BaseController {
             }
             visitor.setCustomer(customer);
             msg.setTo(customer.getId());
+            CustomerChatNode customerChatNode = ChatNodeManager.getCustomerXmppNode(customer);
+            visitorChatNode.changeCurrentChatNode(customerChatNode);
             logger.info(JSONUtil.toJson(visitor));
 
             if (!StringUtils.isEmpty(msg.getContent()) && msg.getContent().startsWith(keywords)) {
@@ -97,10 +99,10 @@ public class RecieveWeiXinMessageApi extends BaseController {
                     }
                     logger.info("" + cFlag);
                     if (!xmppFlag) {
-                        chatnode.login();
-                        chatnode.online(node);
+                        visitorChatNode.login();
+                        visitorChatNode.online(node);
                     }
-                    chatnode.receiveFromGod(node, msg);
+                    visitorChatNode.receiveFromGod(node, msg);
 
                     // 客服不在线
                     if (!cFlag) {

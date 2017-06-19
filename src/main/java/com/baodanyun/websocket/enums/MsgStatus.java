@@ -40,5 +40,5 @@ public enum MsgStatus {
     // 消息发送状态
 
     msgSuccess,
-    msgFail
+    msgFail      // 消息发送失败
 }

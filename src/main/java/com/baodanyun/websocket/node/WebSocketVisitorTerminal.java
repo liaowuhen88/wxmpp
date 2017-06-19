@@ -24,6 +24,7 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
         this.id =id;
     }
 
+
     public WebSocketSession getSession() {
         return session;
     }
@@ -60,5 +61,15 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
         SessionSendUtils.send(getSession(), hello);
 
         return super.joinQueue();
+    }
+
+
+    @Override
+    void offline() throws InterruptedException, BusinessException {
+        super.offline();
+
+        Msg loginError = getSMMsgSendTOVisitor(getAbstractUser(), MsgStatus.loginError);
+
+        SessionSendUtils.send(getSession(), loginError);
     }
 }

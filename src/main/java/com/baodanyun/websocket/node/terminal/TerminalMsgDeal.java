@@ -23,6 +23,9 @@ public interface TerminalMsgDeal {
 
     void receiveFromGod(AbstractTerminal abstractTerminal ,String msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException;
 
+    void sendToXmppError(AbstractTerminal abstractTerminal) throws InterruptedException, BusinessException, SmackException.NotConnectedException;
+
+
     void receiveFromXmpp(AbstractTerminal abstractTerminal ,Message message);
 
 

@@ -8,9 +8,7 @@ import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.event.SynchronizationMsgEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.sendUtils.SessionSendUtils;
-import com.baodanyun.websocket.service.UserServer;
 import com.baodanyun.websocket.util.EventBusUtils;
-import com.baodanyun.websocket.util.SpringContextUtil;
 import org.apache.commons.lang.SerializationUtils;
 import org.jivesoftware.smack.SmackException;
 import org.slf4j.Logger;
@@ -23,7 +21,6 @@ import org.springframework.web.socket.WebSocketSession;
 public class AccessCustomerTerminal extends CustomerTerminal {
     private static final Logger logger = LoggerFactory.getLogger(AccessCustomerTerminal.class);
 
-    UserServer userServer = SpringContextUtil.getBean("userServerImpl", UserServer.class);
     private WebSocketSession session;
 
     AccessCustomerTerminal(ChatNodeAdaptation chatNodeAdaptation, AbstractUser customer, WebSocketSession session, String id) {

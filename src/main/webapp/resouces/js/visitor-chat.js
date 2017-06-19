@@ -40,6 +40,12 @@ xchat.initSuccessQueueStatusHandelEvent = function () {
         $('#message').focusout();
     });
 };
+
+// 消息发送失败
+xchat.msgFailEvent = function () {
+    alert("发送失败");
+};
+
 //初始化失败调用
 xchat.initErrorStatusHandelEvent = function () {
     this.sendEventUnbind();
@@ -50,7 +56,7 @@ xchat.initErrorStatusHandelEvent = function () {
 xchat.loginErrorStatusHandelEvent = function (json) {
     this.sendEventUnbind();
     this.alertShow("登录失败,请刷新当前页面");
-    this.alertMiss();
+    //this.alertMiss();
 };
 //客服登录成功后调用
 xchat.customerOnlineStatusHandelEvent = function () {

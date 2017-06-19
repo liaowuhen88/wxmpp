@@ -28,7 +28,7 @@ public interface ChatLifecycle {
      * @throws XMPPException
      * @throws SmackException
      */
-    boolean logout() throws BusinessException, IOException, XMPPException, SmackException;
+    boolean logout();
 
 
     /**

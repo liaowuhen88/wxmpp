@@ -1,7 +1,6 @@
 package com.baodanyun.websocket.node.dispatcher;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.enums.MsgStatus;
 
 /**
  * Created by liaowuhen on 2017/5/24.
@@ -23,7 +22,5 @@ public interface CustomerDispather {
      * @throws InterruptedException
      */
     boolean uninstall(AbstractUser abstractUser) throws InterruptedException;
-
-    boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws InterruptedException;
 
 }

@@ -2,6 +2,7 @@ package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.util.SpringContextUtil;
@@ -127,6 +128,15 @@ public class AbstractTerminal {
         this.getChatNodeAdaptation().sendMessageTOXmpp(xmppMsg);
     }
 
+    /**
+     * 发送消息到xmpp
+     *
+     * @throws SmackException.NotConnectedException
+     */
+
+    boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws InterruptedException {
+        return true;
+    }
 
     void receiveFromXmpp(Message message) {
         Msg sendMsg = null;

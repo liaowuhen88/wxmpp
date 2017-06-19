@@ -35,20 +35,22 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        ChatNode chatNode = null;
+        AbstractTerminal wn = null;
         try{
             AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
             logger.info("webSocket receive message:" + JSONUtil.toJson(message));
             String content = message.getPayload();
             WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
 
-            ChatNode chatNode = ChatNodeManager.getCustomerXmppNode(au);
+            chatNode = ChatNodeManager.getCustomerXmppNode(au);
 
-
-            AbstractTerminal wn = chatNode.getNode(webSocketTerminalCustomerFactory.getId(webSocketTerminal));
+            wn = chatNode.getNode(webSocketTerminalCustomerFactory.getId(webSocketTerminal));
             chatNode.receiveFromGod(wn,content);
 
 
         }catch (Exception e){
+            chatNode.sendToXmppError(wn);
             logger.error("error", e);
         }
     }

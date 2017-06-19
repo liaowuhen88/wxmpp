@@ -2,6 +2,7 @@ package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.service.VcardService;
 import com.baodanyun.websocket.service.XmppServer;
@@ -97,13 +98,13 @@ public class AbstarctChatNode implements ChatNode {
     @Override
     public void connectionClosed() {
         logger.info(getAbstractUser().getLoginUsername() + ":connectionClosed");
-        xmppClosed();
+        logout();
     }
 
     @Override
     public void connectionClosedOnError(Exception e) {
         logger.error("error", getAbstractUser().getLoginUsername() + ":connectionClosedOnError", e);
-        xmppClosed();
+        logout();
     }
 
     public void xmppClosed() {
@@ -166,17 +167,16 @@ public class AbstarctChatNode implements ChatNode {
     }
 
     @Override
-    public boolean logout() throws BusinessException, IOException, XMPPException, SmackException {
+    public boolean logout() {
         logger.info("[" + this.getAbstractUser().getId() + "]logout ");
         if (null != xmppConnection) {
             if (xmppConnection.isConnected()) {
                 ((AbstractXMPPConnection) xmppConnection).disconnect();
             }
-            return true;
         } else {
             logger.info("jid:[" + this.getAbstractUser().getId() + "] xMPPConnection is closed or xMPPConnection is null");
-            return false;
         }
+        return true;
     }
 
     @Override
@@ -235,7 +235,7 @@ public class AbstarctChatNode implements ChatNode {
         }
     }
 
-    @Override
+
     public void sendMessageTOXmpp(Message xmppMsg) throws SmackException.NotConnectedException {
         xmppConnection.sendStanza(xmppMsg);
         logger.info(this.getAbstractUser().getId() + "xmpp send message:" + JSONUtil.toJson(xmppMsg));
@@ -284,7 +284,20 @@ public class AbstarctChatNode implements ChatNode {
     }
 
     @Override
+    public void sendToXmppError(AbstractTerminal abstractTerminal) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
+        abstractTerminal.messageCallBack(this.getAbstractUser(), MsgStatus.msgFail);
+    }
+
+    @Override
     public void receiveFromXmpp(AbstractTerminal abstractTerminal, Message message) {
         abstractTerminal.receiveFromXmpp(message);
     }
+
+    /**
+     * 发送信息到xmpp
+     *
+     * @param
+     * @throws SmackException.NotConnectedException
+     */
+
 }

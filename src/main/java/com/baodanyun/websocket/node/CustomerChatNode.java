@@ -27,7 +27,7 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
     }
 
     @Override
-    public boolean logout() throws BusinessException, IOException, XMPPException, SmackException {
+    public boolean logout() {
 
         customerDispatcherService.deleteCustomer(this.getAbstractUser().getId());
 
@@ -66,7 +66,6 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         return true;
     }
 
-    @Override
     public boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws InterruptedException {
         if (null != getNodes()) {
             for (AbstractTerminal node : getNodes().values()) {
