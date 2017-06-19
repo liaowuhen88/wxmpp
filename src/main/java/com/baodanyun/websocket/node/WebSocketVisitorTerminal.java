@@ -18,7 +18,7 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
 
     private WebSocketSession session;
 
-    public WebSocketVisitorTerminal(ChatNodeAdaptation chatNodeAdaptation, AbstractUser visitor, WebSocketSession session, String id) {
+    WebSocketVisitorTerminal(ChatNodeAdaptation chatNodeAdaptation, AbstractUser visitor, WebSocketSession session, String id) {
         super(chatNodeAdaptation,visitor);
         this.session = session;
         this.id =id;

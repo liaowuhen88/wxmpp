@@ -1,9 +1,6 @@
-package com.baodanyun.websocket.service.impl.terminal;
+package com.baodanyun.websocket.node;
 
-import com.baodanyun.websocket.node.AbstractTerminal;
-import com.baodanyun.websocket.node.WebSocketCustomerTerminal;
 import com.baodanyun.websocket.node.terminal.WebSocketTerminal;
-import com.baodanyun.websocket.node.ChatNodeAdaptation;
 import com.baodanyun.websocket.service.TerminalFactory;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.slf4j.Logger;

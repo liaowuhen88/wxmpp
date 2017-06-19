@@ -6,7 +6,6 @@ import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.sendUtils.SessionSendUtils;
-import com.baodanyun.websocket.util.CommonConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.WebSocketSession;
@@ -18,7 +17,7 @@ public class WebSocketCustomerTerminal extends CustomerTerminal {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketCustomerTerminal.class);
     private WebSocketSession session;
 
-    public WebSocketCustomerTerminal(ChatNodeAdaptation chatNodeAdaptation, AbstractUser customer, WebSocketSession session, String id) {
+    WebSocketCustomerTerminal(ChatNodeAdaptation chatNodeAdaptation, AbstractUser customer, WebSocketSession session, String id) {
         super(chatNodeAdaptation,customer);
         this.session = session;
         this.id = id;
@@ -64,11 +63,17 @@ public class WebSocketCustomerTerminal extends CustomerTerminal {
         super.online();
         StatusMsg msg = getSMMsgSendTOCustomer(MsgStatus.loginSuccess);
         StatusMsg initSuccess = getSMMsgSendTOCustomer(MsgStatus.initSuccess);
-        StatusMsg onlineQueueSuccess = getSMMsgSendTOCustomer(MsgStatus.onlineQueueSuccess);
+
         SessionSendUtils.send(getSession(), msg);
         SessionSendUtils.send(getSession(), initSuccess);
 
-        logger.info("保存到缓存[USER_CUSTOMER][" + this.getAbstractUser().getId() + "]--->" + userCacheServer.add(CommonConfig.USER_CUSTOMER, this.getAbstractUser()));
     }
 
+    @Override
+    void offline() throws InterruptedException, BusinessException {
+        super.offline();
+        StatusMsg offline = getSMMsgSendTOCustomer(MsgStatus.offline);
+
+        SessionSendUtils.send(getSession(), offline);
+    }
 }

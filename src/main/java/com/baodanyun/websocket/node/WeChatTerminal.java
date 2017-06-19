@@ -18,7 +18,8 @@ import org.slf4j.LoggerFactory;
 public class WeChatTerminal extends VisitorTerminal {
 
     private static final Logger logger = LoggerFactory.getLogger(WeChatTerminal.class);
-    public WeChatTerminal(ChatNodeAdaptation chatNodeAdaptation, AbstractUser visitor, String id) {
+
+    WeChatTerminal(ChatNodeAdaptation chatNodeAdaptation, AbstractUser visitor, String id) {
         super(chatNodeAdaptation,visitor);
         super.id = id;
     }
