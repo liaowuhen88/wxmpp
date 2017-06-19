@@ -1,11 +1,13 @@
 package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.bean.user.NewCustomer;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
 import com.baodanyun.websocket.service.CustomerDispatcherService;
 import com.baodanyun.websocket.util.SpringContextUtil;
+import org.apache.commons.lang.StringUtils;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 import org.slf4j.Logger;
@@ -20,7 +22,6 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
 
     private static final Logger logger = LoggerFactory.getLogger(CustomerChatNode.class);
     CustomerDispatcherService customerDispatcherService = SpringContextUtil.getBean("customerDispatcherServiceImpl", CustomerDispatcherService.class);
-
     public CustomerChatNode(AbstractUser customer) {
         super(customer);
     }
@@ -82,4 +83,17 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         return true;
     }
 
+    @Override
+    public boolean login() throws BusinessException, IOException, XMPPException, SmackException {
+        // 是否为接入用户客服
+        boolean flag = super.login();
+        if (flag) {
+            if (!StringUtils.isEmpty(((NewCustomer) this.getAbstractUser()).getAccessType()) && ((NewCustomer) this.getAbstractUser()).getAccessType().equals("2")) {
+                customerDispatcherService.saveCustomer(this.getAbstractUser());
+            } else {
+                logger.info("不接入用户");
+            }
+        }
+        return flag;
+    }
 }

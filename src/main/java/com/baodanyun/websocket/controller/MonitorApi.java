@@ -1,25 +1,19 @@
 package com.baodanyun.websocket.controller;
 
 import com.baodanyun.websocket.bean.NodeStatues;
-import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.util.CommonConfig;
-import com.baodanyun.websocket.util.JSONUtil;
-import com.baodanyun.websocket.util.Render;
 import org.apache.commons.lang.StringUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -40,39 +34,8 @@ public class MonitorApi extends BaseController {
     @Autowired
     private UserCacheServer userCacheServer;
 
-
-    @RequestMapping(value = "getMonitorVisitor")
-    public void getMonitorVisitor(String id, HttpServletResponse httpServletResponse) {
-        Map<String, AbstractUser> map = userCacheServer.getVisitors();
-        Response response = getResponse(id, map);
-        Render.r(httpServletResponse, JSONUtil.toJson(response));
-    }
-
-    @RequestMapping(value = "getMonitorCustomer")
-    public void getMonitorCustomer(String id, HttpServletResponse httpServletResponse) {
-
-        Map<String, AbstractUser> map = userCacheServer.getCustomers();
-        Response response = getResponse(id, map);
-        Render.r(httpServletResponse, JSONUtil.toJson(response));
-    }
-
-
-    public Response getResponse(String id, Map<String, ? extends AbstractUser> map) {
-        Response response = new Response();
-        try {
-            List<NodeStatues> li = getNodeStatues(id, map);
-            response.setData(li);
-            response.setSuccess(true);
-
-        } catch (Exception e) {
-            logger.error("error", e);
-            response.setMsg(e.getMessage());
-            response.setSuccess(false);
-        }
-
-        return response;
-    }
-
+    @Autowired
+    private CustomerDispatcherService customerDispatcherService;
 
     public List<NodeStatues> getNodeStatues(String id, Map<String, ? extends AbstractUser> map) throws BusinessException {
 

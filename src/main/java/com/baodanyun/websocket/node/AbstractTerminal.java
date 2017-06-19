@@ -20,8 +20,8 @@ import java.util.Date;
 public class AbstractTerminal {
     private static final Logger logger = LoggerFactory.getLogger(AbstractTerminal.class);
     protected String id;
-    private ChatNodeAdaptation chatNodeAdaptation;
     UserCacheServer userCacheServer = SpringContextUtil.getBean("userCacheServerImpl", UserCacheServer.class);
+    private ChatNodeAdaptation chatNodeAdaptation;
 
     AbstractTerminal(ChatNodeAdaptation chatNodeAdaptation) {
         this.chatNodeAdaptation = chatNodeAdaptation;
@@ -105,6 +105,8 @@ public class AbstractTerminal {
          */
         String realTo = this.getChatNodeAdaptation().getRealTo();
         if(!StringUtils.isEmpty(realTo)){
+            xmppMsg.setTo(realTo);
+        } else {
             xmppMsg.setTo(msg.getTo());
         }
         xmppMsg.setType(Message.Type.chat);
@@ -153,6 +155,10 @@ public class AbstractTerminal {
     }
 
     void online() throws InterruptedException, BusinessException {
+
+    }
+
+    void offline() throws InterruptedException, BusinessException {
 
     }
 }

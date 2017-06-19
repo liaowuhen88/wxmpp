@@ -7,7 +7,6 @@ import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.Transferlog;
 import com.baodanyun.websocket.node.*;
 import com.baodanyun.websocket.service.*;
-import com.baodanyun.websocket.service.impl.terminal.AccessWeChatTerminalVisitorFactory;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jivesoftware.smack.SmackException;

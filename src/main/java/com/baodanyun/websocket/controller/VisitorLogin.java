@@ -1,16 +1,15 @@
 package com.baodanyun.websocket.controller;
 
+import com.baodanyun.websocket.bean.request.VisitorLoginBean;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.exception.BusinessException;
-import com.baodanyun.websocket.node.ChatNode;
 import com.baodanyun.websocket.node.ChatNodeManager;
 import com.baodanyun.websocket.node.CustomerChatNode;
 import com.baodanyun.websocket.node.VisitorChatNode;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.util.JSONUtil;
-import com.baodanyun.websocket.util.XMPPUtil;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 import org.slf4j.Logger;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -31,16 +29,10 @@ import java.io.IOException;
 @RestController
 @RequestMapping("visitorlogin")
 public class VisitorLogin extends BaseController {
-    private static final String LOGIN_USER = "u";
+
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private UserServer userServer;
-
-    @Autowired
-    private XmppServer xmppServer;
-
-    @Autowired
-    private UserCacheServer userCacheServer;
 
     @Autowired
     private VcardService vcardService;
@@ -52,16 +44,14 @@ public class VisitorLogin extends BaseController {
     private CustomerDispatcherService customerDispatcherService;
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
-    public ModelAndView visitor(HttpServletRequest request, HttpServletResponse response) throws IOException, XMPPException, SmackException {
+    public ModelAndView visitor(VisitorLoginBean visitorLoginBean, HttpServletRequest request) throws IOException, XMPPException, SmackException {
         ModelAndView mv = new ModelAndView();
-        String openId = request.getParameter(LOGIN_USER);
         AbstractUser cCard;
-        logger.info("accessId:[" + openId + "]");
-
+        AbstractUser customer;
         try {
+            logger.info("visitorLogin:[" + JSONUtil.toJson(visitorLoginBean) + "]");
             // 初始化用户
-            Visitor visitor = userServer.initUserByOpenId(openId);
-            AbstractUser customer;
+            Visitor visitor = userServer.initUserByOpenId(visitorLoginBean.getU());
 
             // 根据用户是否已经在线，获取服务客服
             VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
@@ -79,12 +69,13 @@ public class VisitorLogin extends BaseController {
             visitorChatNode.changeCurrentChatNode(customerChatNode);
 
             logger.info(JSONUtil.toJson(visitor));
-            boolean flag = customerOnline(customer.getId());
+            request.getSession().setAttribute(Common.USER_KEY, visitor);
+            boolean flag = customerOnline(customerChatNode);
             if (flag) {
                 if (visitorChatNode.login()) {
                     cCard = vcardService.getVCardUser(customer.getId(), visitor.getId(), AbstractUser.class);
                     mv = getOnline(visitor, customer.getId(), cCard);
-                    request.getSession().setAttribute(Common.USER_KEY, visitor);
+
                 } else {
                     throw new BusinessException("接入失败");
                 }
@@ -140,12 +131,11 @@ public class VisitorLogin extends BaseController {
         return mv;
     }
 
-    public boolean customerOnline(String cid) {
-        boolean flag = xmppServer.isAuthenticated(cid);
+    public boolean customerOnline(CustomerChatNode customerChatNode) {
+        boolean flag = customerChatNode.isXmppOnline();
         if (!flag) {
-            flag = xmppUserOnlineServer.isOnline(XMPPUtil.jidToName(cid));
+            flag = xmppUserOnlineServer.isOnline(customerChatNode.getAbstractUser().getLoginUsername());
         }
-
         return flag;
     }
 }

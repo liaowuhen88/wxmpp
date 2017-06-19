@@ -3,13 +3,9 @@ package com.baodanyun.websocket.core.handle;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.core.common.Common;
-import com.baodanyun.websocket.node.AbstractTerminal;
+import com.baodanyun.websocket.node.*;
 import com.baodanyun.websocket.node.terminal.WebSocketTerminal;
-import com.baodanyun.websocket.node.ChatNode;
-import com.baodanyun.websocket.node.ChatNodeAdaptation;
-import com.baodanyun.websocket.node.ChatNodeManager;
 import com.baodanyun.websocket.service.WebSocketService;
-import com.baodanyun.websocket.service.impl.terminal.WebSocketTerminalVisitorFactory;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.springframework.web.socket.CloseStatus;
@@ -28,14 +24,14 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
-        webSocketService.saveSession(au.getId(), session);
         logger.info("session is open --- ip:[" + session.getLocalAddress() + "]------visitorId:[" + au.getId() + "] ---- sessionId:[" + session.getId() + "]  ");
+
         WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
 
         ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
         ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
-
         AbstractTerminal wn = webSocketTerminalVisitorFactory.getNode(chatNodeAdaptation,webSocketTerminal);
         chatNode.online(wn);
 

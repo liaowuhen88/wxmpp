@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 public class VisitorChatNode extends AbstarctChatNode {
     private static final Logger logger = LoggerFactory.getLogger(VisitorChatNode.class);
-    UserCacheServer userCacheServer = SpringContextUtil.getBean("userCacheServer", UserCacheServer.class);
+    UserCacheServer userCacheServer = SpringContextUtil.getBean("userCacheServerImpl", UserCacheServer.class);
 
     private CustomerChatNode currentChatNode;
 
@@ -41,30 +41,27 @@ public class VisitorChatNode extends AbstarctChatNode {
         this.getCurrentChatNode().joinQueue(this.getAbstractUser());
     }
 
+    @Override
+    public AbstractTerminal removeNode(String id) throws IOException, XMPPException, SmackException, BusinessException {
+        return super.removeNode(id);
+    }
 
     public ChatNode changeCurrentChatNode(CustomerChatNode currentChatNode) throws BusinessException {
         CustomerChatNode old =  this.currentChatNode;
 
-        if(old.getId().equals(currentChatNode.getId())){
+        if (null != old && old.getId().equals(currentChatNode.getId())) {
             return currentChatNode;
         }
+
         if (this.isXmppOnline()) {
             if(null != old){
                 if (!old.uninstall(this.getAbstractUser())) {
                     throw new BusinessException("从当前客服卸载失败");
                 }
             }
-
-            if (!currentChatNode.joinQueue(this.getAbstractUser())) {
-                throw new BusinessException("加入到目标客服失败");
-            }
-        } else {
-
-            logger.info(JSONUtil.toJson(this.getAbstractUser()));
-            currentChatNode.joinQueue(this.getAbstractUser());
-
         }
-
+        logger.info(JSONUtil.toJson(this.getAbstractUser()));
+        currentChatNode.joinQueue(this.getAbstractUser());
         setCurrentChatNode(currentChatNode);
 
         return old;

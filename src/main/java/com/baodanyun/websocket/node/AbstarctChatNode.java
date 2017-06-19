@@ -97,13 +97,24 @@ public class AbstarctChatNode implements ChatNode {
     @Override
     public void connectionClosed() {
         logger.info(getAbstractUser().getLoginUsername() + ":connectionClosed");
+        xmppClosed();
     }
 
     @Override
     public void connectionClosedOnError(Exception e) {
         logger.error("error", getAbstractUser().getLoginUsername() + ":connectionClosedOnError", e);
+        xmppClosed();
     }
 
+    public void xmppClosed() {
+        for (AbstractTerminal node : nodes.values()) {
+            try {
+                node.offline();
+            } catch (Exception e) {
+                logger.error("", e);
+            }
+        }
+    }
     @Override
     public void reconnectionSuccessful() {
         logger.info(getAbstractUser().getLoginUsername() + ":reconnectionSuccessful");
@@ -121,6 +132,9 @@ public class AbstarctChatNode implements ChatNode {
 
     @Override
     public boolean login() throws BusinessException, IOException, XMPPException, SmackException {
+        if (this.isXmppOnline()) {
+            return this.isXmppOnline();
+        }
         AbstractUser user = getAbstractUser();
         boolean flag;
         try {
@@ -224,7 +238,7 @@ public class AbstarctChatNode implements ChatNode {
     @Override
     public void sendMessageTOXmpp(Message xmppMsg) throws SmackException.NotConnectedException {
         xmppConnection.sendStanza(xmppMsg);
-        logger.info("xmpp send message:" + JSONUtil.toJson(xmppMsg));
+        logger.info(this.getAbstractUser().getId() + "xmpp send message:" + JSONUtil.toJson(xmppMsg));
 
     }
 

@@ -5,10 +5,13 @@ import com.baodanyun.websocket.bean.msg.status.StatusMsg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.AcsessCustomer;
 import com.baodanyun.websocket.enums.MsgStatus;
+import com.baodanyun.websocket.event.SynchronizationMsgEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.sendUtils.SessionSendUtils;
 import com.baodanyun.websocket.service.UserServer;
+import com.baodanyun.websocket.util.EventBusUtils;
 import com.baodanyun.websocket.util.SpringContextUtil;
+import org.apache.commons.lang.SerializationUtils;
 import org.jivesoftware.smack.SmackException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +26,8 @@ public class AccessCustomerTerminal extends CustomerTerminal {
     UserServer userServer = SpringContextUtil.getBean("userServerImpl", UserServer.class);
     private WebSocketSession session;
 
-    public AccessCustomerTerminal(ChatNodeAdaptation chatNodeAdaptation, AbstractUser customer, WebSocketSession session, String id) {
-        super(chatNodeAdaptation,customer);
+    AccessCustomerTerminal(ChatNodeAdaptation chatNodeAdaptation, AbstractUser customer, WebSocketSession session, String id) {
+        super(chatNodeAdaptation, customer);
         this.session = session;
         this.id = id;
     }
@@ -39,7 +42,12 @@ public class AccessCustomerTerminal extends CustomerTerminal {
 
     @Override
     public void receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
-         super.receiveFromGod(msg);
+        super.receiveFromGod(msg);
+        Msg clone = (Msg) SerializationUtils.clone(msg);
+        clone.setIcon(null);
+        SynchronizationMsgEvent sme = new SynchronizationMsgEvent(clone, this);
+
+        EventBusUtils.post(sme);
     }
 
     @Override

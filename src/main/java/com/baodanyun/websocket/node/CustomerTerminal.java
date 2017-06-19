@@ -4,14 +4,11 @@ import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.msg.status.StatusMsg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.enums.MsgStatus;
-import com.baodanyun.websocket.event.SynchronizationMsgEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
 import com.baodanyun.websocket.util.CommonConfig;
 import com.baodanyun.websocket.util.Config;
-import com.baodanyun.websocket.util.EventBusUtils;
 import com.baodanyun.websocket.util.JSONUtil;
-import org.apache.commons.lang.SerializationUtils;
 import org.jivesoftware.smack.SmackException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,12 +29,9 @@ public abstract class CustomerTerminal extends AbstractTerminal implements Custo
 
     @Override
     public void receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
-        Msg clone = (Msg) SerializationUtils.clone(msg);
-        clone.setIcon(null);
-        SynchronizationMsgEvent sme = new SynchronizationMsgEvent(clone,this);
 
-        EventBusUtils.post(sme);
         super.receiveFromGod(msg);
+
 
     }
 

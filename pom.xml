@@ -92,7 +92,7 @@
 			<properties>
 				<bdy.env>online</bdy.env>
 				<log4j.level>info</log4j.level>
-				<oss.upload>http://101.200.87.16:9080</oss.upload>
+				<oss.upload>http://upload.17doubao.com</oss.upload>
 				<open.msg.debug>true</open.msg.debug>
 				<user.info.interface>https://b.17doubao.com</user.info.interface>
 				<user.info.appKey><![CDATA[_(&%#!_L]]></user.info.appKey>

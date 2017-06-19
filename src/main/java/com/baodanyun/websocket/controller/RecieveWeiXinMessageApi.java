@@ -5,13 +5,12 @@ import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.exception.BusinessException;
-import com.baodanyun.websocket.node.AbstractTerminal;
-import com.baodanyun.websocket.node.ChatNode;
-import com.baodanyun.websocket.node.ChatNodeAdaptation;
-import com.baodanyun.websocket.node.ChatNodeManager;
+import com.baodanyun.websocket.node.*;
 import com.baodanyun.websocket.service.*;
-import com.baodanyun.websocket.service.impl.terminal.WeChatTerminalVisitorFactory;
-import com.baodanyun.websocket.util.*;
+import com.baodanyun.websocket.util.Config;
+import com.baodanyun.websocket.util.HttpServletRequestUtils;
+import com.baodanyun.websocket.util.JSONUtil;
+import com.baodanyun.websocket.util.Render;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,18 +96,17 @@ public class RecieveWeiXinMessageApi extends BaseController {
                         cFlag = xmppUserOnlineServer.isOnline(customer.getLoginUsername());
                     }
                     logger.info("" + cFlag);
+                    if (!xmppFlag) {
+                        chatnode.login();
+                        chatnode.online(node);
+                    }
+                    chatnode.receiveFromGod(node, msg);
+
                     // 客服不在线
                     if (!cFlag) {
                         String url = request.getRequestURL().toString();
                         response = getLeaveMessageResponse(customer, url, msg);
                     } else {
-
-                        if (!xmppFlag) {
-                            chatnode.login();
-                            chatnode.online(node);
-                        }
-
-                        chatnode.receiveFromGod(node,msg);
                         response = getOnlineResponse();
                     }
 
@@ -181,7 +179,6 @@ public class RecieveWeiXinMessageApi extends BaseController {
 
     public Response getBindCustomerResponse(Visitor visitor, Msg msg) throws BusinessException, InterruptedException {
         String cJid = msg.getContent().substring(keywords.length()).trim();
-        userCacheServer.addVisitorCustomerOpenId(msg.getFrom(), XMPPUtil.nameToJid(cJid));
 
         Msg sendMsg = new Msg("切换到客服 [" + cJid + "]成功,欢迎您咨询");
 

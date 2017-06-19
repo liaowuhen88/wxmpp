@@ -14,7 +14,7 @@ public class AccessVisitorTerminal extends WeChatTerminal {
 
     private WebSocketSession session;
 
-    public AccessVisitorTerminal(ChatNodeAdaptation chatNodeAdaptation, AbstractUser visitor, String id) {
+    AccessVisitorTerminal(ChatNodeAdaptation chatNodeAdaptation, AbstractUser visitor, String id) {
         super(chatNodeAdaptation,visitor,id);
     }
 

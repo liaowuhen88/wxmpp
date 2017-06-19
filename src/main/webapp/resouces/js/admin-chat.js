@@ -336,6 +336,13 @@ xchat.offlineWaitQueueStatusHandelEvent = function (json) {
     myUtils.renderQueue(json.from, 'historyFriendList', 'down');
     myUtils.renderQueue(json.from, 'friendList', 'down');
 };
+
+//客服下线后调用
+xchat.customerOfflineStatusHandelEvent = function () {
+    this.alertShow('客服已经下线,消息将以离线方式发送');
+    this.alertMiss();
+    this.leaveMessageShow();
+};
 //用户下线
 xchat.offlineStatusHandelEvent = function (json) {
     var _this = this;

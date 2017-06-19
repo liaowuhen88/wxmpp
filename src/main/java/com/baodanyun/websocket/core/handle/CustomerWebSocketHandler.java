@@ -2,13 +2,9 @@ package com.baodanyun.websocket.core.handle;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.core.common.Common;
-import com.baodanyun.websocket.node.AbstractTerminal;
+import com.baodanyun.websocket.node.*;
 import com.baodanyun.websocket.node.terminal.WebSocketTerminal;
-import com.baodanyun.websocket.node.ChatNode;
-import com.baodanyun.websocket.node.ChatNodeAdaptation;
-import com.baodanyun.websocket.node.ChatNodeManager;
 import com.baodanyun.websocket.service.WebSocketService;
-import com.baodanyun.websocket.service.impl.terminal.WebSocketTerminalCustomerFactory;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.springframework.web.socket.CloseStatus;
@@ -26,9 +22,8 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
-        webSocketService.saveSession(au.getId(), session);
         //获取一个customerNode节点
-        ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
+        ChatNode chatNode = ChatNodeManager.getCustomerXmppNode(au);
         WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
 
         ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
@@ -46,12 +41,11 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
             String content = message.getPayload();
             WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
 
-            ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
+            ChatNode chatNode = ChatNodeManager.getCustomerXmppNode(au);
 
 
             AbstractTerminal wn = chatNode.getNode(webSocketTerminalCustomerFactory.getId(webSocketTerminal));
             chatNode.receiveFromGod(wn,content);
-
 
 
         }catch (Exception e){
@@ -66,7 +60,7 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
         logger.info("customer session is closed: id[" + au.getId() + "]" + session);
         WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
 
-        ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
+        ChatNode chatNode = ChatNodeManager.getCustomerXmppNode(au);
 
         AbstractTerminal wn = chatNode.getNode(webSocketTerminalCustomerFactory.getId(webSocketTerminal));
 

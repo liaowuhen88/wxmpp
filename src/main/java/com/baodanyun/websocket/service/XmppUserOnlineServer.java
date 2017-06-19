@@ -74,6 +74,9 @@ public class XmppUserOnlineServer {
         // </presence>
 
         try {
+            if (StringUtils.isEmpty(str)) {
+                return false;
+            }
             Element el = XmllUtil.xmlElementRoot(str);
             logger.info(el.getName());
             if (el.getName().equals("presence")) {

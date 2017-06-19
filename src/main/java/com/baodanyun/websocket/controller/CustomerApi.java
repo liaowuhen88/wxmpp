@@ -259,7 +259,7 @@ public class CustomerApi extends BaseController {
         Response response = new Response();
         Gson gson = new Gson();
         try {
-            Collection<AbstractUser> freeCustomerNodeList = userCacheServer.getCustomers().values();
+            Collection<AbstractUser> freeCustomerNodeList = customerDispatcherService.getCustomerAccept();
             response.setData(gson.toJson(freeCustomerNodeList));
             response.setSuccess(true);
         } catch (Exception e) {
@@ -279,7 +279,7 @@ public class CustomerApi extends BaseController {
     public void onlineCustomerList(PageModel model, HttpServletResponse httpServletResponse) {
         Response response = new Response();
         try {
-            Collection<AbstractUser> freeCustomerNodeList = userCacheServer.getCustomers().values();
+            Collection<AbstractUser> freeCustomerNodeList = customerDispatcherService.getCustomerAccept();
 
             if (null != freeCustomerNodeList) {
                 Iterator<AbstractUser> it = freeCustomerNodeList.iterator();

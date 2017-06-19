@@ -3,12 +3,8 @@ package com.baodanyun.websocket.core.handle;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.AcsessCustomer;
 import com.baodanyun.websocket.core.common.Common;
-import com.baodanyun.websocket.node.AbstractTerminal;
+import com.baodanyun.websocket.node.*;
 import com.baodanyun.websocket.node.terminal.WebSocketTerminal;
-import com.baodanyun.websocket.node.ChatNode;
-import com.baodanyun.websocket.node.ChatNodeAdaptation;
-import com.baodanyun.websocket.node.ChatNodeManager;
-import com.baodanyun.websocket.service.impl.terminal.AccessWebSocketTerminalCustomerFactory;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
@@ -19,9 +15,6 @@ import org.springframework.web.socket.WebSocketSession;
  */
 public class CustomerSimpleWebSocketHandler extends CustomerWebSocketHandler {
     AccessWebSocketTerminalCustomerFactory accessWebSocketTerminalCustomerFactory = SpringContextUtil.getBean("accessWebSocketTerminalCustomerFactory", AccessWebSocketTerminalCustomerFactory.class);
-
-
-
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {

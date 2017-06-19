@@ -1,25 +1,17 @@
 package com.baodanyun.websocket.controller;
 
 import com.baodanyun.websocket.bean.Response;
-import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.AcsessCustomer;
-import com.baodanyun.websocket.bean.user.Customer;
-import com.baodanyun.websocket.bean.user.Visitor;
+import com.baodanyun.websocket.bean.user.*;
 import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.dao.OfuserMapper;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.LoginModel;
-import com.baodanyun.websocket.node.AbstractTerminal;
-import com.baodanyun.websocket.node.ChatNode;
-import com.baodanyun.websocket.node.ChatNodeAdaptation;
-import com.baodanyun.websocket.node.CustomerChatNode;
-import com.baodanyun.websocket.node.ChatNodeManager;
+import com.baodanyun.websocket.node.*;
 import com.baodanyun.websocket.service.CustomerDispatcherService;
 import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.service.UserServer;
 import com.baodanyun.websocket.service.XmppServer;
 import com.baodanyun.websocket.service.impl.PersonalServiceImpl;
-import com.baodanyun.websocket.service.impl.terminal.AccessWeChatTerminalVisitorFactory;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
 import com.baodanyun.websocket.util.XMPPUtil;
@@ -68,8 +60,8 @@ public class CustomerLogin extends BaseController {
     public void api(LoginModel user, HttpServletRequest request, HttpServletResponse response) {
         //客服必须填写用户名 和 密码
         logger.info("user" + JSONUtil.toJson(user));
-        Customer au = new Customer();
-        // au.setAccessType(user.getAccessType());
+        NewCustomer au = new NewCustomer();
+        au.setAccessType(user.getAccessType());
         try {
             customerInit(au, user);
 
@@ -77,11 +69,6 @@ public class CustomerLogin extends BaseController {
 
             boolean flag = cx.login();
             if (flag) {
-                if (user.getAccessType().equals("2")) {
-                    customerDispatcherService.saveCustomer(au);
-                } else {
-                    logger.info("不接入用户");
-                }
                 request.getSession().setAttribute(Common.USER_KEY, au);
             }
         } catch (Exception e) {
@@ -125,7 +112,6 @@ public class CustomerLogin extends BaseController {
 
             visitor.setCustomer(customer);
             logger.info(JSONUtil.toJson(visitor));
-            userCacheServer.addVisitorCustomerOpenId(visitor.getOpenId(), customer.getId());
 
             ChatNode chatnode = ChatNodeManager.getVisitorXmppNode(visitor);
             ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatnode);

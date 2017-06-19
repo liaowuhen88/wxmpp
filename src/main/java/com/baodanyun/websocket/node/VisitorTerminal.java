@@ -49,7 +49,7 @@ public abstract class VisitorTerminal extends AbstractTerminal {
     @Override
     public void receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
 
-
+        super.receiveFromGod(msg);
         VisitorReciveMsgEvent vme = new VisitorReciveMsgEvent(this.getAbstractUser(), ((Visitor) this.getAbstractUser()).getCustomer(), msg.getContent(), CommonConfig.MSG_BIZ_KF_WX_CHAT);
 
         EventBusUtils.post(vme);
@@ -63,8 +63,6 @@ public abstract class VisitorTerminal extends AbstractTerminal {
 
         SendMsgToWeChatEvent swe = new SendMsgToWeChatEvent(we);
         EventBusUtils.post(swe);
-
-        receiveFromGod(msg);
     }
 
     @Override

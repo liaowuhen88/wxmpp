@@ -40,6 +40,7 @@ import java.util.Map;
 @ComponentScan(basePackages =
         {"com.baodanyun.websocket.service",
                 "com.baodanyun.websocket.controller",
+                "com.baodanyun.websocket.node",
                 "com.baodanyun.websocket.listener"
         })
 //加载资源文件

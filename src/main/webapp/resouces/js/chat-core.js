@@ -389,8 +389,8 @@ var xChat = function (options) {
     //上传配置
     var _pluginsConfig = {
         "upload": {
-            "downUrl": "http://test.17doubao.cn/upload/xmppDownLoad/downLoad",
-            "uploadUrl": "http://test.17doubao.cn/upload/upload"
+            "downUrl": "http://upload.17doubao.com/xmppDownLoad/downLoad",
+            "uploadUrl": "http://upload.17doubao.com/upload"
         }
     };
 
