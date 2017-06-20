@@ -27,6 +27,7 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
     UserCacheServer userCacheServer = SpringContextUtil.getBean("userCacheServerImpl", UserCacheServer.class);
 
     CustomerDispatcherService customerDispatcherService = SpringContextUtil.getBean("customerDispatcherServiceImpl", CustomerDispatcherService.class);
+
     public CustomerChatNode(AbstractUser customer) {
         super(customer);
     }
@@ -55,6 +56,21 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         return true;
     }
 
+    @Override
+    public AbstractTerminal removeNode(String id) throws IOException, XMPPException, SmackException, BusinessException {
+        AbstractTerminal at = super.removeNode(id);
+        try {
+            Thread.sleep(1000 * 2);
+        } catch (InterruptedException e) {
+            logger.error("error", e);
+        }
+
+        if (this.getNodes().size() < 1) {
+            this.logout();
+        }
+        return at;
+    }
+
     public boolean uninstall(AbstractUser abstractUser) {
         if (null != getNodes()) {
             for (AbstractTerminal node : getNodes().values()) {
@@ -75,7 +91,7 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         if (null != getNodes()) {
             for (AbstractTerminal node : getNodes().values()) {
                 try {
-                    ((CustomerTerminal) node).messageCallBack(abstractUser, msgStatus);
+                    node.messageCallBack(abstractUser, msgStatus);
                 } catch (InterruptedException e) {
                     logger.error("error", e);
                 }

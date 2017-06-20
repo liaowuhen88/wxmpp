@@ -282,6 +282,7 @@ xchat.sendStatusDone = function (obj) {
     obj.find('.content').removeClass('sending send-failed').addClass('send-done');
 };
 xchat.sendStatusFailed = function (obj) {
+    //alert("发送失败");
     obj.find('.content').removeClass('sending').addClass('send-failed');
 };
 /*=====================================================================================接收消息=====================================================================================*/

@@ -1,22 +1,12 @@
 package com.baodanyun.websocket.service.impl;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.Customer;
-import com.baodanyun.websocket.bean.user.Visitor;
-import com.baodanyun.websocket.exception.BusinessException;
-import com.baodanyun.websocket.service.CacheService;
 import com.baodanyun.websocket.service.UserCacheServer;
-import com.baodanyun.websocket.util.CommonConfig;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -30,7 +20,7 @@ public class UserCacheServerImpl implements UserCacheServer {
     private static final Map<String, AbstractUser> users = new ConcurrentHashMap<>();
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-    @Autowired
+    /*@Autowired
     private CacheService cacheService;
 
     @Override
@@ -43,9 +33,9 @@ public class UserCacheServerImpl implements UserCacheServer {
         return users.put(to, user);
     }
 
-    /**
+    *//**
      * 维护发送消息目的地
-     */
+     *//*
     @Override
     public boolean addVisitorCustomerOpenId(String openId, String to) throws BusinessException {
 
@@ -70,9 +60,9 @@ public class UserCacheServerImpl implements UserCacheServer {
     }
 
 
-    /**
+    *//**
      * 获取发送地址
-     */
+     *//*
     @Override
     public String getCustomerIdByVisitorOpenId(String openId) throws BusinessException {
         if (StringUtils.isEmpty(openId)) {
@@ -90,9 +80,9 @@ public class UserCacheServerImpl implements UserCacheServer {
         return null;
     }
 
-    /**
+    *//**
      * 获取发送地址
-     */
+     *//*
     @Override
     public AbstractUser getCustomerByVisitorOpenId(String openId) throws BusinessException {
         String cJid = getCustomerIdByVisitorOpenId(openId);
@@ -141,11 +131,11 @@ public class UserCacheServerImpl implements UserCacheServer {
         return user;
     }
 
-   /* */
+   *//* *//*
 
-    /**
+    *//**
      * 获取发送地址
-     */
+     *//*
     @Override
     public synchronized boolean add(String key, String id, AbstractUser visitorUser) {
         Map map = (Map) cacheService.get(key);
@@ -218,7 +208,7 @@ public class UserCacheServerImpl implements UserCacheServer {
 
         }
         cacheService.setOneMonth(key, map);
-    }
+    }*/
 
 
 }

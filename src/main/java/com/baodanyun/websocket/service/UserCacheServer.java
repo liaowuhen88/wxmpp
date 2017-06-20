@@ -1,13 +1,6 @@
 package com.baodanyun.websocket.service;
 
-import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.Customer;
-import com.baodanyun.websocket.bean.user.Visitor;
-import com.baodanyun.websocket.exception.BusinessException;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by liaowuhen on 2016/11/11.
@@ -15,18 +8,18 @@ import java.util.Set;
 @Service
 public interface UserCacheServer {
 
-    AbstractUser getVisitorByUidOrOpenID(String to);
+   /* AbstractUser getVisitorByUidOrOpenID(String to);
 
     AbstractUser saveVisitorByUidOrOpenID(String to, AbstractUser user);
-    /**
+    *//**
      * 维护发送消息目的地
-     */
+     *//*
     boolean addVisitorCustomerOpenId(String openId, String to) throws BusinessException;
 
 
-    /**
+    *//**
      * 获取发送地址
-     */
+     *//*
 
     String getCustomerIdByVisitorOpenId(String openId) throws BusinessException;
 
@@ -55,7 +48,7 @@ public interface UserCacheServer {
 
     Object get(String key);
 
-    void delete(String key, String cid, AbstractUser visitorUser);
+    void delete(String key, String cid, AbstractUser visitorUser);*/
 
 
 }

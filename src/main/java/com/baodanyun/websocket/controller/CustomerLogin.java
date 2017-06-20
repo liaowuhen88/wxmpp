@@ -3,12 +3,10 @@ package com.baodanyun.websocket.controller;
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.user.*;
 import com.baodanyun.websocket.core.common.Common;
-import com.baodanyun.websocket.dao.OfuserMapper;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.LoginModel;
 import com.baodanyun.websocket.node.*;
 import com.baodanyun.websocket.service.UserServer;
-import com.baodanyun.websocket.service.XmppServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
 import com.baodanyun.websocket.util.XMPPUtil;
@@ -32,11 +30,6 @@ import javax.servlet.http.HttpServletResponse;
 public class CustomerLogin extends BaseController {
 
     protected static Logger logger = LoggerFactory.getLogger(CustomerApi.class);
-    @Autowired
-    private OfuserMapper ofuserMapper;
-
-    @Autowired
-    private XmppServer xmppServer;
 
     @Autowired
     private UserServer userServer;

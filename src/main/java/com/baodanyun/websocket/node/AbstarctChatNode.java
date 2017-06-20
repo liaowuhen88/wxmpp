@@ -61,16 +61,6 @@ public class AbstarctChatNode implements ChatNode {
     @Override
     public AbstractTerminal removeNode(String id) throws IOException, XMPPException, SmackException, BusinessException {
         AbstractTerminal at = nodes.remove(id);
-
-        try {
-            Thread.sleep(1000*2);
-        } catch (InterruptedException e) {
-            logger.error("error",e);
-        }
-
-        if (nodes.size() < 1) {
-            this.logout();
-        }
         return at;
     }
 
@@ -222,7 +212,7 @@ public class AbstarctChatNode implements ChatNode {
         try {
             logger.info(getAbstractUser().getId() + ":xmpp receive message " + JSONUtil.toJson(message));
 
-            if (null != getNodes()) {
+            if (null != getNodes() && getNodes().size() > 0) {
                 logger.info(this.getAbstractUser().getId() + "getNodes()" + getNodes().size());
                 for (AbstractTerminal node : getNodes().values()) {
                     node.receiveFromXmpp(message);
