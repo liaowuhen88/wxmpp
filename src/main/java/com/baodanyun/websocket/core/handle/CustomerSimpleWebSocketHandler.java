@@ -1,7 +1,7 @@
 package com.baodanyun.websocket.core.handle;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.AcsessCustomer;
+import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.node.*;
 import com.baodanyun.websocket.node.terminal.WebSocketTerminal;
@@ -18,11 +18,11 @@ public class CustomerSimpleWebSocketHandler extends CustomerWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        AcsessCustomer au = (AcsessCustomer) session.getHandshakeAttributes().get(Common.USER_KEY);
+        Customer au = (Customer) session.getHandshakeAttributes().get(Common.USER_KEY);
         // from_to
         WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
 
-        ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
+        ChatNode chatNode = ChatNodeManager.getCustomerXmppNode(au);
         ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
 
         AbstractTerminal wn = accessWebSocketTerminalCustomerFactory.getNode(chatNodeAdaptation,webSocketTerminal);
@@ -40,8 +40,7 @@ public class CustomerSimpleWebSocketHandler extends CustomerWebSocketHandler {
         ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
         ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
 
-
         AbstractTerminal wn = accessWebSocketTerminalCustomerFactory.getNode(chatNodeAdaptation,webSocketTerminal);
-
+        chatNode.removeNode(wn.getId());
     }
 }

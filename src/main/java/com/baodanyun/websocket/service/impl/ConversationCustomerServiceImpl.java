@@ -19,6 +19,10 @@ public class ConversationCustomerServiceImpl implements ConversationCustomerServ
 
     @Override
     public int insert(ConversationCustomer record) {
+        List<ConversationCustomer> li = conversationCustomerMapper.select(record);
+        if (null != li && li.size() > 0) {
+            return 1;
+        }
         return conversationCustomerMapper.insert(record);
     }
 

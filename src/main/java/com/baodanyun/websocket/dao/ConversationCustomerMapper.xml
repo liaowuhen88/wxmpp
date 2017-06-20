@@ -35,14 +35,14 @@
   </delete>
 
 
-  <delete id="select" parameterType="com.baodanyun.websocket.model.ConversationCustomer">
+  <select id="select" resultMap="ResultMapWithBLOBs" parameterType="com.baodanyun.websocket.model.ConversationCustomer">
     select
     <include refid="Base_Column_List"/>
     ,
     <include refid="Blob_Column_List"/>
     from conversation_customer
     where 1 =1
-    and
+
     <if test="cjid != null">
       and cJid = #{cjid,jdbcType=INTEGER}
     </if>
@@ -50,7 +50,7 @@
       and vJid = #{vjid,jdbcType=INTEGER}
     </if>
 
-  </delete>
+  </select>
 
   <insert id="insert" parameterType="com.baodanyun.websocket.model.ConversationCustomer">
     insert into conversation_customer (id, cJid, vJid, 

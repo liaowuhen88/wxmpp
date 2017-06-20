@@ -41,7 +41,7 @@ public class CustomerLogin extends BaseController {
     public void api(LoginModel user, HttpServletRequest request, HttpServletResponse response) {
         //客服必须填写用户名 和 密码
         logger.info("user" + JSONUtil.toJson(user));
-        NewCustomer au = new NewCustomer();
+        Customer au = new Customer();
         au.setAccessType(user.getAccessType());
         try {
             customerInit(au, user);
@@ -77,7 +77,7 @@ public class CustomerLogin extends BaseController {
             if (StringUtils.isBlank(user.getTo())) {
                 throw new BusinessException("to 参数不能为空");
             }
-            AcsessCustomer customer = new AcsessCustomer();
+            Customer customer = new Customer();
 
             customerInit(customer, user);
             CustomerChatNode cx = ChatNodeManager.getCustomerXmppNode(customer);
@@ -96,9 +96,11 @@ public class CustomerLogin extends BaseController {
             visitor.setCustomer(customer);
             logger.info(JSONUtil.toJson(visitor));
 
-            ChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
+            VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
             ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(visitorChatNode);
             AbstractTerminal wn = accessWeChatTerminalVisitorFactory.getNode(chatNodeAdaptation,visitor);
+
+            visitorChatNode.changeCurrentChatNode(cx);
 
             logger.info(JSONUtil.toJson(visitor));
             visitorChatNode.login();

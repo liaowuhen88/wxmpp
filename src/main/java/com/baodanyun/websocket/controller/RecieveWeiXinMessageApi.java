@@ -81,6 +81,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
                 visitorChatNode.addNode(node);
             }
 
+
             boolean xmppFlag = visitorChatNode.isXmppOnline();
             AbstractUser customer;
             if (xmppFlag) {
@@ -95,6 +96,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
             visitorChatNode.changeCurrentChatNode(customerChatNode);
             logger.info(JSONUtil.toJson(visitor));
 
+
             if (!StringUtils.isEmpty(msg.getContent()) && msg.getContent().startsWith(keywords)) {
                 response = getBindCustomerResponse(visitor, msg);
             } else {
@@ -104,6 +106,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
                     if (!cFlag) {
                         cFlag = xmppUserOnlineServer.isOnline(customer.getLoginUsername());
                     }
+
                     logger.info("客服是否在线" + cFlag);
                     if (!xmppFlag) {
                         visitorChatNode.login();

@@ -89,9 +89,16 @@ public class QueueApi extends BaseController {
         Friend friend = new Friend();
         try {
             Visitor visitor = JSONUtil.toObject(Visitor.class, cc.getVisitor());
+
             friend.setId(visitor.getId());
+
             friend.setName(visitor.getUserName());
-            friend.setOnlineStatus(MsgStatus.changeOffline);
+
+            if (!xmppServer.isAuthenticated(visitor.getId())) {
+                friend.setOnlineStatus(MsgStatus.history);
+            } else {
+                friend.setOnlineStatus(MsgStatus.online);
+            }
 
             friend.setNickname(visitor.getNickName() == null ? visitor.getUserName() == null ? "未知" : visitor.getUserName() : visitor.getNickName());
             friend.setIcon(visitor.getIcon());

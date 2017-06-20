@@ -91,7 +91,7 @@ public class VisitorChatNode extends AbstarctChatNode {
             }
         }
         logger.info(JSONUtil.toJson(this.getAbstractUser()));
-        currentChatNode.joinQueue(this.getAbstractUser());
+
         setCurrentChatNode(currentChatNode);
 
         return old;

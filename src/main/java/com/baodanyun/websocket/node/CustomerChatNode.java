@@ -1,7 +1,7 @@
 package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.NewCustomer;
+import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
@@ -107,7 +107,7 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         // 是否为接入用户客服
         boolean flag = super.login();
         if (flag) {
-            if (!StringUtils.isEmpty(((NewCustomer) this.getAbstractUser()).getAccessType()) && ((NewCustomer) this.getAbstractUser()).getAccessType().equals("2")) {
+            if (!StringUtils.isEmpty(((Customer) this.getAbstractUser()).getAccessType()) && ((Customer) this.getAbstractUser()).getAccessType().equals("2")) {
                 customerDispatcherService.saveCustomer(this.getAbstractUser());
             } else {
                 logger.info("不接入用户");

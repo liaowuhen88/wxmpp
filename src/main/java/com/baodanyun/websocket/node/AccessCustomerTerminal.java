@@ -3,7 +3,7 @@ package com.baodanyun.websocket.node;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.msg.status.StatusMsg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.AcsessCustomer;
+import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.event.SynchronizationMsgEvent;
 import com.baodanyun.websocket.exception.BusinessException;
@@ -49,7 +49,7 @@ public class AccessCustomerTerminal extends CustomerTerminal {
 
     @Override
     public boolean sendMsgToGod(Msg msg) {
-        String to = ((AcsessCustomer) getAbstractUser()).getTo();
+        String to = ((Customer) getAbstractUser()).getTo();
 
         if (msg.getFrom().equals(to)) {
             return SessionSendUtils.send(getSession(), msg);
