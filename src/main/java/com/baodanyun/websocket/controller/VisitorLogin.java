@@ -66,13 +66,13 @@ public class VisitorLogin extends BaseController {
             visitor.setCustomer(customer);
 
             CustomerChatNode customerChatNode = ChatNodeManager.getCustomerXmppNode(customer);
-            visitorChatNode.changeCurrentChatNode(customerChatNode);
 
             logger.info(JSONUtil.toJson(visitor));
             request.getSession().setAttribute(Common.USER_KEY, visitor);
             boolean flag = customerOnline(customerChatNode);
             if (flag) {
                 if (visitorChatNode.login()) {
+                    visitorChatNode.changeCurrentChatNode(customerChatNode);
                     cCard = vcardService.getVCardUser(customer.getId(), visitor.getId(), AbstractUser.class);
                     mv = getOnline(visitor, customer.getId(), cCard);
 
@@ -88,7 +88,6 @@ public class VisitorLogin extends BaseController {
 
         } catch (Exception e) {
             logger.error("error", "", e);
-
             mv.addObject("statue", false);
             mv.addObject("customerIsOnline", false);
             mv.addObject("msg", e.getMessage());

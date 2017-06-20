@@ -59,7 +59,7 @@ public class UserServerImpl implements UserServer {
                 visitor.setId(XMPPUtil.nameToJid(openId.toLowerCase()));
                 String pwd = "00818863ff056f1d66c8427836f94a87";
                 visitor.setPassWord(pwd);
-                logger.info("openid[" + openId + "]---visitor[" + JSONUtil.toJson(visitor) + "]");
+
                 return visitor;
             }
             return visitor;

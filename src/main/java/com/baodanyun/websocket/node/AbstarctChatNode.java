@@ -87,6 +87,7 @@ public class AbstarctChatNode implements ChatNode {
     @Override
     public void authenticated(XMPPConnection xmppConnection, boolean b) {
         logger.info(getAbstractUser().getLoginUsername() + ":authenticated");
+        setXmppConnection(xmppConnection);
         Presence presence = new Presence(Presence.Type.available);
         try {
             xmppConnection.sendStanza(presence);

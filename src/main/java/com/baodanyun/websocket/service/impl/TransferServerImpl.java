@@ -45,8 +45,8 @@ public class TransferServerImpl implements TransferServer {
 
     public boolean changeVisitorTo(Transferlog tm, Visitor visitor) throws BusinessException, XMPPException, IOException, SmackException {
         Customer customer = userCacheServer.getUserCustomer(tm.getTransferto());
-
-        return changeVisitorTo(tm, visitor, customer);
+        Customer customerFrom = userCacheServer.getUserCustomer(tm.getTransferfrom());
+        return changeVisitorTo(tm, visitor, customerFrom, customer);
 
     }
 
@@ -63,11 +63,12 @@ public class TransferServerImpl implements TransferServer {
             chatNode.login();
             chatNode.online(at);
 
+            if (null != customerFrom) {
+                CustomerChatNode chatNodeFrom = ChatNodeManager.getCustomerXmppNode(customerFrom);
+                chatNode.setCurrentChatNode(chatNodeFrom);
+            }
 
-            CustomerChatNode chatNodeFrom = ChatNodeManager.getCustomerXmppNode(customerFrom);
             CustomerChatNode chatNodeTo = ChatNodeManager.getCustomerXmppNode(customer);
-
-            chatNode.setCurrentChatNode(chatNodeFrom);
             chatNode.changeCurrentChatNode(chatNodeTo);
 
         } catch (Exception e) {
@@ -78,7 +79,7 @@ public class TransferServerImpl implements TransferServer {
     }
 
     @Override
-    public boolean changeVisitorTo(Transferlog tm, Visitor visitor, Customer customerFrom) throws BusinessException, XMPPException, IOException, SmackException {
+    public boolean changeVisitorTo(Transferlog tm, Visitor visitor, Customer customerFrom, Customer customer) throws BusinessException, XMPPException, IOException, SmackException {
         boolean flag = false;
         try {
 
@@ -95,30 +96,21 @@ public class TransferServerImpl implements TransferServer {
                 if (StringUtils.isEmpty(tm.getTransferto())) {
                     throw new BusinessException("被转接客服账号id为空");
                 }
-                AbstractUser customerTo = userCacheServer.getUserCustomer(tm.getTransferto());
+                visitor.setCustomer(customer);
+                CustomerChatNode chatNodeTo = ChatNodeManager.getCustomerXmppNode(customer);
 
 
-
-                boolean toflag = xmppServer.isAuthenticated(tm.getTransferto());
-
-                if (toflag) {
-
+                if (chatNodeTo.isXmppOnline()) {
+                    if (null != customerFrom) {
+                        CustomerChatNode chatNodeFrom = ChatNodeManager.getCustomerXmppNode(customerFrom);
+                        chatNodeFrom.uninstall(visitor);
+                    }
                     VisitorChatNode chatNode = ChatNodeManager.getVisitorXmppNode(visitor);
-                    ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
-                    AbstractTerminal at =accessWeChatTerminalVisitorFactory.getNode(chatNodeAdaptation,visitor);
-                    chatNode.login();
-                    chatNode.online(at);
 
-
-                    CustomerChatNode chatNodeFrom = ChatNodeManager.getCustomerXmppNode(customerFrom);
-                    CustomerChatNode chatNodeTo = ChatNodeManager.getCustomerXmppNode(customerTo);
-
-                    chatNode.setCurrentChatNode(chatNodeFrom);
                     chatNode.changeCurrentChatNode(chatNodeTo);
                 } else {
                     throw new BusinessException("转出客服已经下线");
                 }
-
                 tm.setStatus(flag);
             } else {
                 tm.setStatus(flag);
@@ -128,7 +120,7 @@ public class TransferServerImpl implements TransferServer {
             tm.setStatus(false);
             tm.setDetail(e.getMessage());
             throw e;
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             transferlogServer.insert(tm);

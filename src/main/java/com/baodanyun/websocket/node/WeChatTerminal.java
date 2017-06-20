@@ -44,7 +44,7 @@ public class WeChatTerminal extends VisitorTerminal {
                 ChatNodeManager.getCustomerXmppNode(((Visitor) getAbstractUser()).getCustomer()).messageCallBack(this.getAbstractUser(), MsgStatus.msgFail);
 
                 // 发送失败记录
-                msg.setFrom(msg.getTo());
+                msg.setFrom(this.getAbstractUser().getId());
                 msg.setTo(from);
                 msg.setContent("系统消息,微信接口不通，消息发送失败");
                 receiveFromGod(msg);

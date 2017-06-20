@@ -296,10 +296,7 @@ public class XmppServer {
             isLoginDone = true;
 
             if (isLoginDone) {
-                logger.info("id:[" + chatNode.getAbstractUser().getId() + "] login success");
-
                 this.saveXMPPConnection(chatNode.getAbstractUser().getId(), xmppConnection);
-                chatNode.setXmppConnection(xmppConnection);
             }
         }
 

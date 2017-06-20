@@ -52,6 +52,15 @@ public class WebSocketCustomerTerminal extends CustomerTerminal {
     }
 
     @Override
+    public boolean uninstall(AbstractUser abstractUser) throws InterruptedException {
+        Msg online = getSMMsgOnlineSendTOCustomer(abstractUser, MsgStatus.offline);
+
+        SessionSendUtils.send(getSession(), online);
+
+        return super.uninstall(abstractUser);
+    }
+
+    @Override
     public boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws InterruptedException {
         StatusMsg msg = getSMMsgSendTOCustomer(msgStatus);
         SessionSendUtils.send(getSession(), msg);

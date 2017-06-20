@@ -27,9 +27,9 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
         logger.info("session is open --- ip:[" + session.getLocalAddress() + "]------visitorId:[" + au.getId() + "] ---- sessionId:[" + session.getId() + "]  ");
 
         WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
-
         ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
         ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
+
         AbstractTerminal wn = webSocketTerminalVisitorFactory.getNode(chatNodeAdaptation,webSocketTerminal);
         chatNode.online(wn);
 

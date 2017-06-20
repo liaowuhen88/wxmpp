@@ -6,6 +6,8 @@ import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
 import com.baodanyun.websocket.service.CustomerDispatcherService;
+import com.baodanyun.websocket.service.UserCacheServer;
+import com.baodanyun.websocket.util.CommonConfig;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jivesoftware.smack.SmackException;
@@ -21,6 +23,9 @@ import java.io.IOException;
 public class CustomerChatNode extends AbstarctChatNode implements CustomerDispather {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomerChatNode.class);
+
+    UserCacheServer userCacheServer = SpringContextUtil.getBean("userCacheServerImpl", UserCacheServer.class);
+
     CustomerDispatcherService customerDispatcherService = SpringContextUtil.getBean("customerDispatcherServiceImpl", CustomerDispatcherService.class);
     public CustomerChatNode(AbstractUser customer) {
         super(customer);
@@ -93,6 +98,7 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
                 logger.info("不接入用户");
             }
         }
+        userCacheServer.add(CommonConfig.USER_CUSTOMER, this.getAbstractUser());
         return flag;
     }
 }

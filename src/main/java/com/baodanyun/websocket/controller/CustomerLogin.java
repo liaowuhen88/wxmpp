@@ -7,11 +7,8 @@ import com.baodanyun.websocket.dao.OfuserMapper;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.LoginModel;
 import com.baodanyun.websocket.node.*;
-import com.baodanyun.websocket.service.CustomerDispatcherService;
-import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.service.UserServer;
 import com.baodanyun.websocket.service.XmppServer;
-import com.baodanyun.websocket.service.impl.PersonalServiceImpl;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
 import com.baodanyun.websocket.util.XMPPUtil;
@@ -43,15 +40,6 @@ public class CustomerLogin extends BaseController {
 
     @Autowired
     private UserServer userServer;
-
-    @Autowired
-    private UserCacheServer userCacheServer;
-
-    @Autowired
-    private PersonalServiceImpl personalService;
-
-    @Autowired
-    private CustomerDispatcherService customerDispatcherService;
 
     @Autowired
     private AccessWeChatTerminalVisitorFactory accessWeChatTerminalVisitorFactory;
@@ -99,7 +87,9 @@ public class CustomerLogin extends BaseController {
             AcsessCustomer customer = new AcsessCustomer();
 
             customerInit(customer, user);
-            if (!xmppServer.isAuthenticated(customer.getId())) {
+            CustomerChatNode cx = ChatNodeManager.getCustomerXmppNode(customer);
+
+            if (!cx.isXmppOnline()) {
                 throw new BusinessException("客服未登录");
             }
 
@@ -113,18 +103,13 @@ public class CustomerLogin extends BaseController {
             visitor.setCustomer(customer);
             logger.info(JSONUtil.toJson(visitor));
 
-            ChatNode chatnode = ChatNodeManager.getVisitorXmppNode(visitor);
-            ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatnode);
+            ChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
+            ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(visitorChatNode);
             AbstractTerminal wn = accessWeChatTerminalVisitorFactory.getNode(chatNodeAdaptation,visitor);
 
-            userCacheServer.saveVisitorByUidOrOpenID(user.getTo(), visitor);
-
             logger.info(JSONUtil.toJson(visitor));
-            boolean login = chatnode.login();
-            if (!login) {
-                throw new BusinessException("无法接入用户");
-            }
-
+            visitorChatNode.login();
+            visitorChatNode.online(wn);
             customer.setTo(visitor.getId());
             request.getSession().setAttribute(Common.USER_KEY, customer);
             mv.addObject("user", JSONUtil.toJson(customer));

@@ -1,6 +1,7 @@
 package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.msg.Msg;
+import com.baodanyun.websocket.bean.msg.status.StatusMsg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.enums.MsgStatus;
@@ -71,5 +72,13 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
         Msg loginError = getSMMsgSendTOVisitor(getAbstractUser(), MsgStatus.loginError);
 
         SessionSendUtils.send(getSession(), loginError);
+    }
+
+    @Override
+    boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws InterruptedException {
+
+        StatusMsg msg = getSMMsgSendTOVisitor(getAbstractUser(), msgStatus);
+        SessionSendUtils.send(getSession(), msg);
+        return false;
     }
 }
