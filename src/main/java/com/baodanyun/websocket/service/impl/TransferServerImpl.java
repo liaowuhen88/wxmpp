@@ -1,7 +1,6 @@
 package com.baodanyun.websocket.service.impl;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.Transferlog;
@@ -44,8 +43,8 @@ public class TransferServerImpl implements TransferServer {
     private AccessWeChatTerminalVisitorFactory accessWeChatTerminalVisitorFactory;
 
     public boolean changeVisitorTo(Transferlog tm, Visitor visitor) throws BusinessException, XMPPException, IOException, SmackException {
-        Customer customer = userCacheServer.getUserCustomer(tm.getTransferto());
-        Customer customerFrom = userCacheServer.getUserCustomer(tm.getTransferfrom());
+        AbstractUser customer = userCacheServer.getCustomer(tm.getTransferto());
+        AbstractUser customerFrom = userCacheServer.getCustomer(tm.getTransferfrom());
         return changeVisitorTo(tm, visitor, customerFrom, customer);
 
     }
@@ -79,12 +78,11 @@ public class TransferServerImpl implements TransferServer {
     }
 
     @Override
-    public boolean changeVisitorTo(Transferlog tm, Visitor visitor, Customer customerFrom, Customer customer) throws BusinessException, XMPPException, IOException, SmackException {
+    public boolean changeVisitorTo(Transferlog tm, Visitor visitor, AbstractUser customerFrom, AbstractUser customer) throws BusinessException, XMPPException, IOException, SmackException {
         boolean flag = false;
         try {
 
             if (null == visitor) {
-
                 throw new BusinessException("访客未在线");
             }
             if (!tm.getTransferto().equals(tm.getTransferfrom()) || tm.isMustDo()) {

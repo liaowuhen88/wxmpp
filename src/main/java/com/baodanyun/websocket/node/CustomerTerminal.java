@@ -5,10 +5,12 @@ import com.baodanyun.websocket.bean.msg.status.StatusMsg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
+import com.baodanyun.websocket.model.ConversationCustomer;
 import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
-import com.baodanyun.websocket.util.CommonConfig;
+import com.baodanyun.websocket.service.ConversationCustomerService;
 import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.JSONUtil;
+import com.baodanyun.websocket.util.SpringContextUtil;
 import org.jivesoftware.smack.SmackException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +23,7 @@ import java.util.Date;
 public abstract class CustomerTerminal extends AbstractTerminal implements CustomerDispather {
     private static final Logger logger = LoggerFactory.getLogger(CustomerTerminal.class);
 
-
+    ConversationCustomerService conversationCustomerService = SpringContextUtil.getBean("conversationCustomerServiceImpl", ConversationCustomerService.class);
 
     CustomerTerminal(ChatNodeAdaptation chatNodeAdaptation, AbstractUser customer) {
         super(chatNodeAdaptation);
@@ -37,14 +39,21 @@ public abstract class CustomerTerminal extends AbstractTerminal implements Custo
 
     @Override
     public boolean joinQueue(AbstractUser abstractUser) throws InterruptedException {
-        logger.info("保存到缓存--->" + userCacheServer.addCid(CommonConfig.USER_ONLINE, this.getAbstractUser().getId(), abstractUser));
+        ConversationCustomer cc = new ConversationCustomer();
+        cc.setCjid(this.getAbstractUser().getId());
+        cc.setVjid(abstractUser.getId());
+        cc.setVisitor(JSONUtil.toJson(abstractUser));
+        conversationCustomerService.insert(cc);
 
         return true;
     }
 
     @Override
     public boolean uninstall(AbstractUser abstractUser) throws InterruptedException {
-        userCacheServer.delete(CommonConfig.USER_ONLINE, this.getAbstractUser().getId(), abstractUser);
+        ConversationCustomer cc = new ConversationCustomer();
+        cc.setCjid(this.getAbstractUser().getId());
+        cc.setVjid(abstractUser.getId());
+        conversationCustomerService.delete(cc);
         return true;
     }
 

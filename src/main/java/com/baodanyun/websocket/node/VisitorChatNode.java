@@ -33,6 +33,7 @@ public class VisitorChatNode extends AbstarctChatNode {
 
     public void setCurrentChatNode(CustomerChatNode currentChatNode) throws BusinessException {
         this.currentChatNode = currentChatNode;
+
         userCacheServer.addVisitorCustomerOpenId(this.getAbstractUser().getOpenId(), currentChatNode.getAbstractUser().getId());
     }
 

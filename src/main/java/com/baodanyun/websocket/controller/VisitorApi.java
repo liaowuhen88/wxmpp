@@ -49,7 +49,7 @@ public class VisitorApi extends BaseController {
     public void visitor(@PathVariable("vjid") String vjid, HttpServletResponse httpServletResponse) {
         Response response = new Response();
         try {
-            Visitor user = userCacheServer.getUserVisitor(vjid);
+            Visitor user = null;
             if (null != user) {
                 response.setSuccess(true);
                 response.setData(user);

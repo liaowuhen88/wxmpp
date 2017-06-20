@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by yutao on 2016/10/4.
@@ -29,8 +31,8 @@ import java.util.Date;
  */
 @RestController
 public class RecieveWeiXinMessageApi extends BaseController {
+    private static final Map<String, Visitor> users = new ConcurrentHashMap();
     protected static Logger logger = LoggerFactory.getLogger(RecieveWeiXinMessageApi.class);
-
     @Autowired
     private UserServer userServer;
 
@@ -64,7 +66,11 @@ public class RecieveWeiXinMessageApi extends BaseController {
         try {
             String body = HttpServletRequestUtils.getBody(request);
             Msg msg = msg(body);
-            Visitor visitor = userServer.initUserByOpenId(msg.getFrom());
+            Visitor visitor = users.get(msg.getFrom());
+            if (null == visitor) {
+                visitor = userServer.initUserByOpenId(msg.getFrom());
+                users.put(msg.getFrom(), visitor);
+            }
 
             VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
             String id = weChatTerminalVisitorFactory.getId(visitor);
@@ -82,6 +88,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
             } else {
                 customer = customerDispatcherService.getDispatcher(visitor.getOpenId());
             }
+
             visitor.setCustomer(customer);
             msg.setTo(customer.getId());
             CustomerChatNode customerChatNode = ChatNodeManager.getCustomerXmppNode(customer);
@@ -97,7 +104,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
                     if (!cFlag) {
                         cFlag = xmppUserOnlineServer.isOnline(customer.getLoginUsername());
                     }
-                    logger.info("" + cFlag);
+                    logger.info("客服是否在线" + cFlag);
                     if (!xmppFlag) {
                         visitorChatNode.login();
                         visitorChatNode.online(node);

@@ -2,11 +2,8 @@ package com.baodanyun.websocket.controller;
 
 import com.baodanyun.websocket.bean.NodeStatues;
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.Customer;
-import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.service.*;
-import com.baodanyun.websocket.util.CommonConfig;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +68,7 @@ public class MonitorApi extends BaseController {
     public NodeStatues getNodeStatuesFromNode(AbstractUser user) {
         NodeStatues ns = new NodeStatues();
 
-        ns.setId(user.getId());
+       /* ns.setId(user.getId());
         if (xmppServer.isConnected(user.getId())) {
                 ns.setXmppIsOnline(true);
             if (xmppServer.isAuthenticated(user.getId())) {
@@ -103,7 +100,7 @@ public class MonitorApi extends BaseController {
 
         if (webSocketService.hasH5Connected(user.getId())) {
             ns.setWsIsOnline(true);
-        }
+        }*/
 
 
         return ns;

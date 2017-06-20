@@ -1,96 +1,131 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.baodanyun.websocket.dao.ConversationCustomerMapper">
-    <resultMap id="BaseResultMap" type="com.baodanyun.websocket.model.ConversationCustomer">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="customer" property="customer" jdbcType="VARCHAR"/>
-        <result column="ut" property="ut" jdbcType="TIMESTAMP"/>
-    </resultMap>
-    <resultMap id="ResultMapWithBLOBs" type="com.baodanyun.websocket.model.ConversationCustomer"
-               extends="BaseResultMap">
-        <result column="visitor" property="visitor" jdbcType="LONGVARCHAR"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        id, customer, ut
-    </sql>
-    <sql id="Blob_Column_List">
-        visitor
-    </sql>
-    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
-        ,
-        <include refid="Blob_Column_List"/>
-        from conversation_customer
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from conversation_customer
-        where id = #{id,jdbcType=INTEGER}
-    </delete>
-    <insert id="insert" parameterType="com.baodanyun.websocket.model.ConversationCustomer">
-        insert into conversation_customer (id, customer, ut,
-        visitor)
-        values (#{id,jdbcType=INTEGER}, #{customer,jdbcType=VARCHAR}, #{ut,jdbcType=TIMESTAMP},
-        #{visitor,jdbcType=LONGVARCHAR})
-    </insert>
-    <insert id="insertSelective" parameterType="com.baodanyun.websocket.model.ConversationCustomer">
-        insert into conversation_customer
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
-            <if test="customer != null">
-                customer,
-            </if>
-            <if test="ut != null">
-                ut,
-            </if>
-            <if test="visitor != null">
-                visitor,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=INTEGER},
-            </if>
-            <if test="customer != null">
-                #{customer,jdbcType=VARCHAR},
-            </if>
-            <if test="ut != null">
-                #{ut,jdbcType=TIMESTAMP},
-            </if>
-            <if test="visitor != null">
-                #{visitor,jdbcType=LONGVARCHAR},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.baodanyun.websocket.model.ConversationCustomer">
-        update conversation_customer
-        <set>
-            <if test="customer != null">
-                customer = #{customer,jdbcType=VARCHAR},
-            </if>
-            <if test="ut != null">
-                ut = #{ut,jdbcType=TIMESTAMP},
-            </if>
-            <if test="visitor != null">
-                visitor = #{visitor,jdbcType=LONGVARCHAR},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.baodanyun.websocket.model.ConversationCustomer">
+  <resultMap id="BaseResultMap" type="com.baodanyun.websocket.model.ConversationCustomer">
+    <id column="id" property="id" jdbcType="INTEGER"/>
+    <result column="cJid" property="cjid" jdbcType="VARCHAR"/>
+    <result column="vJid" property="vjid" jdbcType="VARCHAR"/>
+    <result column="ut" property="ut" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.baodanyun.websocket.model.ConversationCustomer" extends="BaseResultMap">
+    <result column="visitor" property="visitor" jdbcType="LONGVARCHAR"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, cJid, vJid, ut
+  </sql>
+  <sql id="Blob_Column_List">
+    visitor
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List"/>
+    ,
+    <include refid="Blob_Column_List"/>
+    from conversation_customer
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from conversation_customer
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <delete id="delete" parameterType="com.baodanyun.websocket.model.ConversationCustomer">
+    delete from conversation_customer
+    where cJid = #{cjid,jdbcType=INTEGER} and vJid = #{vjid,jdbcType=INTEGER}
+  </delete>
+
+
+  <delete id="select" parameterType="com.baodanyun.websocket.model.ConversationCustomer">
+    select
+    <include refid="Base_Column_List"/>
+    ,
+    <include refid="Blob_Column_List"/>
+    from conversation_customer
+    where 1 =1
+    and
+    <if test="cjid != null">
+      and cJid = #{cjid,jdbcType=INTEGER}
+    </if>
+    <if test="vjid != null">
+      and vJid = #{vjid,jdbcType=INTEGER}
+    </if>
+
+  </delete>
+
+  <insert id="insert" parameterType="com.baodanyun.websocket.model.ConversationCustomer">
+    insert into conversation_customer (id, cJid, vJid, 
+      ut, visitor)
+    values (#{id,jdbcType=INTEGER}, #{cjid,jdbcType=VARCHAR}, #{vjid,jdbcType=VARCHAR}, 
+      #{ut,jdbcType=TIMESTAMP}, #{visitor,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.baodanyun.websocket.model.ConversationCustomer">
+    insert into conversation_customer
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="cjid != null">
+        cJid,
+      </if>
+      <if test="vjid != null">
+        vJid,
+      </if>
+      <if test="ut != null">
+        ut,
+      </if>
+      <if test="visitor != null">
+        visitor,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="cjid != null">
+        #{cjid,jdbcType=VARCHAR},
+      </if>
+      <if test="vjid != null">
+        #{vjid,jdbcType=VARCHAR},
+      </if>
+      <if test="ut != null">
+        #{ut,jdbcType=TIMESTAMP},
+      </if>
+      <if test="visitor != null">
+        #{visitor,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.baodanyun.websocket.model.ConversationCustomer">
     update conversation_customer
-    set customer = #{customer,jdbcType=VARCHAR},
+    <set>
+      <if test="cjid != null">
+        cJid = #{cjid,jdbcType=VARCHAR},
+      </if>
+      <if test="vjid != null">
+        vJid = #{vjid,jdbcType=VARCHAR},
+      </if>
+      <if test="ut != null">
+        ut = #{ut,jdbcType=TIMESTAMP},
+      </if>
+      <if test="visitor != null">
+        visitor = #{visitor,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.baodanyun.websocket.model.ConversationCustomer">
+    update conversation_customer
+    set cJid = #{cjid,jdbcType=VARCHAR},
+    vJid = #{vjid,jdbcType=VARCHAR},
       ut = #{ut,jdbcType=TIMESTAMP},
       visitor = #{visitor,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-    <update id="updateByPrimaryKey" parameterType="com.baodanyun.websocket.model.ConversationCustomer">
-        update conversation_customer
-        set customer = #{customer,jdbcType=VARCHAR},
-        ut = #{ut,jdbcType=TIMESTAMP}
-        where id = #{id,jdbcType=INTEGER}
-    </update>
+  <update id="updateByPrimaryKey" parameterType="com.baodanyun.websocket.model.ConversationCustomer">
+    update conversation_customer
+    set cJid = #{cjid,jdbcType=VARCHAR},
+      vJid = #{vjid,jdbcType=VARCHAR},
+      ut = #{ut,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

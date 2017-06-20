@@ -1,5 +1,7 @@
 package com.baodanyun.websocket.service;
 
+import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.exception.BusinessException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -8,20 +10,28 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserCacheServer {
 
-   /* AbstractUser getVisitorByUidOrOpenID(String to);
-
-    AbstractUser saveVisitorByUidOrOpenID(String to, AbstractUser user);
-    *//**
+    /**
      * 维护发送消息目的地
-     *//*
+     */
     boolean addVisitorCustomerOpenId(String openId, String to) throws BusinessException;
 
+    String getCustomerIdByVisitorOpenId(String openId) throws BusinessException;
 
-    *//**
+    void addCustomer(AbstractUser abstractUser) throws BusinessException;
+
+    AbstractUser getCustomer(String id) throws BusinessException;
+
+/*    AbstractUser getVisitorByUidOrOpenID(String to);*/
+
+   /*
+
+    AbstractUser saveVisitorByUidOrOpenID(String to, AbstractUser user);
+    */
+    /**
      * 获取发送地址
      *//*
 
-    String getCustomerIdByVisitorOpenId(String openId) throws BusinessException;
+
 
     AbstractUser getCustomerByVisitorOpenId(String openId) throws BusinessException;
 

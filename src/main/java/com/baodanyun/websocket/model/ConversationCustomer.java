@@ -5,7 +5,9 @@ import java.util.Date;
 public class ConversationCustomer {
     private Integer id;
 
-    private String customer;
+    private String cjid;
+
+    private String vjid;
 
     private Date ut;
 
@@ -19,12 +21,20 @@ public class ConversationCustomer {
         this.id = id;
     }
 
-    public String getCustomer() {
-        return customer;
+    public String getCjid() {
+        return cjid;
     }
 
-    public void setCustomer(String customer) {
-        this.customer = customer == null ? null : customer.trim();
+    public void setCjid(String cjid) {
+        this.cjid = cjid == null ? null : cjid.trim();
+    }
+
+    public String getVjid() {
+        return vjid;
+    }
+
+    public void setVjid(String vjid) {
+        this.vjid = vjid == null ? null : vjid.trim();
     }
 
     public Date getUt() {

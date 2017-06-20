@@ -351,7 +351,8 @@ public class CustomerApi extends BaseController {
                 for (WeiXinUser info : infos) {
                     WeiXinListUser wu = new WeiXinListUser();
                     //Visitor visitor = userServer.initVisitor(info.getOpenId());
-                    AbstractUser customer = userCacheServer.getCustomerByVisitorOpenId(info.getOpenId());
+                    String jid = userCacheServer.getCustomerIdByVisitorOpenId(info.getOpenId());
+                    AbstractUser customer = userCacheServer.getCustomer(jid);
                     wu.setInfo(info);
                     //wu.setUser(info);
                     wu.setCustomer(customer);
@@ -379,7 +380,9 @@ public class CustomerApi extends BaseController {
         // from 为openId
         AbstractUser au = (AbstractUser) httpServletRequest.getSession().getAttribute(Common.USER_KEY);
         Visitor visitor = userServer.initUserByOpenId(from);
-        AbstractUser customerFrom = userCacheServer.getCustomerByVisitorOpenId(visitor.getOpenId());
+        String jid = userCacheServer.getCustomerIdByVisitorOpenId(visitor.getOpenId());
+        AbstractUser customerFrom = userCacheServer.getCustomer(jid);
+
         transferServer.bindVisitor(customerFrom, au, visitor);
         Response response = new Response();
         response.setData(au);

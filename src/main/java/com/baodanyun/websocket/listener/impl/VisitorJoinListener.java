@@ -5,7 +5,6 @@ import com.baodanyun.websocket.event.VisitorJoinEvent;
 import com.baodanyun.websocket.listener.EventBusListener;
 import com.baodanyun.websocket.listener.VisitorListener;
 import com.baodanyun.websocket.service.UserCacheServer;
-import com.baodanyun.websocket.util.CommonConfig;
 import com.google.common.eventbus.Subscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,10 +37,6 @@ public class VisitorJoinListener extends AbstarctEventBusListener<VisitorJoinEve
                                             ve.getMsgSendService().sendSMMsgToCustomer(ve.getVisitor(), ve.getCustomer(), MsgStatus.onlineQueueSuccess);
                                             ve.getMsgSendService().sendHelloToCustomer(ve.getVisitor(), ve.getCustomer());
                                             ve.getMsgSendService().sendHelloToVisitor(ve.getVisitor(), ve.getCustomer());
-
-                                            logger.info("保存到缓存--->" + userCacheServer.add(CommonConfig.USER_VISITOR, ve.getVisitor()));
-
-                                            logger.info("保存到缓存--->" + userCacheServer.addCid(CommonConfig.USER_ONLINE, ve.getCustomer().getId(), ve.getVisitor()));
 
 
                                         } catch (Exception e) {

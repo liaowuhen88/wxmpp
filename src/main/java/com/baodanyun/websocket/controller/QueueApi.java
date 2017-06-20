@@ -4,11 +4,13 @@ import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.ComparatorFriend;
 import com.baodanyun.websocket.bean.user.Friend;
+import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.enums.MsgStatus;
-import com.baodanyun.websocket.service.UserCacheServer;
+import com.baodanyun.websocket.model.ConversationCustomer;
+import com.baodanyun.websocket.service.ConversationCustomerService;
 import com.baodanyun.websocket.service.XmppServer;
-import com.baodanyun.websocket.util.CommonConfig;
+import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
 import com.baodanyun.websocket.util.XMPPUtil;
 import org.apache.commons.lang.StringUtils;
@@ -32,10 +34,11 @@ public class QueueApi extends BaseController {
     protected static Log logger = LogFactory.getLog(QueueApi.class);
 
     @Autowired
-    private UserCacheServer userCacheServer;
+    private ConversationCustomerService conversationCustomerService;
 
     @Autowired
     private XmppServer xmppServer;
+
 
     @RequestMapping(value = "queue/{q}")
     public void backupQueue(@PathVariable("q") String q, HttpServletRequest request, HttpServletResponse response) {
@@ -48,12 +51,15 @@ public class QueueApi extends BaseController {
 
                 if (QueueName.online.getValue().equals(QueueName.getQueueNameByKey(q))) {
 
-                    Set<AbstractUser> onlineQueue = userCacheServer.get(CommonConfig.USER_ONLINE, customer.getId());
+                    ConversationCustomer record = new ConversationCustomer();
+                    record.setCjid(customer.getId());
+
+                    List<ConversationCustomer> onlineQueue = conversationCustomerService.select(record);
 
                     if (!CollectionUtils.isEmpty(onlineQueue)) {
-                        for (AbstractUser visitor : onlineQueue) {
+                        for (ConversationCustomer cc : onlineQueue) {
 
-                            Friend friend = getFriend(visitor, customer);
+                            Friend friend = getFriend(cc, customer);
                             if (null != friend) {
                                 friendList.add(friend);
                             }
@@ -63,7 +69,7 @@ public class QueueApi extends BaseController {
 
                 List<Friend> li = new ArrayList<>(friendList);
                 logger.info(li.size());
-                ComparatorFriend comparator=new ComparatorFriend();
+                ComparatorFriend comparator = new ComparatorFriend();
                 Collections.sort(li, comparator);
                 msgResponse.setData(li);
                 msgResponse.setSuccess(true);
@@ -78,24 +84,14 @@ public class QueueApi extends BaseController {
         Render.r(response, XMPPUtil.buildJson(msgResponse));
     }
 
-    private Friend getFriend(AbstractUser visitor, AbstractUser customer) {
+    private Friend getFriend(ConversationCustomer cc, AbstractUser customer) {
 
         Friend friend = new Friend();
         try {
+            Visitor visitor = JSONUtil.toObject(Visitor.class, cc.getVisitor());
             friend.setId(visitor.getId());
-
             friend.setName(visitor.getUserName());
-
-            String id = userCacheServer.getCustomerIdByVisitorOpenId(visitor.getOpenId());
-            if (customer.getId().equals(id)) {
-                if (!xmppServer.isAuthenticated(visitor.getId())) {
-                    friend.setOnlineStatus(MsgStatus.history);
-                } else {
-                    friend.setOnlineStatus(MsgStatus.online);
-                }
-            } else {
-                friend.setOnlineStatus(MsgStatus.changeOffline);
-            }
+            friend.setOnlineStatus(MsgStatus.changeOffline);
 
             friend.setNickname(visitor.getNickName() == null ? visitor.getUserName() == null ? "未知" : visitor.getUserName() : visitor.getNickName());
             friend.setIcon(visitor.getIcon());

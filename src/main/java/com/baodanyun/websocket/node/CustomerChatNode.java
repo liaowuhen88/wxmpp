@@ -7,7 +7,6 @@ import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
 import com.baodanyun.websocket.service.CustomerDispatcherService;
 import com.baodanyun.websocket.service.UserCacheServer;
-import com.baodanyun.websocket.util.CommonConfig;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jivesoftware.smack.SmackException;
@@ -114,7 +113,7 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
                 logger.info("不接入用户");
             }
         }
-        userCacheServer.add(CommonConfig.USER_CUSTOMER, this.getAbstractUser());
+        userCacheServer.addCustomer(this.getAbstractUser());
         return flag;
     }
 }

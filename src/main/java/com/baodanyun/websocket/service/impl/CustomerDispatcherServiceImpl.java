@@ -44,7 +44,7 @@ public class CustomerDispatcherServiceImpl implements CustomerDispatcherService 
 
         logger.info("openid:[" + openId + "]--------cid[" + cid + "]");
         if (!StringUtils.isEmpty(cid) && xmppServer.isAuthenticated(cid)) {
-            AbstractUser customer = userCacheServer.getUserCustomer(cid);
+            AbstractUser customer = userCacheServer.getCustomer(cid);
 
             if (null != customer) {
                 return customer;

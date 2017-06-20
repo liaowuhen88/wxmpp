@@ -1,11 +1,16 @@
 package com.baodanyun.websocket.service.impl;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.exception.BusinessException;
+import com.baodanyun.websocket.service.CacheService;
 import com.baodanyun.websocket.service.UserCacheServer;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,23 +24,17 @@ public class UserCacheServerImpl implements UserCacheServer {
     // 第三方接入用户的对应关系
     private static final Map<String, AbstractUser> users = new ConcurrentHashMap<>();
 
+    // 当前在线客服
+    private static final Map<String, AbstractUser> customers = new ConcurrentHashMap<>();
+
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-    /*@Autowired
+
+    @Autowired
     private CacheService cacheService;
 
-    @Override
-    public AbstractUser getVisitorByUidOrOpenID(String to) {
-        return users.get(to);
-    }
-
-    @Override
-    public AbstractUser saveVisitorByUidOrOpenID(String to, AbstractUser user) {
-        return users.put(to, user);
-    }
-
-    *//**
+    /**
      * 维护发送消息目的地
-     *//*
+     */
     @Override
     public boolean addVisitorCustomerOpenId(String openId, String to) throws BusinessException {
 
@@ -59,10 +58,9 @@ public class UserCacheServerImpl implements UserCacheServer {
         return cacheService.setOneMonth(openId, map);
     }
 
-
-    *//**
+    /**
      * 获取发送地址
-     *//*
+     */
     @Override
     public String getCustomerIdByVisitorOpenId(String openId) throws BusinessException {
         if (StringUtils.isEmpty(openId)) {
@@ -80,9 +78,33 @@ public class UserCacheServerImpl implements UserCacheServer {
         return null;
     }
 
-    *//**
+    @Override
+    public void addCustomer(AbstractUser abstractUser) throws BusinessException {
+        customers.put(abstractUser.getId(), abstractUser);
+    }
+
+    @Override
+    public AbstractUser getCustomer(String id) throws BusinessException {
+        return customers.get(id);
+    }
+
+    /**
      * 获取发送地址
-     *//*
+     */
+
+    /*
+
+    @Override
+    public AbstractUser getVisitorByUidOrOpenID(String to) {
+        return users.get(to);
+    }
+
+    @Override
+    public AbstractUser saveVisitorByUidOrOpenID(String to, AbstractUser user) {
+        return users.put(to, user);
+    }
+
+    *//*
     @Override
     public AbstractUser getCustomerByVisitorOpenId(String openId) throws BusinessException {
         String cJid = getCustomerIdByVisitorOpenId(openId);
@@ -90,46 +112,7 @@ public class UserCacheServerImpl implements UserCacheServer {
         return getUserCustomer(cJid);
     }
 
-    @Override
-    public Map<String, AbstractUser> getVisitors() {
-        Object ob = get(CommonConfig.USER_VISITOR);
-        if (null != ob) {
-            return (HashMap<String, AbstractUser>) ob;
-        } else {
-            return new HashMap<>();
-        }
-    }
 
-    @Override
-    public Map<String, AbstractUser> getCustomers() {
-        Object ob = get(CommonConfig.USER_CUSTOMER);
-        if (null != ob) {
-            return (HashMap<String, AbstractUser>) ob;
-        } else {
-            return new HashMap<>();
-        }
-    }
-
-    @Override
-    public AbstractUser getUser(String userId) {
-        AbstractUser u = getUserVisitor(userId);
-        if (null == u) {
-            u = getUserCustomer(userId);
-        }
-        return u;
-    }
-
-    @Override
-    public Customer getUserCustomer(String userId) {
-        Customer user = (Customer) getCustomers().get(userId);
-        return user;
-    }
-
-    @Override
-    public Visitor getUserVisitor(String userId) {
-        Visitor user = (Visitor) getVisitors().get(userId);
-        return user;
-    }
 
    *//* *//*
 
