@@ -3,6 +3,7 @@ package com.baodanyun.websocket.controller;
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.UserSetPW;
 import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.bean.userInterface.PersonalDetail;
 import com.baodanyun.websocket.bean.userInterface.user.VcardUserRes;
@@ -309,19 +310,20 @@ public class CustomerApi extends BaseController {
         Response response = new Response();
         try {
             Transferlog tm = new Transferlog();
+
             logger.info("vjid[" + vjid + "]----fromJid[" + fromJid + "]----toJid[" + toJid + "]");
             tm.setTransferto(toJid);
             tm.setTransferfrom(fromJid);
             tm.setVisitorjid(vjid);
             tm.setCause("客服主动转接");
 
-            String jid = XMPPUtil.jidToName(vjid);
+            String visitorName = XMPPUtil.jidToName(vjid);
 
             Visitor visitor = null;
-            if (PhoneUtils.isMobile(jid)) {
-                visitor = userServer.initByPhone(jid);
+            if (PhoneUtils.isMobile(visitorName)) {
+                visitor = userServer.initByPhone(visitorName);
             } else {
-                visitor = userServer.initUserByOpenId(jid);
+                visitor = userServer.initUserByOpenId(visitorName);
             }
 
 
@@ -339,6 +341,7 @@ public class CustomerApi extends BaseController {
     /**
      * @param httpServletResponse
      */
+
     @RequestMapping(value = "weiXinVisitorList")
     public void weiXinVisitorList(String name, String phone, String nickName, String uid, HttpServletRequest request, HttpServletResponse httpServletResponse) {
         Response response = new Response();
@@ -350,11 +353,14 @@ public class CustomerApi extends BaseController {
             if (null != infos && infos.size() > 0) {
                 for (WeiXinUser info : infos) {
                     WeiXinListUser wu = new WeiXinListUser();
-                    //Visitor visitor = userServer.initVisitor(info.getOpenId());
                     String jid = userCacheServer.getCustomerIdByVisitorOpenId(info.getOpenId());
                     AbstractUser customer = userCacheServer.getCustomer(jid);
+                    if (!StringUtils.isEmpty(jid) && null == customer) {
+                        customer = new Customer();
+                        customer.setId(jid);
+                        customer.setLoginUsername(XMPPUtil.jidToName(jid));
+                    }
                     wu.setInfo(info);
-                    //wu.setUser(info);
                     wu.setCustomer(customer);
                     visitors.add(wu);
                 }
@@ -378,14 +384,15 @@ public class CustomerApi extends BaseController {
     public void bindCustomer(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, String from) throws BusinessException, InterruptedException {
         // 获取当前客服
         // from 为openId
-        AbstractUser au = (AbstractUser) httpServletRequest.getSession().getAttribute(Common.USER_KEY);
+        AbstractUser customer = (AbstractUser) httpServletRequest.getSession().getAttribute(Common.USER_KEY);
         Visitor visitor = userServer.initUserByOpenId(from);
+
         String jid = userCacheServer.getCustomerIdByVisitorOpenId(visitor.getOpenId());
         AbstractUser customerFrom = userCacheServer.getCustomer(jid);
 
-        transferServer.bindVisitor(customerFrom, au, visitor);
+        transferServer.bindVisitor(customerFrom, customer, visitor);
         Response response = new Response();
-        response.setData(au);
+        response.setData(customer);
         response.setSuccess(true);
 
         Render.r(httpServletResponse, JSONUtil.toJson(response));
@@ -469,7 +476,6 @@ public class CustomerApi extends BaseController {
 
             Visitor user = new Visitor();
             user.setId(vjid);
-            user.setCustomer(au);
 
             VisitorChatNode vn = ChatNodeManager.getVisitorXmppNode(user);
 

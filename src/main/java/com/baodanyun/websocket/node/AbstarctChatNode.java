@@ -36,10 +36,19 @@ public class AbstarctChatNode implements ChatNode {
 
     private AbstractUser abstractUser;
     private XMPPConnection xmppConnection;
+    private Long lastActiveTime;
 
-
-    public AbstarctChatNode(AbstractUser abstractUser) {
+    public AbstarctChatNode(AbstractUser abstractUser, Long lastActiveTime) {
         this.abstractUser = abstractUser;
+        this.lastActiveTime = lastActiveTime;
+    }
+
+    public Long getLastActiveTime() {
+        return lastActiveTime;
+    }
+
+    public void setLastActiveTime(Long lastActiveTime) {
+        this.lastActiveTime = lastActiveTime;
     }
 
     @Override
@@ -47,6 +56,9 @@ public class AbstarctChatNode implements ChatNode {
         return abstractUser;
     }
 
+    public void setAbstractUser(AbstractUser abstractUser) {
+        this.abstractUser = abstractUser;
+    }
 
     @Override
     public void setXmppConnection(XMPPConnection xmppConnection) {
@@ -189,6 +201,18 @@ public class AbstarctChatNode implements ChatNode {
     }
 
     @Override
+    public boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws InterruptedException {
+        return false;
+    }
+
+    /**
+     * 终端加入当前节点，并且调用节点的online 方法
+     *
+     * @param node
+     * @throws InterruptedException
+     * @throws BusinessException
+     */
+    @Override
     public void online(AbstractTerminal node) throws InterruptedException, BusinessException {
          addNode(node);
          node.online();
@@ -211,7 +235,7 @@ public class AbstarctChatNode implements ChatNode {
     public void processMessage(Chat chat, Message message) {
         try {
             logger.info(getAbstractUser().getId() + ":xmpp receive message " + JSONUtil.toJson(message));
-
+            this.setLastActiveTime(System.currentTimeMillis());
             if (null != getNodes() && getNodes().size() > 0) {
                 logger.info(this.getAbstractUser().getId() + "getNodes()" + getNodes().size());
                 for (AbstractTerminal node : getNodes().values()) {
@@ -271,6 +295,7 @@ public class AbstarctChatNode implements ChatNode {
 
     @Override
     public void receiveFromGod(AbstractTerminal abstractTerminal, String msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
+        this.setLastActiveTime(System.currentTimeMillis());
         abstractTerminal.receiveFromGod(msg);
     }
 

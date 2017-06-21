@@ -9,16 +9,15 @@ import java.util.List;
  */
 public class Visitor extends AbstractUser {
 
-    public Visitor(){
-        setUserType(UserType.visitor);
-    }
-
+    // 当前客服标签
+    public List<Tags> tags;
     // 表示用户从那个入口接入
     //  0 默认h5客服端   1 微信直接聊天入口
     private Integer type = 0;
 
-    // 当前客服标签
-    public List<Tags> tags;
+    public Visitor() {
+        setUserType(UserType.visitor);
+    }
 
     public List<Tags> getTags() {
         return tags;
@@ -27,8 +26,6 @@ public class Visitor extends AbstractUser {
     public void setTags(List<Tags> tags) {
         this.tags = tags;
     }
-
-    public AbstractUser customer;
 
     @Override
     public boolean equals(Object o) {
@@ -55,11 +52,4 @@ public class Visitor extends AbstractUser {
         return getId().hashCode();
     }
 
-    public AbstractUser getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(AbstractUser customer) {
-        this.customer = customer;
-    }
 }

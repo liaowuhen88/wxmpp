@@ -4,8 +4,6 @@ import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
-import com.baodanyun.websocket.service.UserCacheServer;
-import com.baodanyun.websocket.util.SpringContextUtil;
 import com.baodanyun.websocket.util.XMPPUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jivesoftware.smack.SmackException;
@@ -21,7 +19,7 @@ import java.util.Date;
 public class AbstractTerminal {
     private static final Logger logger = LoggerFactory.getLogger(AbstractTerminal.class);
     protected String id;
-    UserCacheServer userCacheServer = SpringContextUtil.getBean("userCacheServerImpl", UserCacheServer.class);
+
     private ChatNodeAdaptation chatNodeAdaptation;
 
     AbstractTerminal(ChatNodeAdaptation chatNodeAdaptation) {

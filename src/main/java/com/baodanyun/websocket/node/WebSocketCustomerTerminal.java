@@ -17,8 +17,8 @@ public class WebSocketCustomerTerminal extends CustomerTerminal {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketCustomerTerminal.class);
     private WebSocketSession session;
 
-    WebSocketCustomerTerminal(ChatNodeAdaptation chatNodeAdaptation, AbstractUser customer, WebSocketSession session, String id) {
-        super(chatNodeAdaptation,customer);
+    WebSocketCustomerTerminal(ChatNodeAdaptation chatNodeAdaptation, WebSocketSession session, String id) {
+        super(chatNodeAdaptation);
         this.session = session;
         this.id = id;
     }

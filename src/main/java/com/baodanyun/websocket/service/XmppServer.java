@@ -230,12 +230,10 @@ public class XmppServer {
         XMPPTCPConnectionConfiguration config = builder.setServiceName(Config.xmppdomain).setHost(Config.xmppurl).setPort(Integer.parseInt(Config.xmppport)).build();
         AbstractXMPPConnection connection = new XMPPTCPConnection(config);
 
-
         ReconnectionManager reconnectionManager = ReconnectionManager.getInstanceFor(connection);
-        reconnectionManager.setFixedDelay(10);
-        reconnectionManager.setReconnectionPolicy(ReconnectionManager.ReconnectionPolicy.FIXED_DELAY);
+        reconnectionManager.setFixedDelay(1000);
+        reconnectionManager.setReconnectionPolicy(ReconnectionManager.ReconnectionPolicy.RANDOM_INCREASING_DELAY);
         reconnectionManager.enableAutomaticReconnection();
-
 
         Roster.getInstanceFor(connection).setRosterLoadedAtLogin(false);
 

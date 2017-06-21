@@ -21,14 +21,16 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+
+        // 初始化客服节点
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         //获取一个customerNode节点
         ChatNode chatNode = ChatNodeManager.getCustomerXmppNode(au);
-        WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
+        WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au, session);
 
         ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
 
-        AbstractTerminal wn = webSocketTerminalCustomerFactory.getNode(chatNodeAdaptation,webSocketTerminal);
+        AbstractTerminal wn = webSocketTerminalCustomerFactory.getNode(chatNodeAdaptation, webSocketTerminal);
 
         chatNode.online(wn);
     }
@@ -37,19 +39,19 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         ChatNode chatNode = null;
         AbstractTerminal wn = null;
-        try{
+        try {
             AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
             logger.info("webSocket receive message:" + JSONUtil.toJson(message));
             String content = message.getPayload();
-            WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
+            WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au, session);
 
             chatNode = ChatNodeManager.getCustomerXmppNode(au);
 
             wn = chatNode.getNode(webSocketTerminalCustomerFactory.getId(webSocketTerminal));
-            chatNode.receiveFromGod(wn,content);
+            chatNode.receiveFromGod(wn, content);
 
 
-        }catch (Exception e){
+        } catch (Exception e) {
             chatNode.sendToXmppError(wn);
             logger.error("error", e);
         }
@@ -57,10 +59,10 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-
+// 移除当前结点
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         logger.info("customer session is closed: id[" + au.getId() + "]" + session);
-        WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
+        WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au, session);
 
         ChatNode chatNode = ChatNodeManager.getCustomerXmppNode(au);
 

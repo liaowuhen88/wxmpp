@@ -23,6 +23,6 @@ public class WeChatTerminalVisitorFactory implements TerminalFactory<AbstractUse
     @Override
     public AbstractTerminal getNode(ChatNodeAdaptation chatNodeAdaptation, AbstractUser visitor) {
         logger.info("create WeChatTerminal [" + JSONUtil.toJson(visitor) + "]");
-        return new WeChatTerminal(chatNodeAdaptation,visitor,getId(visitor));
+        return new WeChatTerminal(chatNodeAdaptation, getId(visitor));
     }
 }

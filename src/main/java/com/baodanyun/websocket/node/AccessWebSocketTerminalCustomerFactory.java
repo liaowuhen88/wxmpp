@@ -24,7 +24,7 @@ public class AccessWebSocketTerminalCustomerFactory implements TerminalFactory<W
     @Override
     public AbstractTerminal getNode(ChatNodeAdaptation chatNodeAdaptation, WebSocketTerminal webSocketTerminal) {
         logger.info("create AccessWebSocketTerminalCustomerFactory [" + JSONUtil.toJson(webSocketTerminal.getAbstractUser()) + "]");
-        return new AccessCustomerTerminal(chatNodeAdaptation,webSocketTerminal.getAbstractUser(),webSocketTerminal.getSession(),getId(webSocketTerminal));
+        return new AccessCustomerTerminal(chatNodeAdaptation, webSocketTerminal.getSession(), getId(webSocketTerminal));
 
     }
 }

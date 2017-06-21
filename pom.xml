@@ -62,7 +62,7 @@
 				<log4j.level>info</log4j.level>
 				<oss.upload>http://101.200.87.16:9080</oss.upload>
 				<open.msg.debug>true</open.msg.debug>
-				<user.info.interface>https://test.17doubao.com/hr</user.info.interface>
+				<user.info.interface>http://test2.17doubao.com/hrtest</user.info.interface>
 				<user.info.appKey><![CDATA[_(&%#!_L]]></user.info.appKey>
 				<user.info.appSecret>hr@$^*</user.info.appSecret>
 				<!-- mall order interface  -->

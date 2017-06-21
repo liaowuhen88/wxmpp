@@ -2,7 +2,7 @@ package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.exception.BusinessException;
+import com.baodanyun.websocket.enums.MsgStatus;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.packet.Message;
 
@@ -28,6 +28,11 @@ public class ChatNodeAdaptation {
 
     public void sendMessageTOXmpp(Message xmppMsg) throws SmackException.NotConnectedException {
          chatNode.sendMessageTOXmpp(xmppMsg);
+
+    }
+
+    public boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws SmackException.NotConnectedException, InterruptedException {
+        return chatNode.messageCallBack(abstractUser, msgStatus);
     }
 
     /**

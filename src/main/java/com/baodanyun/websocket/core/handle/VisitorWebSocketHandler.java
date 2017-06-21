@@ -22,7 +22,7 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-
+        // 初始化用户节点
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         logger.info("session is open --- ip:[" + session.getLocalAddress() + "]------visitorId:[" + au.getId() + "] ---- sessionId:[" + session.getId() + "]  ");
 
@@ -57,6 +57,8 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+
+        // 移除当前结点
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         logger.info("session is closed  ------visitorId:[" + au.getId() + "] ---- sessionId:[" + session.getId() + "]  ----------status:[ " + status + "]");
 

@@ -41,12 +41,13 @@ public class CustomerLogin extends BaseController {
     public void api(LoginModel user, HttpServletRequest request, HttpServletResponse response) {
         //客服必须填写用户名 和 密码
         logger.info("user" + JSONUtil.toJson(user));
-        Customer au = new Customer();
-        au.setAccessType(user.getAccessType());
+        Customer au = null;
         try {
-            customerInit(au, user);
-
+            // 初始化客服，客服登录
+            au = customerInit(user);
+            au.setAccessType(user.getAccessType());
             CustomerChatNode cx = ChatNodeManager.getCustomerXmppNode(au);
+
 
             boolean flag = cx.login();
             if (flag) {
@@ -77,35 +78,40 @@ public class CustomerLogin extends BaseController {
             if (StringUtils.isBlank(user.getTo())) {
                 throw new BusinessException("to 参数不能为空");
             }
-            Customer customer = new Customer();
 
-            customerInit(customer, user);
+            // 客服处理部分，确保客服在线
+            Customer customer = customerInit(user);
             CustomerChatNode cx = ChatNodeManager.getCustomerXmppNode(customer);
-
             if (!cx.isXmppOnline()) {
                 throw new BusinessException("客服未登录");
             }
 
+            // 因为已经有客服终端启动，所以可以直接初始化用户
+            // 初始化用户
             Visitor visitor;
             if (StringUtils.isNumeric(user.getTo())) {
                 visitor = userServer.initVisitorByUid(Long.parseLong(user.getTo()));
             } else {
                 visitor = userServer.initUserByOpenId(user.getTo());
             }
-
-            visitor.setCustomer(customer);
             logger.info(JSONUtil.toJson(visitor));
-
-            VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
-            ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(visitorChatNode);
-            AbstractTerminal wn = accessWeChatTerminalVisitorFactory.getNode(chatNodeAdaptation,visitor);
-
-            visitorChatNode.changeCurrentChatNode(cx);
-
-            logger.info(JSONUtil.toJson(visitor));
-            visitorChatNode.login();
-            visitorChatNode.online(wn);
             customer.setTo(visitor.getId());
+
+            // 初始化用户终端
+            VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
+            AbstractTerminal wn = visitorChatNode.getNode(accessWeChatTerminalVisitorFactory.getId(visitor));
+            if (null == wn) {
+                ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(visitorChatNode);
+                wn = accessWeChatTerminalVisitorFactory.getNode(chatNodeAdaptation, visitor);
+                visitorChatNode.setCurrentChatNode(cx);
+                logger.info(JSONUtil.toJson(visitor));
+                visitorChatNode.login();
+
+                // 用户上线并且通知客服
+                visitorChatNode.online(wn);
+
+            }
+
             request.getSession().setAttribute(Common.USER_KEY, customer);
             mv.addObject("user", JSONUtil.toJson(customer));
             mv.addObject("to", user.getTo() + "@126xmpp");
@@ -144,7 +150,8 @@ public class CustomerLogin extends BaseController {
      */
 
 
-    public void customerInit(Customer customer, LoginModel user) throws BusinessException {
+    public Customer customerInit(LoginModel user) throws BusinessException {
+        Customer customer = new Customer();
         if (StringUtils.isBlank(user.getUsername())) {
             throw new BusinessException("[username]参数用户名不能为空");
         } else {
@@ -164,6 +171,7 @@ public class CustomerLogin extends BaseController {
         customer.setOpenId(user.getUsername());
         customer.setId(jid);
 
+        return customer;
     }
 
 

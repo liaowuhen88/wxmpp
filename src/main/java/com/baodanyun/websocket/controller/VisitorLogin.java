@@ -50,12 +50,11 @@ public class VisitorLogin extends BaseController {
         AbstractUser customer;
         try {
             logger.info("visitorLogin:[" + JSONUtil.toJson(visitorLoginBean) + "]");
-            // 初始化用户
+            // 初始化用户,以及用户节点
             Visitor visitor = userServer.initUserByOpenId(visitorLoginBean.getU());
-
-            // 根据用户是否已经在线，获取服务客服
             VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
             boolean login = visitorChatNode.isXmppOnline();
+            // 根据用户是否已经在线，获取服务客服
             if (login) {
                 // 在线获取上次服务客服
                 customer = customerDispatcherService.getCustomer(visitor.getOpenId());
@@ -63,13 +62,14 @@ public class VisitorLogin extends BaseController {
                 // 非在线随机获取客服
                 customer = customerDispatcherService.getDispatcher(visitor.getOpenId());
             }
-            visitor.setCustomer(customer);
 
+            // 获取客服节点
             CustomerChatNode customerChatNode = ChatNodeManager.getCustomerXmppNode(customer);
-
             logger.info(JSONUtil.toJson(visitor));
             request.getSession().setAttribute(Common.USER_KEY, visitor);
             boolean flag = customerOnline(customerChatNode);
+
+            // 如果客服在线，用户登录
             if (flag) {
                 if (visitorChatNode.login()) {
                     visitorChatNode.changeCurrentChatNode(customerChatNode);

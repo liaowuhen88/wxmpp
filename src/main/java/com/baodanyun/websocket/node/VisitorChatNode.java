@@ -23,8 +23,8 @@ public class VisitorChatNode extends AbstarctChatNode {
     WeChatTerminalVisitorFactory weChatTerminalVisitorFactory = SpringContextUtil.getBean("weChatTerminalVisitorFactory", WeChatTerminalVisitorFactory.class);
     private CustomerChatNode currentChatNode;
 
-    public VisitorChatNode(AbstractUser visitor) {
-        super(visitor);
+    public VisitorChatNode(AbstractUser visitor, Long lastActiveTime) {
+        super(visitor, lastActiveTime);
     }
 
     public CustomerChatNode getCurrentChatNode() {
@@ -37,7 +37,13 @@ public class VisitorChatNode extends AbstarctChatNode {
         userCacheServer.addVisitorCustomerOpenId(this.getAbstractUser().getOpenId(), currentChatNode.getAbstractUser().getId());
     }
 
-
+    /**
+     * 通知当前客服，有用户接入
+     *
+     * @param node
+     * @throws InterruptedException
+     * @throws BusinessException
+     */
     @Override
     public void online(AbstractTerminal node) throws InterruptedException, BusinessException {
         super.online(node);
@@ -75,9 +81,17 @@ public class VisitorChatNode extends AbstarctChatNode {
         }
     }
 
-
+    /**
+     *  条件：终端上线后，
+     *
+     *  更新客服，从旧的客服下线，新的客服上线，
+     * @param currentChatNode
+     * @return
+     * @throws BusinessException
+     */
     public ChatNode changeCurrentChatNode(CustomerChatNode currentChatNode) throws BusinessException {
         CustomerChatNode old =  this.currentChatNode;
+        setCurrentChatNode(currentChatNode);
 
         if (null != old && old.getId().equals(currentChatNode.getId())) {
             return currentChatNode;
@@ -92,8 +106,8 @@ public class VisitorChatNode extends AbstarctChatNode {
         }
         logger.info(JSONUtil.toJson(this.getAbstractUser()));
 
-        setCurrentChatNode(currentChatNode);
 
+        currentChatNode.joinQueue(this.getAbstractUser());
         return old;
     }
 

@@ -96,10 +96,10 @@ public class AbstractUser implements Serializable {
 
     }
 
-    @Override
+  /*  @Override
     public int hashCode() {
         return this.getId().hashCode();
-    }
+    }*/
 
     public Long getLoginTime() {
         return loginTime;

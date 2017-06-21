@@ -1,7 +1,6 @@
 package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.msg.Msg;
-import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.event.SendMsgToWeChatEvent;
@@ -19,8 +18,8 @@ public class WeChatTerminal extends VisitorTerminal {
 
     private static final Logger logger = LoggerFactory.getLogger(WeChatTerminal.class);
 
-    WeChatTerminal(ChatNodeAdaptation chatNodeAdaptation, AbstractUser visitor, String id) {
-        super(chatNodeAdaptation,visitor);
+    WeChatTerminal(ChatNodeAdaptation chatNodeAdaptation, String id) {
+        super(chatNodeAdaptation);
         super.id = id;
     }
 
@@ -41,7 +40,7 @@ public class WeChatTerminal extends VisitorTerminal {
             we.setMsgStatus((byte) -1);
 
             if (!flag) {
-                ChatNodeManager.getCustomerXmppNode(((Visitor) getAbstractUser()).getCustomer()).messageCallBack(this.getAbstractUser(), MsgStatus.msgFail);
+                this.getChatNodeAdaptation().messageCallBack(this.getAbstractUser(), MsgStatus.msgFail);
 
                 // 发送失败记录
                 msg.setFrom(this.getAbstractUser().getId());

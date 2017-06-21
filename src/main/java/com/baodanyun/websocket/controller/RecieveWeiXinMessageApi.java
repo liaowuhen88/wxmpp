@@ -89,8 +89,6 @@ public class RecieveWeiXinMessageApi extends BaseController {
             } else {
                 customer = customerDispatcherService.getDispatcher(visitor.getOpenId());
             }
-
-            visitor.setCustomer(customer);
             msg.setTo(customer.getId());
             CustomerChatNode customerChatNode = ChatNodeManager.getCustomerXmppNode(customer);
             visitorChatNode.changeCurrentChatNode(customerChatNode);

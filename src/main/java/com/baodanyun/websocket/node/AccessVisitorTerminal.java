@@ -1,6 +1,5 @@
 package com.baodanyun.websocket.node;
 
-import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.exception.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +13,8 @@ public class AccessVisitorTerminal extends WeChatTerminal {
 
     private WebSocketSession session;
 
-    AccessVisitorTerminal(ChatNodeAdaptation chatNodeAdaptation, AbstractUser visitor, String id) {
-        super(chatNodeAdaptation,visitor,id);
+    AccessVisitorTerminal(ChatNodeAdaptation chatNodeAdaptation, String id) {
+        super(chatNodeAdaptation, id);
     }
 
     public WebSocketSession getSession() {
@@ -29,7 +28,6 @@ public class AccessVisitorTerminal extends WeChatTerminal {
     @Override
     public void online() throws InterruptedException, BusinessException {
         super.online();
-        joinQueue();
     }
 
 }

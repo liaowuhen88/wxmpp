@@ -575,10 +575,10 @@ xchat.openFriendWindow = function (isOnline, id, nickname, openId, icon) {
     $(".chat-detail").show();   //把用户详情显示出来
     $(_this.controls.msgContainer).empty(); //清空当前的聊天容器内容
     // 判断是否在线，是否开启聊天窗口
-    if (isOnline == 'changeOffline') {
-        $('#chatInput').addClass('chat-input-disabled');
-    } else {
+    if (isOnline != '-1') {
         $('#chatInput').removeClass('chat-input-disabled');
+    } else {
+        $('#chatInput').addClass('chat-input-disabled');
     }
 
     _this.getLocalHistory(id);

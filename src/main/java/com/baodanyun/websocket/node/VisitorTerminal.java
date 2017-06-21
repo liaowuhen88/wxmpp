@@ -25,11 +25,9 @@ import java.util.Date;
  */
 public abstract class VisitorTerminal extends AbstractTerminal {
     private static final Logger logger = LoggerFactory.getLogger(VisitorTerminal.class);
-    private AbstractUser visitor;
 
-    VisitorTerminal(ChatNodeAdaptation chatNodeAdaptation, AbstractUser visitor) {
+    VisitorTerminal(ChatNodeAdaptation chatNodeAdaptation) {
         super(chatNodeAdaptation);
-        this.visitor = visitor;
     }
 
 
@@ -50,7 +48,7 @@ public abstract class VisitorTerminal extends AbstractTerminal {
     public void receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
 
         super.receiveFromGod(msg);
-        VisitorReciveMsgEvent vme = new VisitorReciveMsgEvent(this.getAbstractUser(), ((Visitor) this.getAbstractUser()).getCustomer(), msg.getContent(), CommonConfig.MSG_BIZ_KF_WX_CHAT);
+        VisitorReciveMsgEvent vme = new VisitorReciveMsgEvent(this.getAbstractUser(), this.getChatNodeAdaptation().getAbstractUser(), msg.getContent(), CommonConfig.MSG_BIZ_KF_WX_CHAT);
 
         EventBusUtils.post(vme);
 
@@ -69,7 +67,7 @@ public abstract class VisitorTerminal extends AbstractTerminal {
     public void online() throws InterruptedException, BusinessException {
 
         super.online();
-        VisitorLoginEvent vl = new VisitorLoginEvent(this.getAbstractUser(), ((Visitor) this.getAbstractUser()).getCustomer(), null);
+        VisitorLoginEvent vl = new VisitorLoginEvent(this.getAbstractUser(), this.getChatNodeAdaptation().getAbstractUser(), null);
 
         EventBusUtils.post(vl);
     }
@@ -88,10 +86,11 @@ public abstract class VisitorTerminal extends AbstractTerminal {
         sendMsg.setType(type);
         sendMsg.setContentType(Msg.MsgContentType.text.toString());
 
-        from = ((Visitor)visitor).getCustomer().getId();
+        AbstractUser customer = this.getChatNodeAdaptation().getAbstractUser();
+        from = customer.getId();
         sendMsg.setFrom(from);
-        sendMsg.setIcon(((Visitor)visitor).getCustomer().getIcon());
-        sendMsg.setFromName(((Visitor)visitor).getCustomer().getNickName());
+        sendMsg.setIcon(customer.getIcon());
+        sendMsg.setFromName(customer.getNickName());
 
 
         sendMsg.setTo(to);

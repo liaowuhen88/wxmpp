@@ -4,9 +4,12 @@ import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
+import com.baodanyun.websocket.model.ConversationCustomer;
 import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
+import com.baodanyun.websocket.service.ConversationCustomerService;
 import com.baodanyun.websocket.service.CustomerDispatcherService;
 import com.baodanyun.websocket.service.UserCacheServer;
+import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jivesoftware.smack.SmackException;
@@ -24,11 +27,11 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
     private static final Logger logger = LoggerFactory.getLogger(CustomerChatNode.class);
 
     UserCacheServer userCacheServer = SpringContextUtil.getBean("userCacheServerImpl", UserCacheServer.class);
-
+    ConversationCustomerService conversationCustomerService = SpringContextUtil.getBean("conversationCustomerServiceImpl", ConversationCustomerService.class);
     CustomerDispatcherService customerDispatcherService = SpringContextUtil.getBean("customerDispatcherServiceImpl", CustomerDispatcherService.class);
 
-    public CustomerChatNode(AbstractUser customer) {
-        super(customer);
+    public CustomerChatNode(AbstractUser customer, Long lastActiveTime) {
+        super(customer, lastActiveTime);
     }
 
     @Override
@@ -40,6 +43,12 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
     }
 
     public boolean joinQueue(AbstractUser abstractUser) {
+        ConversationCustomer cc = new ConversationCustomer();
+        cc.setCjid(this.getAbstractUser().getId());
+        cc.setVjid(abstractUser.getId());
+        cc.setVisitor(JSONUtil.toJson(abstractUser));
+        conversationCustomerService.insert(cc);
+
         if (null != getNodes()) {
             for (AbstractTerminal node : getNodes().values()) {
                 try {
@@ -55,6 +64,16 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         return true;
     }
 
+    /**
+     * 当客服所有节点移除，默认两秒之后并且没有新的节点加入时，关闭客服节点，确保消息不丢失
+     *
+     * @param id
+     * @return
+     * @throws IOException
+     * @throws XMPPException
+     * @throws SmackException
+     * @throws BusinessException
+     */
     @Override
     public AbstractTerminal removeNode(String id) throws IOException, XMPPException, SmackException, BusinessException {
         AbstractTerminal at = super.removeNode(id);
@@ -65,12 +84,18 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         }
 
         if (this.getNodes().size() < 1) {
+            logger.info("customer 没有中断在线，关闭");
             this.logout();
         }
         return at;
     }
 
     public boolean uninstall(AbstractUser abstractUser) {
+        ConversationCustomer cc = new ConversationCustomer();
+        cc.setCjid(this.getAbstractUser().getId());
+        cc.setVjid(abstractUser.getId());
+        conversationCustomerService.delete(cc);
+
         if (null != getNodes()) {
             for (AbstractTerminal node : getNodes().values()) {
                 try {
@@ -86,6 +111,7 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         return true;
     }
 
+    @Override
     public boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws InterruptedException {
         if (null != getNodes()) {
             for (AbstractTerminal node : getNodes().values()) {
@@ -102,6 +128,14 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         return true;
     }
 
+    /**
+     * 登录，并且保存所有客服，以及接入用户客服
+     * @return
+     * @throws BusinessException
+     * @throws IOException
+     * @throws XMPPException
+     * @throws SmackException
+     */
     @Override
     public boolean login() throws BusinessException, IOException, XMPPException, SmackException {
         // 是否为接入用户客服

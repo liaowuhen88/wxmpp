@@ -45,7 +45,7 @@ public interface ChatLifecycle {
 
 
     /**
-     * 上线
+     * 终端加入当前节点，并且调用节点的online 方法
      * @throws InterruptedException
      * @throws BusinessException
      */

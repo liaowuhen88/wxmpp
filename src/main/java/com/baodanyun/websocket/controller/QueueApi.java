@@ -9,6 +9,7 @@ import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.model.ConversationCustomer;
 import com.baodanyun.websocket.service.ConversationCustomerService;
+import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.service.XmppServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
@@ -38,7 +39,8 @@ public class QueueApi extends BaseController {
 
     @Autowired
     private XmppServer xmppServer;
-
+    @Autowired
+    private UserCacheServer userCacheServer;
 
     @RequestMapping(value = "queue/{q}")
     public void backupQueue(@PathVariable("q") String q, HttpServletRequest request, HttpServletResponse response) {
@@ -89,16 +91,21 @@ public class QueueApi extends BaseController {
         Friend friend = new Friend();
         try {
             Visitor visitor = JSONUtil.toObject(Visitor.class, cc.getVisitor());
-
+            String cid = userCacheServer.getCustomerIdByVisitorOpenId(visitor.getOpenId());
             friend.setId(visitor.getId());
 
             friend.setName(visitor.getUserName());
 
-            if (!xmppServer.isAuthenticated(visitor.getId())) {
-                friend.setOnlineStatus(MsgStatus.history);
+            if (customer.getId().equals(cid)) {
+                if (!xmppServer.isAuthenticated(visitor.getId())) {
+                    friend.setOnlineStatus(MsgStatus.history);
+                } else {
+                    friend.setOnlineStatus(MsgStatus.online);
+                }
             } else {
-                friend.setOnlineStatus(MsgStatus.online);
+                friend.setOnlineStatus(MsgStatus.history);
             }
+
 
             friend.setNickname(visitor.getNickName() == null ? visitor.getUserName() == null ? "未知" : visitor.getUserName() : visitor.getNickName());
             friend.setIcon(visitor.getIcon());

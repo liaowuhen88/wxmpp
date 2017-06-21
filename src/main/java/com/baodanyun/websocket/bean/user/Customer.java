@@ -8,7 +8,9 @@ import java.io.Serializable;
  */
 public class Customer extends AbstractUser implements Serializable {
 
-
+    /**
+     * 接入用户客服消息的发送地址，接入的用户Id
+     */
     private String to;
     private String accessType;
 

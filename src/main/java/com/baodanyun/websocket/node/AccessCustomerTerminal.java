@@ -5,12 +5,14 @@ import com.baodanyun.websocket.bean.msg.status.StatusMsg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.enums.MsgStatus;
-import com.baodanyun.websocket.event.SynchronizationMsgEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.sendUtils.SessionSendUtils;
-import com.baodanyun.websocket.util.EventBusUtils;
-import org.apache.commons.lang.SerializationUtils;
+import com.baodanyun.websocket.util.JSONUtil;
+import com.baodanyun.websocket.util.XMPPUtil;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.packet.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.WebSocketSession;
@@ -23,8 +25,8 @@ public class AccessCustomerTerminal extends CustomerTerminal {
 
     private WebSocketSession session;
 
-    AccessCustomerTerminal(ChatNodeAdaptation chatNodeAdaptation, AbstractUser customer, WebSocketSession session, String id) {
-        super(chatNodeAdaptation, customer);
+    AccessCustomerTerminal(ChatNodeAdaptation chatNodeAdaptation, WebSocketSession session, String id) {
+        super(chatNodeAdaptation);
         this.session = session;
         this.id = id;
     }
@@ -40,11 +42,26 @@ public class AccessCustomerTerminal extends CustomerTerminal {
     @Override
     public void receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
         super.receiveFromGod(msg);
-        Msg clone = (Msg) SerializationUtils.clone(msg);
+       /* Msg clone = (Msg) SerializationUtils.clone(msg);
         clone.setIcon(null);
         SynchronizationMsgEvent sme = new SynchronizationMsgEvent(clone, this);
 
-        EventBusUtils.post(sme);
+        EventBusUtils.post(sme);*/
+    }
+
+    @Override
+    void sendMessageTOXmpp(Message xmppMsg) throws SmackException.NotConnectedException {
+        if (!StringUtils.isEmpty(xmppMsg.getTo())) {
+            String realTo = XMPPUtil.jidToName(xmppMsg.getTo());
+            if (NumberUtils.isNumber(realTo)) {
+                if (this.getAbstractUser() instanceof Customer) {
+                    logger.info(JSONUtil.toJson(this.getAbstractUser()));
+                    xmppMsg.setTo(((Customer) this.getAbstractUser()).getTo());
+                    logger.info(" change {} to {} ", realTo, ((Customer) this.getAbstractUser()).getTo());
+                }
+            }
+        }
+        super.sendMessageTOXmpp(xmppMsg);
     }
 
     @Override

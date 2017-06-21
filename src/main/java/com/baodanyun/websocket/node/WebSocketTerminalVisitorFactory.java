@@ -23,7 +23,7 @@ public class WebSocketTerminalVisitorFactory implements TerminalFactory<WebSocke
     @Override
     public AbstractTerminal getNode(ChatNodeAdaptation chatNodeAdaptation, WebSocketTerminal webSocketTerminal) {
         logger.info("create WebSocketVisitorTerminal [" + JSONUtil.toJson(webSocketTerminal.getAbstractUser()) + "]");
-        return new WebSocketVisitorTerminal(chatNodeAdaptation,webSocketTerminal.getAbstractUser(),webSocketTerminal.getSession(),getId(webSocketTerminal));
+        return new WebSocketVisitorTerminal(chatNodeAdaptation, webSocketTerminal.getSession(), getId(webSocketTerminal));
 
     }
 }

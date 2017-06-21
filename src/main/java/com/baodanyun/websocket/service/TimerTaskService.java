@@ -1,5 +1,6 @@
 package com.baodanyun.websocket.service;
 
+import com.baodanyun.websocket.node.ChatNodeManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,20 @@ public class TimerTaskService {
             logger.error("error", "操作失败", e);
         }
     }
+
+    /**
+     * xmpp 空闲超时处理
+     */
+    @Scheduled(cron = "0 0/10 * * * ?")
+    //需要注意@Scheduled这个注解，它可配置多个属性：cron\fixedDelay\fixedRate
+    public void chatNode() {
+        try {
+            ChatNodeManager.freeClosed();
+        } catch (Exception e) {
+            logger.error("error", "操作失败", e);
+        }
+    }
+
 
     /**
      * 启动消息处理线程

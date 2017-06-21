@@ -1,6 +1,7 @@
 package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.dispatcher.ChatLifecycle;
 import com.baodanyun.websocket.node.dispatcher.XmppNodeMsgDeal;
@@ -19,6 +20,13 @@ import java.io.IOException;
  */
 
 public interface ChatNode extends ChatManagerListener, ChatMessageListener, ConnectionListener, ChatLifecycle, TerminalMsgDeal, XmppNodeMsgDeal {
+
+    /**
+     * 获取最近活跃时间，毫秒
+     *
+     * @return
+     */
+    Long getLastActiveTime();
 
     void setXmppConnection(XMPPConnection xmppConnection);
     /**
@@ -64,4 +72,6 @@ public interface ChatNode extends ChatManagerListener, ChatMessageListener, Conn
      */
 
     boolean isOnline();
+
+    boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws InterruptedException;
 }

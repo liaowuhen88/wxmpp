@@ -15,25 +15,55 @@ public class ChatNodeManager {
     private static final Map<String, ChatNode> xmppNodes = new ConcurrentHashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(ChatNodeManager.class);
 
-    public static ChatNode getXmppNode(AbstractUser visitor) {
+    public synchronized static ChatNode getXmppNode(AbstractUser visitor) {
         ChatNode chatNode = xmppNodes.get(visitor.getId());
         return chatNode;
     }
 
-    public static VisitorChatNode getVisitorXmppNode(AbstractUser visitor) {
+    public synchronized static void freeClosed() {
+        // 毫秒
+        for (ChatNode chatNode : xmppNodes.values()) {
+            Long m = System.currentTimeMillis() - chatNode.getLastActiveTime();
+            Long h = m / (1000 * 60);
+            if (h > 30) {
+                chatNode.logout();
+            }
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        // 毫秒
+        Long x = System.currentTimeMillis();
+        Thread.sleep(1000 * 60);
+        Long s = System.currentTimeMillis();
+
+        Long h = (s - x) / (1000 * 60);
+        System.out.println(h);
+        if (h > 30) {
+            System.out.println(h);
+        }
+
+
+    }
+
+    public synchronized static VisitorChatNode getVisitorXmppNode(AbstractUser visitor) {
         ChatNode chatNode = getXmppNode(visitor);
         if (null == chatNode) {
             logger.info("create VisitorChatNode [" + JSONUtil.toJson(visitor) + "]");
-            chatNode = new VisitorChatNode(visitor);
+            chatNode = new VisitorChatNode(visitor, System.currentTimeMillis());
+        } else {
+            ((AbstarctChatNode) chatNode).setAbstractUser(visitor);
         }
         return (VisitorChatNode) chatNode;
     }
 
-    public static CustomerChatNode getCustomerXmppNode(AbstractUser customer) {
+    public synchronized static CustomerChatNode getCustomerXmppNode(AbstractUser customer) {
         ChatNode chatNode = getXmppNode(customer);
         if (null == chatNode) {
             logger.info("create CustomerChatNode [" + JSONUtil.toJson(customer) + "]");
-            chatNode = new CustomerChatNode(customer);
+            chatNode = new CustomerChatNode(customer, System.currentTimeMillis());
+        } else {
+            ((AbstarctChatNode) chatNode).setAbstractUser(customer);
         }
         return (CustomerChatNode) chatNode;
     }
