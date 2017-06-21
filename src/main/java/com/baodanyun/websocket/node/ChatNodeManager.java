@@ -25,7 +25,9 @@ public class ChatNodeManager {
         for (ChatNode chatNode : xmppNodes.values()) {
             Long m = System.currentTimeMillis() - chatNode.getLastActiveTime();
             Long h = m / (1000 * 60);
+            logger.info("node{} 已空闲 {} 分", chatNode.getAbstractUser().getId(), h);
             if (h > 30) {
+                logger.info("node{} 已空闲 {} 分，服务关闭", chatNode.getAbstractUser().getId(), h);
                 chatNode.logout();
             }
         }
