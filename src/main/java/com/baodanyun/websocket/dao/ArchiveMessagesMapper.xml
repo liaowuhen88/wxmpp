@@ -11,7 +11,6 @@
         <result column="conversationId" property="conversationid" jdbcType="BIGINT"/>
     </resultMap>
 
-
     <resultMap id="ResultMapWithBLOBs" type="com.baodanyun.websocket.model.ArchiveMessages" extends="BaseResultMap">
         <result column="body" property="body" jdbcType="LONGVARCHAR"/>
     </resultMap>
@@ -27,6 +26,7 @@
     <resultMap id="ResultMapFromAndTo" type="com.baodanyun.websocket.bean.msg.HistoryMsg" extends="BaseResultMap">
 
     </resultMap>
+
 
     <select id="selectByFromAndTo" resultMap="ResultMapFromAndTo"
             parameterType="com.baodanyun.websocket.model.HistoryMessageModel">
@@ -83,6 +83,30 @@ ORDER BY
         <include refid="Blob_Column_List"/>
         from archiveMessages
         where messageId = #{messageid,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByOwnerJid" resultMap="ResultMapFromAndTo" parameterType="java.lang.String">
+
+        SELECT
+        ac.ownerJid 'from',
+        ac.withJid 'to',
+        ac.`subject` 'contentType',
+        am.direction,
+        am.body content,
+        am.time ct
+
+        FROM
+        (
+        SELECT
+        *
+        FROM
+        archiveconversations
+        WHERE
+        ownerJid = #{ownerJid,jdbcType=BIGINT}
+        ) ac
+        LEFT JOIN archivemessages am ON ac.conversationId = am.conversationId
+        LIMIT 100;
+
     </select>
 
 

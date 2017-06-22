@@ -22,4 +22,7 @@ public interface ArchiveMessagesMapper {
     int updateByPrimaryKey(ArchiveMessages record);
 
     List<HistoryMsg> selectByFromAndTo(HistoryMessageModel model);
+
+    List<HistoryMsg> selectByOwnerJid(String ownerJid);
+
 }

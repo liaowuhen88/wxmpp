@@ -22,7 +22,8 @@ var History = function (options) {
 
     this.interface = {
         searchHistory: window.base + '/messageHistory/getUserHistoryList' || options.interface.searchHistory,
-        historyDetail: window.base + '/messageHistory/query' || options.interface.historyDetail
+        historyDetail: window.base + '/messageHistory/query' || options.interface.historyDetail,
+        queryByOwnerJid: window.base + '/messageHistory/queryByOwnerJid' || options.interface.queryByOwnerJid
     }
 };
 History.prototype = {
@@ -33,6 +34,8 @@ History.prototype = {
         this.showHistoryEventBind();    //显示聊天记录事件绑定
         this.hideHistoryEventBind();       //隐藏聊天记录窗口
         this.wheelGetHistoryEventBind();    //滚动获取更多历史记录事件绑定
+        this.showAllHistoryEventBind();//转接按钮事件
+
     },
     /*=====================================================================================初始化=====================================================================================*/
     /*=====================================================================================历史记录=====================================================================================*/
@@ -60,6 +63,36 @@ History.prototype = {
             }
         });
     },
+
+    //显示历史记录
+    showAllHistory: function (page, count) {
+        console.log(page, count);
+        var ownerJid = $("#showAllHistory").attr('value');
+        var nickName = $("#showAllHistory").attr('nickName');
+        $('#historyFromUsername').text(nickName);
+
+        var _this = this;
+        page = page || 0;
+        count = 20;
+        $.ajax({
+            url: _this.interface.queryByOwnerJid + '?ownerJid=' + ownerJid + '&page=' + page + '&count=' + count,
+            type: 'POST',
+            timeout: 3000,
+            success: function (res) {
+                if (res.success) {
+                    var data = res.data;
+                    console.log(data);
+                    myUtils.DBRenderDivAll(ownerJid, data, 'showHistoryContainer', function () {
+                        console.log("DBRenderDivAll");
+                    });
+                }
+            },
+            error: function () {
+                alert('查询失败,请重试');
+            }
+        });
+    },
+
     //隐藏历史记录窗口事件绑定
     hideHistoryEventBind: function () {
         var _this = this;
@@ -140,6 +173,16 @@ History.prototype = {
                 '</tr>';
         });
         this.table.html(header + body);
+    },
+
+    showAllHistoryEventBind: function () {
+        var _this = this;
+
+        $('#showAllHistory').on('click', function () {
+            _this.showAllHistory();
+            $('#showHistoryContainer').empty();
+            $(_this.controls.showHistory).show();
+        });
     },
     //滚动获取更多历史记录事件绑定
     wheelGetHistoryEventBind: function () {
