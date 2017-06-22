@@ -47,13 +47,24 @@ public class MessageHistoryApi extends BaseController {
         }
 
         List<HistoryMsg> li = archiveMessagesServer.selectByFromAndTo(model);
-
         archiveMessagesServer.getHistoryMsgList(li);
 
         re.setSuccess(true);
         re.setData(li);
         return re;
     }
+
+
+    @RequestMapping(value = "queryByOwnerJid")
+    public Response query(String ownerJid) {
+        Response re = new Response();
+        List<HistoryMsg> li = archiveMessagesServer.selectByOwnerJid(ownerJid);
+        archiveMessagesServer.getHistoryMsgList(li);
+        re.setSuccess(true);
+        re.setData(li);
+        return re;
+    }
+
 
     @RequestMapping(value = "getUserHistoryList")
     public Response getUserHistoryList(HistoryMessageUserModel model) {

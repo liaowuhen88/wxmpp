@@ -26,7 +26,10 @@
 <!-- 有会话 -->
 <div class="chat-window" style="display: none" id="hasChat">
     <div class="chat-screen">
-        <div class="chat-title"><span class="close" id="offSession">结束对话</span><span class="turn" id="turnBtn">转接</span>
+        <div class="chat-title">
+            <span class="close" id="offSession">结束对话</span>
+            <span class="turn" id="turnBtn">转接</span>
+            <span class="turn" id="showAllHistory">查看历史详情</span>
             <div id="currentChatId" data-id=""></div>
         </div>
         <!-- chat-source -->

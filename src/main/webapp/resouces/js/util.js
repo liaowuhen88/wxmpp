@@ -195,6 +195,47 @@ Utils = (function () {
         }
     };
 
+
+    // 历史纪录展示  数据库
+    Utils.prototype.DBRenderDivAll = function renderDiv(currentId, datas, renderDiv, fn) {
+        if (datas) {
+            $.each(datas, function (i, item) {
+                var commentTpl;
+                var direction = item.direction;
+                item.direction = item.direction + ":" + item.to;
+                if (item.ct) {
+                    item.time = myUtils.formatDate(item.ct);
+                }
+                if (direction == 'from') {
+                    if (item.contentType == 'image') {
+                        commentTpl = $('#imgRight').html();
+
+                    } else {
+                        commentTpl = $('#mright').html();
+                    }
+
+                } else {
+                    if (item.contentType == 'image') {
+                        commentTpl = $('#imgLeft').html();
+                    }
+                    if (item.contentType == 'audio') {
+                        commentTpl = $('#audioLeft').html();
+                    } else {
+                        commentTpl = $('#mleft').html();
+                    }
+
+                }
+                //TODO 历史记录的发送状态应该全为发送成功
+                $(Mustache.to_html(commentTpl, item)).prependTo("#" + renderDiv);
+
+            });
+            if (fn) {
+                fn.call(this);
+            }
+        }
+    };
+
+
     Utils.prototype.renderDivAdd = function renderDiv_(tplId, data, renderDiv) {
         if (data) {
             var commentTpl = $('#' + tplId).html();
