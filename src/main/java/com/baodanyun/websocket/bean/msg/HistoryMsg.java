@@ -8,6 +8,15 @@ public class HistoryMsg extends Msg {
     private transient String toCard;
     private transient String fromCard;
     private String toIcon;
+    private String direction;
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
+    }
 
     public String getToCard() {
         return toCard;

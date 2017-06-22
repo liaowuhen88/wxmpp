@@ -30,6 +30,10 @@ public class ArchiveMessagesServer {
         return archiveMessagesMapper.selectByFromAndTo(model);
     }
 
+    public List<HistoryMsg> selectByOwnerJid(String ownerJid) {
+        return archiveMessagesMapper.selectByOwnerJid(ownerJid);
+    }
+
     public void getHistoryMsgList(List<HistoryMsg> li) {
 
         if (!CollectionUtils.isEmpty(li)) {

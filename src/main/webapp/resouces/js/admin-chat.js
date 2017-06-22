@@ -69,7 +69,8 @@ xchat.interface = {
     updateUserInfo: base + '/api/upVisitorInfo',
     getTagsAll: base + '/api/getTagsAll',
     changeProfile: base + '/api/upCustomerInfo',
-    closeFriendWindow: base + '/api/closeFriendWindow'
+    closeFriendWindow: base + '/api/closeFriendWindow',
+
 };
 /*=====================================================================================初始化=====================================================================================*/
 //登录成功
@@ -93,6 +94,8 @@ xchat.initSuccessQueueStatusHandelEvent = function () {
     this.getCustomerList();     //获取客服列表
     this.setUserInfoEventBind();    //设置用户详情事件绑定
     this.customerListEventBind();//转接按钮事件
+
+
 };
 //初始化失败
 xchat.initErrorStatusHandelEvent = function () {
@@ -570,6 +573,9 @@ xchat.openFriendWindow = function (isOnline, id, nickname, openId, icon) {
     window.from_icon = icon;
     //$(id).addClass("active").siblings().removeClass("active");  //设置当前的好友为激活 且 把消息变成已阅读
     $("#currentChatId").empty().append("您正在和" + nickname + "聊天 ").data('id', id); //设置聊天标题
+    $("#showAllHistory").attr('value', id);
+    $("#showAllHistory").attr('nickName', nickname);
+
     $("#noChat").hide();  //中间位置消失
     $("#hasChat").show();   //把聊天窗口显示出来
     $(".chat-detail").show();   //把用户详情显示出来
@@ -947,6 +953,8 @@ xchat.customerListEventBind = function () {
         _this.getCustomerList();
     });
 };
+
+
 xchat.callInEventBind = function () {
     var _this = this;
     $(_this.controls.holdListCont).on('click', '.call_in', function () {
