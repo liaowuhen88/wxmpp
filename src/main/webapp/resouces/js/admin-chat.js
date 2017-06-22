@@ -158,6 +158,7 @@ xchat.closeFriendWindow = function () {
 //接收到消息
 xchat.recvMsgEvent = function (json) {
     // 是否打开当前窗口
+    console.log(json)
     if (json.from != window.destJid) {
         // 未打开当前窗口
         if (jQuery.inArray(json.from, this.recvMsg) == -1) {
@@ -350,7 +351,7 @@ xchat.customerOfflineStatusHandelEvent = function () {
 xchat.offlineStatusHandelEvent = function (json) {
     var _this = this;
     myUtils.renderQueue(json.from, 'friendList', 'remove');
-    myUtils.renderQueue(json.from, 'historyFriendList', 'up', function () {
+    myUtils.renderQueue(json.from, 'historyFriendList', 'down', function () {
         json.name = json.fromName;
         json.nickname = json.fromName;
         json.icon = json.icon || _this.controls.default_visitor_icon;
@@ -364,7 +365,7 @@ xchat.offlineStatusHandelEvent = function (json) {
 xchat.changeOfflineStatusHandelEvent = function (json) {
     var _this = this;
     myUtils.renderQueue(json.from, 'friendList', 'remove');
-    myUtils.renderQueue(json.from, 'historyFriendList', 'up', function () {
+    myUtils.renderQueue(json.from, 'historyFriendList', 'down', function () {
         json.name = json.fromName;
         json.nickname = json.fromName;
         json.icon = json.icon || _this.controls.default_visitor_icon;

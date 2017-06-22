@@ -65,8 +65,8 @@ public abstract class VisitorTerminal extends AbstractTerminal {
 
     @Override
     public void online() throws InterruptedException, BusinessException {
-
         super.online();
+
         VisitorLoginEvent vl = new VisitorLoginEvent(this.getAbstractUser(), this.getChatNodeAdaptation().getAbstractUser(), null);
 
         EventBusUtils.post(vl);
@@ -99,17 +99,34 @@ public abstract class VisitorTerminal extends AbstractTerminal {
         return sendMsg;
     }
 
-    /*@Override
-    public void onlinePush() throws BusinessException, InterruptedException {
-        VisitorLoginEvent vl = new VisitorLoginEvent(visitor, visitor.getCustomer(), this.getMsgSendService());
+    /**
+     * 加入客服队列成功
+     *
+     * @return
+     * @throws InterruptedException
+     */
 
-        EventBusUtils.post(vl);
+    abstract boolean joinQueue();
 
 
-        joinQueue();
+    /**
+     * 被客服移除
+     *
+     * @return
+     * @throws InterruptedException
+     */
+    abstract boolean uninstall() throws InterruptedException;
 
-        pushOfflineMsg();
 
-    }*/
+    /**
+     * 客服上线
+     */
+    abstract boolean customerOnline();
+
+    /**
+     * 客服上线
+     */
+    abstract boolean customerOffline();
+
 
 }

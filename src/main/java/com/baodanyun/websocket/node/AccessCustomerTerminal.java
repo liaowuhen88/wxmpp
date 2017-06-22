@@ -78,14 +78,24 @@ public class AccessCustomerTerminal extends CustomerTerminal {
     }
 
     @Override
-    public void online() throws InterruptedException {
-
-    }
-
-    @Override
     public boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws InterruptedException {
         StatusMsg msg = getSMMsgSendTOCustomer(msgStatus);
         SessionSendUtils.send(getSession(), msg);
+        return false;
+    }
+
+    @Override
+    public boolean joinQueue(AbstractUser abstractUser) {
+        return false;
+    }
+
+    @Override
+    public boolean uninstall(AbstractUser abstractUser) {
+        return false;
+    }
+
+    @Override
+    public boolean visitorOffline(AbstractUser abstractUser) {
         return false;
     }
 }

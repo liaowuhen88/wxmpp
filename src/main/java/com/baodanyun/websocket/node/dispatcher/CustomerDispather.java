@@ -1,6 +1,6 @@
 package com.baodanyun.websocket.node.dispatcher;
 
-import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.node.VisitorChatNode;
 
 /**
  * Created by liaowuhen on 2017/5/24.
@@ -9,18 +9,18 @@ public interface CustomerDispather {
     /**
      * 接入访客
      *
-     * @param abstractUser
+     * @param visitorChatNode
      * @return
      * @throws InterruptedException
      */
-    boolean joinQueue(AbstractUser abstractUser) throws InterruptedException;
+    boolean joinQueue(VisitorChatNode visitorChatNode) throws InterruptedException;
 
     /**
      * 移除访客
-     * @param abstractUser
+     * @param visitorChatNode
      * @return
      * @throws InterruptedException
      */
-    boolean uninstall(AbstractUser abstractUser) throws InterruptedException;
+    boolean uninstall(VisitorChatNode visitorChatNode) throws InterruptedException;
 
 }

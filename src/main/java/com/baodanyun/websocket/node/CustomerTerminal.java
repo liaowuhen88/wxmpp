@@ -4,7 +4,6 @@ import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.msg.status.StatusMsg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.enums.MsgStatus;
-import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
 import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.slf4j.Logger;
@@ -15,27 +14,13 @@ import java.util.Date;
 /**
  * Created by liaowuhen on 2017/5/23.
  */
-public abstract class CustomerTerminal extends AbstractTerminal implements CustomerDispather {
+public abstract class CustomerTerminal extends AbstractTerminal {
     private static final Logger logger = LoggerFactory.getLogger(CustomerTerminal.class);
 
     CustomerTerminal(ChatNodeAdaptation chatNodeAdaptation) {
         super(chatNodeAdaptation);
     }
 
-
-
-    @Override
-    public boolean joinQueue(AbstractUser abstractUser) throws InterruptedException {
-
-
-        return true;
-    }
-
-    @Override
-    public boolean uninstall(AbstractUser abstractUser) throws InterruptedException {
-
-        return true;
-    }
 
     public StatusMsg getSMMsgSendTOCustomer(MsgStatus status) {
         StatusMsg statusSysMsg = StatusMsg.buildStatus(Msg.Type.status);
@@ -81,5 +66,9 @@ public abstract class CustomerTerminal extends AbstractTerminal implements Custo
         return sendMsg;
     }
 
+    public abstract boolean joinQueue(AbstractUser abstractUser);
 
+    public abstract boolean uninstall(AbstractUser abstractUser);
+
+    public abstract boolean visitorOffline(AbstractUser abstractUser);
 }

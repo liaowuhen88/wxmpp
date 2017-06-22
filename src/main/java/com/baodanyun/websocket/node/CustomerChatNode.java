@@ -18,6 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by liaowuhen on 2017/5/23.
@@ -26,34 +28,81 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
 
     private static final Logger logger = LoggerFactory.getLogger(CustomerChatNode.class);
 
-    UserCacheServer userCacheServer = SpringContextUtil.getBean("userCacheServerImpl", UserCacheServer.class);
+    // 加入到客服的访客列表
+    private static final Map<String, VisitorChatNode> VISITOR_CHAT_NODE_MAP = new ConcurrentHashMap<>();
     ConversationCustomerService conversationCustomerService = SpringContextUtil.getBean("conversationCustomerServiceImpl", ConversationCustomerService.class);
     CustomerDispatcherService customerDispatcherService = SpringContextUtil.getBean("customerDispatcherServiceImpl", CustomerDispatcherService.class);
+    private
+    UserCacheServer userCacheServer = SpringContextUtil.getBean("userCacheServerImpl", UserCacheServer.class);
 
     public CustomerChatNode(AbstractUser customer, Long lastActiveTime) {
         super(customer, lastActiveTime);
     }
+
+
+    /**
+     * 当客服所有节点移除，默认两秒之后并且没有新的节点加入时，关闭客服节点，确保消息不丢失
+     *
+     * @param
+     * @return
+     * @throws IOException
+     * @throws XMPPException
+     * @throws SmackException
+     * @throws BusinessException
+     */
+
+
 
     @Override
     public boolean logout() {
 
         customerDispatcherService.deleteCustomer(this.getAbstractUser().getId());
 
+        // 通知访客上线
+        for (VisitorChatNode visitorChatNode : VISITOR_CHAT_NODE_MAP.values()) {
+            visitorChatNode.customerOffline();
+        }
+
         return super.logout();
     }
 
-    public boolean joinQueue(AbstractUser abstractUser) {
+    public boolean joinQueue(VisitorChatNode visitorChatNode) {
         ConversationCustomer cc = new ConversationCustomer();
         cc.setCjid(this.getAbstractUser().getId());
-        cc.setVjid(abstractUser.getId());
-        cc.setVisitor(JSONUtil.toJson(abstractUser));
+        cc.setVjid(visitorChatNode.getAbstractUser().getId());
+        cc.setVisitor(JSONUtil.toJson(visitorChatNode.getAbstractUser()));
         conversationCustomerService.insert(cc);
+
+        VISITOR_CHAT_NODE_MAP.put(visitorChatNode.getId(), visitorChatNode);
 
         if (null != getNodes()) {
             for (AbstractTerminal node : getNodes().values()) {
                 try {
-                    ((CustomerTerminal) node).joinQueue(abstractUser);
-                } catch (InterruptedException e) {
+                    ((CustomerTerminal) node).joinQueue(visitorChatNode.getAbstractUser());
+                } catch (Exception e) {
+                    logger.error("error", e);
+                }
+            }
+        } else {
+            logger.info("joinQueue getNodes() is null");
+        }
+
+        visitorChatNode.joinQueue();
+        return true;
+    }
+
+
+    public boolean uninstall(VisitorChatNode visitorChatNode) {
+        ConversationCustomer cc = new ConversationCustomer();
+        cc.setCjid(this.getAbstractUser().getId());
+        cc.setVjid(visitorChatNode.getAbstractUser().getId());
+        conversationCustomerService.delete(cc);
+        VISITOR_CHAT_NODE_MAP.put(visitorChatNode.getId(), visitorChatNode);
+        if (null != getNodes()) {
+            for (AbstractTerminal node : getNodes().values()) {
+                try {
+                    ((CustomerTerminal) node).uninstall(visitorChatNode.getAbstractUser());
+                } catch (Exception e) {
                     logger.error("error", e);
                 }
             }
@@ -64,43 +113,13 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         return true;
     }
 
-    /**
-     * 当客服所有节点移除，默认两秒之后并且没有新的节点加入时，关闭客服节点，确保消息不丢失
-     *
-     * @param id
-     * @return
-     * @throws IOException
-     * @throws XMPPException
-     * @throws SmackException
-     * @throws BusinessException
-     */
-    @Override
-    public AbstractTerminal removeNode(String id) throws IOException, XMPPException, SmackException, BusinessException {
-        AbstractTerminal at = super.removeNode(id);
-        try {
-            Thread.sleep(1000 * 2);
-        } catch (InterruptedException e) {
-            logger.error("error", e);
-        }
 
-        if (this.getNodes().size() < 1) {
-            logger.info("customer 没有中断在线，关闭");
-            this.logout();
-        }
-        return at;
-    }
-
-    public boolean uninstall(AbstractUser abstractUser) {
-        ConversationCustomer cc = new ConversationCustomer();
-        cc.setCjid(this.getAbstractUser().getId());
-        cc.setVjid(abstractUser.getId());
-        conversationCustomerService.delete(cc);
-
+    public boolean visitorOffline(VisitorChatNode visitorChatNode) {
         if (null != getNodes()) {
             for (AbstractTerminal node : getNodes().values()) {
                 try {
-                    ((CustomerTerminal) node).uninstall(abstractUser);
-                } catch (InterruptedException e) {
+                    ((CustomerTerminal) node).visitorOffline(visitorChatNode.getAbstractUser());
+                } catch (Exception e) {
                     logger.error("error", e);
                 }
             }
@@ -149,5 +168,16 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         }
         userCacheServer.addCustomer(this.getAbstractUser());
         return flag;
+    }
+
+    @Override
+    public void online(AbstractTerminal node) throws InterruptedException, BusinessException {
+        super.online(node);
+
+        // 通知访客上线
+        for (VisitorChatNode visitorChatNode : VISITOR_CHAT_NODE_MAP.values()) {
+            visitorChatNode.customerOnline();
+        }
+
     }
 }

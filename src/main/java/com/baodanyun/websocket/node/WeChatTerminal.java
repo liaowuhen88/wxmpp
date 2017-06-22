@@ -75,5 +75,25 @@ public class WeChatTerminal extends VisitorTerminal {
         joinQueue();
     }
 
+    @Override
+    boolean joinQueue() {
+        return false;
+    }
+
+    @Override
+    boolean uninstall() throws InterruptedException {
+        return false;
+    }
+
+    @Override
+    boolean customerOnline() {
+        return false;
+    }
+
+    @Override
+    boolean customerOffline() {
+        return false;
+    }
+
 
 }

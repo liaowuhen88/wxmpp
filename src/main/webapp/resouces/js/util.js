@@ -383,6 +383,9 @@ Utils = (function () {
         }else if (!hasFind && 'up' == status) {
             $('#chatInput').removeClass('chat-input-disabled');
             addFriend.call(this);
+        } else if (!hasFind && 'down' == status) {
+            $('#chatInput').addClass('chat-input-disabled');
+            addFriend.call(this);
         }
     };
 

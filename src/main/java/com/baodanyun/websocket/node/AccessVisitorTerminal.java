@@ -30,4 +30,24 @@ public class AccessVisitorTerminal extends WeChatTerminal {
         super.online();
     }
 
+    @Override
+    boolean joinQueue() {
+        return false;
+    }
+
+    @Override
+    boolean uninstall() throws InterruptedException {
+        return false;
+    }
+
+    @Override
+    boolean customerOnline() {
+        return false;
+    }
+
+    @Override
+    boolean customerOffline() {
+        return false;
+    }
+
 }

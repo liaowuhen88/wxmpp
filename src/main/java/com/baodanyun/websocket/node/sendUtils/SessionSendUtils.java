@@ -20,7 +20,7 @@ public class SessionSendUtils {
                 String content = JSONUtil.toJson(sendMsg);
                 session.sendMessage(new TextMessage(content));
                 flag = true;
-                logger.info("msg---" + JSONUtil.toJson(content) + "send to webSocket --->:" + flag);
+                logger.info("session {} msg---" + JSONUtil.toJson(content) + "send to webSocket --->:" + flag, session.getId());
             }
         } catch (Exception e) {
             logger.error("error", "发送失败", e);

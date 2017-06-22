@@ -16,10 +16,13 @@ import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.chat.Chat;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smackx.offline.OfflineMessageManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -73,6 +76,20 @@ public class AbstarctChatNode implements ChatNode {
     @Override
     public AbstractTerminal removeNode(String id) throws IOException, XMPPException, SmackException, BusinessException {
         AbstractTerminal at = nodes.remove(id);
+
+        try {
+            Thread.sleep(1000 * 2);
+        } catch (InterruptedException e) {
+            logger.error("error", e);
+        }
+
+        if (this.getNodes().size() < 1) {
+            logger.info("no Terminal，xmpp closed");
+            this.logout();
+        } else {
+            logger.info("node size ", nodes.size());
+        }
+
         return at;
     }
 
@@ -216,6 +233,27 @@ public class AbstarctChatNode implements ChatNode {
     public void online(AbstractTerminal node) throws InterruptedException, BusinessException {
          addNode(node);
          node.online();
+        //pushOfflineMsg();
+
+    }
+
+    public boolean pushOfflineMsg() throws BusinessException {
+        //加载离线记录
+        logger.info("pushOfflineMsg");
+        OfflineMessageManager offlineManager = new OfflineMessageManager(this.xmppConnection);
+        try {
+            Thread.sleep(1000 * 10);
+            List<Message> msgList = offlineManager.getMessages();
+            if (!CollectionUtils.isEmpty(msgList)) {
+                for (Message message : msgList) {
+                    processMessage(message);
+                    offlineManager.deleteMessages();
+                }
+            }
+        } catch (Exception e) {
+            logger.error("error", "offline msg error");
+        }
+        return true;
     }
 
     @Override
@@ -233,6 +271,10 @@ public class AbstarctChatNode implements ChatNode {
 
     @Override
     public void processMessage(Chat chat, Message message) {
+        processMessage(message);
+    }
+
+    private void processMessage(Message message) {
         try {
             logger.info(getAbstractUser().getId() + ":xmpp receive message " + JSONUtil.toJson(message));
             this.setLastActiveTime(System.currentTimeMillis());
@@ -249,7 +291,6 @@ public class AbstarctChatNode implements ChatNode {
             logger.error("error", "msgSendControl.sendMsg error", e);
         }
     }
-
 
     public void sendMessageTOXmpp(Message xmppMsg) throws SmackException.NotConnectedException {
         xmppConnection.sendStanza(xmppMsg);

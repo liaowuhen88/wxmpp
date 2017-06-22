@@ -72,7 +72,7 @@ public class VisitorLogin extends BaseController {
             // 如果客服在线，用户登录
             if (flag) {
                 if (visitorChatNode.login()) {
-                    visitorChatNode.changeCurrentChatNode(customerChatNode);
+                    visitorChatNode.setCurrentChatNode(customerChatNode);
                     cCard = vcardService.getVCardUser(customer.getId(), visitor.getId(), AbstractUser.class);
                     mv = getOnline(visitor, customer.getId(), cCard);
 

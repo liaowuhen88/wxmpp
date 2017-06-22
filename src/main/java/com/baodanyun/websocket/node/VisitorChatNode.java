@@ -47,12 +47,15 @@ public class VisitorChatNode extends AbstarctChatNode {
     @Override
     public void online(AbstractTerminal node) throws InterruptedException, BusinessException {
         super.online(node);
-        this.getCurrentChatNode().joinQueue(this.getAbstractUser());
+        this.getCurrentChatNode().joinQueue(this);
     }
 
+
     @Override
-    public AbstractTerminal removeNode(String id) throws IOException, XMPPException, SmackException, BusinessException {
-        return super.removeNode(id);
+    public boolean logout() {
+        this.getCurrentChatNode().visitorOffline(this);
+
+        return super.logout();
     }
 
     @Override
@@ -99,7 +102,7 @@ public class VisitorChatNode extends AbstarctChatNode {
 
         if (this.isXmppOnline()) {
             if(null != old){
-                if (!old.uninstall(this.getAbstractUser())) {
+                if (!old.uninstall(this)) {
                     throw new BusinessException("从当前客服卸载失败");
                 }
             }
@@ -107,7 +110,7 @@ public class VisitorChatNode extends AbstarctChatNode {
         logger.info(JSONUtil.toJson(this.getAbstractUser()));
 
 
-        currentChatNode.joinQueue(this.getAbstractUser());
+        currentChatNode.joinQueue(this);
         return old;
     }
 
@@ -121,5 +124,45 @@ public class VisitorChatNode extends AbstarctChatNode {
         return flag;
     }
 
+
+    /**
+     * 客服上线
+     */
+    boolean joinQueue() {
+        for (AbstractTerminal node : getNodes().values()) {
+            if (node instanceof VisitorTerminal) {
+                ((VisitorTerminal) node).joinQueue();
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
+     * 客服上线
+     */
+    boolean customerOnline() throws InterruptedException {
+        for (AbstractTerminal node : getNodes().values()) {
+            if (node instanceof VisitorTerminal) {
+                ((VisitorTerminal) node).customerOnline();
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 客服上线
+     */
+    boolean customerOffline() {
+        for (AbstractTerminal node : getNodes().values()) {
+            if (node instanceof VisitorTerminal) {
+                ((VisitorTerminal) node).customerOffline();
+            }
+        }
+
+        return true;
+    }
 
 }

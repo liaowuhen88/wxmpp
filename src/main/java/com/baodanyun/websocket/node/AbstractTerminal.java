@@ -34,49 +34,11 @@ public class AbstractTerminal {
         return chatNodeAdaptation;
     }
 
-    /**
-     * 移除访客通知
-     *
-     * @return
-     * @throws InterruptedException
-     */
-    boolean uninstall() throws InterruptedException {
-        return false;
-    }
 
-    /**
-     * 接入通知
-     *
-     * @return
-     * @throws InterruptedException
-     */
-
-    boolean joinQueue() throws InterruptedException, BusinessException {
-        return false;
-    }
 
     public String getId() {
         return id;
     }
-
-    /*public boolean pushOfflineMsg() throws BusinessException {
-        //加载离线记录
-        XMPPConnection xmppConnection = this.getXmppNode().getXMPPConnection();
-        OfflineMessageManager offlineManager = new OfflineMessageManager(xmppConnection);
-        try {
-            List<Message> msgList = offlineManager.getMessages();
-            if (!CollectionUtils.isEmpty(msgList)) {
-                for (Message message : msgList) {
-                    receiveFromXmpp(message);
-                    offlineManager.deleteMessages();
-                }
-            }
-        } catch (Exception e) {
-            logger.error("error", "offline msg error");
-        }
-
-        return true;
-    }*/
 
     void receiveFromGod(String content) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
         if (!StringUtils.isEmpty(content)) {
@@ -162,10 +124,22 @@ public class AbstractTerminal {
         sendMsgToGod(sendMsg);
     }
 
+
+    /**
+     * 用户上线
+     *
+     * @throws InterruptedException
+     * @throws BusinessException
+     */
     void online() throws InterruptedException, BusinessException {
 
     }
 
+    /**
+     * 用户下线
+     * @throws InterruptedException
+     * @throws BusinessException
+     */
     void offline() throws InterruptedException, BusinessException {
 
     }

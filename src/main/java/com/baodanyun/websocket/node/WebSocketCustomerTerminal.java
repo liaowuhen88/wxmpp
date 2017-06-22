@@ -38,9 +38,7 @@ public class WebSocketCustomerTerminal extends CustomerTerminal {
     }
 
     @Override
-    public boolean joinQueue(AbstractUser abstractUser) throws InterruptedException {
-
-        super.joinQueue(abstractUser);
+    public boolean joinQueue(AbstractUser abstractUser) {
 
         Msg hello = getMsgHelloToCustomer(abstractUser);
         Msg online = getSMMsgOnlineSendTOCustomer(abstractUser, MsgStatus.onlineQueueSuccess);
@@ -52,12 +50,21 @@ public class WebSocketCustomerTerminal extends CustomerTerminal {
     }
 
     @Override
-    public boolean uninstall(AbstractUser abstractUser) throws InterruptedException {
+    public boolean uninstall(AbstractUser abstractUser) {
         Msg online = getSMMsgOnlineSendTOCustomer(abstractUser, MsgStatus.offline);
 
         SessionSendUtils.send(getSession(), online);
 
-        return super.uninstall(abstractUser);
+        return true;
+    }
+
+    @Override
+    public boolean visitorOffline(AbstractUser abstractUser) {
+        Msg online = getSMMsgOnlineSendTOCustomer(abstractUser, MsgStatus.offline);
+
+        SessionSendUtils.send(getSession(), online);
+
+        return true;
     }
 
     @Override
@@ -81,7 +88,7 @@ public class WebSocketCustomerTerminal extends CustomerTerminal {
     @Override
     void offline() throws InterruptedException, BusinessException {
         super.offline();
-        StatusMsg offline = getSMMsgSendTOCustomer(MsgStatus.loginError);
+        StatusMsg offline = getSMMsgSendTOCustomer(MsgStatus.offline);
 
         SessionSendUtils.send(getSession(), offline);
     }

@@ -49,11 +49,11 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
         SessionSendUtils.send(getSession(), loginSuccess);
         SessionSendUtils.send(getSession(), initSuccess);
 
-        joinQueue();
     }
 
     @Override
-    public boolean joinQueue() throws InterruptedException, BusinessException {
+    public boolean joinQueue() {
+
         Msg onlineQueueSuccess = getSMMsgSendTOVisitor(getAbstractUser(), MsgStatus.onlineQueueSuccess);
 
         Msg hello = getMsgHelloToVisitor(((Visitor) getAbstractUser()));
@@ -61,7 +61,31 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
         SessionSendUtils.send(getSession(), onlineQueueSuccess);
         SessionSendUtils.send(getSession(), hello);
 
-        return super.joinQueue();
+        return true;
+    }
+
+    @Override
+    boolean uninstall() throws InterruptedException {
+        return false;
+    }
+
+    @Override
+    boolean customerOnline() {
+        Msg customerOnline = getSMMsgSendTOVisitor(getAbstractUser(), MsgStatus.customerOnline);
+
+        SessionSendUtils.send(getSession(), customerOnline);
+
+        return true;
+    }
+
+    @Override
+    boolean customerOffline() {
+        Msg customerOnline = getSMMsgSendTOVisitor(getAbstractUser(), MsgStatus.customerOffline);
+
+
+        SessionSendUtils.send(getSession(), customerOnline);
+
+        return false;
     }
 
 
@@ -69,7 +93,7 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
     void offline() throws InterruptedException, BusinessException {
         super.offline();
 
-        Msg loginError = getSMMsgSendTOVisitor(getAbstractUser(), MsgStatus.loginError);
+        Msg loginError = getSMMsgSendTOVisitor(getAbstractUser(), MsgStatus.offline);
 
         SessionSendUtils.send(getSession(), loginError);
     }
