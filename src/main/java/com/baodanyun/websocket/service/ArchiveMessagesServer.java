@@ -6,6 +6,7 @@ import com.baodanyun.websocket.dao.ArchiveMessagesMapper;
 import com.baodanyun.websocket.model.HistoryMessageModel;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.XmllUtil;
+import org.apache.commons.lang.StringUtils;
 import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,10 @@ public class ArchiveMessagesServer {
     }
 
     public List<HistoryMsg> selectByOwnerJid(String ownerJid) {
-        return archiveMessagesMapper.selectByOwnerJid(ownerJid);
+        if (!StringUtils.isEmpty(ownerJid)) {
+            return archiveMessagesMapper.selectByOwnerJid(ownerJid);
+        }
+        return null;
     }
 
     public void getHistoryMsgList(List<HistoryMsg> li) {

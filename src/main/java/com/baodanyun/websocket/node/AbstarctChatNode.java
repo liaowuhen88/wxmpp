@@ -70,24 +70,35 @@ public class AbstarctChatNode implements ChatNode {
 
     @Override
     public void addNode(AbstractTerminal node) {
-        nodes.put(node.getId(), node);
+        getNodes().put(node.getId(), node);
     }
 
+
+    /**
+     * 延时五秒关闭
+     *
+     * @param id
+     * @return
+     * @throws IOException
+     * @throws XMPPException
+     * @throws SmackException
+     * @throws BusinessException
+     */
     @Override
     public AbstractTerminal removeNode(String id) throws IOException, XMPPException, SmackException, BusinessException {
-        AbstractTerminal at = nodes.remove(id);
+        AbstractTerminal at = getNodes().remove(id);
 
         try {
-            Thread.sleep(1000 * 2);
+            Thread.sleep(1000 * 5);
         } catch (InterruptedException e) {
             logger.error("error", e);
         }
 
         if (this.getNodes().size() < 1) {
-            logger.info("no Terminal，xmpp closed");
+            logger.info("{} no Terminal，xmpp closed", this.getAbstractUser().getId());
             this.logout();
         } else {
-            logger.info("node size ", nodes.size());
+            logger.info("node size {} ", getNodes());
         }
 
         return at;
@@ -95,7 +106,7 @@ public class AbstarctChatNode implements ChatNode {
 
     @Override
     public AbstractTerminal getNode(String id) {
-        return nodes.get(id);
+        return getNodes().get(id);
     }
 
     @Override
@@ -118,17 +129,17 @@ public class AbstarctChatNode implements ChatNode {
     @Override
     public void connectionClosed() {
         logger.info(getAbstractUser().getLoginUsername() + ":connectionClosed");
-        logout();
+        //logout();
     }
 
     @Override
     public void connectionClosedOnError(Exception e) {
         logger.error("error", getAbstractUser().getLoginUsername() + ":connectionClosedOnError", e);
-        logout();
+        //logout();
     }
 
     public void xmppClosed() {
-        for (AbstractTerminal node : nodes.values()) {
+        for (AbstractTerminal node : getNodes().values()) {
             try {
                 node.offline();
             } catch (Exception e) {
@@ -211,10 +222,7 @@ public class AbstarctChatNode implements ChatNode {
 
     @Override
     public boolean isOnline() {
-        if (null != xmppConnection) {
-            return xmppConnection.isAuthenticated();
-        }
-        return false;
+        return this.isXmppOnline();
     }
 
     @Override
@@ -299,11 +307,8 @@ public class AbstarctChatNode implements ChatNode {
     }
 
     public Map<String, AbstractTerminal> getNodes() {
+        logger.info(nodes.keySet().toString());
         return nodes;
-    }
-
-    public void setNodes(Map<String, AbstractTerminal> nodes) {
-        this.nodes = nodes;
     }
 
 
@@ -314,7 +319,7 @@ public class AbstarctChatNode implements ChatNode {
      */
     @Override
     public boolean synchronizationMsg(String id,Msg msg) {
-        for (AbstractTerminal node : nodes.values()) {
+        for (AbstractTerminal node : getNodes().values()) {
             if (id.equals(node.getId())) {
                 node.sendMsgToGod(msg);
             } else {

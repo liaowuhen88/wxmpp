@@ -6,8 +6,10 @@ import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.event.SendMsgToWeChatEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.WechatMsg;
+import com.baodanyun.websocket.node.sendUtils.WeChatResponse;
 import com.baodanyun.websocket.node.sendUtils.WeChatSendUtils;
 import com.baodanyun.websocket.util.EventBusUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +33,7 @@ public class WeChatTerminal extends VisitorTerminal {
             String content = msg.getContent();
             msg.setType("text");
             msg.setFrom(this.getAbstractUser().getOpenId());
-            flag = WeChatSendUtils.send(msg);
+            WeChatResponse response = WeChatSendUtils.send(msg);
 
 
             WechatMsg we = new WechatMsg();
@@ -39,13 +41,24 @@ public class WeChatTerminal extends VisitorTerminal {
             we.setMsgTo(this.getAbstractUser().getOpenId());
             we.setMsgStatus((byte) -1);
 
-            if (!flag) {
+            if (null == response || !response.getAccept()) {
                 this.getChatNodeAdaptation().messageCallBack(this.getAbstractUser(), MsgStatus.msgFail);
 
                 // 发送失败记录
                 msg.setFrom(this.getAbstractUser().getId());
                 msg.setTo(from);
-                msg.setContent("系统消息,微信接口不通，消息发送失败");
+
+                if (null == response) {
+                    msg.setContent("系统消息,微信发送超时，消息发送失败");
+                } else {
+                    if (StringUtils.isEmpty(response.getReason())) {
+                        msg.setContent("系统消息,微信接口不通，返回信息为空，消息发送失败");
+                    } else {
+                        msg.setContent(response.getReason());
+                    }
+
+                }
+
                 receiveFromGod(msg);
 
                 /**

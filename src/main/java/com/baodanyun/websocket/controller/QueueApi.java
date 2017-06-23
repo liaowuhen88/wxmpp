@@ -46,6 +46,7 @@ public class QueueApi extends BaseController {
     public void backupQueue(@PathVariable("q") String q, HttpServletRequest request, HttpServletResponse response) {
         Response msgResponse = new Response();
         try {
+            logger.info("queue");
             AbstractUser customer = (AbstractUser) request.getSession().getAttribute(Common.USER_KEY);
             if (null != customer) {
 
@@ -90,6 +91,7 @@ public class QueueApi extends BaseController {
 
         Friend friend = new Friend();
         try {
+
             Visitor visitor = JSONUtil.toObject(Visitor.class, cc.getVisitor());
             String cid = userCacheServer.getCustomerIdByVisitorOpenId(visitor.getOpenId());
             friend.setId(visitor.getId());

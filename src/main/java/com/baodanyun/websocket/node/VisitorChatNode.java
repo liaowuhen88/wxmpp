@@ -5,6 +5,7 @@ import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
+import org.apache.commons.lang.StringUtils;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.chat.Chat;
@@ -33,8 +34,11 @@ public class VisitorChatNode extends AbstarctChatNode {
 
     public void setCurrentChatNode(CustomerChatNode currentChatNode) throws BusinessException {
         this.currentChatNode = currentChatNode;
-
-        userCacheServer.addVisitorCustomerOpenId(this.getAbstractUser().getOpenId(), currentChatNode.getAbstractUser().getId());
+        if (!StringUtils.isEmpty(this.getAbstractUser().getOpenId())) {
+            userCacheServer.addVisitorCustomerOpenId(this.getAbstractUser().getOpenId(), currentChatNode.getAbstractUser().getId());
+        } else {
+            logger.info("this.getAbstractUser().getOpenId() is null");
+        }
     }
 
     /**
@@ -57,6 +61,7 @@ public class VisitorChatNode extends AbstarctChatNode {
 
         return super.logout();
     }
+
 
     @Override
     public void processMessage(Chat chat, Message message) {
