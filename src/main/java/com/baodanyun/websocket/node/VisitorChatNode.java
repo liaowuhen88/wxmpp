@@ -24,7 +24,7 @@ public class VisitorChatNode extends AbstarctChatNode {
     WeChatTerminalVisitorFactory weChatTerminalVisitorFactory = SpringContextUtil.getBean("weChatTerminalVisitorFactory", WeChatTerminalVisitorFactory.class);
     private CustomerChatNode currentChatNode;
 
-    public VisitorChatNode(AbstractUser visitor, Long lastActiveTime) {
+    VisitorChatNode(AbstractUser visitor, Long lastActiveTime) {
         super(visitor, lastActiveTime);
     }
 

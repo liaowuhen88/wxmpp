@@ -307,7 +307,7 @@ public class AbstarctChatNode implements ChatNode {
     }
 
     public Map<String, AbstractTerminal> getNodes() {
-        logger.info(nodes.keySet().toString());
+        logger.info("{},{}", this.getAbstractUser().getId(), nodes.keySet().toString());
         return nodes;
     }
 

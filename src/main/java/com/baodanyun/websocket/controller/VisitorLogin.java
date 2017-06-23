@@ -53,6 +53,7 @@ public class VisitorLogin extends BaseController {
             // 初始化用户,以及用户节点
             Visitor visitor = userServer.initUserByOpenId(visitorLoginBean.getU());
             VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
+
             boolean login = visitorChatNode.isXmppOnline();
             // 根据用户是否已经在线，获取服务客服
             if (login) {

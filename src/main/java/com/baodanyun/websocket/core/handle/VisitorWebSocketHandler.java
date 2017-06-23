@@ -31,6 +31,7 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
         ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
 
         AbstractTerminal wn = webSocketTerminalVisitorFactory.getNode(chatNodeAdaptation,webSocketTerminal);
+
         chatNode.online(wn);
 
     }
