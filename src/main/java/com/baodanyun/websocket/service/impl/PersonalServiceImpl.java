@@ -349,14 +349,14 @@ public class PersonalServiceImpl implements PersonalService {
             hrUser = null;
         }
         logger.info("hruser:" + hrUser);
-        HrUser user = null;
+        HrUser user;
         try {
             if (!StringUtils.isEmpty(hrUser)) {
                 user = JSONUtil.toObject(HrUser.class, hrUser);
                 Long uid = user.getUid();
 
                 if (null == uid || 0 == uid) {
-                    throw new BusinessException(openId + "不存在");
+                    return null;
                 } else {
                     logger.info("uid:[" + uid + "]--------openId[" + openId + "]");
                     logger.info("" + cacheService.setOneMonth(CommonConfig.USER_OPENID_KEY + openId, hrUser));
