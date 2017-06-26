@@ -1,6 +1,7 @@
 package com.baodanyun.websocket.service.impl;
 
 import com.baodanyun.websocket.dao.OfuserMapper;
+import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.Ofproperty;
 import com.baodanyun.websocket.model.Ofuser;
 import com.baodanyun.websocket.service.OfpropertyService;
@@ -25,12 +26,16 @@ public class OfuserServiceImpl implements OfuserService {
     private OfpropertyService ofpropertyService;
 
     @Override
-    public boolean checkOfUser(String userName, String password) {
-        if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {
-            return false;
+    public boolean checkOfUser(String userName, String password) throws BusinessException {
+        if (StringUtils.isEmpty(userName)) {
+            throw new BusinessException("用户名不能为空");
         }
-        try {
-            Ofuser ofuser = ofuserMapper.selectByPrimaryKey(userName);
+        if (StringUtils.isEmpty(password)) {
+            throw new BusinessException("密码不能为空");
+        }
+        Ofuser ofuser = ofuserMapper.selectByPrimaryKey(userName);
+
+        if (null != ofuser) {
             Ofproperty passwordKey = ofpropertyService.selectByPrimaryKey("passwordKey");
             String key = passwordKey.getPropvalue();
             Blowfish bf = new Blowfish(key);
@@ -38,13 +43,11 @@ public class OfuserServiceImpl implements OfuserService {
             logger.info("password: {} _________ encryptedString: {}", password, encryptedString);
             if (password.equals(encryptedString)) {
                 return true;
+            } else {
+                throw new BusinessException("账号密码不匹配");
             }
-
-        } catch (Exception e) {
-            logger.info("error", e);
+        } else {
+            throw new BusinessException("用户不存在");
         }
-
-
-        return false;
     }
 }

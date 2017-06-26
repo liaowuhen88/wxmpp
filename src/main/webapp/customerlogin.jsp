@@ -54,13 +54,7 @@
                 window.location.href = window.base + "/api/customer_chat";
             }, function (json) {
                 $btn.button('reset');
-                if (json.code == 1) {
-                    alert("参数错误")
-                } else if (json.code == 2) {
-                    alert("用户名或者密码错误")
-                } else {
-                    alert("系统错误")
-                }
+                alert(json.msg)
             });
         })
     });

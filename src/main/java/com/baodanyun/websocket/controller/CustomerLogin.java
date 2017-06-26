@@ -1,7 +1,6 @@
 package com.baodanyun.websocket.controller;
 
 import com.baodanyun.websocket.bean.Response;
-import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.core.common.Common;
@@ -47,22 +46,26 @@ public class CustomerLogin extends BaseController {
     public void api(LoginModel user, HttpServletRequest request, HttpServletResponse response) {
         //客服必须填写用户名 和 密码
         logger.info("user" + JSONUtil.toJson(user));
-        Customer au = null;
+        Customer customer = null;
+        Response responseMsg = new Response();
         try {
             // 初始化客服，客服登录
-            au = customerInit(user);
-            boolean flag = ofuserService.checkOfUser("zwc", "111111");
-            if (flag) {
-                request.getSession().setAttribute(Common.USER_KEY, au);
-            } else {
-                throw new BusinessException("密码不正确");
-            }
-        } catch (Exception e) {
+            customer = customerInit(user);
+            ofuserService.checkOfUser(customer.getLoginUsername(), customer.getPassWord());
+            request.getSession().setAttribute(Common.USER_KEY, customer);
+            responseMsg.setSuccess(true);
+
+        } catch (BusinessException e) {
+            responseMsg.setMsg(e.getMessage());
+            responseMsg.setSuccess(false);
             logger.error("error", e);
-            au = null;
+        } catch (Exception e) {
+            responseMsg.setMsg("系统异常");
+            responseMsg.setSuccess(false);
+            logger.error("error", e);
         }
 
-        Render.r(response, XMPPUtil.buildJson(getRespone(au)));
+        Render.r(response, XMPPUtil.buildJson(responseMsg));
     }
 
 
@@ -134,19 +137,6 @@ public class CustomerLogin extends BaseController {
             mv.addObject("msg", "系统异常");
         }
         return mv;
-    }
-
-
-    public Response getRespone(AbstractUser cu) {
-        Response responseMsg = new Response();
-        if (null == cu) {
-            responseMsg.setMsg(Common.ErrorCode.LOGIN_ERROR.getCodeName());
-            responseMsg.setCode(Common.ErrorCode.LOGIN_ERROR.getCode());
-            responseMsg.setSuccess(false);
-        } else {
-            responseMsg.setSuccess(true);
-        }
-        return responseMsg;
     }
 
     /**
