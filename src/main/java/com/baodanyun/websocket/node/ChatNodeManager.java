@@ -72,7 +72,7 @@ public class ChatNodeManager {
 
     public static void saveXmppNode(ChatNode chatNode) {
         logger.info("save ChatNode [" + JSONUtil.toJson(chatNode.getAbstractUser()) + "]");
-        xmppNodes.put(chatNode.getAbstractUser().getId(), chatNode);
+        xmppNodes.put(chatNode.getId(), chatNode);
     }
 
     public static void removeXmppNode(String jid) {
