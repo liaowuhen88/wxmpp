@@ -99,7 +99,11 @@ public class CustomerLogin extends BaseController {
                 visitor = userServer.initUserByOpenId(user.getTo());
             }
             logger.info(JSONUtil.toJson(visitor));
+            if (null == visitor) {
+                throw new BusinessException("获取用户消息失败");
+            }
             customer.setTo(visitor.getId());
+
 
             // 初始化用户终端
             VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);

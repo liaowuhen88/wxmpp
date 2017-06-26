@@ -207,6 +207,8 @@ public class AbstarctChatNode implements ChatNode {
         } else {
             logger.info("jid:[" + this.getAbstractUser().getId() + "] xMPPConnection is closed or xMPPConnection is null");
         }
+
+        ChatNodeManager.removeXmppNode(this.getId());
         return true;
     }
 
