@@ -27,11 +27,10 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
         //获取一个customerNode节点
         ChatNode chatNode = ChatNodeManager.getCustomerXmppNode(au);
         WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au, session);
-
         ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
 
         AbstractTerminal wn = webSocketTerminalCustomerFactory.getNode(chatNodeAdaptation, webSocketTerminal);
-
+        chatNode.login();
         chatNode.online(wn);
     }
 

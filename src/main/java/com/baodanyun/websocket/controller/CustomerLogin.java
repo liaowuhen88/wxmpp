@@ -1,11 +1,14 @@
 package com.baodanyun.websocket.controller;
 
 import com.baodanyun.websocket.bean.Response;
-import com.baodanyun.websocket.bean.user.*;
+import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.bean.user.Customer;
+import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.LoginModel;
 import com.baodanyun.websocket.node.*;
+import com.baodanyun.websocket.service.OfuserService;
 import com.baodanyun.websocket.service.UserServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
@@ -35,6 +38,9 @@ public class CustomerLogin extends BaseController {
     private UserServer userServer;
 
     @Autowired
+    private OfuserService ofuserService;
+
+    @Autowired
     private AccessWeChatTerminalVisitorFactory accessWeChatTerminalVisitorFactory;
 
     @RequestMapping(value = "loginApi", method = RequestMethod.POST)
@@ -45,13 +51,11 @@ public class CustomerLogin extends BaseController {
         try {
             // 初始化客服，客服登录
             au = customerInit(user);
-            au.setAccessType(user.getAccessType());
-            CustomerChatNode cx = ChatNodeManager.getCustomerXmppNode(au);
-
-
-            boolean flag = cx.login();
+            boolean flag = ofuserService.checkOfUser("zwc", "111111");
             if (flag) {
                 request.getSession().setAttribute(Common.USER_KEY, au);
+            } else {
+                throw new BusinessException("密码不正确");
             }
         } catch (Exception e) {
             logger.error("error", e);
@@ -160,17 +164,12 @@ public class CustomerLogin extends BaseController {
 
         String jid = XMPPUtil.nameToJid(user.getUsername());
 
-        if (StringUtils.isBlank(user.getPassword())) {
-            customer.setPassWord("111111");
-        } else {
-            customer.setPassWord(user.getPassword());
-        }
-
+        customer.setPassWord(user.getPassword());
         customer.setLoginUsername(user.getUsername());
         customer.setLoginTime(System.currentTimeMillis());
         customer.setOpenId(user.getUsername());
         customer.setId(jid);
-
+        customer.setAccessType(user.getAccessType());
         return customer;
     }
 

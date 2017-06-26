@@ -1,9 +1,9 @@
 package com.baodanyun.wxmpp.test;
 
-import com.baodanyun.websocket.dao.OfpropertyMapper;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.Ofproperty;
 import com.baodanyun.websocket.service.OfpropertyService;
+import com.baodanyun.websocket.service.OfuserService;
 import com.baodanyun.websocket.util.Blowfish;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,10 @@ public class OpenfireEncryptedPassWord extends BaseTest {
     @Autowired
     private OfpropertyService ofpropertyService;
 
+    @Autowired
+    private OfuserService ofuserService;
+
+
     @Test
     public void subString() throws BusinessException {
 
@@ -25,8 +29,9 @@ public class OpenfireEncryptedPassWord extends BaseTest {
         System.out.println(key);//will
 
 
-        Blowfish bf = new Blowfish("p6N2tvv9kvBeDT2");
-        String encryptedString = bf.decrypt("34dcc87e22b82507a69cd7078144cb8a26afc4c6df6d09d9");
+        // Blowfish bf = new Blowfish("p6N2tvv9kvBeDT2");
+        Blowfish bf = new Blowfish(key);
+        String encryptedString = bf.decrypt("9fa897614b75122bbc4026a09f0563c8d66b9b9ec803299d");
         System.out.println(encryptedString);//will
 
         encryptedString = bf.decrypt("G+e5PFjEZKFGDfwT3W1rNUn4bm8=");
@@ -40,4 +45,11 @@ public class OpenfireEncryptedPassWord extends BaseTest {
 
 
     }
+
+    @Test
+    public void check() throws BusinessException {
+        ofuserService.checkOfUser("zwc", "111111");
+
+    }
+
 }
