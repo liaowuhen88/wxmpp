@@ -202,10 +202,8 @@ public class XmppServer {
 
 
         ReconnectionManager reconnectionManager = ReconnectionManager.getInstanceFor(connection);
-        reconnectionManager.setFixedDelay(10);
-        reconnectionManager.setReconnectionPolicy(ReconnectionManager.ReconnectionPolicy.FIXED_DELAY);
+        reconnectionManager.setReconnectionPolicy(ReconnectionManager.ReconnectionPolicy.RANDOM_INCREASING_DELAY);
         reconnectionManager.enableAutomaticReconnection();
-
 
         Roster.getInstanceFor(connection).setRosterLoadedAtLogin(false);
 
