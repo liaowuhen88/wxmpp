@@ -117,11 +117,9 @@ public class CustomerLogin extends BaseController {
                 visitorChatNode.setCurrentChatNode(cx);
                 logger.info(JSONUtil.toJson(visitor));
                 visitorChatNode.login();
-
-                // 用户上线并且通知客服
-                visitorChatNode.online(wn);
-
             }
+            // 用户上线并且通知客服
+            visitorChatNode.online(wn);
 
             request.getSession().setAttribute(Common.USER_KEY, customer);
             mv.addObject("user", JSONUtil.toJson(customer));
