@@ -170,9 +170,8 @@ xchat.sendEvent = function () {
 };
 //发送消息
 xchat.sendMsgHandelEvent = function (data) {
-    data.fromName = window.card.nickName;
-    data.icon = window.card.icon || this.controls.default_visitor_icon;
-
+    data.fromName = window.visitor.nickName || "游客";
+    data.icon = window.visitor.icon || this.controls.default_visitor_icon;
     data.src = data.to;
     //图片等待返回真正地址之后 才保存本地缓存
     if (data.contentType == 'image') {
@@ -256,6 +255,8 @@ xchat.sendAgainEventBind = function () {
 xchat.recvTextMsgHandelEvent = function (json) {
     json.icon = json.icon || this.controls.default_kf_icon;
     json.src = json.from;
+    json.time = myUtils.formatDate(new Date(json.ct));
+
     myUtils.storage(json);
     myUtils.renderDivAdd('mleft', json, 'msgContainer');
     this.goBottom();
@@ -264,6 +265,7 @@ xchat.recvTextMsgHandelEvent = function (json) {
 xchat.recvImageMsgHandelEvent = function (json) {
     json.icon = json.icon || this.controls.default_kf_icon;
     json.src = json.from;
+    json.time = myUtils.formatDate(new Date(json.ct));
     myUtils.storage(json);
     myUtils.renderDivAdd("imgLeft", json, "msgContainer");
     this.goBottom();

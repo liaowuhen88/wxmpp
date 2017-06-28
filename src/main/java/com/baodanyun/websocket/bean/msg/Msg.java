@@ -33,6 +33,7 @@ public class Msg implements Serializable{
     private String id;
     private Long ct;
     private String type;
+    private String msgType;   //synchronize
     private boolean isRead;//TODO 是否已经被回执
     private Long readCt;//阅读时间
 
@@ -76,6 +77,14 @@ public class Msg implements Serializable{
             logger.error("error", e);
         }
         return msg;
+    }
+
+    public String getMsgType() {
+        return msgType;
+    }
+
+    public void setMsgType(String msgType) {
+        this.msgType = msgType;
     }
 
     public Long getCt() {

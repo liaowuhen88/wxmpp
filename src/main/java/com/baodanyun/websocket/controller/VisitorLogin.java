@@ -74,8 +74,7 @@ public class VisitorLogin extends BaseController {
             if (flag) {
                 if (visitorChatNode.login()) {
                     visitorChatNode.setCurrentChatNode(customerChatNode);
-                    cCard = vcardService.getVCardUser(customer.getId(), visitor.getId(), AbstractUser.class);
-                    mv = getOnline(visitor, customer.getId(), cCard);
+                    mv = getOnline(visitor, customer.getId());
 
                 } else {
                     throw new BusinessException("接入失败");
@@ -98,18 +97,14 @@ public class VisitorLogin extends BaseController {
         return mv;
     }
 
-    public ModelAndView getOnline(AbstractUser visitor, String customerJid, AbstractUser card) throws BusinessException, InterruptedException, XMPPException, SmackException, IOException {
+    public ModelAndView getOnline(AbstractUser visitor, String customerJid) throws BusinessException, InterruptedException, XMPPException, SmackException, IOException {
         // 客服在线
         ModelAndView mv = new ModelAndView();
 
-        if (null == card.getId()) {
-            card.setId("-1");
-        }
         mv.addObject("statue", true);
         mv.addObject("customerIsOnline", true);
-        mv.addObject("visitor", visitor);
+        mv.addObject("visitor", JSONUtil.toJson(visitor));
         mv.addObject("customerJid", customerJid);
-        mv.addObject("card", card);
         mv.setViewName("/visitor");
 
         return mv;

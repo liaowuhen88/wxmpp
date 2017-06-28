@@ -56,6 +56,10 @@ public class AbstractTerminal {
         return false;
     }
 
+    AbstractUser getCustomer() {
+
+        return getChatNodeAdaptation().getCustomer();
+    }
 
     void receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
         Message xmppMsg = new Message();
@@ -65,7 +69,7 @@ public class AbstractTerminal {
          * 可能会有转接的情况
          */
         String realTo = this.getChatNodeAdaptation().getRealTo();
-        if(!StringUtils.isEmpty(realTo)){
+        if (!StringUtils.isEmpty(realTo)) {
             xmppMsg.setTo(realTo);
         } else {
             xmppMsg.setTo(msg.getTo());
@@ -84,7 +88,7 @@ public class AbstractTerminal {
      * @throws SmackException.NotConnectedException
      */
 
-    void sendMessageTOXmpp(Message xmppMsg) throws SmackException.NotConnectedException{
+    void sendMessageTOXmpp(Message xmppMsg) throws SmackException.NotConnectedException {
         this.getChatNodeAdaptation().sendMessageTOXmpp(xmppMsg);
     }
 
@@ -110,6 +114,11 @@ public class AbstractTerminal {
 
             sendMsg.setType(type);
             sendMsg.setFrom(from);
+
+            if (null != this.getCustomer()) {
+                sendMsg.setFromName(this.getCustomer().getNickName());
+
+            }
             sendMsg.setTo(to);
             sendMsg.setCt(ct);
             sendMsg.setOpenId(this.getAbstractUser().getOpenId());
@@ -137,6 +146,7 @@ public class AbstractTerminal {
 
     /**
      * 用户下线
+     *
      * @throws InterruptedException
      * @throws BusinessException
      */

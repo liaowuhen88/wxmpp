@@ -5,7 +5,6 @@ import com.baodanyun.websocket.bean.msg.status.StatusMsg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.util.Config;
-import com.baodanyun.websocket.util.JSONUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,12 +44,22 @@ public abstract class CustomerTerminal extends AbstractTerminal {
     }
 
 
+    /**
+     * 客服发送给用户的信息
+     * <p/>
+     * from 为客服
+     * <p/>
+     * to为用户
+     *
+     * @param visitor
+     * @return
+     */
     public Msg getMsgHelloToCustomer(AbstractUser visitor) {
-        logger.info("user--->" + JSONUtil.toJson(this.getAbstractUser()));
+
         String body = Config.greetingWord;
         Msg sendMsg = new Msg(body);
-        String to = this.getAbstractUser().getId();
-        String from = visitor.getId();
+        String from = this.getAbstractUser().getId();
+        String to = visitor.getId();
         String type = Msg.Type.msg.toString();
         Long ct = new Date().getTime();
 
@@ -62,7 +71,7 @@ public abstract class CustomerTerminal extends AbstractTerminal {
         // 获取发送端用户
         sendMsg.setIcon(this.getAbstractUser().getIcon());
         sendMsg.setFromName(this.getAbstractUser().getNickName());
-
+        sendMsg.setMsgType("synchronize");
         return sendMsg;
     }
 

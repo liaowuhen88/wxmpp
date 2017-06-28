@@ -33,18 +33,17 @@ public class WebSocketCustomerTerminal extends CustomerTerminal {
 
     @Override
     public boolean sendMsgToGod(Msg msg) {
-        SessionSendUtils.send(getSession(), msg);
+        SessionSendUtils.send(this.getAbstractUser(), getSession(), msg);
         return true;
     }
 
     @Override
     public boolean joinQueue(AbstractUser abstractUser) {
-
-        Msg hello = getMsgHelloToCustomer(abstractUser);
         Msg online = getSMMsgOnlineSendTOCustomer(abstractUser, MsgStatus.onlineQueueSuccess);
+        Msg hello = getMsgHelloToCustomer(abstractUser);
 
-        SessionSendUtils.send(getSession(), online);
-        SessionSendUtils.send(getSession(), hello);
+        SessionSendUtils.send(this.getAbstractUser(), getSession(), online);
+        SessionSendUtils.send(this.getAbstractUser(), getSession(), hello);
 
         return true;
     }
@@ -53,7 +52,7 @@ public class WebSocketCustomerTerminal extends CustomerTerminal {
     public boolean uninstall(AbstractUser abstractUser) {
         Msg online = getSMMsgOnlineSendTOCustomer(abstractUser, MsgStatus.offline);
 
-        SessionSendUtils.send(getSession(), online);
+        SessionSendUtils.send(this.getAbstractUser(), getSession(), online);
 
         return true;
     }
@@ -62,7 +61,7 @@ public class WebSocketCustomerTerminal extends CustomerTerminal {
     public boolean visitorOffline(AbstractUser abstractUser) {
         Msg online = getSMMsgOnlineSendTOCustomer(abstractUser, MsgStatus.offline);
 
-        SessionSendUtils.send(getSession(), online);
+        SessionSendUtils.send(this.getAbstractUser(), getSession(), online);
 
         return true;
     }
@@ -70,7 +69,7 @@ public class WebSocketCustomerTerminal extends CustomerTerminal {
     @Override
     public boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws InterruptedException {
         StatusMsg msg = getSMMsgSendTOCustomer(msgStatus);
-        SessionSendUtils.send(getSession(), msg);
+        SessionSendUtils.send(this.getAbstractUser(), getSession(), msg);
         return false;
     }
 
@@ -80,8 +79,8 @@ public class WebSocketCustomerTerminal extends CustomerTerminal {
         StatusMsg msg = getSMMsgSendTOCustomer(MsgStatus.loginSuccess);
         StatusMsg initSuccess = getSMMsgSendTOCustomer(MsgStatus.initSuccess);
 
-        SessionSendUtils.send(getSession(), msg);
-        SessionSendUtils.send(getSession(), initSuccess);
+        SessionSendUtils.send(this.getAbstractUser(), getSession(), msg);
+        SessionSendUtils.send(this.getAbstractUser(), getSession(), initSuccess);
 
     }
 
@@ -90,6 +89,6 @@ public class WebSocketCustomerTerminal extends CustomerTerminal {
         super.offline();
         StatusMsg offline = getSMMsgSendTOCustomer(MsgStatus.offline);
 
-        SessionSendUtils.send(getSession(), offline);
+        SessionSendUtils.send(this.getAbstractUser(), getSession(), offline);
     }
 }

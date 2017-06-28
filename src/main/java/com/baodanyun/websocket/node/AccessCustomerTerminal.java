@@ -69,7 +69,7 @@ public class AccessCustomerTerminal extends CustomerTerminal {
         String to = ((Customer) getAbstractUser()).getTo();
 
         if (msg.getFrom().equals(to)) {
-            return SessionSendUtils.send(getSession(), msg);
+            return SessionSendUtils.send(this.getAbstractUser(), getSession(), msg);
         } else {
             logger.info("AccessCustomerTerminal[" + to + "]  --------- msg.getTo() [" + msg.getFrom() + "]");
         }
@@ -80,7 +80,7 @@ public class AccessCustomerTerminal extends CustomerTerminal {
     @Override
     public boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws InterruptedException {
         StatusMsg msg = getSMMsgSendTOCustomer(msgStatus);
-        SessionSendUtils.send(getSession(), msg);
+        SessionSendUtils.send(this.getAbstractUser(), getSession(), msg);
         return false;
     }
 

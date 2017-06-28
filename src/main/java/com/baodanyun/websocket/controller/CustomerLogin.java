@@ -160,6 +160,7 @@ public class CustomerLogin extends BaseController {
         customer.setLoginUsername(user.getUsername());
         customer.setLoginTime(System.currentTimeMillis());
         customer.setOpenId(user.getUsername());
+        customer.setNickName(user.getUsername());
         customer.setId(jid);
         customer.setAccessType(user.getAccessType());
         return customer;

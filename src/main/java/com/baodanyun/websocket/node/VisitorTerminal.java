@@ -3,17 +3,13 @@ package com.baodanyun.websocket.node;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.msg.status.StatusMsg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.event.SendMsgToWeChatEvent;
 import com.baodanyun.websocket.event.VisitorLoginEvent;
 import com.baodanyun.websocket.event.VisitorReciveMsgEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.WechatMsg;
-import com.baodanyun.websocket.util.CommonConfig;
-import com.baodanyun.websocket.util.Config;
-import com.baodanyun.websocket.util.EventBusUtils;
-import com.baodanyun.websocket.util.JSONUtil;
+import com.baodanyun.websocket.util.*;
 import org.jivesoftware.smack.SmackException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,26 +68,30 @@ public abstract class VisitorTerminal extends AbstractTerminal {
         EventBusUtils.post(vl);
     }
 
-    public Msg getMsgHelloToVisitor(Visitor user) {
-        logger.info("user--->" + JSONUtil.toJson(user));
+
+    /**
+     * 客服发给用户的见面信息
+     *
+     * @param
+     * @return
+     */
+    public Msg getMsgHelloToVisitor(AbstractUser customer) {
         String body = Config.greetingWord;
+        logger.info(JSONUtil.toJson(customer));
+        String to = getAbstractUser().getId();
+
+
         Msg sendMsg = new Msg(body);
-        String from;
-
-        String to = user.getId();
-
         String type = Msg.Type.msg.toString();
         Long ct = new Date().getTime();
 
         sendMsg.setType(type);
         sendMsg.setContentType(Msg.MsgContentType.text.toString());
 
-        AbstractUser customer = this.getChatNodeAdaptation().getAbstractUser();
-        from = customer.getId();
-        sendMsg.setFrom(from);
+
+        sendMsg.setFrom(customer.getId());
         sendMsg.setIcon(customer.getIcon());
         sendMsg.setFromName(customer.getNickName());
-
 
         sendMsg.setTo(to);
         sendMsg.setCt(ct);
@@ -106,7 +106,7 @@ public abstract class VisitorTerminal extends AbstractTerminal {
      * @throws InterruptedException
      */
 
-    abstract boolean joinQueue();
+    abstract boolean joinQueue(AbstractUser customer);
 
 
     /**

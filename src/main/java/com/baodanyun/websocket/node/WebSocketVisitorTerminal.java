@@ -3,7 +3,6 @@ package com.baodanyun.websocket.node;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.msg.status.StatusMsg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.sendUtils.SessionSendUtils;
@@ -36,7 +35,7 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
 
     @Override
     public boolean sendMsgToGod(Msg msg) {
-        return SessionSendUtils.send(getSession(), msg);
+        return SessionSendUtils.send(this.getAbstractUser(), getSession(), msg);
     }
 
     @Override
@@ -46,20 +45,20 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
 
         Msg initSuccess = getSMMsgSendTOVisitor(getAbstractUser(), MsgStatus.initSuccess);
 
-        SessionSendUtils.send(getSession(), loginSuccess);
-        SessionSendUtils.send(getSession(), initSuccess);
+        SessionSendUtils.send(this.getAbstractUser(), getSession(), loginSuccess);
+        SessionSendUtils.send(this.getAbstractUser(), getSession(), initSuccess);
 
     }
 
     @Override
-    public boolean joinQueue() {
+    public boolean joinQueue(AbstractUser customer) {
 
         Msg onlineQueueSuccess = getSMMsgSendTOVisitor(getAbstractUser(), MsgStatus.onlineQueueSuccess);
 
-        Msg hello = getMsgHelloToVisitor(((Visitor) getAbstractUser()));
+        Msg hello = getMsgHelloToVisitor(customer);
 
-        SessionSendUtils.send(getSession(), onlineQueueSuccess);
-        SessionSendUtils.send(getSession(), hello);
+        SessionSendUtils.send(this.getAbstractUser(), getSession(), onlineQueueSuccess);
+        SessionSendUtils.send(this.getAbstractUser(), getSession(), hello);
 
         return true;
     }
@@ -73,7 +72,7 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
     boolean customerOnline() {
         Msg customerOnline = getSMMsgSendTOVisitor(getAbstractUser(), MsgStatus.customerOnline);
 
-        SessionSendUtils.send(getSession(), customerOnline);
+        SessionSendUtils.send(this.getAbstractUser(), getSession(), customerOnline);
 
         return true;
     }
@@ -83,7 +82,7 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
         Msg customerOnline = getSMMsgSendTOVisitor(getAbstractUser(), MsgStatus.customerOffline);
 
 
-        SessionSendUtils.send(getSession(), customerOnline);
+        SessionSendUtils.send(this.getAbstractUser(), getSession(), customerOnline);
 
         return false;
     }
@@ -95,14 +94,14 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
 
         Msg loginError = getSMMsgSendTOVisitor(getAbstractUser(), MsgStatus.offline);
 
-        SessionSendUtils.send(getSession(), loginError);
+        SessionSendUtils.send(this.getAbstractUser(), getSession(), loginError);
     }
 
     @Override
     boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws InterruptedException {
 
         StatusMsg msg = getSMMsgSendTOVisitor(getAbstractUser(), msgStatus);
-        SessionSendUtils.send(getSession(), msg);
+        SessionSendUtils.send(this.getAbstractUser(), getSession(), msg);
         return false;
     }
 }

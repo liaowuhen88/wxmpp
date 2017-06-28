@@ -17,7 +17,6 @@ public class ChatNodeAdaptation {
     }
 
     public boolean synchronizationMsg(String id,Msg msg){
-
         return chatNode.synchronizationMsg(id,msg);
 
     }
@@ -25,6 +24,14 @@ public class ChatNodeAdaptation {
     public AbstractUser getAbstractUser(){
         return chatNode.getAbstractUser();
     }
+
+    public AbstractUser getCustomer() {
+        if (chatNode instanceof VisitorChatNode) {
+            return ((VisitorChatNode) chatNode).getCurrentChatNode().getAbstractUser();
+        }
+        return null;
+    }
+
 
     public void sendMessageTOXmpp(Message xmppMsg) throws SmackException.NotConnectedException {
          chatNode.sendMessageTOXmpp(xmppMsg);

@@ -1,6 +1,7 @@
 package com.baodanyun.websocket.node.sendUtils;
 
 import com.baodanyun.websocket.bean.msg.Msg;
+import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,14 +14,14 @@ import org.springframework.web.socket.WebSocketSession;
 public class SessionSendUtils {
     private static Logger logger = LoggerFactory.getLogger(SessionSendUtils.class);
 
-    public static boolean send(WebSocketSession session, Msg sendMsg) {
+    public static boolean send(AbstractUser abstractUser, WebSocketSession session, Msg sendMsg) {
         boolean flag = false;
         try {
             if (session.isOpen()) {
                 String content = JSONUtil.toJson(sendMsg);
                 session.sendMessage(new TextMessage(content));
                 flag = true;
-                logger.info("session {} msg---" + JSONUtil.toJson(content) + "send to webSocket --->:" + flag, session.getId());
+                logger.info("user {} session {} msg ---" + JSONUtil.toJson(content) + "send to webSocket --->:" + flag, abstractUser.getId(), session.getId());
             }
         } catch (Exception e) {
             logger.error("error", "发送失败", e);

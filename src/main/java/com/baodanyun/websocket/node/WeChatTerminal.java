@@ -1,7 +1,7 @@
 package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.msg.Msg;
-import com.baodanyun.websocket.bean.user.Visitor;
+import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.event.SendMsgToWeChatEvent;
 import com.baodanyun.websocket.exception.BusinessException;
@@ -80,17 +80,16 @@ public class WeChatTerminal extends VisitorTerminal {
     @Override
     public void online() throws InterruptedException, BusinessException {
         super.online();
-        Msg hello = getMsgHelloToVisitor(((Visitor) getAbstractUser()));
+    }
+
+    @Override
+    boolean joinQueue(AbstractUser customer) {
+        Msg hello = getMsgHelloToVisitor(customer);
         hello.setFrom(this.getAbstractUser().getOpenId());
 
         WeChatSendUtils.send(hello);
 
-        joinQueue();
-    }
-
-    @Override
-    boolean joinQueue() {
-        return false;
+        return true;
     }
 
     @Override

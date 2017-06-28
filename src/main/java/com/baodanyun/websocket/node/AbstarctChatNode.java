@@ -284,6 +284,12 @@ public class AbstarctChatNode implements ChatNode {
         processMessage(message);
     }
 
+
+    /**
+     * 接收消息从xmpp
+     *
+     * @param message
+     */
     private void processMessage(Message message) {
         try {
             logger.info(getAbstractUser().getId() + ":xmpp receive message " + JSONUtil.toJson(message));
@@ -341,6 +347,14 @@ public class AbstarctChatNode implements ChatNode {
         abstractTerminal.receiveFromGod(msg);
     }
 
+    /**
+     * 从终端接收消息发送到xmpp
+     * @param abstractTerminal
+     * @param msg
+     * @throws InterruptedException
+     * @throws BusinessException
+     * @throws SmackException.NotConnectedException
+     */
     @Override
     public void receiveFromGod(AbstractTerminal abstractTerminal, String msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
         this.setLastActiveTime(System.currentTimeMillis());

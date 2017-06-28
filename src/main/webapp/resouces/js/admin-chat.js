@@ -194,12 +194,19 @@ xchat.recvMsgEvent = function (json) {
 xchat.recvTextMsgHandelEvent = function (json) {
     document.getElementById("msgTipAudio").play();
     json.time = myUtils.formatDate(new Date(json.ct));
-    json.src = json.from;
-    json.icon = json.icon || this.controls.default_visitor_icon;
+
+
+    if ("synchronize" == json.msgType) {
+        json.src = json.to;
+        json.icon = json.icon || this.controls.default_kf_icon;
+    } else {
+        json.icon = json.icon || this.controls.default_visitor_icon;
+        json.src = json.from;
+    }
+
     if (json.from == window.destJid) {
         myUtils.renderDivAdd('mleft', json, 'chatMsgContainer');
-    } else if (json.from == window.currentId) {
-        json.src = json.to;
+    } else if (json.to == window.destJid) {
         myUtils.renderDivAdd('mright', json, 'chatMsgContainer');
     }
     myUtils.storage(json);
@@ -208,14 +215,13 @@ xchat.recvTextMsgHandelEvent = function (json) {
 //接收到图片消息
 xchat.recvImageMsgHandelEvent = function (json) {
     document.getElementById("msgTipAudio").play();
-    json.src = json.from;
-    json.icon = json.icon || this.controls.default_visitor_icon;
     json.time = myUtils.formatDate(new Date(json.ct));
+    json.icon = json.icon || this.controls.default_visitor_icon;
+    json.src = json.from;
     if (json.from == window.destJid) {
         myUtils.renderDivAdd('imgLeft', json, 'chatMsgContainer');
-    } else if (json.from == window.currentId) {
-        myUtils.renderDivAdd('imgRight', json, 'chatMsgContainer');
     }
+
     myUtils.storage(json);
     xchat.goBottom();
 };
@@ -223,15 +229,14 @@ xchat.recvImageMsgHandelEvent = function (json) {
 //接收到音频信息
 xchat.recvAudioMsgHandelEvent = function (json) {
     document.getElementById("msgTipAudio").play();
-    json.src = json.from;
-    json.icon = json.icon || this.controls.default_visitor_icon;
+
     json.time = myUtils.formatDate(new Date(json.ct));
+    json.icon = json.icon || this.controls.default_visitor_icon;
+    json.src = json.from;
     if (json.from == window.destJid) {
         myUtils.renderDivAdd('audioLeft', json, 'chatMsgContainer');
-    } else if (json.from == window.currentId) {
-        json.src = json.to;
-        myUtils.renderDivAdd('audioRight', json, 'chatMsgContainer');
     }
+
     myUtils.storage(json);
     xchat.goBottom();
 };
@@ -476,7 +481,6 @@ xchat.loadChatListEvent = function () {
     });
 
 
-
     $(".chat-source-detail-btn").click(function () {
         _this.visitorProperties();
     });
@@ -494,8 +498,11 @@ xchat.getLocalHistory = function (id) {
     if (dataList) {
         dataList = eval("(" + dataList + ")");
         dataList.map(function (val) {
-            if (val.icon === undefined || val.icon === '') {
-                val.icon = _this.controls.defaultAvatar;
+
+            if (val.from == window.destJid) {
+                val.icon = val.icon || this.controls.defaultAvatar;
+            } else if (val.to == window.destJid) {
+                val.icon = val.icon || this.controls.default_kf_icon;
             }
         });
         myUtils.cacheRenderDiv(window.currentId, dataList, 'chatMsgContainer', function () {

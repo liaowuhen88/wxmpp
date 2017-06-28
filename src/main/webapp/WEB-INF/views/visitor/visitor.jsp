@@ -9,8 +9,9 @@
     <title>豆包客服</title>
     <script>
         window.base = "<%=base%>";
-        window.currentId = "${visitor.id}";
-        window.card = "${card}";
+        window.visitor = ${visitor};
+        window.currentId = window.visitor.id;
+
         window.destJid = "${customerJid}";
     </script>
     <link rel="stylesheet" href="<%=base%>/resouces/styles/vistors.css?v=1">

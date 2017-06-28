@@ -1,5 +1,6 @@
 package com.baodanyun.websocket.node;
 
+import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.exception.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,14 +32,10 @@ public class AccessVisitorTerminal extends WeChatTerminal {
     }
 
     @Override
-    boolean joinQueue() {
+    boolean joinQueue(AbstractUser customer) {
         return false;
     }
 
-    @Override
-    boolean uninstall() throws InterruptedException {
-        return false;
-    }
 
     @Override
     boolean customerOnline() {
