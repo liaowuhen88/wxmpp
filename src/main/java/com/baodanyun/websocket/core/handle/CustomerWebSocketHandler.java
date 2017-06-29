@@ -58,7 +58,7 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-// 移除当前结点
+        // 移除当前结点
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         logger.info("customer session is closed: id[" + au.getId() + "]" + session);
         WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au, session);
@@ -67,7 +67,12 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
 
         AbstractTerminal wn = chatNode.getNode(webSocketTerminalCustomerFactory.getId(webSocketTerminal));
 
-        chatNode.removeNode(wn.getId());
+        if (null != wn) {
+            chatNode.removeNode(wn.getId());
+        } else {
+            logger.info("wn is null");
+        }
+
 
 
     }

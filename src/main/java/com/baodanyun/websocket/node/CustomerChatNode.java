@@ -1,18 +1,15 @@
 package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.ConversationCustomer;
 import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
 import com.baodanyun.websocket.service.ConversationCustomerService;
-import com.baodanyun.websocket.service.CustomerDispatcherService;
-import com.baodanyun.websocket.service.UserCacheServer;
+import com.baodanyun.websocket.service.CustomerDispatcherTactics;
 import com.baodanyun.websocket.service.XmppUserOnlineServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
-import org.apache.commons.lang.StringUtils;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 import org.slf4j.Logger;
@@ -32,11 +29,8 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
     // 加入到客服的访客列表
     private static final Map<String, VisitorChatNode> VISITOR_CHAT_NODE_MAP = new ConcurrentHashMap<>();
     ConversationCustomerService conversationCustomerService = SpringContextUtil.getBean("conversationCustomerServiceImpl", ConversationCustomerService.class);
-    CustomerDispatcherService customerDispatcherService = SpringContextUtil.getBean("customerDispatcherServiceImpl", CustomerDispatcherService.class);
+    CustomerDispatcherTactics customerDispatcherTactics = SpringContextUtil.getBean("customerDispatcherTacticsImpl", CustomerDispatcherTactics.class);
     XmppUserOnlineServer xmppUserOnlineServer = SpringContextUtil.getBean("xmppUserOnlineServer", XmppUserOnlineServer.class);
-
-    private
-    UserCacheServer userCacheServer = SpringContextUtil.getBean("userCacheServerImpl", UserCacheServer.class);
 
     public CustomerChatNode(AbstractUser customer, Long lastActiveTime) {
         super(customer, lastActiveTime);
@@ -59,7 +53,7 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
     @Override
     public boolean logout() {
 
-        customerDispatcherService.deleteCustomer(this.getAbstractUser().getId());
+        customerDispatcherTactics.deleteCustomer(this.getAbstractUser().getId());
 
         // 通知访客上线
         for (VisitorChatNode visitorChatNode : VISITOR_CHAT_NODE_MAP.values()) {
@@ -163,13 +157,8 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         // 是否为接入用户客服
         boolean flag = super.login();
         if (flag) {
-            if (!StringUtils.isEmpty(((Customer) this.getAbstractUser()).getAccessType()) && ((Customer) this.getAbstractUser()).getAccessType().equals("2")) {
-                customerDispatcherService.saveCustomer(this.getAbstractUser());
-            } else {
-                logger.info("不接入用户");
-            }
+            customerDispatcherTactics.saveCustomer(this.getAbstractUser());
         }
-        userCacheServer.addCustomer(this.getAbstractUser());
         return flag;
     }
 

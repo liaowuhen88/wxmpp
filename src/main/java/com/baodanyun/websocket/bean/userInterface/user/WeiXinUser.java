@@ -14,6 +14,16 @@ public class WeiXinUser {
 
     private String nickName;
 
+    private String icon;
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
     public String getUid() {
         return uid;
     }

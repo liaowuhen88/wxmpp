@@ -41,12 +41,11 @@ public class VisitorLogin extends BaseController {
     private XmppUserOnlineServer xmppUserOnlineServer;
 
     @Autowired
-    private CustomerDispatcherService customerDispatcherService;
+    private CustomerDispatcherTactics customerDispatcherTactics;
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView visitor(VisitorLoginBean visitorLoginBean, HttpServletRequest request) throws IOException, XMPPException, SmackException {
         ModelAndView mv = new ModelAndView();
-        AbstractUser cCard;
         AbstractUser customer;
         try {
             logger.info("visitorLogin:[" + JSONUtil.toJson(visitorLoginBean) + "]");
@@ -54,15 +53,7 @@ public class VisitorLogin extends BaseController {
             Visitor visitor = userServer.initUserByOpenId(visitorLoginBean.getU());
             VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
 
-            boolean login = visitorChatNode.isXmppOnline();
-            // 根据用户是否已经在线，获取服务客服
-            if (login) {
-                // 在线获取上次服务客服
-                customer = customerDispatcherService.getCustomer(visitor.getOpenId());
-            } else {
-                // 非在线随机获取客服
-                customer = customerDispatcherService.getDispatcher(visitor.getOpenId());
-            }
+            customer = customerDispatcherTactics.getCustomer(visitorChatNode.getAbstractUser().getOpenId());
 
             // 获取客服节点
             CustomerChatNode customerChatNode = ChatNodeManager.getCustomerXmppNode(customer);

@@ -31,9 +31,6 @@ public class MonitorApi extends BaseController {
     @Autowired
     private UserCacheServer userCacheServer;
 
-    @Autowired
-    private CustomerDispatcherService customerDispatcherService;
-
     public List<NodeStatues> getNodeStatues(String id, Map<String, ? extends AbstractUser> map) throws BusinessException {
 
         if (!StringUtils.isEmpty(id)) {

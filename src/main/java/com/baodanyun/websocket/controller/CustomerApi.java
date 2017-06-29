@@ -3,7 +3,6 @@ package com.baodanyun.websocket.controller;
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.UserSetPW;
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.bean.userInterface.PersonalDetail;
 import com.baodanyun.websocket.bean.userInterface.user.VcardUserRes;
@@ -70,7 +69,7 @@ public class CustomerApi extends BaseController {
     private WebSocketService webSocketService;
 
     @Autowired
-    private CustomerDispatcherService customerDispatcherService;
+    private CustomerDispatcherTactics customerDispatcherTactics;
 
     /**
      * 获取客服的信息
@@ -214,7 +213,7 @@ public class CustomerApi extends BaseController {
         Response response = new Response();
         Gson gson = new Gson();
         try {
-            Collection collection = customerDispatcherService.getCustomerAccept();
+            Collection collection = customerDispatcherTactics.getCustomerAccept();
             response.setData(collection);
             response.setSuccess(true);
         } catch (Exception e) {
@@ -262,7 +261,7 @@ public class CustomerApi extends BaseController {
         Response response = new Response();
         Gson gson = new Gson();
         try {
-            Collection<AbstractUser> freeCustomerNodeList = customerDispatcherService.getCustomerAccept();
+            Collection<AbstractUser> freeCustomerNodeList = customerDispatcherTactics.getCustomerAccept();
             response.setData(gson.toJson(freeCustomerNodeList));
             response.setSuccess(true);
         } catch (Exception e) {
@@ -282,7 +281,7 @@ public class CustomerApi extends BaseController {
     public void onlineCustomerList(PageModel model, HttpServletResponse httpServletResponse) {
         Response response = new Response();
         try {
-            Collection<AbstractUser> freeCustomerNodeList = customerDispatcherService.getCustomerAccept();
+            Collection<AbstractUser> freeCustomerNodeList = customerDispatcherTactics.getCustomerAccept();
 
             if (null != freeCustomerNodeList) {
                 Iterator<AbstractUser> it = freeCustomerNodeList.iterator();
@@ -358,13 +357,7 @@ public class CustomerApi extends BaseController {
                     String jid = userCacheServer.getCustomerIdByVisitorOpenId(info.getOpenId());
                     AbstractUser customer = null;
                     if (!StringUtils.isEmpty(jid)) {
-                        customer = userCacheServer.getCustomer(jid);
-                    }
-
-                    if (null == customer) {
-                        customer = new Customer();
-                        customer.setId(jid);
-                        customer.setLoginUsername(XMPPUtil.jidToName(jid));
+                        customer = customerDispatcherTactics.getCustomer(jid);
                     }
                     wu.setInfo(info);
                     wu.setCustomer(customer);
@@ -395,7 +388,7 @@ public class CustomerApi extends BaseController {
         Visitor visitor = userServer.initUserByOpenId(from);
 
         String jid = userCacheServer.getCustomerIdByVisitorOpenId(visitor.getOpenId());
-        AbstractUser customerFrom = userCacheServer.getCustomer(jid);
+        AbstractUser customerFrom = customerDispatcherTactics.getCustomer(jid);
 
         transferServer.bindVisitor(customerFrom, customer, visitor);
         Response response = new Response();

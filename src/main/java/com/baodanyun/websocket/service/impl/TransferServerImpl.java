@@ -34,16 +34,14 @@ public class TransferServerImpl implements TransferServer {
     private XmppServer xmppServer;
 
     @Autowired
-    private UserCacheServer userCacheServer;
-
-    @Autowired
-    private MsgSendControl msgSendControl;
+    private CustomerDispatcherTactics customerDispatcherTactics;
 
     @Autowired
     private AccessWeChatTerminalVisitorFactory accessWeChatTerminalVisitorFactory;
 
     public boolean changeVisitorTo(Transferlog tm, Visitor visitor) throws BusinessException, XMPPException, IOException, SmackException {
-        AbstractUser customerTo = userCacheServer.getCustomer(tm.getTransferto());
+        AbstractUser customerTo = customerDispatcherTactics.getCustomer(tm.getTransferto());
+
         return changeVisitorTo(tm, visitor, customerTo);
 
     }

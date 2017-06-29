@@ -29,9 +29,6 @@ public class UserServerImpl implements UserServer {
     // key  用户openID
     private final Map<String, Visitor> visitors = new ConcurrentHashMap<>();
 
-    // key uid  value openid
-    /*private final Map<Long, String> uidOpenid = new ConcurrentHashMap<>();*/
-
     @Autowired
     private PersonalServiceImpl personalService;
 
@@ -118,6 +115,7 @@ public class UserServerImpl implements UserServer {
             visitor.setPassWord(pwd);
             visitor.setLoginTime(new Date().getTime());
             visitor.setOpenId(vu.getOpenId());
+            visitor.setIcon(vu.getIcon());
             visitors.put(vu.getUid(), visitor);
         }
 
