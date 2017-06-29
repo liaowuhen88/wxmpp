@@ -66,6 +66,9 @@ public class RecieveWeiXinMessageApi extends BaseController {
             Msg msg = msg(body);
             VisitorChatNode visitorChatNode = initVisitorChatNode(msg);
 
+            CustomerChatNode customerChatNode = visitorChatNode.getCurrentChatNode();
+            msg.setTo(customerChatNode.getAbstractUser().getId());
+
             if (!StringUtils.isEmpty(msg.getContent()) && msg.getContent().startsWith(keywords)) {
                 response = getBindCustomerResponse(visitorChatNode.getAbstractUser(), msg);
             } else {
@@ -179,19 +182,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
             visitorChatNode.addNode(node);
         }
 
-        if (null == visitorChatNode.getCurrentChatNode() || !visitorChatNode.getCurrentChatNode().isXmppOnline()) {
-            // 只有customer改变才need changeCurrentChatNode
-            boolean need = null != visitorChatNode.getCurrentChatNode();
-            AbstractUser customer = customerDispatcherTactics.getCustomer(visitorChatNode.getAbstractUser().getOpenId());
-
-            msg.setTo(customer.getId());
-            CustomerChatNode customerChatNode = ChatNodeManager.getCustomerXmppNode(customer);
-            if (need) {
-                visitorChatNode.changeCurrentChatNode(customerChatNode);
-            } else {
-                visitorChatNode.setCurrentChatNode(customerChatNode);
-            }
-        }
+        visitorChatNode.initCurrentChatNode();
 
         logger.info(JSONUtil.toJson(visitorChatNode.getAbstractUser()));
 
@@ -199,6 +190,8 @@ public class RecieveWeiXinMessageApi extends BaseController {
             visitorChatNode.login();
             if (null != node) {
                 visitorChatNode.online(node);
+            } else {
+                logger.error("node is null");
             }
         }
 

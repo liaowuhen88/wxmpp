@@ -46,17 +46,14 @@ public class VisitorLogin extends BaseController {
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView visitor(VisitorLoginBean visitorLoginBean, HttpServletRequest request) throws IOException, XMPPException, SmackException {
         ModelAndView mv = new ModelAndView();
-        AbstractUser customer;
+
         try {
             logger.info("visitorLogin:[" + JSONUtil.toJson(visitorLoginBean) + "]");
             // 初始化用户,以及用户节点
             Visitor visitor = userServer.initUserByOpenId(visitorLoginBean.getU());
             VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
-
-            customer = customerDispatcherTactics.getCustomer(visitorChatNode.getAbstractUser().getOpenId());
-
             // 获取客服节点
-            CustomerChatNode customerChatNode = ChatNodeManager.getCustomerXmppNode(customer);
+            CustomerChatNode customerChatNode = visitorChatNode.initCurrentChatNode();
             logger.info(JSONUtil.toJson(visitor));
             request.getSession().setAttribute(Common.USER_KEY, visitor);
             boolean flag = customerOnline(customerChatNode);
@@ -65,7 +62,7 @@ public class VisitorLogin extends BaseController {
             if (flag) {
                 if (visitorChatNode.login()) {
                     visitorChatNode.setCurrentChatNode(customerChatNode);
-                    mv = getOnline(visitor, customer.getId());
+                    mv = getOnline(visitor, customerChatNode.getAbstractUser().getId());
 
                 } else {
                     throw new BusinessException("接入失败");
@@ -73,9 +70,8 @@ public class VisitorLogin extends BaseController {
 
             } else {
                 //客服不在线
-                mv = getOffline(visitor, customer.getId());
+                mv = getOffline(visitor, customerChatNode.getAbstractUser().getId());
             }
-
 
         } catch (Exception e) {
             logger.error("error", "", e);

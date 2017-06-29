@@ -2,6 +2,7 @@ package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.exception.BusinessException;
+import com.baodanyun.websocket.service.CustomerDispatcherTactics;
 import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
@@ -22,6 +23,8 @@ public class VisitorChatNode extends AbstarctChatNode {
     private static final Logger logger = LoggerFactory.getLogger(VisitorChatNode.class);
     UserCacheServer userCacheServer = SpringContextUtil.getBean("userCacheServerImpl", UserCacheServer.class);
     WeChatTerminalVisitorFactory weChatTerminalVisitorFactory = SpringContextUtil.getBean("weChatTerminalVisitorFactory", WeChatTerminalVisitorFactory.class);
+    CustomerDispatcherTactics customerDispatcherTactics = SpringContextUtil.getBean("customerDispatcherTacticsImpl", CustomerDispatcherTactics.class);
+
     private CustomerChatNode currentChatNode;
 
     VisitorChatNode(AbstractUser visitor, Long lastActiveTime) {
@@ -41,6 +44,21 @@ public class VisitorChatNode extends AbstarctChatNode {
         }
     }
 
+    public CustomerChatNode initCurrentChatNode() throws BusinessException {
+        if (null == this.getCurrentChatNode() || !this.getCurrentChatNode().isXmppOnline()) {
+            // 只有customer改变才need changeCurrentChatNode
+            boolean need = null != this.getCurrentChatNode();
+            AbstractUser customer = customerDispatcherTactics.getCustomer(this.getAbstractUser().getOpenId());
+            CustomerChatNode customerChatNode = ChatNodeManager.getCustomerXmppNode(customer);
+            if (need) {
+                this.changeCurrentChatNode(customerChatNode);
+            } else {
+                this.setCurrentChatNode(customerChatNode);
+            }
+        }
+
+        return this.getCurrentChatNode();
+    }
     /**
      * 通知当前客服，有用户接入
      *
