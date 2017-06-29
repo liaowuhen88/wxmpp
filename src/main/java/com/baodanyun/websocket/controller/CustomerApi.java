@@ -481,7 +481,7 @@ public class CustomerApi extends BaseController {
             CustomerChatNode customerChatNode = ChatNodeManager.getCustomerXmppNode(customer);
             vn.setCurrentChatNode(customerChatNode);
             customerChatNode.uninstall(vn);
-            logger.info("关闭用户，用户退出");
+            logger.info("关闭用户{}，用户退出", vjid);
             vn.logout();
 
             response.setSuccess(true);
