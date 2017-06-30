@@ -79,7 +79,7 @@ public class AppKeyVisitorLogin extends BaseController {
             responseMsg.setMsg(e.getMessage());
         }
 
-
+        response.setHeader("Access-Control-Allow-Origin","*" );
         Render.r(response, XMPPUtil.buildJson(responseMsg));
     }
 
