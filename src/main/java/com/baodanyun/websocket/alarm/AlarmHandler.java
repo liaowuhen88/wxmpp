@@ -3,6 +3,8 @@ package com.baodanyun.websocket.alarm;/**
  * @since 2017-06-29 18:53
  **/
 
+import com.baodanyun.websocket.alarm.listener.AlarmModels;
+import com.baodanyun.websocket.alarm.listener.WriteDBListenerImpl;
 import com.baodanyun.websocket.event.AlarmEvent;
 import com.baodanyun.websocket.util.XMPPUtil;
 import org.jivesoftware.smack.packet.Message;
@@ -23,7 +25,7 @@ public abstract class AlarmHandler {
 
     protected AlarmHandler nextAlarmHandler;
 
-    public AlarmHandler getNextAlarmHandler() {
+    protected AlarmHandler getNextAlarmHandler() {
         return nextAlarmHandler;
     }
 
@@ -33,14 +35,14 @@ public abstract class AlarmHandler {
      *
      * @param ruleTime 规则时间
      */
-    public abstract void alarm(final long ruleTime, final AlarmEvent alarmInfo);
+    protected abstract void alarm(final long ruleTime, final AlarmEvent alarmInfo);
 
     /**
-     * 记录日志
+     * 打印记录日志且记入到库
      *
      * @param alarmInfo
      */
-    public void recordLog(final String tip, final AlarmEvent alarmInfo) {
+    protected final void recordLog(final String tip, final AlarmEvent alarmInfo) {
         DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         Message message = alarmInfo.getMessage();
 
@@ -53,6 +55,11 @@ public abstract class AlarmHandler {
                 message.getBody());
 
         LOGGER.info(content);
+
+        //打印日志后写库
+        AlarmModels models = new AlarmModels();
+        models.addListener(new WriteDBListenerImpl()); //记录到库的listener
+        models.executeAlarm(alarmInfo);
     }
 }
 

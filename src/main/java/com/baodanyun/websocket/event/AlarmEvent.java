@@ -17,10 +17,14 @@ public class AlarmEvent {
      */
     private int count;
 
+    /**
+     * 类型
+     */
+    private byte type;
+
     private AlarmEnum alarmEnum;
 
     private Message message;
-
     /**
      * 访客发消息的时间
      */
@@ -29,6 +33,14 @@ public class AlarmEvent {
     public AlarmEvent(AlarmEnum alarmEnum, Message message) {
         this.alarmEnum = alarmEnum;
         this.message = message;
+    }
+
+    public byte getType() {
+        return type;
+    }
+
+    public void setType(byte type) {
+        this.type = type;
     }
 
     public int getCount() {

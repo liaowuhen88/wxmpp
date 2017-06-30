@@ -57,6 +57,7 @@ public class AlarmBoxer {
      * <li>超时5分钟则告警客服</li>
      * <li>15分钟则告警到Boss</li>
      * <li>30分钟后清除</li>
+     * <li>每告警一次数据记录入库</li>
      * </ol>
      */
     public synchronized void doAlarmJob() {

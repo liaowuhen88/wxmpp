@@ -1,5 +1,6 @@
 package com.baodanyun.websocket.alarm;
 
+import com.baodanyun.websocket.enums.AlarmTypeEnum;
 import com.baodanyun.websocket.event.AlarmEvent;
 
 
@@ -26,10 +27,12 @@ public class AlarmToDestroy extends AlarmHandler {
      * @param alarmInfo
      */
     public void alarm(final long ruleTime, final AlarmEvent alarmInfo) {
-        if (ruleTime >= MINUTE) {
-            super.recordLog(String.format("%s分钟后客服无回复", MINUTE), alarmInfo);
 
+        if (ruleTime >= MINUTE) {
             AlarmBoxer.getInstance().remove(alarmInfo); //清除此条任务
+            alarmInfo.setType((byte) AlarmTypeEnum.type3.getType());
+
+            super.recordLog(String.format("%s分钟后客服无回复", MINUTE), alarmInfo);
         } else {
             if (getNextAlarmHandler() != null)
                 getNextAlarmHandler().alarm(ruleTime, alarmInfo);

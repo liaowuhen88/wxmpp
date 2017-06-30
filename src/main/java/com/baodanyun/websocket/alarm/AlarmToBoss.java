@@ -1,5 +1,6 @@
 package com.baodanyun.websocket.alarm;
 
+import com.baodanyun.websocket.enums.AlarmTypeEnum;
 import com.baodanyun.websocket.event.AlarmEvent;
 
 /**
@@ -12,7 +13,7 @@ import com.baodanyun.websocket.event.AlarmEvent;
 public class AlarmToBoss extends AlarmHandler {
 
     /*15分钟*/;
-    private final static int MINUTE = 4;
+    private final static int MINUTE = 15;
 
     private AlarmToBoss(Builder builder) {
         this.nextAlarmHandler = builder.nextHandler;
@@ -27,9 +28,10 @@ public class AlarmToBoss extends AlarmHandler {
     public void alarm(final long ruleTime, final AlarmEvent alarmInfo) {
         int count = alarmInfo.getCount();
         if (ruleTime >= MINUTE && count == 1) {
-            super.recordLog(String.format("%s分钟后客服无回复告警给张总", MINUTE), alarmInfo);
-
             alarmInfo.setCount(++count);
+            alarmInfo.setType((byte) AlarmTypeEnum.type2.getType());
+
+            super.recordLog(String.format("%s分钟后客服无回复告警给张总", MINUTE), alarmInfo);
         } else {
             if (getNextAlarmHandler() != null)
                 getNextAlarmHandler().alarm(ruleTime, alarmInfo);
