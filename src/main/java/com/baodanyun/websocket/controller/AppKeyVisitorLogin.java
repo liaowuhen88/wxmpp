@@ -79,7 +79,6 @@ public class AppKeyVisitorLogin extends BaseController {
             responseMsg.setMsg(e.getMessage());
         }
 
-
         Render.r(response, XMPPUtil.buildJson(responseMsg));
     }
 

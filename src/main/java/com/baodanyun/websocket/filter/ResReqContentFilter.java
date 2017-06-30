@@ -26,13 +26,6 @@ public class ResReqContentFilter implements Filter {
         HttpResReqContext.setRequest((HttpServletRequest) arg0);
         HttpResReqContext.setResponse(response);
         arg2.doFilter(arg0, response);
-
-       /* response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET");
-        response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "X-Requested-With,content-type");*/
-        
-
     }
 
     public void init(FilterConfig arg0) throws ServletException {
