@@ -1,10 +1,6 @@
-package com.baodanyun.websocket.alarm.listener;/**
- * @author hubo
- * @since 2017-06-30 15:42
- **/
+package com.baodanyun.websocket.alarm.listener;
 
 import com.baodanyun.websocket.event.AlarmEvent;
-
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
