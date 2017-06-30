@@ -1,6 +1,8 @@
 package com.baodanyun.websocket.service;
 
-import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.bean.request.AppKeyVisitorLoginBean;
+import com.baodanyun.websocket.bean.user.AppCustomer;
+import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.exception.BusinessException;
 
 /**
@@ -13,5 +15,7 @@ public interface AppKeyService {
      * @param appkey
      * @return
      */
-    AbstractUser getByAppKey(String appkey) throws BusinessException;
+    AppCustomer getCustomerByAppKey(String appkey) throws BusinessException;
+
+    Visitor getVisitor(AppKeyVisitorLoginBean re) throws BusinessException;
 }

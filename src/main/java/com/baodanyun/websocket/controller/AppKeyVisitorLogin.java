@@ -13,7 +13,6 @@ import com.baodanyun.websocket.service.AppKeyService;
 import com.baodanyun.websocket.service.CustomerDispatcherService;
 import com.baodanyun.websocket.service.XmppUserOnlineServer;
 import com.baodanyun.websocket.util.JSONUtil;
-import com.baodanyun.websocket.util.PropertiesUtil;
 import com.baodanyun.websocket.util.Render;
 import com.baodanyun.websocket.util.XMPPUtil;
 import org.jivesoftware.smack.SmackException;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * Created by yutao on 2016/10/4.
@@ -37,7 +35,6 @@ import java.util.Map;
 @RequestMapping("appKeyCheck")
 public class AppKeyVisitorLogin extends BaseController {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-    Map<String, String> map = PropertiesUtil.get(this.getClass().getClassLoader(), "config.properties");
     @Autowired
     private AppKeyService appKeyService;
 
@@ -50,22 +47,13 @@ public class AppKeyVisitorLogin extends BaseController {
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
     public void visitor(AppKeyVisitorLoginBean re, HttpServletRequest request, HttpServletResponse response) throws IOException, XMPPException, SmackException {
         Response responseMsg = new Response();
-        AbstractUser customer;
+        AppCustomer customer;
         try {
             logger.info("visitorLogin:[" + JSONUtil.toJson(re.getAppKey()) + "]");
             // 初始化用户,以及用户节点
-            AbstractUser visitor = appKeyService.getByAppKey(re.getAppKey());
-
+            customer = appKeyService.getCustomerByAppKey(re.getAppKey());
+            AbstractUser visitor = appKeyService.getVisitor(re);
             VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
-            boolean login = visitorChatNode.isXmppOnline();
-            // 根据用户是否已经在线，获取服务客服
-            if (login) {
-                // 在线获取上次服务客服
-                customer = customerDispatcherService.getCustomer(visitor.getOpenId());
-            } else {
-                // 非在线随机获取客服
-                customer = customerDispatcherService.getDispatcher(visitor.getOpenId());
-            }
 
             // 获取客服节点
             CustomerChatNode customerChatNode = ChatNodeManager.getCustomerXmppNode(customer);
@@ -76,13 +64,13 @@ public class AppKeyVisitorLogin extends BaseController {
             if (flag) {
                 if (visitorChatNode.login()) {
                     visitorChatNode.setCurrentChatNode(customerChatNode);
-                    getOnline(responseMsg, visitor, customer.getId());
+                    getOnline(responseMsg, customer);
                 } else {
                     throw new BusinessException("接入失败");
                 }
             } else {
                 //客服不在线
-                getOffline(responseMsg, visitor, customer.getId());
+                getOffline(responseMsg, customer);
             }
         } catch (Exception e) {
             responseMsg.setSuccess(false);
@@ -93,23 +81,17 @@ public class AppKeyVisitorLogin extends BaseController {
         Render.r(response, XMPPUtil.buildJson(responseMsg));
     }
 
-    public void getOnline(Response responseMsg, AbstractUser visitor, String customerJid) throws BusinessException, InterruptedException, XMPPException, SmackException, IOException {
+    public void getOnline(Response responseMsg, AppCustomer customer) throws BusinessException, InterruptedException, XMPPException, SmackException, IOException {
         // 客服在线
-
-        AppCustomer ac = new AppCustomer();
-        ac.setVisitor(visitor);
-        ac.setCustomerIsOnline(true);
-        ac.setSocketUrl("/sockjs/newVisitor");
-        ac.setOssUrl(map.get("oss.upload"));
         responseMsg.setSuccess(true);
-        responseMsg.setData(ac);
-
+        responseMsg.setData(customer);
     }
 
 
-    public void getOffline(Response responseMsg, AbstractUser visitor, String customerJid) throws BusinessException {
+    public void getOffline(Response responseMsg, AppCustomer customer) throws BusinessException {
 
         responseMsg.setSuccess(false);
+        responseMsg.setData(customer);
         responseMsg.setMsg("客服不在线");
 
     }
