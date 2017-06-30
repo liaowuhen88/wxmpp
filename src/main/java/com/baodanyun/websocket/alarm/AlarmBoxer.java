@@ -1,7 +1,4 @@
-package com.baodanyun.websocket.alarm;/**
- * @author hubo
- * @since 2017-06-29 17:58
- **/
+package com.baodanyun.websocket.alarm;
 
 import com.baodanyun.websocket.enums.AlarmEnum;
 import com.baodanyun.websocket.event.AlarmEvent;

@@ -1,7 +1,4 @@
-package com.baodanyun.websocket.alarm;/**
- * @author hubo
- * @since 2017-06-29 18:53
- **/
+package com.baodanyun.websocket.alarm;
 
 import com.baodanyun.websocket.alarm.listener.AlarmModels;
 import com.baodanyun.websocket.alarm.listener.WriteDBListenerImpl;

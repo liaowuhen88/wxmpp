@@ -1,7 +1,4 @@
-package com.baodanyun.websocket.alarm.listener;/**
- * @author hubo
- * @since 2017-06-30 15:40
- **/
+package com.baodanyun.websocket.alarm.listener;
 
 import com.baodanyun.websocket.dao.AlarmLogMapper;
 import com.baodanyun.websocket.event.AlarmEvent;
