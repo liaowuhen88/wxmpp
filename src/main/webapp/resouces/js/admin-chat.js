@@ -492,12 +492,12 @@ xchat.wsClose = function () {
     window.location.href = this.interface.login;
 };
 //本地缓存历史数据
-xchat.getLocalHistory = function (id) {debugger;
+xchat.getLocalHistory = function (id) {
     var _this = this;
     var dataList = myUtils.getStorage(id);
     if (dataList) {
         dataList = eval("(" + dataList + ")");
-        dataList.map(function (val) {debugger;
+        dataList.map(function (val) {
 
             if (val.from == window.destJid) {
                 val.icon = val.icon || _this.controls.defaultAvatar;
