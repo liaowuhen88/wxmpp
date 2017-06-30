@@ -492,17 +492,17 @@ xchat.wsClose = function () {
     window.location.href = this.interface.login;
 };
 //本地缓存历史数据
-xchat.getLocalHistory = function (id) {
+xchat.getLocalHistory = function (id) {debugger;
     var _this = this;
     var dataList = myUtils.getStorage(id);
     if (dataList) {
         dataList = eval("(" + dataList + ")");
-        dataList.map(function (val) {
+        dataList.map(function (val) {debugger;
 
             if (val.from == window.destJid) {
-                val.icon = val.icon || this.controls.defaultAvatar;
+                val.icon = val.icon || _this.controls.defaultAvatar;
             } else if (val.to == window.destJid) {
-                val.icon = val.icon || this.controls.default_kf_icon;
+                val.icon = val.icon || _this.controls.default_kf_icon;
             }
         });
         myUtils.cacheRenderDiv(window.currentId, dataList, 'chatMsgContainer', function () {
