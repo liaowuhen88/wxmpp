@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 告警容器
  * @author hubo
  * @since 2017-06-29 17:58
  **/
@@ -65,10 +66,11 @@ public class AlarmBoxer {
             AlarmEvent alarmInfo = map.getValue();
             long ruleTime = DateUtils.getMinutesDiff(alarmInfo.getVisitorSendMsgTime());//时间差
 
+            //组合责任链
             AlarmToDestroy destroy = new AlarmToDestroy.Builder().build();
             AlarmToBoss boss = new AlarmToBoss.Builder().nextHandler(destroy).build();
-
             AlarmToCustomer customer = new AlarmToCustomer.Builder().nextHandler(boss).build();
+
             customer.alarm(ruleTime, alarmInfo); //告警
         }
     }
