@@ -49,10 +49,8 @@ public class AppKeyVisitorLogin extends BaseController {
         Response responseMsg = new Response();
         AppCustomer customer;
         try {
-            int endIndex = request.getRequestURL().length() - request.getPathInfo().length() + 1;
-            String url = request.getRequestURL().substring(0, endIndex);
-
-            logger.info("visitorLogin:[" + JSONUtil.toJson(re.getAppKey()) + "]  ---- url{}", url);
+            String url = request.getRequestURL().substring(0, request.getRequestURL().indexOf(request.getRequestURI()));
+            logger.info("visitorLogin:[" + JSONUtil.toJson(re.getAppKey()) + "]---- url {}", url);
             // 初始化用户,以及用户节点
             customer = appKeyService.getCustomerByAppKey(re.getAppKey(), url);
             AbstractUser visitor = appKeyService.getVisitor(re);
@@ -76,6 +74,7 @@ public class AppKeyVisitorLogin extends BaseController {
                 getOffline(responseMsg, customer);
             }
         } catch (Exception e) {
+            logger.error("", e);
             responseMsg.setSuccess(false);
             responseMsg.setMsg(e.getMessage());
         }
