@@ -26,7 +26,7 @@ public class AppKeyServiceImpl implements AppKeyService {
      * @return
      */
     @Override
-    public AppCustomer getCustomerByAppKey(String appkey) throws BusinessException {
+    public AppCustomer getCustomerByAppKey(String appkey, String url) throws BusinessException {
 
         if (StringUtils.isEmpty(appkey)) {
             throw new BusinessException("appKey is null");
@@ -38,7 +38,7 @@ public class AppKeyServiceImpl implements AppKeyService {
         au.setUserName("客服");
         au.setIcon("http://www.gx8899.com/uploads/allimg/2016060716/1-160226194S9.png");
         au.setCustomerIsOnline(true);
-        au.setSocketUrl("/sockjs/newVisitor");
+        au.setSocketUrl(url + "/sockjs/newVisitor");
         au.setOssUrl(map.get("oss.upload"));
 
 
