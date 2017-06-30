@@ -1,5 +1,6 @@
 package com.baodanyun.websocket.service;
 
+import com.baodanyun.websocket.alarm.AlarmBoxer;
 import com.baodanyun.websocket.node.ChatNodeManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +70,19 @@ public class TimerTaskService {
             dealMsgSendControl = false;
         }
 
+    }
+
+    /**
+     * 告警任务
+     */
+    @Scheduled(cron = "0 0/2 * * * ?")
+    public void alarmJob() {
+        try {
+            logger.info("开始计时告警");
+            AlarmBoxer.getInstance().doAlarmJob();
+        } catch (Exception e) {
+            logger.error("error", "告警任务操作失败", e);
+        }
     }
 
 }

@@ -1,17 +1,22 @@
 package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.enums.AlarmEnum;
 import com.baodanyun.websocket.enums.MsgStatus;
+import com.baodanyun.websocket.event.AlarmEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.ConversationCustomer;
 import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
 import com.baodanyun.websocket.service.ConversationCustomerService;
 import com.baodanyun.websocket.service.CustomerDispatcherTactics;
 import com.baodanyun.websocket.service.XmppUserOnlineServer;
+import com.baodanyun.websocket.util.EventBusUtils;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.chat.Chat;
+import org.jivesoftware.smack.packet.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -179,5 +184,12 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         return cFlag;
     }
 
+    @Override
+    public void processMessage(Chat chat, Message message) {
+        super.processMessage(chat, message);
 
+        AlarmEvent alarmEvent = new AlarmEvent(AlarmEnum.VISITOR, message); //告警
+        EventBusUtils.post(alarmEvent);
+
+    }
 }

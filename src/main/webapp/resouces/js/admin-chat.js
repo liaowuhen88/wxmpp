@@ -611,6 +611,12 @@ xchat.openFriendWindow = function (isOnline, id, nickname, openId, icon) {
 //获取当前用户的详情
 xchat.getUserInfo = function (currentId, destJid, openId) {
     var _this = this;
+    $("#userDetail").empty();
+    $(_this.controls.claimsContainer).empty();
+    $(_this.controls.contractsContainer).empty();
+    $(_this.controls.orderContainer).empty();
+
+
     $.ajax({
         url: _this.interface.userInfo + '?id=' + destJid + '&openid=' + openId,
         type: 'GET',
@@ -672,11 +678,6 @@ xchat.getUserInfo = function (currentId, destJid, openId) {
                         if (contract) {
                             _this.contractComb(contract);   //合同
                         }
-                    } else {
-                        $("#userDetail").empty();
-                        $(_this.controls.claimsContainer).empty();
-                        $(_this.controls.contractsContainer).empty();
-                        $(_this.controls.orderContainer).empty();
                     }
 
                     if (vCard) {
