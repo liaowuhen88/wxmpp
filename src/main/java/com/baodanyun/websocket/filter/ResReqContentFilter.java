@@ -19,12 +19,13 @@ public class ResReqContentFilter implements Filter {
 
     }
 
-    public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain arg2) throws IOException, ServletException {
-            arg0.setCharacterEncoding("UTF-8");
-            HttpResReqContext.setRequest((HttpServletRequest) arg0);
-            HttpResReqContext.setResponse((HttpServletResponse) arg1);
-            arg2.doFilter(arg0, arg1);
+    public void doFilter(ServletRequest arg0, ServletResponse servletResponse, FilterChain arg2) throws IOException, ServletException {
 
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
+        arg0.setCharacterEncoding("UTF-8");
+        HttpResReqContext.setRequest((HttpServletRequest) arg0);
+        HttpResReqContext.setResponse(response);
+        arg2.doFilter(arg0, response);
     }
 
     public void init(FilterConfig arg0) throws ServletException {
