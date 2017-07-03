@@ -26,6 +26,7 @@ import java.util.Properties;
 public class WebXmlConfig implements WebApplicationInitializer {
     protected static Logger logger = LoggerFactory.getLogger(WebXmlConfig.class);
 
+
     @Override
     public void onStartup(ServletContext servletContext)
             throws ServletException {
@@ -35,7 +36,7 @@ public class WebXmlConfig implements WebApplicationInitializer {
         servletContext.addListener(SessionCounter.class);
         /*servletContext.addListener(Log4jConfigListener.class);*/
         Properties props = new Properties();
-        props.put("cors.allowOrigin", "http://kf.17doubao.com");
+        props.put("cors.allowOrigin", "*");
         props.put("cors.supportedMethods", "GET, POST, HEAD, PUT, DELETE");
         props.put("cors.supportedHeaders", "Accept,Origin,X-Requested-With,Content-Type,Last-Modified");
         props.put("cors.exposedHeaders", "Set-Cookie");
