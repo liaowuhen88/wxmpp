@@ -404,6 +404,9 @@ Utils = (function () {
                 msgList = [];
                 msgList.push(data);
             } else {
+                if(storeList.length >= 300){
+                    storeList.shift();
+                }
                 storeList.push(data);
                 msgList = storeList;
             }
