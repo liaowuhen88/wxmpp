@@ -4,6 +4,7 @@ import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
+import com.baodanyun.websocket.util.EmojiUtil;
 import com.baodanyun.websocket.util.XMPPUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jivesoftware.smack.SmackException;
@@ -105,6 +106,8 @@ public class AbstractTerminal {
     void receiveFromXmpp(Message message) {
         Msg sendMsg = null;
         String body = message.getBody();
+        body = EmojiUtil.tranformEemojiContent(body);//文本内容替换表情
+
         if (StringUtils.isNotBlank(body)) {
             sendMsg = new Msg(body);
             String from = XMPPUtil.removeSource(message.getFrom());

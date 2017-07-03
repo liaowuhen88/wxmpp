@@ -9,7 +9,7 @@
         <div class="avatar"><img src="{{icon}}" alt="{{username}}"></div>
         <span class="time">{{time}}</span>
         <span class="time">{{direction}}</span>
-        <span class="message">{{content}}</span>
+        <span class="message">{{&content}}</span>
     </div>
 </script>
 
