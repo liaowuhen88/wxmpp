@@ -43,7 +43,8 @@ public abstract class AlarmHandler {
         DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         Message message = alarmInfo.getMessage();
 
-        String content = String.format("%s;客服:%s;用户:%s;发送消息时间:%s;现在时间:%s;消息内容:[%s]",
+        String text = "%s;客服:%s;用户:%s;发送消息时间:%s;现在时间:%s;消息内容:[%s]";
+        String content = String.format(text,
                 tip,
                 XMPPUtil.jidToName(message.getTo()),
                 XMPPUtil.jidToName(message.getFrom()),
