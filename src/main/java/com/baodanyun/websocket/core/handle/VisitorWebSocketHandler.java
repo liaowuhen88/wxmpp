@@ -26,11 +26,11 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         logger.info("session is open --- ip:[" + session.getLocalAddress() + "]------visitorId:[" + au.getId() + "] ---- sessionId:[" + session.getId() + "]  ");
 
-        WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
+        WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au, session);
         ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
         ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
 
-        AbstractTerminal wn = webSocketTerminalVisitorFactory.getNode(chatNodeAdaptation,webSocketTerminal);
+        AbstractTerminal wn = webSocketTerminalVisitorFactory.getNode(chatNodeAdaptation, webSocketTerminal);
 
         chatNode.online(wn);
 
@@ -41,16 +41,16 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
         logger.info("sessionId--->" + session.getId() + "webSocket receive message:" + JSONUtil.toJson(message));
         ChatNode chatNode = null;
         AbstractTerminal wn = null;
-        try{
+        try {
             AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
 
             String content = message.getPayload();
             chatNode = ChatNodeManager.getVisitorXmppNode(au);
-            WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
+            WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au, session);
             wn = chatNode.getNode(webSocketTerminalVisitorFactory.getId(webSocketTerminal));
-            chatNode.receiveFromGod(wn,content);
+            chatNode.receiveFromGod(wn, content);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             chatNode.sendToXmppError(wn);
             logger.error("error", e);
         }
@@ -64,9 +64,11 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
         logger.info("session is closed  ------visitorId:[" + au.getId() + "] ---- sessionId:[" + session.getId() + "]  ----------status:[ " + status + "]");
 
         ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
-        WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
+        WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au, session);
         AbstractTerminal wn = chatNode.getNode(webSocketTerminalVisitorFactory.getId(webSocketTerminal));
-        chatNode.removeNode(wn.getId());
+
+        if (wn != null)
+            chatNode.removeNode(wn.getId());
 
     }
 
