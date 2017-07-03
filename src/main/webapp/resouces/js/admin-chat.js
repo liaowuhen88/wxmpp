@@ -192,6 +192,8 @@ xchat.recvMsgEvent = function (json) {
 
 //接收到文本消息
 xchat.recvTextMsgHandelEvent = function (json) {
+    json.content = wechatFace.faceToHTML(json.content, window.base); //表情字符转换对象的图片
+
     document.getElementById("msgTipAudio").play();
     json.time = myUtils.formatDate(new Date(json.ct));
 
