@@ -15,6 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Created by liaowuhen on 2016/11/15.
@@ -67,6 +68,18 @@ public class TestOrder {
         int count = 1;
         count++;
         System.out.print(count);
+    }
+
+    @Test
+    public void main() {
+        Properties props = new Properties();
+        props.put("cors.allowOrigin", "http://kf.17doubao.com");
+        props.put("cors.supportedMethods", "GET, POST, HEAD, PUT, DELETE");
+        props.put("cors.supportedHeaders", "Accept,Origin,X-Requested-With,Content-Type,Last-Modified");
+        props.put("cors.exposedHeaders", "Set-Cookie");
+        props.put("cors.supportsCredentials", "true");
+
+
     }
 
     @Test

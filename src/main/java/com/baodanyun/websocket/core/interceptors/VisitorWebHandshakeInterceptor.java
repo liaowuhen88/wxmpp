@@ -24,6 +24,10 @@ public class VisitorWebHandshakeInterceptor implements HandshakeInterceptor {
 
         ServletServerHttpRequest req = (ServletServerHttpRequest) serverHttpRequest;
         AbstractUser visitor = (AbstractUser) req.getServletRequest().getSession().getAttribute(Common.USER_KEY);
+
+      /*  serverHttpResponse.getHeaders().add("Content-Type","text/event-stream");
+        serverHttpResponse.getHeaders().add("Cache-Control","no-cache");*/
+
         Map header = (Map) req.getServletRequest().getSession().getAttribute(Common.VISITOR_USER_HEADER);
         map.put(Common.USER_KEY, visitor);
         map.put(Common.VISITOR_USER_HEADER, header);
