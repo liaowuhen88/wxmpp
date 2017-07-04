@@ -45,7 +45,7 @@
         <span class="time">{{direction}}</span>
         <span class="time">{{time}}</span>
 
-        <span class="message">{{content}}</span>
+        <span class="message">{{&content}}</span>
     </div>
 </script>
 
