@@ -106,9 +106,8 @@ public class AbstractTerminal {
     void receiveFromXmpp(Message message) {
         Msg sendMsg = null;
         String body = message.getBody();
-        body = EmojiUtil.tranformEemojiContent(body);//文本内容替换表情
-
         if (StringUtils.isNotBlank(body)) {
+            body = EmojiUtil.tranformEemojiContent(body);//文本内容替换表情
             sendMsg = new Msg(body);
             String from = XMPPUtil.removeSource(message.getFrom());
             String to = XMPPUtil.removeSource(message.getTo());
