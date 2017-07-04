@@ -3,9 +3,6 @@ package com.baodanyun.websocket.springConfig;
 import com.baodanyun.websocket.filter.LoginFilter;
 import com.baodanyun.websocket.filter.ResReqContentFilter;
 import com.baodanyun.websocket.listener.SessionCounter;
-import com.thetransactioncompany.cors.CORSConfiguration;
-import com.thetransactioncompany.cors.CORSConfigurationException;
-import com.thetransactioncompany.cors.CORSFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
@@ -16,7 +13,6 @@ import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import java.util.EnumSet;
-import java.util.Properties;
 
 /**
  * Created by liaowuhen on 2016/11/2.
@@ -35,7 +31,7 @@ public class WebXmlConfig implements WebApplicationInitializer {
         servletContext.setInitParameter("contextConfigLocation", "classpath:spring-conf.xml");
         servletContext.addListener(SessionCounter.class);
         /*servletContext.addListener(Log4jConfigListener.class);*/
-        Properties props = new Properties();
+        /*Properties props = new Properties();
         props.put("cors.allowOrigin", "*");
         props.put("cors.supportedMethods", "GET, POST, HEAD, PUT, DELETE");
         props.put("cors.supportedHeaders", "Accept,Origin,X-Requested-With,Content-Type,Last-Modified");
@@ -47,13 +43,13 @@ public class WebXmlConfig implements WebApplicationInitializer {
             FilterRegistration.Dynamic corsFilter = servletContext.addFilter(
                     "corsFilter", co);
             corsFilter.addMappingForUrlPatterns(
-                    EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE), false, "/*");
+                    EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE), false, "*//*");
 
 
         } catch (CORSConfigurationException e) {
             throw new RuntimeException(e);
         }
-
+*/
 
         //OpenSessionInViewFilter
         ResReqContentFilter ref = new ResReqContentFilter();

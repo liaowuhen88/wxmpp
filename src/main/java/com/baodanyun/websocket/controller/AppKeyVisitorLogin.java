@@ -49,6 +49,7 @@ public class AppKeyVisitorLogin extends BaseController {
         Response responseMsg = new Response();
         AppCustomer customer;
         try {
+            //String url = "";
             //String url = "ws" + "://" + request.getServerName() + ":" + request.getServerPort();
             String url = request.getRequestURL().substring(0, request.getRequestURL().indexOf(request.getRequestURI()));
             logger.info("visitorLogin:[" + JSONUtil.toJson(re.getAppKey()) + "]---- url {}", url);
@@ -79,6 +80,9 @@ public class AppKeyVisitorLogin extends BaseController {
             responseMsg.setSuccess(false);
             responseMsg.setMsg(e.getMessage());
         }
+
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin", "*");
 
         Render.r(response, XMPPUtil.buildJson(responseMsg));
     }
