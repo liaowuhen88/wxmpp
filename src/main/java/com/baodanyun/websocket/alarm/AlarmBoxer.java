@@ -62,7 +62,6 @@ public class AlarmBoxer {
         LOGGER.info(String.format("容器map任务条数%s", alarmMap.size()));
 
         for (Map.Entry<String, AlarmEvent> map : alarmMap.entrySet()) {
-
             AlarmEvent alarmInfo = map.getValue();
             long ruleTime = DateUtils.getMinutesDiff(alarmInfo.getVisitorSendMsgTime());//时间差
 
