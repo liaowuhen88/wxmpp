@@ -4,6 +4,7 @@ package com.baodanyun.websocket.event;/**
  **/
 
 import com.baodanyun.websocket.enums.AlarmEnum;
+import com.baodanyun.websocket.enums.AlarmTypeEnum;
 import org.jivesoftware.smack.packet.Message;
 
 /**
@@ -20,7 +21,7 @@ public class AlarmEvent {
     /**
      * 类型
      */
-    private byte type;
+    private AlarmTypeEnum alarmTypeEnum;
 
     private AlarmEnum alarmEnum;
 
@@ -35,12 +36,12 @@ public class AlarmEvent {
         this.message = message;
     }
 
-    public byte getType() {
-        return type;
+    public AlarmTypeEnum getAlarmTypeEnum() {
+        return alarmTypeEnum;
     }
 
-    public void setType(byte type) {
-        this.type = type;
+    public void setAlarmTypeEnum(AlarmTypeEnum alarmTypeEnum) {
+        this.alarmTypeEnum = alarmTypeEnum;
     }
 
     public int getCount() {

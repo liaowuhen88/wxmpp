@@ -9,25 +9,32 @@ public enum AlarmTypeEnum {
     /**
      * 客服5分钟无回复
      */
-    type1(1),
+    TYPE1(1, 1),
 
     /**
      * 15分钟告警到Boss
      */
-    type2(2),
+    TYPE2(2, 3),
 
     /**
      * 30分钟无回复
      */
-    type3(3);
+    TYPE3(3, 5);
 
     private int type;
 
-    AlarmTypeEnum(int type) {
+    private int minute;
+
+    AlarmTypeEnum(int type, int minute) {
         this.type = type;
+        this.minute = minute;
     }
 
     public int getType() {
         return type;
+    }
+
+    public int getMinute() {
+        return minute;
     }
 }

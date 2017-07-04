@@ -19,6 +19,11 @@ public class AlarmToCustomer extends AlarmHandler {
         this.nextAlarmHandler = builder.nextHandler;
     }
 
+    @Override
+    protected boolean isAlarm() {
+        return true;
+    }
+
     /**
      * 告警业务操作
      *
@@ -27,11 +32,11 @@ public class AlarmToCustomer extends AlarmHandler {
      */
     public void alarm(final long ruleTime, final AlarmEvent alarmInfo) {
         int count = alarmInfo.getCount();
-        if (ruleTime >= MINUTE && count < 1) {//告警一次
+        if (ruleTime >= AlarmTypeEnum.TYPE1.getMinute() && count < 1) {//告警一次
             alarmInfo.setCount(++count);
-            alarmInfo.setType((byte) AlarmTypeEnum.type1.getType());
+            alarmInfo.setAlarmTypeEnum(AlarmTypeEnum.TYPE1);
 
-            super.recordLog(String.format("%s分钟后客服无回复告警客服", MINUTE), alarmInfo);
+            super.processAlarm(alarmInfo);
         } else {
             if (getNextAlarmHandler() != null)
                 getNextAlarmHandler().alarm(ruleTime, alarmInfo);

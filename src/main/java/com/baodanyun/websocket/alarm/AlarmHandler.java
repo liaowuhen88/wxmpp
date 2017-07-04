@@ -1,6 +1,7 @@
 package com.baodanyun.websocket.alarm;
 
 import com.baodanyun.websocket.alarm.listener.AlarmModels;
+import com.baodanyun.websocket.alarm.listener.AlarmWechatListenerImpl;
 import com.baodanyun.websocket.alarm.listener.WriteDBListenerImpl;
 import com.baodanyun.websocket.event.AlarmEvent;
 import com.baodanyun.websocket.util.XMPPUtil;
@@ -35,29 +36,50 @@ public abstract class AlarmHandler {
     protected abstract void alarm(final long ruleTime, final AlarmEvent alarmInfo);
 
     /**
+     * 是否告警
+     */
+    protected abstract boolean isAlarm();
+
+    /**
+     * 告警业务
+     * 执行告警业务写库存及发微信
+     *
+     * @param tip       标识
+     * @param alarmInfo 告警信息
+     */
+    protected final void processAlarm(final AlarmEvent alarmInfo) {
+        //打印日志
+        this.printLong(alarmInfo);
+
+        AlarmModels models = new AlarmModels();
+        models.addListener(new WriteDBListenerImpl()); //记录到库
+
+        if (isAlarm()) {
+            models.addListener(new AlarmWechatListenerImpl());//微信告警
+        }
+
+        models.executeAlarm(alarmInfo);
+    }
+
+    /**
      * 打印记录日志且记入到库
      *
      * @param alarmInfo
      */
-    protected final void recordLog(final String tip, final AlarmEvent alarmInfo) {
+    private void printLong(final AlarmEvent alarmInfo) {
         DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         Message message = alarmInfo.getMessage();
 
-        String text = "%s;客服:%s;用户:%s;发送消息时间:%s;现在时间:%s;消息内容:[%s]";
+        String text = "%s分钟后客服无回复;客服:%s;用户:%s;发送消息时间:%s;现在时间:%s;消息内容:[%s]";
         String content = String.format(text,
-                tip,
-                XMPPUtil.jidToName(message.getTo()),
-                XMPPUtil.jidToName(message.getFrom()),
+                alarmInfo.getAlarmTypeEnum().getMinute(),
+                message.getTo(),
+                message.getFrom(),
                 new DateTime(alarmInfo.getVisitorSendMsgTime()).toString(fmt),
                 DateTime.now().toString(fmt),
                 message.getBody());
 
         LOGGER.info(content);
-
-        //打印日志后写库
-        AlarmModels models = new AlarmModels();
-        models.addListener(new WriteDBListenerImpl()); //记录到库的listener
-        models.executeAlarm(alarmInfo);
     }
 }
 

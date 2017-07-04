@@ -66,7 +66,7 @@ public class AlarmBoxer {
             long ruleTime = DateUtils.getMinutesDiff(alarmInfo.getVisitorSendMsgTime());//时间差
 
             //组合责任链
-            AlarmToDestroy destroy = new AlarmToDestroy.Builder().build();
+            AlarmToDestroy destroy = new AlarmToDestroy();
             AlarmToBoss boss = new AlarmToBoss.Builder().nextHandler(destroy).build();
             AlarmToCustomer customer = new AlarmToCustomer.Builder().nextHandler(boss).build();
 

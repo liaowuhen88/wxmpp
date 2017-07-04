@@ -2,7 +2,8 @@ package com.baodanyun.websocket.alarm.listener;
 
 import com.baodanyun.websocket.event.AlarmEvent;
 
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -12,7 +13,7 @@ import java.util.concurrent.Executors;
  **/
 public class AlarmModels {
 
-    private static CopyOnWriteArraySet<AlarmListener> listeners = new CopyOnWriteArraySet<>();
+    private static Queue<AlarmListener> listeners = new ConcurrentLinkedDeque<>();
 
     private ExecutorService executorService = Executors.newFixedThreadPool(4);
 
@@ -24,11 +25,11 @@ public class AlarmModels {
      * 执行告警业务
      */
     public void executeAlarm(final AlarmEvent alarmInfo) {
-        for (final AlarmListener listener : listeners) {
+        for (int i = 0, len = listeners.size(); i < len ; i++) {
             executorService.submit(new Runnable() {
                 @Override
                 public void run() {
-                    listener.alarm(alarmInfo);
+                    listeners.poll().alarm(alarmInfo);
                 }
             });
         }

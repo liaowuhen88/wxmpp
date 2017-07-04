@@ -7,6 +7,8 @@ import com.baodanyun.websocket.util.SpringContextUtil;
 import com.baodanyun.websocket.util.XMPPUtil;
 import org.jivesoftware.smack.packet.Message;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
@@ -18,22 +20,26 @@ import java.util.Date;
  **/
 public class WriteDBListenerImpl implements AlarmListener {
 
-
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     private AlarmLogMapper alarmLogMapper = SpringContextUtil.getBean("alarmLogMapper", AlarmLogMapper.class);
 
     @Override
     public void alarm(AlarmEvent alarmInfo) {
-        Message message = alarmInfo.getMessage();
+        try {
+            Message message = alarmInfo.getMessage();
 
-        AlarmLog log = new AlarmLog();
-        log.setCreateTime(new Date());
-        log.setCustomerName(XMPPUtil.jidToName(message.getTo()));
-        log.setVisitorName(XMPPUtil.jidToName(message.getFrom()));
-        log.setMessage(message.getBody());
-        log.setSendTime(new DateTime(alarmInfo.getVisitorSendMsgTime()).toDate());
-        log.setType(alarmInfo.getType());
+            AlarmLog log = new AlarmLog();
+            log.setCreateTime(new Date());
+            log.setCustomerName(XMPPUtil.jidToName(message.getTo()));
+            log.setVisitorName(XMPPUtil.jidToName(message.getFrom()));
+            log.setMessage(message.getBody());
+            log.setSendTime(new DateTime(alarmInfo.getVisitorSendMsgTime()).toDate());
+            log.setType((byte) alarmInfo.getAlarmTypeEnum().getType());
 
-        alarmLogMapper.insertSelective(log);
+            alarmLogMapper.insertSelective(log);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+        }
 
     }
 }

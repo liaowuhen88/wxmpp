@@ -13,51 +13,27 @@ import com.baodanyun.websocket.event.AlarmEvent;
  **/
 public class AlarmToDestroy extends AlarmHandler {
 
-    /*30分钟*/;
-    private final static int MINUTE = 30;
-
-    private AlarmToDestroy(Builder builder) {
-        this.nextAlarmHandler = builder.nextHandler;
+    @Override
+    protected boolean isAlarm() {
+        return false;
     }
 
     /**
      * 告警业务操作
      *
      * @param ruleTime  规则时间
-     * @param alarmInfo
+     * @param alarmInfo 告警详情
      */
     public void alarm(final long ruleTime, final AlarmEvent alarmInfo) {
 
-        if (ruleTime >= MINUTE) {
+        if (ruleTime >= AlarmTypeEnum.TYPE3.getMinute()) {
             AlarmBoxer.getInstance().remove(alarmInfo); //清除此条任务
-            alarmInfo.setType((byte) AlarmTypeEnum.type3.getType());
+            alarmInfo.setAlarmTypeEnum(AlarmTypeEnum.TYPE3);
 
-            super.recordLog(String.format("%s分钟后客服无回复", MINUTE), alarmInfo);
+            super.processAlarm(alarmInfo);
         } else {
             if (getNextAlarmHandler() != null)
                 getNextAlarmHandler().alarm(ruleTime, alarmInfo);
-        }
-    }
-
-
-    public static class Builder {
-        private AlarmHandler nextHandler;
-
-        public Builder() {
-
-        }
-
-        public Builder(AlarmHandler nextHandler) {
-            this.nextHandler = nextHandler;
-        }
-
-        public Builder nextHandler(AlarmHandler nextHandler) {
-            this.nextHandler = nextHandler;
-            return this;
-        }
-
-        public AlarmToDestroy build() {
-            return new AlarmToDestroy(this);
         }
     }
 }
