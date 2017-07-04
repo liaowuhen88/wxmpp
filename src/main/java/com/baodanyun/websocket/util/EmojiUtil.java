@@ -35,10 +35,10 @@ public class EmojiUtil {
         return span.trim();
     }
 
-    public static void main(String[] args) {
-        String content = "欢<span class=\"emoji emoji1f75f\"></span>迎新<span class=\"emoji emoji1f44f\"></span>会员<span class=\"emoji emoji1f45f\"></span>天天币<span class=\"emoji emoji1f64f\"></span>";
+    /*public static void main(String[] args) {
+        String content = "";//"欢<span class=\"emoji emoji1f75f\"></span>迎新<span class=\"emoji emoji1f44f\"></span>会员<span class=\"emoji emoji1f45f\"></span>天天币<span class=\"emoji emoji1f64f\"></span>";
         String result = tranformEemojiContent(content);
 
         System.out.println(result);
-    }
+    }*/
 }

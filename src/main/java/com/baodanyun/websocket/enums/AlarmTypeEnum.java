@@ -1,7 +1,4 @@
-package com.baodanyun.websocket.enums;/**
- * @author hubo
- * @since 2017-06-29 17:25
- **/
+package com.baodanyun.websocket.enums;
 
 /**
  * @author hubo
