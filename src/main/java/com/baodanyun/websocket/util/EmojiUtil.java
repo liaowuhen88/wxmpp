@@ -14,12 +14,14 @@ import java.util.regex.Pattern;
 public class EmojiUtil {
 
     /**
-     * emoji表情转换(hex -> utf-16)
-     * 如内容: 欢迎新会员<span class="emoji emoji1f44f"></span>
-     * 转换后的内容： 欢迎新会员'表情'
+     * emoji表情转换
+     * <ul>
+     * <li>可能表情格式: <code><span class="emoji emoji1f44f"></span></code>则取出1f44f转换表情后替换span标签</li>
+     * <li>可能表情内容: <code>\u003cspan class</code>中的unicode转换</li>
+     * </ul>
      */
     public static String tranformEemojiContent(String span) {
-        span = StringEscapeUtils.unescapeJava(span); //转换unicode码如\u003cspan
+        span = StringEscapeUtils.unescapeJava(span); //转换unicode码
 
         Pattern pattern = Pattern.compile("<span.*?>.*?</span>");
         Pattern p = Pattern.compile(".*?<span.*?class=.*?emoji emoji(.*?)\"></span>.*?");
