@@ -4,7 +4,6 @@ import com.baodanyun.websocket.alarm.listener.AlarmModels;
 import com.baodanyun.websocket.alarm.listener.AlarmWechatListenerImpl;
 import com.baodanyun.websocket.alarm.listener.WriteDBListenerImpl;
 import com.baodanyun.websocket.event.AlarmEvent;
-import com.baodanyun.websocket.util.XMPPUtil;
 import org.jivesoftware.smack.packet.Message;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -44,7 +43,6 @@ public abstract class AlarmHandler {
      * 告警业务
      * 执行告警业务写库存及发微信
      *
-     * @param tip       标识
      * @param alarmInfo 告警信息
      */
     protected final void processAlarm(final AlarmEvent alarmInfo) {
