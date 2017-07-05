@@ -12,9 +12,6 @@ import com.baodanyun.websocket.event.AlarmEvent;
  **/
 public class AlarmToBoss extends AlarmHandler {
 
-    /*15分钟*/;
-    private final static int MINUTE = 15;
-
     private AlarmToBoss(Builder builder) {
         this.nextAlarmHandler = builder.nextHandler;
     }
