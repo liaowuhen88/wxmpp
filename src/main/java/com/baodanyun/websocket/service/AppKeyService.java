@@ -17,5 +17,7 @@ public interface AppKeyService {
      */
     AppCustomer getCustomerByAppKey(String appkey, String url) throws BusinessException;
 
-    Visitor getVisitor(AppKeyVisitorLoginBean re) throws BusinessException;
+    Visitor getVisitor(AppKeyVisitorLoginBean re, String token) throws BusinessException;
+
+    Visitor getVisitorByToken(String token) throws BusinessException;
 }

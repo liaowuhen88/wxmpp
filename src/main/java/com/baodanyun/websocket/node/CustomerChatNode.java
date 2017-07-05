@@ -9,6 +9,7 @@ import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
 import com.baodanyun.websocket.service.ConversationCustomerService;
 import com.baodanyun.websocket.service.CustomerDispatcherService;
 import com.baodanyun.websocket.service.UserCacheServer;
+import com.baodanyun.websocket.service.XmppUserOnlineServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.apache.commons.lang.StringUtils;
@@ -35,6 +36,10 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
     private
     UserCacheServer userCacheServer = SpringContextUtil.getBean("userCacheServerImpl", UserCacheServer.class);
 
+    private
+    XmppUserOnlineServer xmppUserOnlineServer = SpringContextUtil.getBean("xmppUserOnlineServer", XmppUserOnlineServer.class);
+
+
     public CustomerChatNode(AbstractUser customer, Long lastActiveTime) {
         super(customer, lastActiveTime);
     }
@@ -51,6 +56,13 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
      * @throws BusinessException
      */
 
+    public boolean openfireOnline() {
+        boolean flag = this.isXmppOnline();
+        if (!flag) {
+            flag = xmppUserOnlineServer.isOnline(this.getAbstractUser().getLoginUsername());
+        }
+        return flag;
+    }
 
 
     @Override

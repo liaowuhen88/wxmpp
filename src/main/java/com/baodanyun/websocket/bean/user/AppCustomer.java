@@ -9,6 +9,15 @@ public class AppCustomer extends AbstractUser {
     private boolean customerIsOnline;
     private String socketUrl;
     private String ossUrl;
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public String getOssUrl() {
         return ossUrl;

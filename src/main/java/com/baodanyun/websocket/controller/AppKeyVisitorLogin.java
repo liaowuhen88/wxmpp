@@ -4,7 +4,6 @@ import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.request.AppKeyVisitorLoginBean;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.AppCustomer;
-import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.ChatNodeManager;
 import com.baodanyun.websocket.node.CustomerChatNode;
@@ -55,26 +54,24 @@ public class AppKeyVisitorLogin extends BaseController {
             logger.info("visitorLogin:[" + JSONUtil.toJson(re.getAppKey()) + "]---- url {}", url);
             // 初始化用户,以及用户节点
             customer = appKeyService.getCustomerByAppKey(re.getAppKey(), url);
-            AbstractUser visitor = appKeyService.getVisitor(re);
+            AbstractUser visitor = appKeyService.getVisitor(re, customer.getToken());
             VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
-
             // 获取客服节点
             CustomerChatNode customerChatNode = ChatNodeManager.getCustomerXmppNode(customer);
-            logger.info(JSONUtil.toJson(visitor));
-            request.getSession().setAttribute(Common.USER_KEY, visitor);
-            boolean flag = customerOnline(customerChatNode);
+
+            visitorChatNode.setCurrentChatNode(customerChatNode);
+
+            boolean flag = customerChatNode.openfireOnline();
             // 如果客服在线，用户登录
             if (flag) {
-                if (visitorChatNode.login()) {
-                    visitorChatNode.setCurrentChatNode(customerChatNode);
-                    getOnline(responseMsg, customer);
-                } else {
-                    throw new BusinessException("接入失败");
-                }
+                getOnline(responseMsg, customer);
             } else {
                 //客服不在线
                 getOffline(responseMsg, customer);
             }
+            getOnline(responseMsg, customer);
+
+
         } catch (Exception e) {
             logger.error("", e);
             responseMsg.setSuccess(false);
@@ -102,11 +99,4 @@ public class AppKeyVisitorLogin extends BaseController {
 
     }
 
-    public boolean customerOnline(CustomerChatNode customerChatNode) {
-        boolean flag = customerChatNode.isXmppOnline();
-        if (!flag) {
-            flag = xmppUserOnlineServer.isOnline(customerChatNode.getAbstractUser().getLoginUsername());
-        }
-        return flag;
-    }
 }

@@ -11,12 +11,15 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by liaowuhen on 2017/6/30.
  */
 @Service
 public class AppKeyServiceImpl implements AppKeyService {
+    private static Map<String, Visitor> visitors = new ConcurrentHashMap<>();
     Map<String, String> map = PropertiesUtil.get(this.getClass().getClassLoader(), "config.properties");
 
     /**
@@ -40,13 +43,13 @@ public class AppKeyServiceImpl implements AppKeyService {
         au.setCustomerIsOnline(true);
         au.setSocketUrl(url + "/sockjs/newVisitor");
         au.setOssUrl(map.get("oss.upload"));
-
+        au.setToken(UUID.randomUUID().toString());
 
         return au;
     }
 
     @Override
-    public Visitor getVisitor(AppKeyVisitorLoginBean re) throws BusinessException {
+    public Visitor getVisitor(AppKeyVisitorLoginBean re, String token) throws BusinessException {
         if (StringUtils.isEmpty(re.getId())) {
             throw new BusinessException("id is null");
         }
@@ -54,10 +57,22 @@ public class AppKeyServiceImpl implements AppKeyService {
         au.setId(XMPPUtil.nameToJid(re.getId()));
         au.setLoginUsername(re.getId());
         au.setOpenId(re.getId());
-        au.setUserName("客服");
+        au.setUserName(re.getNickname());
         au.setIcon(re.getAvatar());
         au.setNickName(re.getNickname());
         au.setPassWord("00818863ff056f1d66c8427836f94a87");
+
+        visitors.put(token, au);
         return au;
     }
+
+    @Override
+    public Visitor getVisitorByToken(String token) throws BusinessException {
+        if (StringUtils.isEmpty(token)) {
+            throw new BusinessException("token is null");
+        }
+        return visitors.get(token);
+    }
+
+
 }
