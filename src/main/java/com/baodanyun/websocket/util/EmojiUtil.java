@@ -19,7 +19,7 @@ public class EmojiUtil {
      * 转换后的内容： 欢迎新会员'表情'
      */
     public static String tranformEemojiContent(String span) {
-        span = StringEscapeUtils.unescapeJava(span); //unicode码如\u003cspan
+        span = StringEscapeUtils.unescapeJava(span); //转换unicode码如\u003cspan
 
         Pattern pattern = Pattern.compile("<span.*?>.*?</span>");
         Pattern p = Pattern.compile(".*?<span.*?class=.*?emoji emoji(.*?)\"></span>.*?");
@@ -38,11 +38,4 @@ public class EmojiUtil {
         return span.trim();
     }
 
-    public static void main(String[] args) throws  Exception {
-        String content = "<span class=\"emoji emoji1f604\"></span>天天\\u003cspan class\\u003d\\\"emoji emoji1f60a\\\"\\u003e\\u003c/span\\u003e\\u003cspan class\\u003d\\\"emoji emoji1f63a\\\"\\u003e\\u003c/span\\u003e\\u003cspan class\\u003d\\\"emoji emoji1f604\\\"\\u003e\\u003c/span\\u003e\\u003cspan class\\u003d\\\"emoji emoji1f639\\\"\\u003e\\u003c/span\\u003e\\u003cspan class\\u003d\\\"emoji emoji1f62d\\\"\\u003e\\u003c/span\\u003e\"";//"欢<span class=\"emoji emoji1f75f\"></span>迎新<span class=\"emoji emoji1f44f\"></span>会员<span class=\"emoji emoji1f45f\"></span>天天币<span class=\"emoji emoji1f64f\"></span>";
-
-       content =  StringEscapeUtils.unescapeJava(content);
-
-        System.out.println(tranformEemojiContent(content));
-    }
 }

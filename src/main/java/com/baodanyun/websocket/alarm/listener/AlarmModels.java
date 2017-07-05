@@ -1,6 +1,8 @@
 package com.baodanyun.websocket.alarm.listener;
 
 import com.baodanyun.websocket.event.AlarmEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -12,19 +14,20 @@ import java.util.concurrent.Executors;
  * @since 2017-06-30 15:42
  **/
 public class AlarmModels {
+    private final Logger LOGGER = LoggerFactory.getLogger(AlarmModels.class);
 
-    private static Queue<AlarmListener> listeners = new ConcurrentLinkedDeque<>();
+    private Queue<AlarmListener> listeners = new ConcurrentLinkedDeque<>();
 
-    private ExecutorService executorService = Executors.newFixedThreadPool(4);
+    private ExecutorService executorService = Executors.newFixedThreadPool(2);
 
-    public void addListener(AlarmListener listener) {
+    public synchronized void addListener(AlarmListener listener) {
         listeners.add(listener);
     }
 
     /**
      * 执行告警业务
      */
-    public void executeAlarm(final AlarmEvent alarmInfo) {
+    public synchronized void executeAlarm(final AlarmEvent alarmInfo) {
         for (int i = 0, len = listeners.size(); i < len ; i++) {
             executorService.submit(new Runnable() {
                 @Override
@@ -32,6 +35,7 @@ public class AlarmModels {
                     listeners.poll().alarm(alarmInfo);
                 }
             });
+
         }
     }
 }

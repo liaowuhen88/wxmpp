@@ -12,13 +12,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 告警容器
+ *
  * @author hubo
  * @since 2017-06-29 17:58
  **/
 public class AlarmBoxer {
-    protected final static Logger LOGGER = LoggerFactory.getLogger(AlarmBoxer.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(AlarmBoxer.class);
 
-    private final static AlarmBoxer alarmBoxer = new AlarmBoxer();
+    private static final AlarmBoxer alarmBoxer = new AlarmBoxer();
 
     private final Map<String, AlarmEvent> alarmMap = new ConcurrentHashMap();
 
@@ -26,6 +27,11 @@ public class AlarmBoxer {
         return alarmBoxer;
     }
 
+    /**
+     * 以访客的jid为key存储
+     *
+     * @param alarmEvent
+     */
     public synchronized void put(AlarmEvent alarmEvent) {
         String visitorJid = XMPPUtil.jidToName(alarmEvent.getMessage().getFrom());
         alarmMap.put(visitorJid, alarmEvent);
@@ -33,6 +39,11 @@ public class AlarmBoxer {
         LOGGER.info("添加任务: key=" + visitorJid);
     }
 
+    /**
+     * 删除
+     *
+     * @param alarmEvent
+     */
     public synchronized void remove(AlarmEvent alarmEvent) {
         String key;
         if (alarmEvent.getAlarmEnum() == AlarmEnum.VISITOR) {
@@ -55,7 +66,7 @@ public class AlarmBoxer {
      * <li>超时5分钟则告警客服</li>
      * <li>15分钟则告警到Boss</li>
      * <li>30分钟后清除</li>
-     * <li>每告警一次数据记录入库</li>
+     * <li>每告警一次数据记录入库且发送到微信公众号提醒</li>
      * </ol>
      */
     public synchronized void doAlarmJob() {
@@ -63,7 +74,7 @@ public class AlarmBoxer {
 
         for (Map.Entry<String, AlarmEvent> map : alarmMap.entrySet()) {
             AlarmEvent alarmInfo = map.getValue();
-            long ruleTime = DateUtils.getMinutesDiff(alarmInfo.getVisitorSendMsgTime());//时间差
+            long ruleTime = DateUtils.getMinutesDiff(alarmInfo.getVisitorSendMsgTime());//分钟差
 
             //组合责任链
             AlarmToDestroy destroy = new AlarmToDestroy();
