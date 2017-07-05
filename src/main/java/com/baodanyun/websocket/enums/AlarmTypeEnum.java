@@ -9,17 +9,17 @@ public enum AlarmTypeEnum {
     /**
      * 客服5分钟无回复
      */
-    TYPE1(1, 1),
+    TYPE1(1, 5),
 
     /**
      * 15分钟告警到Boss
      */
-    TYPE2(2, 3),
+    TYPE2(2, 15),
 
     /**
      * 30分钟无回复
      */
-    TYPE3(3, 5);
+    TYPE3(3, 30);
 
     private int type;
 
