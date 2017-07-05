@@ -39,17 +39,6 @@ public class NewVisitorWebSocketHandler extends VisitorWebSocketHandler {
         }
 
         if (StringUtils.isEmpty(token)) {
-            return;
-        } else {
-            VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
-            CustomerChatNode customerChatNode = visitorChatNode.getCurrentChatNode();
-            boolean flag = customerChatNode.openfireOnline();
-            // 如果客服在线，用户登录
-            if (flag) {
-                if (!visitorChatNode.login()) {
-                    throw new BusinessException("接入失败");
-                }
-            }
 
             WebSocketTerminal webSocketTerminal = new WebSocketTerminal(visitor, session);
             ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(visitor);

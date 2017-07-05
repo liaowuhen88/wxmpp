@@ -64,6 +64,9 @@ public class AppKeyVisitorLogin extends BaseController {
             boolean flag = customerChatNode.openfireOnline();
             // 如果客服在线，用户登录
             if (flag) {
+                if (!visitorChatNode.login()) {
+                    throw new BusinessException("接入失败");
+                }
                 getOnline(responseMsg, customer);
             } else {
                 //客服不在线
