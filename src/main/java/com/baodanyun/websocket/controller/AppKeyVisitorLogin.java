@@ -49,8 +49,7 @@ public class AppKeyVisitorLogin extends BaseController {
         AppCustomer customer;
         try {
             //String url = "";
-            //String url = "ws" + "://" + request.getServerName() + ":" + request.getServerPort();
-            String url = request.getRequestURL().substring(0, request.getRequestURL().indexOf(request.getRequestURI()));
+            String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
             logger.info("visitorLogin:[" + JSONUtil.toJson(re.getAppKey()) + "]---- url {}", url);
             // 初始化用户,以及用户节点
             customer = appKeyService.getCustomerByAppKey(re.getAppKey(), url);

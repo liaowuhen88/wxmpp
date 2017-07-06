@@ -74,11 +74,13 @@ public class NewVisitorWebSocketHandler extends VisitorWebSocketHandler {
                 } else {
                     logger.info("token is null");
                 }
+                if (StringUtils.isNotEmpty(content)) {
+                    chatNode = ChatNodeManager.getVisitorXmppNode(au);
+                    WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au, session);
+                    wn = chatNode.getNode(webSocketTerminalVisitorFactory.getId(webSocketTerminal));
+                    chatNode.receiveFromGod(wn, content);
+                }
 
-                chatNode = ChatNodeManager.getVisitorXmppNode(au);
-                WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au, session);
-                wn = chatNode.getNode(webSocketTerminalVisitorFactory.getId(webSocketTerminal));
-                chatNode.receiveFromGod(wn, content);
             }
 
         } catch (Exception e) {
