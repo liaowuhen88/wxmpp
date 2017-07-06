@@ -2,7 +2,6 @@ package com.baodanyun.websocket.alarm.listener;
 
 import com.alibaba.fastjson.JSON;
 import com.baodanyun.websocket.bean.msg.Msg;
-import com.baodanyun.websocket.enums.AlarmTypeEnum;
 import com.baodanyun.websocket.event.AlarmEvent;
 import com.baodanyun.websocket.node.sendUtils.WeChatResponse;
 import com.baodanyun.websocket.node.sendUtils.WeChatSendUtils;
@@ -13,7 +12,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,13 +23,10 @@ import java.util.Map;
  * @since 2017-06-30 15:40
  **/
 public class AlarmWechatListenerImpl implements AlarmListener {
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-
     /**
      * boss的openId对应的key
      */
     private static final String BOSS_KEY = "boss";
-
     /**
      * 人名与openid对应的关系
      */
@@ -46,6 +41,8 @@ public class AlarmWechatListenerImpl implements AlarmListener {
         openIdMap.put("zhangchi", "oAH_qsq4sqTB9RRRCsAqm6MNvk94"); //张弛用马秋萌的openid
         openIdMap.put("boss", "oAH_qsk7UoktC1IRUIACJGUZ-Tkg"); //张启科
     }
+
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public void alarm(final AlarmEvent alarmInfo) {
@@ -66,23 +63,27 @@ public class AlarmWechatListenerImpl implements AlarmListener {
         msg.setContent(content);
         this.sendWechat(msg); //告警到客服
 
-        if (alarmInfo.getAlarmTypeEnum() == AlarmTypeEnum.TYPE2) {//15分钟无回复发送到boss
+        /*if (alarmInfo.getAlarmTypeEnum() == AlarmTypeEnum.TYPE2) {//15分钟无回复发送到boss
             Msg toBossMsg = new Msg();
             BeanUtils.copyProperties(msg, toBossMsg);
             toBossMsg.setFrom(openIdMap.get(BOSS_KEY));
             msg.setOpenId(openIdMap.get(BOSS_KEY));
 
-            //this.sendWechat(toBossMsg);
-        }
-
+            this.sendWechat(toBossMsg);
+        }*/
     }
 
+    /**
+     * 发送微信公众号
+     *
+     * @param msg 消息实体
+     */
     private void sendWechat(Msg msg) {
         LOGGER.info("发送微信: " + JSON.toJSONString(msg));
         WeChatResponse response = WeChatSendUtils.send(msg);
 
         if (null == response || !response.getAccept()) {
-            LOGGER.info("发送微信失败");
+            LOGGER.info("发送微信失败:" + JSON.toJSONString(msg));
         } else {
             LOGGER.info("发送微信成功: " + JSON.toJSONString(response));
         }
