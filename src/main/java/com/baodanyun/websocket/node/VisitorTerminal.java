@@ -61,8 +61,6 @@ public abstract class VisitorTerminal extends AbstractTerminal {
         logger.info("user--->" + JSONUtil.toJson(user));
         String body = Config.greetingWord;
         Msg sendMsg = new Msg(body);
-        String from;
-
         String to = user.getId();
 
         String type = Msg.Type.msg.toString();
@@ -71,12 +69,12 @@ public abstract class VisitorTerminal extends AbstractTerminal {
         sendMsg.setType(type);
         sendMsg.setContentType(Msg.MsgContentType.text.toString());
 
-        AbstractUser customer = this.getChatNodeAdaptation().getAbstractUser();
-        from = customer.getId();
-        sendMsg.setFrom(from);
-        sendMsg.setIcon(customer.getIcon());
-        sendMsg.setFromName(customer.getNickName());
-
+        AbstractUser customer = this.getChatNodeAdaptation().getCustomer();
+        if (null != customer) {
+            sendMsg.setFrom(customer.getId());
+            sendMsg.setIcon(customer.getIcon());
+            sendMsg.setFromName(customer.getNickName());
+        }
 
         sendMsg.setTo(to);
         sendMsg.setCt(ct);

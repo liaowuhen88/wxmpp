@@ -40,11 +40,10 @@ public class AppKeyServiceImpl implements AppKeyService {
         au.setOpenId(appkey);
         au.setUserName("客服");
         au.setIcon("http://www.gx8899.com/uploads/allimg/2016060716/1-160226194S9.png");
-        au.setCustomerIsOnline(true);
         au.setSocketUrl(url + "/sockjs/newVisitor");
         au.setOssUrl(map.get("oss.upload"));
         au.setToken(UUID.randomUUID().toString());
-
+        au.setLoginTime(System.currentTimeMillis());
         return au;
     }
 
@@ -56,6 +55,7 @@ public class AppKeyServiceImpl implements AppKeyService {
         Visitor au = new Visitor();
         au.setId(XMPPUtil.nameToJid(re.getId()));
         au.setLoginUsername(re.getId());
+        au.setLoginTime(System.currentTimeMillis());
         au.setOpenId(re.getId());
         au.setUserName(re.getNickname());
         au.setIcon(re.getAvatar());

@@ -67,6 +67,7 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
 
         Msg onlineQueueSuccess = getSMMsgSendTOVisitor(getAbstractUser(), MsgStatus.onlineQueueSuccess);
 
+        String realTo = this.getChatNodeAdaptation().getRealTo();
         Msg hello = getMsgHelloToVisitor(((Visitor) getAbstractUser()));
 
         SessionSendUtils.send(getSession(), onlineQueueSuccess);

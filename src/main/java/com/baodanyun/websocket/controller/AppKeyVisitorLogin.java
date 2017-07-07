@@ -70,10 +70,8 @@ public class AppKeyVisitorLogin extends BaseController {
             } else {
                 //客服不在线
                 getOffline(responseMsg, customer);
+                responseMsg.setMsg("客服不在线");
             }
-            getOnline(responseMsg, customer);
-
-
         } catch (Exception e) {
             logger.error("", e);
             responseMsg.setSuccess(false);
@@ -88,13 +86,14 @@ public class AppKeyVisitorLogin extends BaseController {
 
     public void getOnline(Response responseMsg, AppCustomer customer) throws BusinessException, InterruptedException, XMPPException, SmackException, IOException {
         // 客服在线
+        customer.setCustomerIsOnline(true);
         responseMsg.setSuccess(true);
         responseMsg.setData(customer);
     }
 
 
     public void getOffline(Response responseMsg, AppCustomer customer) throws BusinessException {
-
+        customer.setCustomerIsOnline(false);
         responseMsg.setSuccess(false);
         responseMsg.setData(customer);
         responseMsg.setMsg("客服不在线");

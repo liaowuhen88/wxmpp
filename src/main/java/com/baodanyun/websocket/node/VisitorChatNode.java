@@ -53,8 +53,9 @@ public class VisitorChatNode extends AbstarctChatNode {
 
     @Override
     public boolean logout() {
-        this.getCurrentChatNode().visitorOffline(this);
-
+        if (null != this.getCurrentChatNode()) {
+            this.getCurrentChatNode().visitorOffline(this);
+        }
         return super.logout();
     }
 

@@ -50,7 +50,7 @@ public class XmppUserOnlineServer {
         try {
             return isOnlineByJid(jid);
         } catch (Exception e) {
-            logger.error("", e);
+            logger.error("解析异常");
         }
         return false;
     }
@@ -78,6 +78,11 @@ public class XmppUserOnlineServer {
                 return false;
             }
             Element el = XmllUtil.xmlElementRoot(str);
+
+            if (null != el && StringUtils.isEmpty(el.getName())) {
+                return false;
+            }
+
             logger.info(el.getName());
             if (el.getName().equals("presence")) {
                 if (!StringUtils.isEmpty(el.getAttribute("from").toString())) {
@@ -97,7 +102,7 @@ public class XmppUserOnlineServer {
             }
 
         } catch (Exception e) {
-            logger.error("error", "xml 解析异常", e);
+            logger.error("error", "xml 解析异常");
         }
 
         return false;

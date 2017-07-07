@@ -39,9 +39,15 @@ public class NewVisitorWebSocketHandler extends VisitorWebSocketHandler {
         }
 
         if (StringUtils.isEmpty(token)) {
-
+            VisitorChatNode chatNode = ChatNodeManager.getVisitorXmppNode(visitor);
+            CustomerChatNode customerChatNode = chatNode.getCurrentChatNode();
+            if (null == customerChatNode) {
+                throw new BusinessException("未绑定客服");
+            }
+            if (!customerChatNode.openfireOnline()) {
+                throw new BusinessException("客服不在线");
+            }
             WebSocketTerminal webSocketTerminal = new WebSocketTerminal(visitor, session);
-            ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(visitor);
             ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
 
             AbstractTerminal wn = webSocketTerminalVisitorFactory.getNode(chatNodeAdaptation, webSocketTerminal);
@@ -84,8 +90,10 @@ public class NewVisitorWebSocketHandler extends VisitorWebSocketHandler {
             }
 
         } catch (Exception e) {
-            chatNode.sendToXmppError(wn);
             logger.error("error", e);
+            if (null != wn) {
+                chatNode.sendToXmppError(wn);
+            }
         }
     }
 
