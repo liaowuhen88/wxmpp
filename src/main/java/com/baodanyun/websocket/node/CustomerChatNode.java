@@ -1,15 +1,18 @@
 package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.ConversationCustomer;
 import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
 import com.baodanyun.websocket.service.ConversationCustomerService;
-import com.baodanyun.websocket.service.CustomerDispatcherTactics;
+import com.baodanyun.websocket.service.CustomerDispatcherService;
+import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.service.XmppUserOnlineServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
+import org.apache.commons.lang.StringUtils;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
 import org.slf4j.Logger;
@@ -29,8 +32,13 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
     // 加入到客服的访客列表
     private static final Map<String, VisitorChatNode> VISITOR_CHAT_NODE_MAP = new ConcurrentHashMap<>();
     ConversationCustomerService conversationCustomerService = SpringContextUtil.getBean("conversationCustomerServiceImpl", ConversationCustomerService.class);
-    CustomerDispatcherTactics customerDispatcherTactics = SpringContextUtil.getBean("customerDispatcherTacticsImpl", CustomerDispatcherTactics.class);
+    CustomerDispatcherService customerDispatcherService = SpringContextUtil.getBean("customerDispatcherServiceImpl", CustomerDispatcherService.class);
+    private
+    UserCacheServer userCacheServer = SpringContextUtil.getBean("userCacheServerImpl", UserCacheServer.class);
+
+    private
     XmppUserOnlineServer xmppUserOnlineServer = SpringContextUtil.getBean("xmppUserOnlineServer", XmppUserOnlineServer.class);
+
 
     public CustomerChatNode(AbstractUser customer, Long lastActiveTime) {
         super(customer, lastActiveTime);
@@ -48,12 +56,19 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
      * @throws BusinessException
      */
 
+    public boolean openfireOnline() {
+        boolean flag = this.isXmppOnline();
+        if (!flag) {
+            flag = xmppUserOnlineServer.isOnline(this.getAbstractUser().getLoginUsername());
+        }
+        return flag;
+    }
 
 
     @Override
     public boolean logout() {
 
-        customerDispatcherTactics.deleteCustomer(this.getAbstractUser().getId());
+        customerDispatcherService.deleteCustomer(this.getAbstractUser().getId());
 
         // 通知访客上线
         for (VisitorChatNode visitorChatNode : VISITOR_CHAT_NODE_MAP.values()) {
@@ -157,27 +172,24 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         // 是否为接入用户客服
         boolean flag = super.login();
         if (flag) {
-            customerDispatcherTactics.saveCustomer(this.getAbstractUser());
+            if (!StringUtils.isEmpty(((Customer) this.getAbstractUser()).getAccessType()) && ((Customer) this.getAbstractUser()).getAccessType().equals("2")) {
+                customerDispatcherService.saveCustomer(this.getAbstractUser());
+            } else {
+                logger.info("不接入用户");
+            }
         }
+        userCacheServer.addCustomer(this.getAbstractUser());
         return flag;
     }
 
     @Override
     public void online(AbstractTerminal node) throws InterruptedException, BusinessException {
         super.online(node);
+
         // 通知访客上线
         for (VisitorChatNode visitorChatNode : VISITOR_CHAT_NODE_MAP.values()) {
             visitorChatNode.customerOnline();
         }
+
     }
-
-    public boolean xmppOnlineServer() throws InterruptedException, BusinessException {
-        boolean cFlag = xmppServer.isAuthenticated(this.getAbstractUser().getId());
-        if (!cFlag) {
-            cFlag = xmppUserOnlineServer.isOnline(this.getAbstractUser().getLoginUsername());
-        }
-        return cFlag;
-    }
-
-
 }

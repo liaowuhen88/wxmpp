@@ -3,6 +3,7 @@ package com.baodanyun.websocket.controller;
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.UserSetPW;
 import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.bean.userInterface.PersonalDetail;
 import com.baodanyun.websocket.bean.userInterface.user.VcardUserRes;
@@ -13,7 +14,6 @@ import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.PageModel;
 import com.baodanyun.websocket.model.Transferlog;
 import com.baodanyun.websocket.model.UserModel;
-import com.baodanyun.websocket.node.CustomerChatNode;
 import com.baodanyun.websocket.node.VisitorChatNode;
 import com.baodanyun.websocket.node.ChatNodeManager;
 import com.baodanyun.websocket.service.*;
@@ -69,7 +69,7 @@ public class CustomerApi extends BaseController {
     private WebSocketService webSocketService;
 
     @Autowired
-    private CustomerDispatcherTactics customerDispatcherTactics;
+    private CustomerDispatcherService customerDispatcherService;
 
     /**
      * 获取客服的信息
@@ -213,7 +213,7 @@ public class CustomerApi extends BaseController {
         Response response = new Response();
         Gson gson = new Gson();
         try {
-            Collection collection = customerDispatcherTactics.getCustomerAccept();
+            Collection collection = customerDispatcherService.getCustomerAccept();
             response.setData(collection);
             response.setSuccess(true);
         } catch (Exception e) {
@@ -240,7 +240,6 @@ public class CustomerApi extends BaseController {
             response.setSuccess(true);
 
             // 关闭node
-            logger.info("客服退出");
             ChatNodeManager.getCustomerXmppNode(customer).logout();
             httpServletRequest.getSession().invalidate();
 
@@ -261,7 +260,7 @@ public class CustomerApi extends BaseController {
         Response response = new Response();
         Gson gson = new Gson();
         try {
-            Collection<AbstractUser> freeCustomerNodeList = customerDispatcherTactics.getCustomerAccept();
+            Collection<AbstractUser> freeCustomerNodeList = customerDispatcherService.getCustomerAccept();
             response.setData(gson.toJson(freeCustomerNodeList));
             response.setSuccess(true);
         } catch (Exception e) {
@@ -281,7 +280,7 @@ public class CustomerApi extends BaseController {
     public void onlineCustomerList(PageModel model, HttpServletResponse httpServletResponse) {
         Response response = new Response();
         try {
-            Collection<AbstractUser> freeCustomerNodeList = customerDispatcherTactics.getCustomerAccept();
+            Collection<AbstractUser> freeCustomerNodeList = customerDispatcherService.getCustomerAccept();
 
             if (null != freeCustomerNodeList) {
                 Iterator<AbstractUser> it = freeCustomerNodeList.iterator();
@@ -355,14 +354,15 @@ public class CustomerApi extends BaseController {
                 for (WeiXinUser info : infos) {
                     WeiXinListUser wu = new WeiXinListUser();
                     String jid = userCacheServer.getCustomerIdByVisitorOpenId(info.getOpenId());
-                    AbstractUser customer = null;
-                    if (!StringUtils.isEmpty(jid)) {
-                        customer = customerDispatcherTactics.getCustomer(jid);
+                    AbstractUser customer = userCacheServer.getCustomer(jid);
+                    if (!StringUtils.isEmpty(jid) && null == customer) {
+                        customer = new Customer();
+                        customer.setId(jid);
+                        customer.setLoginUsername(XMPPUtil.jidToName(jid));
                     }
                     wu.setInfo(info);
                     wu.setCustomer(customer);
                     visitors.add(wu);
-
                 }
             }
             response.setData(visitors);
@@ -388,7 +388,7 @@ public class CustomerApi extends BaseController {
         Visitor visitor = userServer.initUserByOpenId(from);
 
         String jid = userCacheServer.getCustomerIdByVisitorOpenId(visitor.getOpenId());
-        AbstractUser customerFrom = customerDispatcherTactics.getCustomer(jid);
+        AbstractUser customerFrom = userCacheServer.getCustomer(jid);
 
         transferServer.bindVisitor(customerFrom, customer, visitor);
         Response response = new Response();
@@ -472,16 +472,19 @@ public class CustomerApi extends BaseController {
         Response response = new Response();
         try {
             // au 为登录客服
-            AbstractUser customer = (AbstractUser) request.getSession().getAttribute(Common.USER_KEY);
+            AbstractUser au = (AbstractUser) request.getSession().getAttribute(Common.USER_KEY);
+
+            ConversationCustomer cc = new ConversationCustomer();
+            cc.setCjid(au.getId());
+            cc.setVjid(vjid);
+            conversationCustomerService.delete(cc);
+
 
             Visitor user = new Visitor();
             user.setId(vjid);
 
             VisitorChatNode vn = ChatNodeManager.getVisitorXmppNode(user);
-            CustomerChatNode customerChatNode = ChatNodeManager.getCustomerXmppNode(customer);
-            vn.setCurrentChatNode(customerChatNode);
-            customerChatNode.uninstall(vn);
-            logger.info("关闭用户{}，用户退出", vjid);
+
             vn.logout();
 
             response.setSuccess(true);

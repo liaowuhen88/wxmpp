@@ -1,15 +1,13 @@
 package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.msg.Msg;
-import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.event.SendMsgToWeChatEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.WechatMsg;
-import com.baodanyun.websocket.node.sendUtils.WeChatResponse;
 import com.baodanyun.websocket.node.sendUtils.WeChatSendUtils;
 import com.baodanyun.websocket.util.EventBusUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +24,26 @@ public class WeChatTerminal extends VisitorTerminal {
     }
 
     @Override
+    public void receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
+        super.receiveFromGod(msg);
+
+        VisitorReciveMsgEvent vme = new VisitorReciveMsgEvent(this.getAbstractUser(), this.getChatNodeAdaptation().getAbstractUser(), msg.getContent(), CommonConfig.MSG_BIZ_KF_WX_CHAT);
+
+        EventBusUtils.post(vme);
+
+        WechatMsg we = new WechatMsg();
+        we.setType("receive");
+        we.setContent(msg.getContent());
+        we.setMsgFrom(this.getAbstractUser().getOpenId());
+        we.setMsgTo(msg.getTo());
+        we.setMsgStatus((byte) 1);
+
+        SendMsgToWeChatEvent swe = new SendMsgToWeChatEvent(we);
+        EventBusUtils.post(swe);
+
+    }
+
+    @Override
     public boolean sendMsgToGod(Msg msg) {
         boolean flag = false;
         try {
@@ -33,7 +51,7 @@ public class WeChatTerminal extends VisitorTerminal {
             String content = msg.getContent();
             msg.setType("text");
             msg.setFrom(this.getAbstractUser().getOpenId());
-            WeChatResponse response = WeChatSendUtils.send(msg);
+            flag = WeChatSendUtils.send(msg);
 
 
             WechatMsg we = new WechatMsg();
@@ -41,24 +59,13 @@ public class WeChatTerminal extends VisitorTerminal {
             we.setMsgTo(this.getAbstractUser().getOpenId());
             we.setMsgStatus((byte) -1);
 
-            if (null == response || !response.getAccept()) {
+            if (!flag) {
                 this.getChatNodeAdaptation().messageCallBack(this.getAbstractUser(), MsgStatus.msgFail);
 
                 // 发送失败记录
                 msg.setFrom(this.getAbstractUser().getId());
                 msg.setTo(from);
-
-                if (null == response) {
-                    msg.setContent("系统消息,微信发送超时，消息发送失败");
-                } else {
-                    if (StringUtils.isEmpty(response.getReason())) {
-                        msg.setContent("系统消息,微信接口不通，返回信息为空，消息发送失败");
-                    } else {
-                        msg.setContent(response.getReason());
-                    }
-
-                }
-
+                msg.setContent("系统消息,微信接口不通，消息发送失败");
                 receiveFromGod(msg);
 
                 /**
@@ -80,16 +87,17 @@ public class WeChatTerminal extends VisitorTerminal {
     @Override
     public void online() throws InterruptedException, BusinessException {
         super.online();
-    }
-
-    @Override
-    boolean joinQueue(AbstractUser customer) {
-        Msg hello = getMsgHelloToVisitor(customer);
+        Msg hello = getMsgHelloToVisitor(((Visitor) getAbstractUser()));
         hello.setFrom(this.getAbstractUser().getOpenId());
 
         WeChatSendUtils.send(hello);
 
-        return true;
+        joinQueue();
+    }
+
+    @Override
+    boolean joinQueue() {
+        return false;
     }
 
     @Override

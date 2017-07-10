@@ -75,7 +75,7 @@ public class AbstractTerminal {
             xmppMsg.setTo(msg.getTo());
         }
         xmppMsg.setType(Message.Type.chat);
-        xmppMsg.setBody(msg.getContent().toString());
+        xmppMsg.setBody(msg.getContent());
         xmppMsg.setSubject(msg.getContentType());
 
         sendMessageTOXmpp(xmppMsg);
