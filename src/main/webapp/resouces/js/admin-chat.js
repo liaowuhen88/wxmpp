@@ -516,7 +516,7 @@ xchat.getRemoteHistory = function (customerPage, cacheLastId, fn) {
     myUtils.customerHistory(customerPage, cacheLastId, fn);
 };
 //滚动加载历史消息
-xchat.loadHistoryEventBind = function () {
+xchat.loadHistoryEventBind = function () {alert();
     var _this = this;
     var i = 0;
     var customerPage = new myUtils.Page({
@@ -891,10 +891,16 @@ xchat.contractComb = function (data) {
         } else {
             item.expirydate = '';
         }
-        html += '<li><span class="tag">合同名称:</span>' + item.name + '</li>';
+        html += '<li><span class="tag">合同名称4:</span>' + item.name + '</li>';
         html += '<li><span class="tag">合同编号:</span>' + item.code + '</li>';
         html += '<li><span class="tag">生效日期:</span>' + item.effectivedate + '</li>';
         html += '<li><span class="tag">失效日期:</span>' + item.expirydate + '</li>';
+        html += '<li><span class="tag">总保费合计:</span>' + item.money + '</li>';
+        html += '<li><span class="tag">缴费方式:</span>' + item.paytype + '</li>';
+        html += '<li><span class="tag">争议处理方式:</span>' + item.dispute + '</li>';
+        html += '<li><span class="tag">渠道商名称:</span>' + item.channelname + '</li>';
+        html += '<li><span class="tag">主被保险人数目:</span>' + item.mianpnum + '</li>';
+        html += '<li><span class="tag">合同类型:</span>' + (item.contactType ? "个人":"企业") + (item.isOfficial == 1 ? "正式合同":"体验合同") + '</li>';
         itemHtml += '<ul class="modal_ul">' + html + '</ul>';
         html = '';
     });
