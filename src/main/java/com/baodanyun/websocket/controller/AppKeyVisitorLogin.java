@@ -9,8 +9,6 @@ import com.baodanyun.websocket.node.ChatNodeManager;
 import com.baodanyun.websocket.node.CustomerChatNode;
 import com.baodanyun.websocket.node.VisitorChatNode;
 import com.baodanyun.websocket.service.AppKeyService;
-import com.baodanyun.websocket.service.CustomerDispatcherService;
-import com.baodanyun.websocket.service.XmppUserOnlineServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
 import com.baodanyun.websocket.util.XMPPUtil;
@@ -36,12 +34,6 @@ public class AppKeyVisitorLogin extends BaseController {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private AppKeyService appKeyService;
-
-    @Autowired
-    private XmppUserOnlineServer xmppUserOnlineServer;
-
-    @Autowired
-    private CustomerDispatcherService customerDispatcherService;
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
     public void visitor(AppKeyVisitorLoginBean re, HttpServletRequest request, HttpServletResponse response) throws IOException, XMPPException, SmackException {
