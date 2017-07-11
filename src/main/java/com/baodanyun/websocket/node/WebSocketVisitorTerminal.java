@@ -54,12 +54,7 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
     public boolean joinQueue(AbstractUser customer) {
 
         Msg onlineQueueSuccess = getSMMsgSendTOVisitor(getAbstractUser(), MsgStatus.onlineQueueSuccess);
-
-        Msg hello = getMsgHelloToVisitor(customer);
-
         SessionSendUtils.send(this.getAbstractUser(), getSession(), onlineQueueSuccess);
-        SessionSendUtils.send(this.getAbstractUser(), getSession(), hello);
-
         return true;
     }
 
