@@ -2,8 +2,11 @@ package com.baodanyun.websocket.alarm;
 
 import com.baodanyun.websocket.enums.AlarmEnum;
 import com.baodanyun.websocket.event.AlarmEvent;
+import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.DateUtils;
 import com.baodanyun.websocket.util.XMPPUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.jivesoftware.smack.packet.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,10 +36,16 @@ public class AlarmBoxer {
      * @param alarmEvent
      */
     public synchronized void put(AlarmEvent alarmEvent) {
-        String visitorJid = XMPPUtil.jidToName(alarmEvent.getMessage().getFrom());
-        alarmMap.put(visitorJid, alarmEvent);
+        Message message = alarmEvent.getMessage();
+        String helloMsg = Config.greetingWord;
 
-        LOGGER.info("添加任务: key=" + visitorJid);
+        if (StringUtils.isNotBlank(message.getBody()) && !helloMsg.equals(message.getBody())) {//非上线时的问候消息
+            String visitorJid = XMPPUtil.jidToName(alarmEvent.getMessage().getFrom());
+
+            alarmMap.put(visitorJid, alarmEvent);
+
+            LOGGER.info("添加任务: key=" + visitorJid);
+        }
     }
 
     /**
