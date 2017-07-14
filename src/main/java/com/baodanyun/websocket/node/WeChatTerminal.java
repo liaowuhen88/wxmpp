@@ -63,7 +63,7 @@ public class WeChatTerminal extends VisitorTerminal {
             we.setMsgTo(this.getAbstractUser().getOpenId());
             we.setMsgStatus((byte) -1);
 
-            if (null != response && !response.getAccept()) {
+            if (null == response || !response.getAccept()) {
                 this.getChatNodeAdaptation().messageCallBack(this.getAbstractUser(), MsgStatus.msgFail);
 
                 // 发送失败记录
