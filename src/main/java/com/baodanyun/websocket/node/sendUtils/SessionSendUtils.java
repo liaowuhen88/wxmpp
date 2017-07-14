@@ -24,8 +24,10 @@ public class SessionSendUtils {
                 //从XMPP中的消息没法设置来源属性，从发消息后设置到了缓存中
                 if (sendMsg.getFrom() != null && sendMsg.getTo() != null) {
                     Integer source = MsgSourceUtil.get(sendMsg.getFrom().concat(sendMsg.getTo()));//消息来源
-                    sendMsg.setSource(source);
-                    sendMsg.setSourceDesc(TeminalTypeEnum.H5.getDesc(2));
+                    if (null != source) {
+                        sendMsg.setSource(source);
+                        sendMsg.setSourceDesc(TeminalTypeEnum.H5.getDesc(source));
+                    }
                 }
 
                 String content = JSONUtil.toJson(sendMsg);
