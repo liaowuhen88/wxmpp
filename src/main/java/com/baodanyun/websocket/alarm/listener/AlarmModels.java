@@ -28,7 +28,7 @@ public class AlarmModels {
      * 执行告警业务
      */
     public synchronized void executeAlarm(final AlarmEvent alarmInfo) {
-        for (int i = 0, len = listeners.size(); i < len ; i++) {
+        for (int i = 0, len = listeners.size(); i < len; i++) {
             executorService.submit(new Runnable() {
                 @Override
                 public void run() {
