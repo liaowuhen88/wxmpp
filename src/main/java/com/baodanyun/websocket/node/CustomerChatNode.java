@@ -107,7 +107,8 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         cc.setCjid(this.getAbstractUser().getId());
         cc.setVjid(visitorChatNode.getAbstractUser().getId());
         conversationCustomerService.delete(cc);
-        VISITOR_CHAT_NODE_MAP.put(visitorChatNode.getId(), visitorChatNode);
+
+        VISITOR_CHAT_NODE_MAP.remove(visitorChatNode.getId());
         if (null != getNodes()) {
             for (AbstractTerminal node : getNodes().values()) {
                 try {
@@ -119,7 +120,7 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         } else {
             logger.info("joinQueue getNodes() is null");
         }
-
+        visitorChatNode.logout();
         return true;
     }
 

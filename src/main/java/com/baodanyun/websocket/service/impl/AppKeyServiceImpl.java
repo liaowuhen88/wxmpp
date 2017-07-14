@@ -52,9 +52,16 @@ public class AppKeyServiceImpl implements AppKeyService {
         if (StringUtils.isEmpty(re.getId())) {
             throw new BusinessException("id is null");
         }
+
+        String id = re.getId();
+        if (StringUtils.isEmpty(id)) {
+            throw new BusinessException("用户id不能为空");
+        } else {
+            id = id.toLowerCase();
+        }
         Visitor au = new Visitor();
-        au.setId(XMPPUtil.nameToJid(re.getId()));
-        au.setLoginUsername(re.getId());
+        au.setId(XMPPUtil.nameToJid(id));
+        au.setLoginUsername(id);
         au.setLoginTime(System.currentTimeMillis());
         au.setOpenId(re.getId());
         au.setUserName(re.getNickname());
