@@ -26,11 +26,12 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
         AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
         logger.info("session is open --- ip:[" + session.getLocalAddress() + "]------visitorId:[" + au.getId() + "] ---- sessionId:[" + session.getId() + "]  ");
 
-        WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
+        WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au, session);
         ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
         ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(chatNode);
 
-        AbstractTerminal wn = webSocketTerminalVisitorFactory.getNode(chatNodeAdaptation,webSocketTerminal);
+        AbstractTerminal wn = webSocketTerminalVisitorFactory.getNode(chatNodeAdaptation, webSocketTerminal);
+
         chatNode.online(wn);
 
     }
@@ -65,7 +66,9 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
         ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
         WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
         AbstractTerminal wn = chatNode.getNode(webSocketTerminalVisitorFactory.getId(webSocketTerminal));
-        chatNode.removeNode(wn.getId());
+
+        if (wn != null)
+            chatNode.removeNode(wn.getId());
 
     }
 

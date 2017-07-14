@@ -3,14 +3,9 @@ package com.baodanyun.websocket.node;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.msg.status.StatusMsg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.enums.MsgStatus;
-import com.baodanyun.websocket.event.VisitorReciveMsgEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.sendUtils.SessionSendUtils;
-import com.baodanyun.websocket.util.CommonConfig;
-import com.baodanyun.websocket.util.EventBusUtils;
-import org.jivesoftware.smack.SmackException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.WebSocketSession;
@@ -29,13 +24,6 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
         this.id =id;
     }
 
-    @Override
-    public void receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
-        super.receiveFromGod(msg);
-
-        VisitorReciveMsgEvent vme = new VisitorReciveMsgEvent(this.getAbstractUser(), this.getChatNodeAdaptation().getAbstractUser(), msg.getContent(), CommonConfig.MSG_BIZ_KF_CHAT);
-        EventBusUtils.post(vme);
-    }
 
     public WebSocketSession getSession() {
         return session;
@@ -63,16 +51,10 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
     }
 
     @Override
-    public boolean joinQueue() {
+    public boolean joinQueue(AbstractUser customer) {
 
         Msg onlineQueueSuccess = getSMMsgSendTOVisitor(getAbstractUser(), MsgStatus.onlineQueueSuccess);
-
-        String realTo = this.getChatNodeAdaptation().getRealTo();
-        Msg hello = getMsgHelloToVisitor(((Visitor) getAbstractUser()));
-
         SessionSendUtils.send(this.getAbstractUser(), getSession(), onlineQueueSuccess);
-        SessionSendUtils.send(this.getAbstractUser(), getSession(), hello);
-
         return true;
     }
 

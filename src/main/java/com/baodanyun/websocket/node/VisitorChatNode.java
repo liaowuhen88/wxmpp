@@ -1,9 +1,12 @@
 package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.enums.AlarmEnum;
+import com.baodanyun.websocket.event.AlarmEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.service.CustomerDispatcherTactics;
 import com.baodanyun.websocket.service.UserCacheServer;
+import com.baodanyun.websocket.util.EventBusUtils;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.apache.commons.lang.StringUtils;
@@ -102,6 +105,9 @@ public class VisitorChatNode extends AbstarctChatNode {
 
                 logger.info("joinQueue getNodes() is null");
             }
+
+            AlarmEvent alarmEvent = new AlarmEvent(AlarmEnum.CUSTOMER, message); //告警
+            EventBusUtils.post(alarmEvent);
 
         } catch (Exception e) {
             logger.error("error", "msgSendControl.sendMsg error", e);

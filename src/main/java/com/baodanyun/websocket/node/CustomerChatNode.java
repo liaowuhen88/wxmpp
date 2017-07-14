@@ -7,7 +7,6 @@ import com.baodanyun.websocket.model.ConversationCustomer;
 import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
 import com.baodanyun.websocket.service.ConversationCustomerService;
 import com.baodanyun.websocket.service.CustomerDispatcherTactics;
-import com.baodanyun.websocket.service.UserCacheServer;
 import com.baodanyun.websocket.service.XmppUserOnlineServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
@@ -30,13 +29,8 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
     // 加入到客服的访客列表
     private static final Map<String, VisitorChatNode> VISITOR_CHAT_NODE_MAP = new ConcurrentHashMap<>();
     ConversationCustomerService conversationCustomerService = SpringContextUtil.getBean("conversationCustomerServiceImpl", ConversationCustomerService.class);
-    CustomerDispatcherTactics customerDispatcherService = SpringContextUtil.getBean("customerDispatcherTacticsImpl", CustomerDispatcherTactics.class);
-    private
-    UserCacheServer userCacheServer = SpringContextUtil.getBean("userCacheServerImpl", UserCacheServer.class);
-
-    private
+    CustomerDispatcherTactics customerDispatcherTactics = SpringContextUtil.getBean("customerDispatcherTacticsImpl", CustomerDispatcherTactics.class);
     XmppUserOnlineServer xmppUserOnlineServer = SpringContextUtil.getBean("xmppUserOnlineServer", XmppUserOnlineServer.class);
-
 
     public CustomerChatNode(AbstractUser customer, Long lastActiveTime) {
         super(customer, lastActiveTime);
@@ -54,19 +48,12 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
      * @throws BusinessException
      */
 
-    public boolean openfireOnline() {
-        boolean flag = this.isXmppOnline();
-        if (!flag) {
-            flag = xmppUserOnlineServer.isOnline(this.getAbstractUser().getLoginUsername());
-        }
-        return flag;
-    }
 
 
     @Override
     public boolean logout() {
 
-        customerDispatcherService.deleteCustomer(this.getAbstractUser().getId());
+        customerDispatcherTactics.deleteCustomer(this.getAbstractUser().getId());
 
         // 通知访客上线
         for (VisitorChatNode visitorChatNode : VISITOR_CHAT_NODE_MAP.values()) {
@@ -107,7 +94,7 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         cc.setCjid(this.getAbstractUser().getId());
         cc.setVjid(visitorChatNode.getAbstractUser().getId());
         conversationCustomerService.delete(cc);
-        VISITOR_CHAT_NODE_MAP.remove(visitorChatNode.getId());
+        VISITOR_CHAT_NODE_MAP.put(visitorChatNode.getId(), visitorChatNode);
         if (null != getNodes()) {
             for (AbstractTerminal node : getNodes().values()) {
                 try {
@@ -119,7 +106,7 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         } else {
             logger.info("joinQueue getNodes() is null");
         }
-        visitorChatNode.logout();
+
         return true;
     }
 
@@ -170,7 +157,7 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         // 是否为接入用户客服
         boolean flag = super.login();
         if (flag) {
-            customerDispatcherService.saveCustomer(this.getAbstractUser());
+            customerDispatcherTactics.saveCustomer(this.getAbstractUser());
         }
         return flag;
     }
@@ -178,11 +165,26 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
     @Override
     public void online(AbstractTerminal node) throws InterruptedException, BusinessException {
         super.online(node);
-
         // 通知访客上线
         for (VisitorChatNode visitorChatNode : VISITOR_CHAT_NODE_MAP.values()) {
             visitorChatNode.customerOnline();
         }
+    }
+
+    public boolean xmppOnlineServer() throws InterruptedException, BusinessException {
+        boolean cFlag = xmppServer.isAuthenticated(this.getAbstractUser().getId());
+        if (!cFlag) {
+            cFlag = xmppUserOnlineServer.isOnline(this.getAbstractUser().getLoginUsername());
+        }
+        return cFlag;
+    }
+
+    @Override
+    public void processMessage(Chat chat, Message message) {
+        super.processMessage(chat, message);
+
+        AlarmEvent alarmEvent = new AlarmEvent(AlarmEnum.VISITOR, message); //告警
+        EventBusUtils.post(alarmEvent);
 
     }
 }

@@ -21,6 +21,8 @@
     <script src="<%=request.getContextPath()%>/resouces/scripts/history.js"></script>
     <script src="<%=request.getContextPath()%>/resouces/scripts/set.js"></script>
     <script src="<%=request.getContextPath()%>/resouces/scripts/leaveMessage.js"></script>
+    <script src="<%=request.getContextPath()%>/resouces/js/wechatface.js"></script>
+
     <script>
         $(function () {
 

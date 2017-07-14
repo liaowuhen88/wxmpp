@@ -4,7 +4,7 @@
         <div class="avatar"><img src="{{icon}}"/></div>
         <div class="content">
             <div class="name">{{fromName}}</div>
-            <div class="message-wrapper text">{{content}}</div>
+            <div class="message-wrapper text">{{&content}}</div>
         </div>
     </div>
 </script>
@@ -14,7 +14,7 @@
         <div class="avatar"><img src="{{icon}}"/></div>
         <div class="content">
             <div class="name">{{fromName}}</div>
-            <div class="message-wrapper text">{{content}}</div>
+            <div class="message-wrapper text">{{&content}}</div>
         </div>
     </div>
 </script>

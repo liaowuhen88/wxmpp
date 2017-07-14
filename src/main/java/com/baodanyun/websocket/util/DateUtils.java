@@ -625,4 +625,21 @@ public class DateUtils {
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         return calendar.getTime();
     }
+
+    /**
+     * 计算beginTime与系统时间相差分钟数
+     *
+     * @param beginTime 开始时间
+     * @return
+     */
+    public static long getMinutesDiff(long beginTime) {
+        long nd = 1000 * 24 * 60 * 60;
+        long nh = 1000 * 60 * 60;
+        long nm = 1000 * 60;
+
+        long diff = System.currentTimeMillis() - beginTime;
+        long min = diff % nd % nh / nm;
+
+        return min;
+    }
 }

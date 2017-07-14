@@ -158,7 +158,7 @@ Utils = (function () {
 
 
     // 历史纪录展示  数据库
-    Utils.prototype.DBRenderDiv = function renderDiv(currentId, datas, renderDiv, fn) {
+    Utils.prototype.DBRenderDiv = function renderDiv(currentId, datas, renderDiv, fn) {debugger;
         if (datas) {
             $.each(datas, function (i, item) {
                 var commentTpl;
@@ -178,7 +178,7 @@ Utils = (function () {
                     if (item.contentType == 'image') {
                         commentTpl = $('#imgLeft').html();
                     }
-                    if (item.contentType == 'audio') {
+                    else if (item.contentType == 'audio') {
                         commentTpl = $('#audioLeft').html();
                     } else {
                         commentTpl = $('#mleft').html();

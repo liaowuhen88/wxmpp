@@ -192,6 +192,8 @@ xchat.recvMsgEvent = function (json) {
 
 //接收到文本消息
 xchat.recvTextMsgHandelEvent = function (json) {
+    json.content = wechatFace.faceToHTML(json.content, window.base); //表情字符转换对象的图片
+
     document.getElementById("msgTipAudio").play();
     json.time = myUtils.formatDate(new Date(json.ct));
 
@@ -500,9 +502,9 @@ xchat.getLocalHistory = function (id) {
         dataList.map(function (val) {
 
             if (val.from == window.destJid) {
-                val.icon = val.icon || this.controls.defaultAvatar;
+                val.icon = val.icon || _this.controls.defaultAvatar;
             } else if (val.to == window.destJid) {
-                val.icon = val.icon || this.controls.default_kf_icon;
+                val.icon = val.icon || _this.controls.default_kf_icon;
             }
         });
         myUtils.cacheRenderDiv(window.currentId, dataList, 'chatMsgContainer', function () {
@@ -514,7 +516,7 @@ xchat.getRemoteHistory = function (customerPage, cacheLastId, fn) {
     myUtils.customerHistory(customerPage, cacheLastId, fn);
 };
 //滚动加载历史消息
-xchat.loadHistoryEventBind = function () {
+xchat.loadHistoryEventBind = function () {alert();
     var _this = this;
     var i = 0;
     var customerPage = new myUtils.Page({
@@ -611,6 +613,12 @@ xchat.openFriendWindow = function (isOnline, id, nickname, openId, icon) {
 //获取当前用户的详情
 xchat.getUserInfo = function (currentId, destJid, openId) {
     var _this = this;
+    $("#userDetail").empty();
+    $(_this.controls.claimsContainer).empty();
+    $(_this.controls.contractsContainer).empty();
+    $(_this.controls.orderContainer).empty();
+
+
     $.ajax({
         url: _this.interface.userInfo + '?id=' + destJid + '&openid=' + openId,
         type: 'GET',
@@ -672,11 +680,6 @@ xchat.getUserInfo = function (currentId, destJid, openId) {
                         if (contract) {
                             _this.contractComb(contract);   //合同
                         }
-                    } else {
-                        $("#userDetail").empty();
-                        $(_this.controls.claimsContainer).empty();
-                        $(_this.controls.contractsContainer).empty();
-                        $(_this.controls.orderContainer).empty();
                     }
 
                     if (vCard) {
@@ -888,10 +891,16 @@ xchat.contractComb = function (data) {
         } else {
             item.expirydate = '';
         }
-        html += '<li><span class="tag">合同名称:</span>' + item.name + '</li>';
+        html += '<li><span class="tag">合同名称4:</span>' + item.name + '</li>';
         html += '<li><span class="tag">合同编号:</span>' + item.code + '</li>';
         html += '<li><span class="tag">生效日期:</span>' + item.effectivedate + '</li>';
         html += '<li><span class="tag">失效日期:</span>' + item.expirydate + '</li>';
+        html += '<li><span class="tag">总保费合计:</span>' + item.money + '</li>';
+        html += '<li><span class="tag">缴费方式:</span>' + item.paytype + '</li>';
+        html += '<li><span class="tag">争议处理方式:</span>' + item.dispute + '</li>';
+        html += '<li><span class="tag">渠道商名称:</span>' + item.channelname + '</li>';
+        html += '<li><span class="tag">主被保险人数目:</span>' + item.mianpnum + '</li>';
+        html += '<li><span class="tag">合同类型:</span>' + (item.contactType ? "个人":"企业") + (item.isOfficial == 1 ? "正式合同":"体验合同") + '</li>';
         itemHtml += '<ul class="modal_ul">' + html + '</ul>';
         html = '';
     });

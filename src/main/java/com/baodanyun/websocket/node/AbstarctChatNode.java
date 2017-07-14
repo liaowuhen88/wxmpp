@@ -294,6 +294,7 @@ public class AbstarctChatNode implements ChatNode {
     private void processMessage(Message message) {
         try {
             logger.info(getAbstractUser().getId() + ":xmpp receive message " + JSONUtil.toJson(message));
+
             this.setLastActiveTime(System.currentTimeMillis());
             if (null != getNodes() && getNodes().size() > 0) {
                 logger.info(this.getAbstractUser().getId() + "getNodes()" + getNodes().size());
