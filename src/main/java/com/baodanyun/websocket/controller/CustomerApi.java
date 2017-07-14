@@ -11,11 +11,11 @@ import com.baodanyun.websocket.bean.userInterface.user.WeiXinListUser;
 import com.baodanyun.websocket.bean.userInterface.user.WeiXinUser;
 import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.exception.BusinessException;
-import com.baodanyun.websocket.model.ConversationCustomer;
 import com.baodanyun.websocket.model.PageModel;
 import com.baodanyun.websocket.model.Transferlog;
 import com.baodanyun.websocket.model.UserModel;
 import com.baodanyun.websocket.node.ChatNodeManager;
+import com.baodanyun.websocket.node.CustomerChatNode;
 import com.baodanyun.websocket.node.VisitorChatNode;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.util.JSONUtil;
@@ -468,21 +468,15 @@ public class CustomerApi extends BaseController {
     public void visitorOff(@PathVariable("vjid") String vjid, HttpServletRequest request, HttpServletResponse httpServletResponse) {
         Response response = new Response();
         try {
-            // au 为登录客服
-            AbstractUser au = (AbstractUser) request.getSession().getAttribute(Common.USER_KEY);
-
-            ConversationCustomer cc = new ConversationCustomer();
-            cc.setCjid(au.getId());
-            cc.setVjid(vjid);
-            conversationCustomerService.delete(cc);
-
+            // customer 为登录客服
+            AbstractUser customer = (AbstractUser) request.getSession().getAttribute(Common.USER_KEY);
 
             Visitor user = new Visitor();
             user.setId(vjid);
 
             VisitorChatNode vn = ChatNodeManager.getVisitorXmppNode(user);
-
-            vn.logout();
+            CustomerChatNode customerChatNode = ChatNodeManager.getCustomerXmppNode(customer);
+            customerChatNode.uninstall(vn);
 
             response.setSuccess(true);
 
