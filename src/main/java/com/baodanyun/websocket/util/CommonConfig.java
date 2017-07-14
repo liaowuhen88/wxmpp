@@ -18,6 +18,14 @@ public class CommonConfig {
     public static final String MSG_BIZ_KF_QUIT = "0102"; //退出客服
     public static final String MSG_BIZ_KF_LEAVE_MESSAGE = "0103"; //用户留言
 
+    public static final String LOGIN_FROM_H5 = "0109"; //用户从H5进入
+    public static final String LOGIN__FROM_WE_CHAT_ACTIVE = "0108"; //用户主动从微信进入
+    public static final String LOGIN__FROM_WE_CHAT_PASSIVE = "0106"; //用户被动从微信进入
+
+    public static final String MSG_SOURCE_H5 = "010901"; //消息来源于H5
+    public static final String MSG_SOURCE_WE_CHAT_ACTIVE = "010801"; //用户消息主动从来源于微信
+    public static final String MSG_SOURCE_WE_CHAT_PASSIVE = "010601"; //用户消息被动从来源于H5
+
 
     // 缓存常量
 

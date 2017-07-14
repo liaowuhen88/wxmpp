@@ -15,18 +15,18 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-public class VisitorListener {
-    private static final Logger logger = LoggerFactory.getLogger(VisitorListener.class);
+public class WechatListener {
+    private static final Logger logger = LoggerFactory.getLogger(WechatListener.class);
 
     @Autowired
     private SendToEventCenterService se;
 
     public void login(AbstractUser visitor, AbstractUser customer) {
-        try{
+        try {
             LogUserEvents le = getByLogUserEvents(visitor, customer);
             le.setEvt(CommonConfig.MSG_BIZ_KF_ENTER);
             se.sendToEventCenter(le);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("error", "error", e);
         }
     }
@@ -47,45 +47,45 @@ public class VisitorListener {
     }
 
     public void logOut(AbstractUser visitor, AbstractUser customer) {
-        try{
+        try {
             LogUserEvents le = getByLogUserEvents(visitor, customer);
             le.setEvt(CommonConfig.MSG_BIZ_KF_QUIT);
             se.sendToEventCenter(le);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("error", "error", e);
         }
     }
 
-    public void leaveMessage(String myid,String m ){
-        try{
+    public void leaveMessage(String myid, String m) {
+        try {
             LogUserEvents le = new LogUserEvents();
             le.setOtype(CommonConfig.Event_OType_WX_KF);
             le.setMyUid(myid);
             le.setEvt(CommonConfig.MSG_BIZ_KF_LEAVE_MESSAGE);
             le.setMark(m);
             se.sendToEventCenter(le);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("error", "error", e);
         }
     }
 
     public void leaveMessage(Visitor visitor, AbstractUser customer) {
-        try{
+        try {
             LogUserEvents le = getByLogUserEvents(visitor, customer);
             le.setEvt(CommonConfig.MSG_BIZ_KF_LEAVE_MESSAGE);
             se.sendToEventCenter(le);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("error", "error", e);
         }
     }
 
     public void chat(String mark, AbstractUser visitor, AbstractUser customer, String evnetNum) {
-        try{
+        try {
             LogUserEvents le = getByLogUserEvents(visitor, customer);
             le.setEvt(evnetNum);
             le.setMark(mark);
             se.sendToEventCenter(le);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("error", "error", e);
         }
     }
@@ -100,9 +100,9 @@ public class VisitorListener {
 
     public LogUserEvents getByLogUserEvents(AbstractUser visitor, String cid) {
         LogUserEvents le = new LogUserEvents();
-        if(null != visitor.getUid()){
-            le.setMyUid(visitor.getUid()+"");
-        }else {
+        if (null != visitor.getUid()) {
+            le.setMyUid(visitor.getUid() + "");
+        } else {
             le.setMyUid(visitor.getOpenId());
         }
 

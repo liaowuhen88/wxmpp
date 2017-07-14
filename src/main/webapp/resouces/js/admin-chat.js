@@ -186,6 +186,10 @@ xchat.recvMsgEvent = function (json) {
         xchat.recvMsgOne[from] = count;
         $(document.getElementById('m' + from)).html(count);
 
+        if (json.source && json.source == 1) {//消息来源是微信则绿色背景
+            $(document.getElementById('m' + from)).css('background', 'green');
+        }
+
     }
 };
 
@@ -517,7 +521,6 @@ xchat.getRemoteHistory = function (customerPage, cacheLastId, fn) {
 };
 //滚动加载历史消息
 xchat.loadHistoryEventBind = function () {
-    alert();
     var _this = this;
     var i = 0;
     var customerPage = new myUtils.Page({
@@ -901,7 +904,7 @@ xchat.contractComb = function (data) {
         html += '<li><span class="tag">争议处理方式:</span>' + item.dispute + '</li>';
         html += '<li><span class="tag">渠道商名称:</span>' + item.channelname + '</li>';
         html += '<li><span class="tag">主被保险人数目:</span>' + item.mianpnum + '</li>';
-        html += '<li><span class="tag">合同类型:</span>' + (item.contactType ? "个人" : "企业") + (item.isOfficial == 1 ? "正式合同" : "体验合同") + '</li>';
+        html += '<li><span class="tag">合同类型:</span>' + (item.contactType ? "个人":"企业") + (item.isOfficial == 1 ? "正式合同":"体验合同") + '</li>';
         itemHtml += '<ul class="modal_ul">' + html + '</ul>';
         html = '';
     });

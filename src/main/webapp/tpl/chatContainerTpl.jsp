@@ -7,7 +7,7 @@
 <script id="mleft" type="text/html">
     <div class="timeline timeline-from">
         <div class="avatar"><img src="{{icon}}" alt="{{username}}"></div>
-        <span class="time">{{time}}</span>
+        <span class="time">{{time}} {{sourceDesc}}</span>
         <span class="time">{{direction}}</span>
         <span class="message">{{&content}}</span>
     </div>
@@ -17,7 +17,7 @@
     <div class="timeline timeline-from" id="{{id}}">
         <div class="avatar"><img src="{{icon}}" alt="{{username}}"></div>
         <span class="time">{{direction}}</span>
-        <span class="time">{{time}}</span>
+        <span class="time">{{time}} {{sourceDesc}}</span>
 
         <%--<div class="message-wrapper emoji" style="width:265px;height:201px;"><img src="{{content}}" width="265">
             </div>--%>
@@ -29,7 +29,7 @@
     <div class="timeline timeline-from" id="{{id}}">
         <div class="avatar"><img src="{{icon}}" alt="{{username}}"></div>
         <span class="time">{{direction}}</span>
-        <span class="time">{{time}}</span>
+        <span class="time">{{time}} {{sourceDesc}}</span>
 
         <%--<div class="message-wrapper emoji" style="width:265px;height:201px;"><img src="{{content}}" width="265">
             </div>--%>
@@ -43,7 +43,7 @@
     <div class="timeline timeline-go">
         <div class="avatar"><img src="{{icon}}" alt="{{username}}"></div>
         <span class="time">{{direction}}</span>
-        <span class="time">{{time}}</span>
+        <span class="time">{{time}} {{sourceDesc}}</span>
 
         <span class="message">{{&content}}</span>
     </div>
@@ -53,7 +53,7 @@
     <div class="timeline timeline-go" id="{{id}}">
         <div class="avatar"><img src="{{icon}}" alt="{{username}}"></div>
         <span class="time">{{direction}}</span>
-        <span class="time">{{time}}</span>
+        <span class="time">{{time}} {{sourceDesc}}</span>
 
         <%--<div class="message-wrapper emoji" style="width:265px;height:201px;"><img src="{{content}}" width="265">--%>
         <span class="message"><a href="{{content}}" rel="lightbox" ><img src="{{content}}" alt=""></a></span>

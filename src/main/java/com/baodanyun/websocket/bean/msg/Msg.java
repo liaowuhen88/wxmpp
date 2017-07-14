@@ -15,7 +15,7 @@ import java.io.Serializable;
  * Created by yutao on 2016/7/20.
  * 顶层消息 描述了当前消息是动作 还是消息
  */
-public class Msg implements Serializable{
+public class Msg implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(Msg.class);
     // 表示用户从那个入口接入
     //  0 默认h5客服端   1 微信直接聊天入口
@@ -36,6 +36,9 @@ public class Msg implements Serializable{
     private String msgType;   //synchronize
     private boolean isRead;//TODO 是否已经被回执
     private Long readCt;//阅读时间
+
+    private Integer source; //终端来源标识
+    private String sourceDesc; //端来源描述
 
     public Msg(String content) {
         this.content = content;
@@ -220,6 +223,22 @@ public class Msg implements Serializable{
         this.toType = toType;
     }
 
+    public Integer getSource() {
+        return source;
+    }
+
+    public void setSource(Integer source) {
+        this.source = source;
+    }
+
+    public String getSourceDesc() {
+        return sourceDesc;
+    }
+
+    public void setSourceDesc(String sourceDesc) {
+        this.sourceDesc = sourceDesc;
+    }
+
     //receiptMsg 回执消息
     public enum MsgContentType {
         text, video, file, audio, image, receiptMsg
@@ -229,4 +248,5 @@ public class Msg implements Serializable{
     public enum Type {
         active, msg, status
     }
+
 }

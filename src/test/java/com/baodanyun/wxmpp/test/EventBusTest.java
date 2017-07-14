@@ -1,9 +1,5 @@
 package com.baodanyun.wxmpp.test;
 
-import com.baodanyun.websocket.event.SynchronizationMsgEvent;
-import com.baodanyun.websocket.event.VisitorJoinEvent;
-import com.baodanyun.websocket.event.VisitorLoginEvent;
-import com.baodanyun.websocket.util.EventBusUtils;
 import org.junit.Test;
 
 /**
@@ -13,7 +9,7 @@ public class EventBusTest extends BaseTest {
 
     @Test
     public void testLogin() {
-        VisitorLoginEvent le = new VisitorLoginEvent(null, null, null);
+        /*VisitorLoginEvent le = new VisitorLoginEvent(null, null, null);
 
         VisitorJoinEvent vj = new VisitorJoinEvent(null, null, null);
 
@@ -21,6 +17,6 @@ public class EventBusTest extends BaseTest {
 
         EventBusUtils.post(le);
         EventBusUtils.post(vj);
-        EventBusUtils.post(sm);
+        EventBusUtils.post(sm);*/
     }
 }

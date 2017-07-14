@@ -7,7 +7,6 @@ import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.event.SendMsgToWeChatEvent;
 import com.baodanyun.websocket.event.VisitorLoginEvent;
-import com.baodanyun.websocket.event.VisitorReciveMsgEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.WechatMsg;
 import com.baodanyun.websocket.util.CommonConfig;
@@ -48,9 +47,10 @@ public abstract class VisitorTerminal extends AbstractTerminal {
     public void receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
 
         super.receiveFromGod(msg);
-        VisitorReciveMsgEvent vme = new VisitorReciveMsgEvent(this.getAbstractUser(), this.getChatNodeAdaptation().getAbstractUser(), msg.getContent(), CommonConfig.MSG_BIZ_KF_WX_CHAT);
-
-        EventBusUtils.post(vme);
+        /*VisitorReciveMsgEvent vme = new VisitorReciveMsgEvent(this.getAbstractUser(),
+                this.getChatNodeAdaptation().getAbstractUser(), msg.getContent(),
+                CommonConfig.MSG_BIZ_KF_WX_CHAT);
+        EventBusUtils.post(vme);*/
 
         WechatMsg we = new WechatMsg();
         we.setType("receive");
@@ -67,8 +67,8 @@ public abstract class VisitorTerminal extends AbstractTerminal {
     public void online() throws InterruptedException, BusinessException {
         super.online();
 
-        VisitorLoginEvent vl = new VisitorLoginEvent(this.getAbstractUser(), this.getChatNodeAdaptation().getAbstractUser(), null);
-
+        VisitorLoginEvent vl = new VisitorLoginEvent(this.getAbstractUser(),
+                this.getChatNodeAdaptation().getAbstractUser(), CommonConfig.MSG_BIZ_KF_ENTER);
         EventBusUtils.post(vl);
     }
 
