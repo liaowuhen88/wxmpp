@@ -1,6 +1,5 @@
 package com.baodanyun.websocket.listener.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.baodanyun.websocket.alarm.AlarmBoxer;
 import com.baodanyun.websocket.event.AlarmEvent;
 import com.baodanyun.websocket.listener.EventBusListener;
@@ -21,8 +20,7 @@ public class AlarmListener extends AbstarctEventBusListener<AlarmEvent> implemen
     @Override
     @Subscribe
     public boolean processExpiringEvent(final AlarmEvent alarmEvent) {
-        logger.info(JSONUtil.toJson(alarmEvent));
-        System.out.println("事件: " + JSON.toJSONString(alarmEvent));
+        logger.info("告警: " + JSONUtil.toJson(alarmEvent));
 
         switch (alarmEvent.getAlarmEnum()) {
             case CUSTOMER:

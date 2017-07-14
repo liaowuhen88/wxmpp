@@ -5,6 +5,7 @@ import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.util.EmojiUtil;
+import com.baodanyun.websocket.util.MsgSourceUtil;
 import com.baodanyun.websocket.util.XMPPUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jivesoftware.smack.SmackException;
@@ -80,6 +81,9 @@ public class AbstractTerminal {
         xmppMsg.setSubject(msg.getContentType());
 
         sendMessageTOXmpp(xmppMsg);
+
+        MsgSourceUtil.put(msg.getFrom().concat(msg.getTo()), msg.getSource()); //缓存来源
+
     }
 
     /**

@@ -37,7 +37,7 @@ public class VisitorLoginListener extends AbstarctEventBusListener<VisitorLoginE
 
                                             ve.getMsgSendService().sendSMMsgToVisitor(ve.getUser(), ve.getCustomer(), MsgStatus.initSuccess);*/
 
-                                            visitorListener.login(ve.getUser(), ve.getCustomer());
+                                            visitorListener.login(ve.getUser(), ve.getCustomer(), ve.getEventCode());
                                         } catch (Exception e) {
                                             logger.error("error", e);
                                         }

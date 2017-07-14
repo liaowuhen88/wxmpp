@@ -6,7 +6,7 @@ import com.baodanyun.websocket.service.MsgSendService;
 /**
  * Created by liaowuhen on 2017/5/15.
  */
-public class VisitorLoginEvent {
+public class WechatLoginEvent {
 
     private AbstractUser user;
     private AbstractUser customer;
@@ -14,7 +14,7 @@ public class VisitorLoginEvent {
 
     private String eventCode; //事件编码
 
-    public VisitorLoginEvent(AbstractUser user, AbstractUser customer, MsgSendService msgSendService) {
+    public WechatLoginEvent(AbstractUser user, AbstractUser customer, MsgSendService msgSendService) {
         this.user = user;
         this.customer = customer;
         this.msgSendService = msgSendService;
@@ -25,7 +25,7 @@ public class VisitorLoginEvent {
      * @param customer
      * @param eventCode 事件编码
      */
-    public VisitorLoginEvent(AbstractUser user, AbstractUser customer, String eventCode) {
+    public WechatLoginEvent(AbstractUser user, AbstractUser customer, String eventCode) {
         this.user = user;
         this.customer = customer;
         this.eventCode = eventCode;

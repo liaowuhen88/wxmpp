@@ -186,6 +186,10 @@ xchat.recvMsgEvent = function (json) {
         xchat.recvMsgOne[from] = count;
         $(document.getElementById('m' + from)).html(count);
 
+        if (json.source && json.source == 1) {//消息来源是微信则绿色背景
+            $(document.getElementById('m' + from)).css('background', 'green');
+        }
+
     }
 };
 
@@ -516,7 +520,7 @@ xchat.getRemoteHistory = function (customerPage, cacheLastId, fn) {
     myUtils.customerHistory(customerPage, cacheLastId, fn);
 };
 //滚动加载历史消息
-xchat.loadHistoryEventBind = function () {alert();
+xchat.loadHistoryEventBind = function () {
     var _this = this;
     var i = 0;
     var customerPage = new myUtils.Page({
@@ -891,7 +895,7 @@ xchat.contractComb = function (data) {
         } else {
             item.expirydate = '';
         }
-        html += '<li><span class="tag">合同名称4:</span>' + item.name + '</li>';
+        html += '<li><span class="tag">合同名称:</span>' + item.name + '</li>';
         html += '<li><span class="tag">合同编号:</span>' + item.code + '</li>';
         html += '<li><span class="tag">生效日期:</span>' + item.effectivedate + '</li>';
         html += '<li><span class="tag">失效日期:</span>' + item.expirydate + '</li>';

@@ -4,6 +4,7 @@ import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Visitor;
+import com.baodanyun.websocket.enums.TeminalTypeEnum;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.*;
 import com.baodanyun.websocket.service.CustomerDispatcherTactics;
@@ -64,6 +65,8 @@ public class RecieveWeiXinMessageApi extends BaseController {
         try {
             String body = HttpServletRequestUtils.getBody(request);
             Msg msg = msg(body);
+            msg.setSource(TeminalTypeEnum.WE_CHAT.getCode()); //消息来源是微信
+
             VisitorChatNode visitorChatNode = initVisitorChatNode(msg);
 
             CustomerChatNode customerChatNode = visitorChatNode.getCurrentChatNode();

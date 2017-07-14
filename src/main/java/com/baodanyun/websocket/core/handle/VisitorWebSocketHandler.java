@@ -1,8 +1,11 @@
 package com.baodanyun.websocket.core.handle;
 
 
+import com.alibaba.fastjson.JSON;
+import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.core.common.Common;
+import com.baodanyun.websocket.enums.TeminalTypeEnum;
 import com.baodanyun.websocket.node.*;
 import com.baodanyun.websocket.node.terminal.WebSocketTerminal;
 import com.baodanyun.websocket.util.JSONUtil;
@@ -45,6 +48,8 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
             AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
 
             String content = message.getPayload();
+            content = this.appendSource(content); //标识消息来源是H5
+
             chatNode = ChatNodeManager.getVisitorXmppNode(au);
             WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au, session);
             wn = chatNode.getNode(webSocketTerminalVisitorFactory.getId(webSocketTerminal));
@@ -70,6 +75,17 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
         if (wn != null)
             chatNode.removeNode(wn.getId());
 
+    }
+
+    private void setSourceCache() {
+
+    }
+
+    private String appendSource(String content) {
+        Msg msg = Msg.handelMsg(content);
+        msg.setSource(TeminalTypeEnum.H5.getCode());
+
+        return JSON.toJSONString(msg);
     }
 
 }
