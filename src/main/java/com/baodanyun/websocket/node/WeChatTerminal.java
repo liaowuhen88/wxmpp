@@ -96,8 +96,8 @@ public class WeChatTerminal extends VisitorTerminal {
     }
 
     @Override
-    boolean joinQueue(AbstractUser customer) {
-        Msg hello = getMsgHelloToVisitor(customer);
+    boolean joinQueue() {
+        Msg hello = getMsgHelloToVisitor();
         hello.setFrom(this.getAbstractUser().getOpenId());
 
         WeChatSendUtils.send(hello);

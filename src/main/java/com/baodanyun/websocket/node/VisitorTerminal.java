@@ -3,7 +3,6 @@ package com.baodanyun.websocket.node;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.msg.status.StatusMsg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.event.SendMsgToWeChatEvent;
 import com.baodanyun.websocket.event.VisitorLoginEvent;
@@ -72,7 +71,8 @@ public abstract class VisitorTerminal extends AbstractTerminal {
         EventBusUtils.post(vl);
     }
 
-    public Msg getMsgHelloToVisitor(Visitor user) {
+    public Msg getMsgHelloToVisitor() {
+        AbstractUser user = this.getAbstractUser();
         logger.info("user--->" + JSONUtil.toJson(user));
         String body = Config.greetingWord;
         Msg sendMsg = new Msg(body);
