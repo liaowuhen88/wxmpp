@@ -904,7 +904,7 @@ xchat.contractComb = function (data) {
         html += '<li><span class="tag">争议处理方式:</span>' + item.dispute + '</li>';
         html += '<li><span class="tag">渠道商名称:</span>' + item.channelname + '</li>';
         html += '<li><span class="tag">主被保险人数目:</span>' + item.mianpnum + '</li>';
-        html += '<li><span class="tag">合同类型:</span>' + (item.contactType ? "个人":"企业") + (item.isOfficial == 1 ? "正式合同":"体验合同") + '</li>';
+        html += '<li><span class="tag">合同类型:</span>' + (item.contactType ? "个人" : "企业") + (item.isOfficial == 1 ? "正式合同" : "体验合同") + '</li>';
         itemHtml += '<ul class="modal_ul">' + html + '</ul>';
         html = '';
     });
