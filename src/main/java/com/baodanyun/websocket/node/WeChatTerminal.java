@@ -4,10 +4,14 @@ import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.event.SendMsgToWeChatEvent;
+import com.baodanyun.websocket.event.VisitorReciveMsgEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.WechatMsg;
+import com.baodanyun.websocket.node.sendUtils.WeChatResponse;
 import com.baodanyun.websocket.node.sendUtils.WeChatSendUtils;
+import com.baodanyun.websocket.util.CommonConfig;
 import com.baodanyun.websocket.util.EventBusUtils;
+import org.jivesoftware.smack.SmackException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,13 +49,13 @@ public class WeChatTerminal extends VisitorTerminal {
 
     @Override
     public boolean sendMsgToGod(Msg msg) {
-        boolean flag = false;
+        WeChatResponse response;
         try {
             String from = msg.getFrom();
             String content = msg.getContent();
             msg.setType("text");
             msg.setFrom(this.getAbstractUser().getOpenId());
-            flag = WeChatSendUtils.send(msg);
+            response = WeChatSendUtils.send(msg);
 
 
             WechatMsg we = new WechatMsg();
@@ -59,7 +63,7 @@ public class WeChatTerminal extends VisitorTerminal {
             we.setMsgTo(this.getAbstractUser().getOpenId());
             we.setMsgStatus((byte) -1);
 
-            if (!flag) {
+            if (null != response && !response.getAccept()) {
                 this.getChatNodeAdaptation().messageCallBack(this.getAbstractUser(), MsgStatus.msgFail);
 
                 // 发送失败记录
@@ -81,7 +85,7 @@ public class WeChatTerminal extends VisitorTerminal {
         } catch (Exception e) {
             logger.error("error", "", e);
         }
-        return flag;
+        return true;
     }
 
     @Override

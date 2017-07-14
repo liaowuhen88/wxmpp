@@ -3,7 +3,6 @@ package com.baodanyun.websocket.controller;
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.*;
 import com.baodanyun.websocket.service.CustomerDispatcherTactics;
@@ -26,8 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by yutao on 2016/10/4.
@@ -37,7 +34,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @RestController
 public class RecieveWeiXinMessageApi extends BaseController {
     protected static Logger logger = LoggerFactory.getLogger(RecieveWeiXinMessageApi.class);
-    private static Map<String, Visitor> visitors = new ConcurrentHashMap<>();
     @Autowired
     private UserServer userServer;
 
@@ -72,7 +68,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
             if (!StringUtils.isEmpty(msg.getContent()) && msg.getContent().startsWith(keywords)) {
                 response = getBindCustomerResponse(visitorChatNode.getAbstractUser(), msg);
             } else {
-                boolean cFlag = visitorChatNode.getCurrentChatNode().xmppOnlineServer();
+                boolean cFlag = visitorChatNode.getCurrentChatNode().openfireOnline();
                 logger.info("客服是否在线" + cFlag);
                 AbstractTerminal node = visitorChatNode.getNode(weChatTerminalVisitorFactory.getId(visitorChatNode.getAbstractUser()));
                 // 客服不在线
