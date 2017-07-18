@@ -1,7 +1,6 @@
 package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.msg.Msg;
-import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.event.SendMsgToWeChatEvent;
 import com.baodanyun.websocket.event.VisitorLoginEvent;
@@ -85,7 +84,7 @@ public class WeChatTerminal extends VisitorTerminal {
     public void online() throws InterruptedException, BusinessException {
         super.online();
 
-        this.wecahtLoginEvt();
+        wecahtLoginEvt();
     }
 
     public void wecahtLoginEvt() {

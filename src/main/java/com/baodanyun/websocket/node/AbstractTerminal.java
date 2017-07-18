@@ -80,9 +80,10 @@ public class AbstractTerminal {
         xmppMsg.setBody(msg.getContent());
         xmppMsg.setSubject(msg.getContentType());
 
+
+        MsgSourceUtil.put(this.getAbstractUser().getLoginUsername(), msg.getTo(), msg.getSource()); //缓存来源
         sendMessageTOXmpp(xmppMsg);
 
-        MsgSourceUtil.put(msg.getFrom().concat(msg.getTo()), msg.getSource()); //缓存来源
 
     }
 

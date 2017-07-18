@@ -9,6 +9,7 @@ import com.baodanyun.websocket.node.ChatNodeManager;
 import com.baodanyun.websocket.node.CustomerChatNode;
 import com.baodanyun.websocket.node.VisitorChatNode;
 import com.baodanyun.websocket.service.AppKeyService;
+import com.baodanyun.websocket.util.AccessControlAllowUtils;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
 import com.baodanyun.websocket.util.XMPPUtil;
@@ -70,8 +71,7 @@ public class AppKeyVisitorLogin extends BaseController {
             responseMsg.setMsg(e.getMessage());
         }
 
-        response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Origin", "*");
+        AccessControlAllowUtils.access(response);
 
         Render.r(response, XMPPUtil.buildJson(responseMsg));
     }
