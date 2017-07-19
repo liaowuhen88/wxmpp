@@ -44,18 +44,18 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
         logger.info("sessionId--->" + session.getId() + "webSocket receive message:" + JSONUtil.toJson(message));
         ChatNode chatNode = null;
         AbstractTerminal wn = null;
-        try{
+        try {
             AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
 
             String content = message.getPayload();
             content = this.appendSource(content); //标识消息来源是H5
 
             chatNode = ChatNodeManager.getVisitorXmppNode(au);
-            WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
+            WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au, session);
             wn = chatNode.getNode(webSocketTerminalVisitorFactory.getId(webSocketTerminal));
-            chatNode.receiveFromGod(wn,content);
+            chatNode.receiveFromGod(wn, content);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             chatNode.sendToXmppError(wn);
             logger.error("error", e);
         }
@@ -69,7 +69,7 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
         logger.info("session is closed  ------visitorId:[" + au.getId() + "] ---- sessionId:[" + session.getId() + "]  ----------status:[ " + status + "]");
 
         ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
-        WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
+        WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au, session);
         AbstractTerminal wn = chatNode.getNode(webSocketTerminalVisitorFactory.getId(webSocketTerminal));
 
         if (wn != null)
