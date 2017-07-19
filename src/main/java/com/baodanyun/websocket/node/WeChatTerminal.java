@@ -97,10 +97,10 @@ public class WeChatTerminal extends VisitorTerminal {
 
     @Override
     boolean joinQueue(AbstractUser customer) {
-        Msg hello = getMsgHelloToVisitor(customer);
+       /* Msg hello = getMsgHelloToVisitor(customer);
         hello.setFrom(this.getAbstractUser().getOpenId());
 
-        WeChatSendUtils.send(hello);
+        WeChatSendUtils.send(hello);*/
 
         return true;
     }
