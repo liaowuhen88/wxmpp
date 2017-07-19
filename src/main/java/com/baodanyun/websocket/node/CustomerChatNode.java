@@ -76,7 +76,7 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         conversationCustomerService.insert(cc);
 
         VISITOR_CHAT_NODE_MAP.put(visitorChatNode.getId(), visitorChatNode);
-
+        visitorChatNode.joinQueue();
         if (null != getNodes()) {
             for (AbstractTerminal node : getNodes().values()) {
                 try {
@@ -89,7 +89,6 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
             logger.info("joinQueue getNodes() is null");
         }
 
-        visitorChatNode.joinQueue();
         return true;
     }
 

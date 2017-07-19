@@ -4,7 +4,6 @@ import com.baodanyun.websocket.event.AlarmEvent;
 
 /**
  * 告警Listener
- *
  * @author hubo
  * @since 2017-06-30 15:37
  **/

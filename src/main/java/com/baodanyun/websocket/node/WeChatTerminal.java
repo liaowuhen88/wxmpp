@@ -84,7 +84,7 @@ public class WeChatTerminal extends VisitorTerminal {
     public void online() throws InterruptedException, BusinessException {
         super.online();
 
-        wecahtLoginEvt();
+        this.wecahtLoginEvt();
     }
 
     public void wecahtLoginEvt() {
