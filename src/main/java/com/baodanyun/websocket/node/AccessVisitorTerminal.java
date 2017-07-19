@@ -1,8 +1,9 @@
 package com.baodanyun.websocket.node;
 
 import com.baodanyun.websocket.bean.msg.Msg;
-import com.baodanyun.websocket.event.VisitorLoginEvent;
+import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.event.VisitorReciveMsgEvent;
+import com.baodanyun.websocket.event.WechatLoginEvent;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.util.CommonConfig;
 import com.baodanyun.websocket.util.EventBusUtils;
@@ -42,7 +43,6 @@ public class AccessVisitorTerminal extends WeChatTerminal {
                 this.getChatNodeAdaptation().getAbstractUser(), CommonConfig.LOGIN__FROM_WE_CHAT_PASSIVE);
         EventBusUtils.post(vle);
     }
-
 
     @Override
     boolean customerOnline() {

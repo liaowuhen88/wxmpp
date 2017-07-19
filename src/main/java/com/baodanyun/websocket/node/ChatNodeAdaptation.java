@@ -17,6 +17,7 @@ public class ChatNodeAdaptation {
     }
 
     public boolean synchronizationMsg(String id,Msg msg){
+
         return chatNode.synchronizationMsg(id,msg);
 
     }
@@ -24,14 +25,6 @@ public class ChatNodeAdaptation {
     public AbstractUser getAbstractUser(){
         return chatNode.getAbstractUser();
     }
-
-    public AbstractUser getCustomer() {
-        if (chatNode instanceof VisitorChatNode) {
-            return ((VisitorChatNode) chatNode).getCurrentChatNode().getAbstractUser();
-        }
-        return null;
-    }
-
 
     public void sendMessageTOXmpp(Message xmppMsg) throws SmackException.NotConnectedException {
          chatNode.sendMessageTOXmpp(xmppMsg);
@@ -47,9 +40,23 @@ public class ChatNodeAdaptation {
      * @return
      * @throws SmackException.NotConnectedException
      */
-    public String getRealTo() throws SmackException.NotConnectedException {
+    public String getRealTo() {
         if(chatNode instanceof VisitorChatNode){
            return  ((VisitorChatNode) chatNode).getCurrentChatNode().getAbstractUser().getId();
+        }
+        return null;
+    }
+
+
+    /**
+     * 获取realTo 地址
+     *
+     * @return
+     * @throws SmackException.NotConnectedException
+     */
+    public AbstractUser getCustomer() {
+        if (chatNode instanceof VisitorChatNode) {
+            return ((VisitorChatNode) chatNode).getCurrentChatNode().getAbstractUser();
         }
         return  null;
     }

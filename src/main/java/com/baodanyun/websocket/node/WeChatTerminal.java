@@ -85,7 +85,7 @@ public class WeChatTerminal extends VisitorTerminal {
     public void online() throws InterruptedException, BusinessException {
         super.online();
 
-        this.wecahtLoginEvt();
+        wecahtLoginEvt();
     }
 
     public void wecahtLoginEvt() {
@@ -96,11 +96,11 @@ public class WeChatTerminal extends VisitorTerminal {
     }
 
     @Override
-    boolean joinQueue(AbstractUser customer) {
-       /* Msg hello = getMsgHelloToVisitor(customer);
+    boolean joinQueue() {
+        Msg hello = getMsgHelloToVisitor();
         hello.setFrom(this.getAbstractUser().getOpenId());
 
-        WeChatSendUtils.send(hello);*/
+        WeChatSendUtils.send(hello);
 
         return true;
     }

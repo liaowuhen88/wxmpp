@@ -240,7 +240,6 @@ public class CustomerApi extends BaseController {
             response.setSuccess(true);
 
             // 关闭node
-            logger.info("客服退出");
             ChatNodeManager.getCustomerXmppNode(customer).logout();
             httpServletRequest.getSession().invalidate();
 
@@ -362,7 +361,6 @@ public class CustomerApi extends BaseController {
                     wu.setInfo(info);
                     wu.setCustomer(customer);
                     visitors.add(wu);
-
                 }
             }
             response.setData(visitors);
@@ -471,7 +469,7 @@ public class CustomerApi extends BaseController {
     public void visitorOff(@PathVariable("vjid") String vjid, HttpServletRequest request, HttpServletResponse httpServletResponse) {
         Response response = new Response();
         try {
-            // au 为登录客服
+            // customer 为登录客服
             AbstractUser customer = (AbstractUser) request.getSession().getAttribute(Common.USER_KEY);
 
             Visitor user = new Visitor();
@@ -479,10 +477,7 @@ public class CustomerApi extends BaseController {
 
             VisitorChatNode vn = ChatNodeManager.getVisitorXmppNode(user);
             CustomerChatNode customerChatNode = ChatNodeManager.getCustomerXmppNode(customer);
-            vn.setCurrentChatNode(customerChatNode);
             customerChatNode.uninstall(vn);
-            logger.info("关闭用户{}，用户退出", vjid);
-            vn.logout();
 
             response.setSuccess(true);
 

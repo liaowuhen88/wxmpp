@@ -78,8 +78,9 @@ public class VisitorChatNode extends AbstarctChatNode {
 
     @Override
     public boolean logout() {
-        this.getCurrentChatNode().visitorOffline(this);
-
+        if (null != this.getCurrentChatNode()) {
+            this.getCurrentChatNode().visitorOffline(this);
+        }
         return super.logout();
     }
 
@@ -160,7 +161,7 @@ public class VisitorChatNode extends AbstarctChatNode {
     boolean joinQueue() {
         for (AbstractTerminal node : getNodes().values()) {
             if (node instanceof VisitorTerminal) {
-                ((VisitorTerminal) node).joinQueue(this.getCurrentChatNode().getAbstractUser());
+                ((VisitorTerminal) node).joinQueue();
             }
         }
 

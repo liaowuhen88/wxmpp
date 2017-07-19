@@ -158,7 +158,8 @@ Utils = (function () {
 
 
     // 历史纪录展示  数据库
-    Utils.prototype.DBRenderDiv = function renderDiv(currentId, datas, renderDiv, fn) {debugger;
+    Utils.prototype.DBRenderDiv = function renderDiv(currentId, datas, renderDiv, fn) {
+        debugger;
         if (datas) {
             $.each(datas, function (i, item) {
                 var commentTpl;
@@ -404,6 +405,9 @@ Utils = (function () {
                 msgList = [];
                 msgList.push(data);
             } else {
+                if (storeList.length >= 300) {
+                    storeList.shift();
+                }
                 storeList.push(data);
                 msgList = storeList;
             }
