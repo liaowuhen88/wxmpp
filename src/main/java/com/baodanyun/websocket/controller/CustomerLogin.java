@@ -110,14 +110,13 @@ public class CustomerLogin extends BaseController {
 
             // 初始化用户终端
             VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
-            /*AbstractTerminal wn = visitorChatNode.getNode(accessWeChatTerminalVisitorFactory.getId(visitor));
-            if (null == wn) {*/
-                ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(visitorChatNode);
+
+            ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(visitorChatNode);
             AbstractTerminal wn = accessWeChatTerminalVisitorFactory.getNode(chatNodeAdaptation, visitor);
-                visitorChatNode.setCurrentChatNode(cx);
-                logger.info(JSONUtil.toJson(visitor));
-                visitorChatNode.login();
-            //}
+            visitorChatNode.setCurrentChatNode(cx);
+            logger.info(JSONUtil.toJson(visitor));
+            visitorChatNode.login();
+
             // 用户上线并且通知客服
             visitorChatNode.online(wn);
 
