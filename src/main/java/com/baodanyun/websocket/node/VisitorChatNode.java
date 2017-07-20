@@ -28,10 +28,20 @@ public class VisitorChatNode extends AbstarctChatNode {
     WeChatTerminalVisitorFactory weChatTerminalVisitorFactory = SpringContextUtil.getBean("weChatTerminalVisitorFactory", WeChatTerminalVisitorFactory.class);
     CustomerDispatcherTactics customerDispatcherTactics = SpringContextUtil.getBean("customerDispatcherTacticsImpl", CustomerDispatcherTactics.class);
 
+    private boolean needHello = true;
+
     private CustomerChatNode currentChatNode;
 
     VisitorChatNode(AbstractUser visitor, Long lastActiveTime) {
         super(visitor, lastActiveTime);
+    }
+
+    public boolean isNeedHello() {
+        return needHello;
+    }
+
+    public void setNeedHello(boolean needHello) {
+        this.needHello = needHello;
     }
 
     public CustomerChatNode getCurrentChatNode() {
@@ -44,6 +54,16 @@ public class VisitorChatNode extends AbstarctChatNode {
             userCacheServer.addVisitorCustomerOpenId(this.getAbstractUser().getOpenId(), currentChatNode.getAbstractUser().getId());
         } else {
             logger.info("this.getAbstractUser().getOpenId() is null");
+        }
+    }
+
+    @Override
+    public void addNode(AbstractTerminal node) {
+        super.addNode(node);
+        // 如果是被动呼入，不需要发送hello
+
+        if (node instanceof AccessVisitorTerminal) {
+            this.setNeedHello(false);
         }
     }
 

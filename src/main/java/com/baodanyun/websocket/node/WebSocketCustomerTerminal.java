@@ -1,14 +1,11 @@
 package com.baodanyun.websocket.node;
 
-import com.alibaba.fastjson.JSON;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.msg.status.StatusMsg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.sendUtils.SessionSendUtils;
-import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.packet.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.WebSocketSession;
@@ -46,22 +43,7 @@ public class WebSocketCustomerTerminal extends CustomerTerminal {
         Msg hello = getMsgHelloToCustomer(abstractUser);
 
         SessionSendUtils.send(this.getAbstractUser(), getSession(), online);
-
-
-        try {
-            Message helloMsgToVisitor = new Message();
-            helloMsgToVisitor.setBody(hello.getContent());
-            helloMsgToVisitor.setFrom(hello.getFrom());
-            helloMsgToVisitor.setType(Message.Type.chat);
-            helloMsgToVisitor.setTo(hello.getTo());
-
-            this.getChatNodeAdaptation().sendMessageTOXmpp(helloMsgToVisitor);
-            logger.info("发送问候给访客" + JSON.toJSONString(helloMsgToVisitor));
-
-            SessionSendUtils.send(this.getAbstractUser(), getSession(), hello);//websokect推送客服自己一条仅为知晓
-        } catch (SmackException.NotConnectedException e) {
-            logger.error(e.getMessage());
-        }
+        SessionSendUtils.send(this.getAbstractUser(), getSession(), hello);//websokect推送客服自己一条仅为知晓
 
         return true;
     }

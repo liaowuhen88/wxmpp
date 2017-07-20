@@ -386,7 +386,10 @@ public class CustomerApi extends BaseController {
         Visitor visitor = userServer.initUserByOpenId(from);
 
         String jid = userCacheServer.getCustomerIdByVisitorOpenId(visitor.getOpenId());
-        AbstractUser customerFrom = customerDispatcherTactics.getCustomer(jid);
+        AbstractUser customerFrom = null;
+        if (StringUtils.isNotEmpty(jid)) {
+            customerFrom = customerDispatcherTactics.getCustomerAcceptByJidOnline(jid);
+        }
 
         transferServer.bindVisitor(customerFrom, customer, visitor);
         Response response = new Response();

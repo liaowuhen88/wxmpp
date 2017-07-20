@@ -1,5 +1,6 @@
 package com.baodanyun.websocket.node;
 
+import com.alibaba.fastjson.JSON;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.enums.AlarmEnum;
 import com.baodanyun.websocket.enums.MsgStatus;
@@ -10,6 +11,7 @@ import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
 import com.baodanyun.websocket.service.ConversationCustomerService;
 import com.baodanyun.websocket.service.CustomerDispatcherTactics;
 import com.baodanyun.websocket.service.XmppUserOnlineServer;
+import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.EventBusUtils;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
@@ -68,6 +70,21 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         return super.logout();
     }
 
+    public void sendToVisitor(AbstractUser visitor) {
+        try {
+            Message helloMsgToVisitor = new Message();
+            helloMsgToVisitor.setBody(Config.greetingWord);
+            helloMsgToVisitor.setFrom(this.getAbstractUser().getId());
+            helloMsgToVisitor.setType(Message.Type.chat);
+            helloMsgToVisitor.setTo(visitor.getId());
+
+            sendMessageTOXmpp(helloMsgToVisitor);
+            logger.info("发送问候给访客" + JSON.toJSONString(helloMsgToVisitor));
+
+        } catch (SmackException.NotConnectedException e) {
+            logger.error(e.getMessage());
+        }
+    }
     public boolean joinQueue(VisitorChatNode visitorChatNode) {
         ConversationCustomer cc = new ConversationCustomer();
         cc.setCjid(this.getAbstractUser().getId());
@@ -76,7 +93,9 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         conversationCustomerService.insert(cc);
 
         VISITOR_CHAT_NODE_MAP.put(visitorChatNode.getId(), visitorChatNode);
+
         visitorChatNode.joinQueue();
+
         if (null != getNodes()) {
             for (AbstractTerminal node : getNodes().values()) {
                 try {
@@ -87,6 +106,11 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
             }
         } else {
             logger.info("joinQueue getNodes() is null");
+        }
+
+        if (visitorChatNode.isNeedHello()) {
+            sendToVisitor(visitorChatNode.getAbstractUser());
+            visitorChatNode.setNeedHello(false);
         }
 
         return true;
@@ -191,4 +215,5 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         EventBusUtils.post(alarmEvent);
 
     }
+
 }
