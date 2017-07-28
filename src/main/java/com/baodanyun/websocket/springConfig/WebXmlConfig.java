@@ -22,6 +22,7 @@ import java.util.EnumSet;
 public class WebXmlConfig implements WebApplicationInitializer {
     protected static Logger logger = LoggerFactory.getLogger(WebXmlConfig.class);
 
+
     @Override
     public void onStartup(ServletContext servletContext)
             throws ServletException {
@@ -30,6 +31,25 @@ public class WebXmlConfig implements WebApplicationInitializer {
         servletContext.setInitParameter("contextConfigLocation", "classpath:spring-conf.xml");
         servletContext.addListener(SessionCounter.class);
         /*servletContext.addListener(Log4jConfigListener.class);*/
+        /*Properties props = new Properties();
+        props.put("cors.allowOrigin", "*");
+        props.put("cors.supportedMethods", "GET, POST, HEAD, PUT, DELETE");
+        props.put("cors.supportedHeaders", "Accept,Origin,X-Requested-With,Content-Type,Last-Modified");
+        props.put("cors.exposedHeaders", "Set-Cookie");
+        props.put("cors.supportsCredentials", "true");
+        try {
+            CORSConfiguration cf = new CORSConfiguration(props);
+            CORSFilter co = new CORSFilter(cf);
+            FilterRegistration.Dynamic corsFilter = servletContext.addFilter(
+                    "corsFilter", co);
+            corsFilter.addMappingForUrlPatterns(
+                    EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE), false, "*//*");
+
+
+        } catch (CORSConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+*/
 
         //OpenSessionInViewFilter
         ResReqContentFilter ref = new ResReqContentFilter();

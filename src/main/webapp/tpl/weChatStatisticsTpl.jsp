@@ -3,10 +3,10 @@
     <tr>
         <td>{{id}}</td>
         <td>{{msgTo}}</td>
-        <td>{{sendTime}}</td>
-        <td>{{successFromCount}}</td>
-        <td>{{failFromCount}}</td>
-        <td>{{successToCount}}</td>
+        <td width="200px">{{sendTime}}</td>
+        <td class="successFromCount">{{successFromCount}}</td>
+        <td class="failFromCount">{{failFromCount}}</td>
+        <td class="successToCount">{{successToCount}}</td>
     </tr>
 
 </script>
