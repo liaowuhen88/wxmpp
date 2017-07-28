@@ -69,7 +69,7 @@ public class VisitorWebSocketHandler extends AbstractWebSocketHandler {
         logger.info("session is closed  ------visitorId:[" + au.getId() + "] ---- sessionId:[" + session.getId() + "]  ----------status:[ " + status + "]");
 
         ChatNode chatNode = ChatNodeManager.getVisitorXmppNode(au);
-        WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au,session);
+        WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au, session);
         AbstractTerminal wn = chatNode.getNode(webSocketTerminalVisitorFactory.getId(webSocketTerminal));
 
         if (wn != null)
