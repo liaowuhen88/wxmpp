@@ -43,6 +43,7 @@ public class AccessVisitorTerminal extends WeChatTerminal {
         EventBusUtils.post(vle);
     }
 
+
     @Override
     boolean customerOnline() {
         return false;

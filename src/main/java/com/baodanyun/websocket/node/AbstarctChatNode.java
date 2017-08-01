@@ -194,7 +194,6 @@ public class AbstarctChatNode implements ChatNode {
             logger.error("error", e);
             throw e;
         }
-
         return flag;
     }
 

@@ -71,25 +71,30 @@ public abstract class VisitorTerminal extends AbstractTerminal {
         EventBusUtils.post(vl);
     }
 
-    public Msg getMsgHelloToVisitor() {
-        AbstractUser user = this.getAbstractUser();
-        logger.info("user--->" + JSONUtil.toJson(user));
-        String body = Config.greetingWord;
-        Msg sendMsg = new Msg(body);
-        String to = user.getId();
 
+    /**
+     * 客服发给用户的见面信息
+     *
+     * @param
+     * @return
+     */
+    public Msg getMsgHelloToVisitor(AbstractUser customer) {
+        String body = Config.greetingWord;
+        logger.info(JSONUtil.toJson(customer));
+        String to = getAbstractUser().getId();
+
+
+        Msg sendMsg = new Msg(body);
         String type = Msg.Type.msg.toString();
         Long ct = new Date().getTime();
 
         sendMsg.setType(type);
         sendMsg.setContentType(Msg.MsgContentType.text.toString());
 
-        AbstractUser customer = this.getChatNodeAdaptation().getCustomer();
-        if (null != customer) {
-            sendMsg.setFrom(customer.getId());
-            sendMsg.setIcon(customer.getIcon());
-            sendMsg.setFromName(customer.getNickName());
-        }
+
+        sendMsg.setFrom(customer.getId());
+        sendMsg.setIcon(customer.getIcon());
+        sendMsg.setFromName(customer.getNickName());
 
         sendMsg.setTo(to);
         sendMsg.setCt(ct);
@@ -104,7 +109,7 @@ public abstract class VisitorTerminal extends AbstractTerminal {
      * @throws InterruptedException
      */
 
-    abstract boolean joinQueue();
+    abstract boolean joinQueue(AbstractUser customer);
 
 
     /**

@@ -75,7 +75,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
             if (!StringUtils.isEmpty(msg.getContent()) && msg.getContent().startsWith(keywords)) {
                 response = getBindCustomerResponse(visitorChatNode.getAbstractUser(), msg);
             } else {
-                boolean cFlag = visitorChatNode.getCurrentChatNode().openfireOnline();
+                boolean cFlag = visitorChatNode.getCurrentChatNode().xmppOnlineServer();
                 logger.info("客服是否在线" + cFlag);
                 AbstractTerminal node = visitorChatNode.getNode(weChatTerminalVisitorFactory.getId(visitorChatNode.getAbstractUser()));
                 // 客服不在线

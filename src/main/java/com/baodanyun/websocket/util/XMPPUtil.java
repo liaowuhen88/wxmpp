@@ -16,12 +16,7 @@ public class XMPPUtil {
     }
 
     public static String jidToName(String jid) {
-        if (StringUtils.isNotEmpty(jid)) {
-            if (jid.contains(Common.COMMON_XMPP_DOMAIN_CHAR)) {
-                return jid.substring(0, jid.indexOf(Common.COMMON_XMPP_DOMAIN_CHAR));
-            }
-        }
-        return jid;
+        return jid.substring(0, jid.indexOf(Common.COMMON_XMPP_DOMAIN_CHAR));
     }
 
     public static String removeSource(String jid) {

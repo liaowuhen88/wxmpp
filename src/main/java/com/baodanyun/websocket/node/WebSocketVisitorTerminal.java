@@ -60,7 +60,7 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
     }
 
     @Override
-    public boolean joinQueue() {
+    public boolean joinQueue(AbstractUser customer) {
 
         Msg onlineQueueSuccess = getSMMsgSendTOVisitor(getAbstractUser(), MsgStatus.onlineQueueSuccess);
         SessionSendUtils.send(this.getAbstractUser(), getSession(), onlineQueueSuccess);

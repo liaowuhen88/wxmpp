@@ -199,7 +199,7 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         }
     }
 
-    public boolean openfireOnline() throws InterruptedException, BusinessException {
+    public boolean xmppOnlineServer() throws InterruptedException, BusinessException {
         boolean cFlag = xmppServer.isAuthenticated(this.getAbstractUser().getId());
         if (!cFlag) {
             cFlag = xmppUserOnlineServer.isOnline(this.getAbstractUser().getLoginUsername());

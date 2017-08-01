@@ -39,14 +39,20 @@
     </select>
 
     <select id="statistics" resultMap="statisticsResultMap">
-        SELECT * FROM (SELECT *,COUNT(*) from_count FROM  wechat_msg m1
+        SELECT * FROM (SELECT *,COUNT(1) from_count FROM wechat_msg m1
+        WHERE 1=1
+        <if test="jid != null and jid !=''">
+            AND m1.msg_from = #{jid,jdbcType=VARCHAR}
+        </if>
 
-        WHERE m1.msg_from = #{jid,jdbcType=VARCHAR}
         AND m1.ct > #{startDate,jdbcType=VARCHAR}
         AND #{endDate,jdbcType=VARCHAR} > m1.ct GROUP BY msg_to,msg_status ORDER BY m1.ct) x1
         LEFT JOIN
-        (SELECT COUNT(*) to_count,msg_from FROM wechat_msg
-        WHERE msg_to =#{jid,jdbcType=VARCHAR}
+        (SELECT COUNT(1) to_count,msg_from FROM wechat_msg
+        WHERE 1=1
+        <if test="jid != null and jid !=''">
+            AND msg_to =#{jid,jdbcType=VARCHAR}
+        </if>
         AND ct > #{startDate,jdbcType=VARCHAR}
         AND #{endDate,jdbcType=VARCHAR} > ct GROUP BY msg_from) x2
         ON x1.`msg_to` = x2.msg_from ;
@@ -157,4 +163,5 @@
       type = #{type,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
 </mapper>

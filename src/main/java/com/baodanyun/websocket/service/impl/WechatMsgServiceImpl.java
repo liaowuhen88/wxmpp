@@ -6,7 +6,6 @@ import com.baodanyun.websocket.dao.WechatMsgMapper;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.WechatMsg;
 import com.baodanyun.websocket.service.WechatMsgService;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,9 +29,9 @@ public class WechatMsgServiceImpl implements WechatMsgService {
 
     @Override
     public List<WeChatMsgStatistics> statistics(String jid, Date date) throws BusinessException {
-        if (StringUtils.isEmpty(jid)) {
+        /*if (StringUtils.isEmpty(jid)) {
             throw new BusinessException("jid can not be null");
-        }
+        }*/
         if (null == date) {
             date = new Date();
         }

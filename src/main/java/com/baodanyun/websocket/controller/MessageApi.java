@@ -6,7 +6,6 @@ import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.listener.VisitorListener;
 import com.baodanyun.websocket.model.MessageModel;
 import com.baodanyun.websocket.service.MessageServer;
-import com.baodanyun.websocket.util.AccessControlAllowUtils;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
 import org.apache.commons.lang.StringUtils;
@@ -67,7 +66,6 @@ public class MessageApi extends BaseController {
             response.setMsg("getTagsAll error");
             response.setSuccess(false);
         }
-        AccessControlAllowUtils.access(httpServletResponse);
         Render.r(httpServletResponse, JSONUtil.toJson(response));
     }
 
@@ -94,16 +92,9 @@ public class MessageApi extends BaseController {
             response.setMsg("getTagsAll error");
             response.setSuccess(false);
         }
-        AccessControlAllowUtils.access(httpServletResponse);
         Render.r(httpServletResponse, JSONUtil.toJson(response));
     }
 
-    /**
-     * 留言
-     *
-     * @param message
-     * @param httpServletResponse
-     */
     @RequestMapping(value = "addMessage")
     public void addMessage(MessageModel message, HttpServletResponse httpServletResponse) {
         Response response = new Response();
@@ -122,8 +113,6 @@ public class MessageApi extends BaseController {
             response.setMsg("update error");
             response.setSuccess(false);
         }
-
-        AccessControlAllowUtils.access(httpServletResponse);
         Render.r(httpServletResponse, JSONUtil.toJson(response));
     }
 
