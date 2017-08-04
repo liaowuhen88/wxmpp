@@ -71,30 +71,25 @@ public abstract class VisitorTerminal extends AbstractTerminal {
         EventBusUtils.post(vl);
     }
 
-
-    /**
-     * 客服发给用户的见面信息
-     *
-     * @param
-     * @return
-     */
-    public Msg getMsgHelloToVisitor(AbstractUser customer) {
+    public Msg getMsgHelloToVisitor() {
+        AbstractUser user = this.getAbstractUser();
+        logger.info("user--->" + JSONUtil.toJson(user));
         String body = Config.greetingWord;
-        logger.info(JSONUtil.toJson(customer));
-        String to = getAbstractUser().getId();
-
-
         Msg sendMsg = new Msg(body);
+        String to = user.getId();
+
         String type = Msg.Type.msg.toString();
         Long ct = new Date().getTime();
 
         sendMsg.setType(type);
         sendMsg.setContentType(Msg.MsgContentType.text.toString());
 
-
+        AbstractUser customer = this.getChatNodeAdaptation().getCustomer();
+        if (null != customer) {
         sendMsg.setFrom(customer.getId());
         sendMsg.setIcon(customer.getIcon());
         sendMsg.setFromName(customer.getNickName());
+        }
 
         sendMsg.setTo(to);
         sendMsg.setCt(ct);
