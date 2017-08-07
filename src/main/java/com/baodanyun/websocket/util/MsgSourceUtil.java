@@ -14,7 +14,7 @@ public class MsgSourceUtil {
     private static final LRUCache<String, Integer> cache = new LRUCache<>(1000);
     protected static Logger logger = LoggerFactory.getLogger(MsgSourceUtil.class);
 
-    private static void put(String key, Integer val) {
+    public static void put(String key, Integer val) {
         cache.put(key, val);
     }
 
@@ -30,7 +30,11 @@ public class MsgSourceUtil {
         return get(key);
     }
 
-    private static Integer get(String key) {
+    public static Integer get(String key) {
         return cache.get(key);
+    }
+
+    public static void remove(String key) {
+        cache.remove(key);
     }
 }

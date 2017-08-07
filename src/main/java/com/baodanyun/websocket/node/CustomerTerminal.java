@@ -4,7 +4,9 @@ import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.msg.status.StatusMsg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.enums.MsgStatus;
+import com.baodanyun.websocket.enums.TeminalTypeEnum;
 import com.baodanyun.websocket.util.Config;
+import com.baodanyun.websocket.util.MsgSourceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,6 +74,12 @@ public abstract class CustomerTerminal extends AbstractTerminal {
         sendMsg.setIcon(this.getAbstractUser().getIcon());
         sendMsg.setFromName(this.getAbstractUser().getNickName());
         sendMsg.setMsgType("synchronize");
+
+        Integer uec = MsgSourceUtil.get(sendMsg.getTo()); //uec用户来源
+        if (uec != null) {
+            sendMsg.setSource(uec);
+            sendMsg.setSourceDesc(TeminalTypeEnum.H5.getDesc(uec));
+        }
         return sendMsg;
     }
 

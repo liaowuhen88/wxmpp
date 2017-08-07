@@ -4,12 +4,14 @@ import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.core.common.Common;
+import com.baodanyun.websocket.enums.TeminalTypeEnum;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.LoginModel;
 import com.baodanyun.websocket.node.*;
 import com.baodanyun.websocket.service.OfuserService;
 import com.baodanyun.websocket.service.UserServer;
 import com.baodanyun.websocket.util.JSONUtil;
+import com.baodanyun.websocket.util.MsgSourceUtil;
 import com.baodanyun.websocket.util.Render;
 import com.baodanyun.websocket.util.XMPPUtil;
 import org.apache.commons.lang.StringUtils;
@@ -118,6 +120,7 @@ public class CustomerLogin extends BaseController {
             visitorChatNode.login();
 
             // 用户上线并且通知客服
+            MsgSourceUtil.put(user.getTo() + "@126xmpp", TeminalTypeEnum.UEC.getCode());
             visitorChatNode.online(wn);
 
             request.getSession().setAttribute(Common.USER_KEY, customer);

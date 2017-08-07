@@ -46,22 +46,7 @@ public class WebSocketCustomerTerminal extends CustomerTerminal {
         Msg hello = getMsgHelloToCustomer(abstractUser);
 
         SessionSendUtils.send(this.getAbstractUser(), getSession(), online);
-
-
-        try {
-            Message helloMsgToVisitor = new Message();
-            helloMsgToVisitor.setBody(hello.getContent());
-            helloMsgToVisitor.setFrom(hello.getFrom());
-            helloMsgToVisitor.setType(Message.Type.chat);
-            helloMsgToVisitor.setTo(hello.getTo());
-
-            this.getChatNodeAdaptation().sendMessageTOXmpp(helloMsgToVisitor);
-            logger.info("发送问候给访客" + JSON.toJSONString(helloMsgToVisitor));
-
         SessionSendUtils.send(this.getAbstractUser(), getSession(), hello);//websokect推送客服自己一条仅为知晓
-        } catch (SmackException.NotConnectedException e) {
-            logger.error(e.getMessage());
-        }
 
         return true;
     }

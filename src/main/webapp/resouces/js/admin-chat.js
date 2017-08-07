@@ -189,6 +189,15 @@ xchat.recvMsgEvent = function (json) {
         if (json.source && json.source == 1) {//消息来源是微信则绿色背景
             $(document.getElementById('m' + from)).css('background', 'green');
         }
+        if (json.source && json.source == 3) {//消息来源是UEC
+            var obj = $(document.getElementById(json.to));
+            var myFriendId = $(obj).attr("id");
+            var openId = $(obj).attr("openId");
+            var nickname = $(obj).find('.name').text();
+            xchat.openFriendWindow("changeOffline", myFriendId, nickname, openId);
+
+            $(obj).addClass("active");
+        }
 
     }
 };

@@ -3,8 +3,10 @@ package com.baodanyun.websocket.node.sendUtils;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.enums.TeminalTypeEnum;
+import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.MsgSourceUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.TextMessage;
@@ -33,6 +35,10 @@ public class SessionSendUtils {
                 String content = JSONUtil.toJson(sendMsg);
                 session.sendMessage(new TextMessage(content));
                 flag = true;
+
+                if (String.valueOf(sendMsg.getContent()).equals(Config.greetingWord)) {
+                    MsgSourceUtil.remove(sendMsg.getTo()); //删除标识
+                }
                 logger.info("user {} session {} msg ---" + JSONUtil.toJson(content) + "send to webSocket --->:" + flag, abstractUser.getId(), session.getId());
             }
         } catch (Exception e) {

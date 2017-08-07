@@ -51,5 +51,9 @@ public class LRUCache<K, V> {
     public synchronized Collection<Map.Entry<K, V>> getAll() {
         return new ArrayList<Map.Entry<K, V>>(map.entrySet());
     }
+
+    public synchronized void remove(String key) {
+        map.remove(key);
+    }
 }
 
