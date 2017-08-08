@@ -90,7 +90,7 @@ ORDER BY
         SELECT
         ac.ownerJid 'from',
         ac.withJid 'to',
-        ac.`subject` 'contentType',
+        am.`subject` 'contentType',
         am.direction,
         am.body content,
         am.time ct
