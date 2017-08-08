@@ -1,6 +1,7 @@
 package com.baodanyun.websocket.util;
 
 import com.baodanyun.websocket.alarm.LRUCache;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +36,8 @@ public class MsgSourceUtil {
     }
 
     public static void remove(String key) {
-        cache.remove(key);
+        if (StringUtils.isNotBlank(key)) {
+            cache.remove(key);
+        }
     }
 }

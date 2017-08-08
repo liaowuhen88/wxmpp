@@ -79,10 +79,13 @@ public class CustomerLogin extends BaseController {
      * @return
      */
     @RequestMapping(value = "customerLogin")
-    public ModelAndView customerLogin(LoginModel user, HttpServletRequest request) {
+    public void customerLogin(LoginModel user, HttpServletRequest request, HttpServletResponse response) {
+        Response responseMsg = new Response();
+        responseMsg.setSuccess(true);
+        String cacheKey = ""; //标识是第三方来源的key
+
         //客服必须填写用户名 和 密码
         logger.info("user" + JSONUtil.toJson(user));
-        ModelAndView mv = new ModelAndView();
         try {
             if (StringUtils.isBlank(user.getTo())) {
                 throw new BusinessException("to 参数不能为空");
@@ -109,7 +112,6 @@ public class CustomerLogin extends BaseController {
             }
             customer.setTo(visitor.getId());
 
-
             // 初始化用户终端
             VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
 
@@ -120,23 +122,24 @@ public class CustomerLogin extends BaseController {
             visitorChatNode.login();
 
             // 用户上线并且通知客服
-            MsgSourceUtil.put(user.getTo() + "@126xmpp", TeminalTypeEnum.UEC.getCode());
+            cacheKey = user.getTo() + "@126xmpp";
+            MsgSourceUtil.put(cacheKey, TeminalTypeEnum.UEC.getCode());
             visitorChatNode.online(wn);
-
-            request.getSession().setAttribute(Common.USER_KEY, customer);
-            mv.addObject("user", JSONUtil.toJson(customer));
-            mv.addObject("to", user.getTo() + "@126xmpp");
-            mv.setViewName("/customerSimple");
         } catch (BusinessException e) {
+            responseMsg.setMsg(e.getMessage());
+            responseMsg.setSuccess(false);
+            MsgSourceUtil.remove(cacheKey);
+
             logger.error("error", e);
-            mv.setViewName("/index");
-            mv.addObject("msg", e.getMessage());
         } catch (Exception e) {
+            responseMsg.setMsg(e.getMessage());
+            responseMsg.setSuccess(false);
+            MsgSourceUtil.remove(cacheKey);
+
             logger.error("error", e);
-            mv.setViewName("/index");
-            mv.addObject("msg", "系统异常");
         }
-        return mv;
+
+        Render.r(response, XMPPUtil.buildJson(responseMsg));
     }
 
     /**
