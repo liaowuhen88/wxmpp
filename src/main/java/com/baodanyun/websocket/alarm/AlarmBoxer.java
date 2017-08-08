@@ -21,13 +21,18 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 public class AlarmBoxer {
     protected static final Logger LOGGER = LoggerFactory.getLogger(AlarmBoxer.class);
-
-    private static final AlarmBoxer alarmBoxer = new AlarmBoxer();
-
     private final Map<String, AlarmEvent> alarmMap = new ConcurrentHashMap();
 
     public static synchronized AlarmBoxer getInstance() {
-        return alarmBoxer;
+        return SingletonHolder.INSTANCE;
+    }
+
+    /**
+     * 内部类单例
+     */
+    private static class SingletonHolder {
+        private static final AlarmBoxer INSTANCE = new AlarmBoxer();
+
     }
 
     /**
