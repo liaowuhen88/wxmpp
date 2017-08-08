@@ -24,7 +24,7 @@
 
 
     <resultMap id="ResultMapFromAndTo" type="com.baodanyun.websocket.bean.msg.HistoryMsg" extends="BaseResultMap">
-
+        <result column="contentType" property="contentType" jdbcType="VARCHAR"/>
     </resultMap>
 
 
@@ -103,6 +103,8 @@ ORDER BY
         archiveconversations
         WHERE
         ownerJid = #{ownerJid,jdbcType=BIGINT}
+
+        ORDER BY conversationId DESC
         ) ac
         LEFT JOIN archivemessages am ON ac.conversationId = am.conversationId
         LIMIT 100;

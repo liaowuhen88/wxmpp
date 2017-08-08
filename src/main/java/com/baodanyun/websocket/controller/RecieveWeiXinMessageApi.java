@@ -82,6 +82,9 @@ public class RecieveWeiXinMessageApi extends BaseController {
                 if (!cFlag) {
                     String url = request.getRequestURL().toString();
                     response = getLeaveMessageResponse(visitorChatNode.getCurrentChatNode().getAbstractUser(), url, msg);
+
+                    Render.r(httpServletResponse, JSONUtil.toJson(response)); //客服不在线直接返回
+                    return;
                 } else {
                     response = getOnlineResponse();
                 }
