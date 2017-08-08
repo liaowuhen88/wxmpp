@@ -10,10 +10,7 @@ import com.baodanyun.websocket.model.LoginModel;
 import com.baodanyun.websocket.node.*;
 import com.baodanyun.websocket.service.OfuserService;
 import com.baodanyun.websocket.service.UserServer;
-import com.baodanyun.websocket.util.JSONUtil;
-import com.baodanyun.websocket.util.MsgSourceUtil;
-import com.baodanyun.websocket.util.Render;
-import com.baodanyun.websocket.util.XMPPUtil;
+import com.baodanyun.websocket.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -66,7 +62,7 @@ public class CustomerLogin extends BaseController {
             responseMsg.setSuccess(false);
             logger.error("error", e);
         }
-
+        AccessControlAllowUtils.access(response);
         Render.r(response, XMPPUtil.buildJson(responseMsg));
     }
 
