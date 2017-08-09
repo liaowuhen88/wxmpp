@@ -134,7 +134,7 @@ public class CustomerLogin extends BaseController {
 
             logger.error("error", e);
         }
-
+        AccessControlAllowUtils.access(response);
         Render.r(response, XMPPUtil.buildJson(responseMsg));
     }
 
