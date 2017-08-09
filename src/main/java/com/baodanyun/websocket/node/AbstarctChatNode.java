@@ -179,6 +179,9 @@ public class AbstarctChatNode implements ChatNode {
             }
 
             if (!StringUtils.isEmpty(user.getId()) && xmppServer.isAuthenticated(user.getId())) {
+                if (null == xmppConnection) {
+                    xmppConnection = xmppServer.getXMPPConnection(user.getId());
+                }
                 return true;
             }
             flag = xmppServer.login(this);
