@@ -50,4 +50,20 @@ public class OfuserServiceImpl implements OfuserService {
             throw new BusinessException("用户不存在");
         }
     }
+
+    /**
+     * 根据用户名获取客服
+     *
+     * @param userName
+     * @return
+     */
+    public Ofuser getUserByUsername(String userName) {
+        Ofuser user = null;
+        if (StringUtils.isBlank(userName)) {
+            return user;
+        }
+        user = ofuserMapper.selectByPrimaryKey(userName);
+
+        return user;
+    }
 }
