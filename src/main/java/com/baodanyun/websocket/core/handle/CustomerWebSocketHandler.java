@@ -47,11 +47,19 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
             chatNode = ChatNodeManager.getCustomerXmppNode(au);
 
             wn = chatNode.getNode(webSocketTerminalCustomerFactory.getId(webSocketTerminal));
-            chatNode.receiveFromGod(wn, content);
 
+            if (null == wn) {
+                logger.info("wn is null");
+            } else {
+                chatNode.receiveFromGod(wn, content);
+            }
 
         } catch (Exception e) {
-            chatNode.sendToXmppError(wn);
+            if (null != wn) {
+                chatNode.sendToXmppError(wn);
+            } else {
+                logger.info("wn is null");
+            }
             logger.error("error", e);
         }
     }

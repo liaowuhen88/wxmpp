@@ -84,7 +84,11 @@ public class NewVisitorWebSocketHandler extends VisitorWebSocketHandler {
                     chatNode = ChatNodeManager.getVisitorXmppNode(au);
                     WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au, session);
                     wn = chatNode.getNode(webSocketTerminalVisitorFactory.getId(webSocketTerminal));
-                    chatNode.receiveFromGod(wn, content);
+                    if (null == wn) {
+                        logger.info("wn is null");
+                    } else {
+                        chatNode.receiveFromGod(wn, content);
+                    }
                 }
 
             }
