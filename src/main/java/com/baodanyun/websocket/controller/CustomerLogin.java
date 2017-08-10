@@ -130,7 +130,8 @@ public class CustomerLogin extends BaseController {
 
             // 用户上线并且通知客服
             cacheKey = user.getTo() + "@126xmpp";
-            MsgSourceUtil.put(cacheKey, TeminalTypeEnum.UEC.getCode());
+            MsgSourceUtil.put(cacheKey, TeminalTypeEnum.UEC.getCode()); //标识来源于UEC平台
+
             visitorChatNode.online(wn);
         } catch (BusinessException e) {
             responseMsg.setMsg(e.getMessage());
