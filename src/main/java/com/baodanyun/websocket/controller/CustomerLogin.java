@@ -86,7 +86,10 @@ public class CustomerLogin extends BaseController {
         logger.info("user" + JSONUtil.toJson(user));
         try {
             if (StringUtils.isBlank(user.getTo())) {
-                throw new BusinessException("to 参数不能为空");
+                responseMsg.setSuccess(false);
+                responseMsg.setMsg("to 参数不能为空");
+                Render.r(response, XMPPUtil.buildJson(responseMsg));
+                return;
             }
 
             // 客服处理部分，确保客服在线
@@ -96,6 +99,7 @@ public class CustomerLogin extends BaseController {
                 responseMsg.setSuccess(false);
                 responseMsg.setMsg("客服未登录");
                 Render.r(response, XMPPUtil.buildJson(responseMsg));
+                return;
             }
 
             // 因为已经有客服终端启动，所以可以直接初始化用户
@@ -111,7 +115,7 @@ public class CustomerLogin extends BaseController {
                 responseMsg.setSuccess(false);
                 responseMsg.setMsg("获取用户消息失败");
                 Render.r(response, XMPPUtil.buildJson(responseMsg));
-
+                return;
             }
             customer.setTo(visitor.getId());
 
