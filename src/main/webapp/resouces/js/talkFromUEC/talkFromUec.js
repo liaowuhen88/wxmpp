@@ -13,8 +13,8 @@ function startCustomerTalk(username, to) {
         type: 'POST',
         success: function (data) {
             if (data.code == 0 && !data.success && data.msg == '客服未登录') {
-                url = 'http://kfnew.17doubao.com/kf/api/customer_chat?platform=uec&username=' + username + '&to' + to;
-                window.open(url, "_blank");
+                url = 'http://kfnew.17doubao.com/kf/api/customer_chat?platform=uec&username=' + username + '&to=' + to;
+                window.open(url, "_blank"); //登陆且返回页面
             } else if (data.success) {
                 alert('已接入用户，请到客服后台系统服务用户');
             }
