@@ -1,5 +1,9 @@
 # 客服系统API说明文档
 
+## uec 中心对接客服js文件
+
+http://bj-bdy-public.oss-cn-beijing.aliyuncs.com/kf/js/talkFromUec.js
+
 ## 客服修改密码接口说明
 
 ```

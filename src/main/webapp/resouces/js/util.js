@@ -219,7 +219,7 @@ Utils = (function () {
                     if (item.contentType == 'image') {
                         commentTpl = $('#imgLeft').html();
                     }
-                    if (item.contentType == 'audio') {
+                    else if (item.contentType == 'audio') {
                         commentTpl = $('#audioLeft').html();
                     } else {
                         commentTpl = $('#mleft').html();
