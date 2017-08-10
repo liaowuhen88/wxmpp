@@ -76,6 +76,8 @@ public class CustomerLogin extends BaseController {
      */
     @RequestMapping(value = "customerLogin")
     public void customerLogin(LoginModel user, HttpServletRequest request, HttpServletResponse response) {
+        AccessControlAllowUtils.access(response); //允许跨域
+
         Response responseMsg = new Response();
         responseMsg.setSuccess(true);
         String cacheKey = ""; //标识是第三方来源的key
@@ -91,7 +93,9 @@ public class CustomerLogin extends BaseController {
             Customer customer = customerInit(user);
             CustomerChatNode cx = ChatNodeManager.getCustomerXmppNode(customer);
             if (!cx.isXmppOnline()) {
-                throw new BusinessException("客服未登录");
+                responseMsg.setSuccess(false);
+                responseMsg.setMsg("客服未登录");
+                Render.r(response, XMPPUtil.buildJson(responseMsg));
             }
 
             // 因为已经有客服终端启动，所以可以直接初始化用户
@@ -104,7 +108,10 @@ public class CustomerLogin extends BaseController {
             }
             logger.info(JSONUtil.toJson(visitor));
             if (null == visitor) {
-                throw new BusinessException("获取用户消息失败");
+                responseMsg.setSuccess(false);
+                responseMsg.setMsg("获取用户消息失败");
+                Render.r(response, XMPPUtil.buildJson(responseMsg));
+
             }
             customer.setTo(visitor.getId());
 
@@ -134,7 +141,7 @@ public class CustomerLogin extends BaseController {
 
             logger.error("error", e);
         }
-        AccessControlAllowUtils.access(response);
+
         Render.r(response, XMPPUtil.buildJson(responseMsg));
     }
 
