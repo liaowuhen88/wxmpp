@@ -53,6 +53,9 @@ public class LoginFilter implements Filter {
                 if (uri.startsWith(req.getContextPath() + "/api/customer_chat") || uri.startsWith(req.getContextPath() + "/api/customer/chat")) {
                     logger.info("req.getSession().getAttribute(Common.USER_KEY) is null");
                     ServletUtil.redirect(resp, req.getContextPath() + "/customerlogin");
+                } else {
+                    logger.info(" 非法请求" + uri);
+
                 }
             }
         }
@@ -72,8 +75,9 @@ public class LoginFilter implements Filter {
                 || uri.startsWith(request.getContextPath() + "/visitorlogin")
                 || uri.startsWith(request.getContextPath() + "/api/customerLogin")
                 || uri.startsWith(request.getContextPath() + "/customerlogin")
-                || uri.startsWith(request.getContextPath() + "/doLoginForUecUser")
+                || uri.startsWith(request.getContextPath() + "/api/doLoginForUecUser")
                 || uri.startsWith(request.getContextPath() + "/api/customerAndJoin")
+                || uri.startsWith(request.getContextPath() + "/talkFromUec")
 
                 ) {
             return true;
