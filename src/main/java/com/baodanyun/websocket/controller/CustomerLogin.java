@@ -16,6 +16,8 @@ import com.baodanyun.websocket.service.OfuserService;
 import com.baodanyun.websocket.service.UserServer;
 import com.baodanyun.websocket.util.*;
 import org.apache.commons.lang.StringUtils;
+import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.XMPPException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * Created by yutao on 2016/10/4.
@@ -35,17 +38,14 @@ import javax.servlet.http.HttpServletResponse;
 public class CustomerLogin extends BaseController {
 
     protected static Logger logger = LoggerFactory.getLogger(CustomerApi.class);
-
-    @Autowired
-    private UserServer userServer;
-
-    @Autowired
-    private OfuserService ofuserService;
-
-    @Autowired
-    private AccessWeChatTerminalVisitorFactory accessWeChatTerminalVisitorFactory;
     @Autowired
     OfpropertyService ofpropertyService;
+    @Autowired
+    private UserServer userServer;
+    @Autowired
+    private OfuserService ofuserService;
+    @Autowired
+    private AccessWeChatTerminalVisitorFactory accessWeChatTerminalVisitorFactory;
 
     @RequestMapping(value = "loginApi", method = RequestMethod.POST)
     public void api(LoginModel user, HttpServletRequest request, HttpServletResponse response) {
@@ -126,7 +126,8 @@ public class CustomerLogin extends BaseController {
             }
 
             // 客服处理部分，确保客服在线
-            Customer customer = customerInit(user);
+            Customer customer = customerInitUec(user);
+            logger.info(JSONUtil.toJson(customer));
             CustomerChatNode cx = ChatNodeManager.getCustomerXmppNode(customer);
             if (!cx.isXmppOnline()) {
                 responseMsg.setSuccess(false);
@@ -163,7 +164,7 @@ public class CustomerLogin extends BaseController {
             visitorChatNode.login();
 
             // 用户上线并且通知客服
-            cacheKey = user.getTo() + "@126xmpp";
+            cacheKey = visitor.getId();
             MsgSourceUtil.put(cacheKey, TeminalTypeEnum.UEC.getCode()); //标识来源于UEC平台
 
             visitorChatNode.online(wn);
@@ -216,7 +217,7 @@ public class CustomerLogin extends BaseController {
     /**
      * UEC平台用客户名就可以登陆
      */
-    private void startTalkFromUEC(HttpServletRequest req) throws BusinessException {
+    private void startTalkFromUEC(HttpServletRequest req) throws BusinessException, XMPPException, IOException, SmackException {
         String userName = String.valueOf(req.getParameter("username")); //客服名
         String to = String.valueOf(req.getParameter("to")); //要接入的用户
         Ofuser ofuser = ofuserService.getUserByUsername(userName);
@@ -233,6 +234,9 @@ public class CustomerLogin extends BaseController {
         String password = this.encryptPassword(ofuser); //用户密码名
         loginModel.setPassword(password);
         Customer customer = customerInitUec(loginModel);
+
+        logger.info(JSONUtil.toJson(customer));
+        // CustomerChatNode cx = ChatNodeManager.getCustomerXmppNode(customer);
 
         req.getSession().setAttribute(Common.USER_KEY, customer);
     }

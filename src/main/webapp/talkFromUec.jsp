@@ -34,7 +34,7 @@
             alert('客户名或者用户为空');
             return false;
         }
-        var url = window.base || '' + '/api/customerAndJoin?username=' + username + '&to=' + to;
+        var url = window.base + '/api/customerAndJoin?username=' + username + '&to=' + to;
         $.ajax({
             url: url,
             type: 'POST',
@@ -47,7 +47,7 @@
                     }, 3000);
                 } else {
                     if (data.code == -1) {//客服未登录
-                        url = window.base || '' + '/api/doLoginForUecUser?username=' + username + '&to=' + to;
+                        url = window.base + '/api/doLoginForUecUser?username=' + username + '&to=' + to;
                         window.location.href = url;
                     } else {//异常提示
                         alert(data.msg);
