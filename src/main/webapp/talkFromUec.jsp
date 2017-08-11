@@ -16,6 +16,7 @@
 
 </head>
 <body>
+${msg}
 <div align="center" id="tipDiv"></div>
 </body>
 <script>
@@ -25,8 +26,8 @@
     });
 
     function talk(username, to) {
-        if (!username || !to) {
-            alert('客户名或者用户为空');
+        if (!to) {
+            alert('用户为空');
             return false;
         }
         var url = window.base || '' + '/api/customerAndJoin?username=' + username + '&to=' + to;
