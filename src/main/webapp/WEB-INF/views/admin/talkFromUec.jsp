@@ -29,7 +29,7 @@
             alert('客户名或者用户为空');
             return false;
         }
-        var url = window.base || '' + '/api/talkFromUEC?username=' + username + '&to=' + to;
+        var url = window.base || '' + '/api/customerAndJoin?username=' + username + '&to=' + to;
         $.ajax({
             url: url,
             type: 'POST',
