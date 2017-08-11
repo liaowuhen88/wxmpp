@@ -174,6 +174,6 @@ public class AbstractUser implements Serializable {
     }
 
     public enum UserType {
-        visitor, customer
+        visitor, customer, uec
     }
 }

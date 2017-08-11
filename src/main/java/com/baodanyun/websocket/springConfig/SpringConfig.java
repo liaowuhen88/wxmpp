@@ -38,7 +38,8 @@ import java.util.Map;
         {"com.baodanyun.websocket.service",
                 "com.baodanyun.websocket.controller",
                 "com.baodanyun.websocket.node",
-                "com.baodanyun.websocket.listener"
+                "com.baodanyun.websocket.listener",
+                "com.baodanyun.websocket.filter"
         })
 //加载资源文件
 @PropertySource({"classpath:config.properties"})

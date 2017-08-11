@@ -53,10 +53,10 @@ public class WeChatTerminal extends VisitorTerminal {
                 msg.setTo(from);
 
                 if (null == response) {
-                    msg.setContent("系统消息,微信发送超时，【\"+content+\"】消息发送失败请重新发送");
+                    msg.setContent("系统消息,微信发送超时，【" + content + "】消息发送失败请重新发送");
                 } else {
                     if (StringUtils.isEmpty(response.getReason())) {
-                        msg.setContent("系统消息,微信接口不通，返回信息为空，【\"+content+\"】消息发送失败");
+                        msg.setContent("系统消息,微信接口不通，返回信息为空，【" + content + "】消息发送失败");
                     } else {
                         msg.setContent(response.getReason());
                     }

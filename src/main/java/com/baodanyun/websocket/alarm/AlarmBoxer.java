@@ -32,7 +32,9 @@ public class AlarmBoxer {
      */
     private static class SingletonHolder {
         private static final AlarmBoxer INSTANCE = new AlarmBoxer();
+    }
 
+    private AlarmBoxer() {
     }
 
     /**

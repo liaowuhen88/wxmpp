@@ -1,9 +1,25 @@
 package com.baodanyun.websocket.filter;
 
+import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.core.common.Common;
+import com.baodanyun.websocket.exception.BusinessException;
+import com.baodanyun.websocket.model.LoginModel;
+import com.baodanyun.websocket.model.Ofproperty;
+import com.baodanyun.websocket.model.Ofuser;
+import com.baodanyun.websocket.service.OfpropertyService;
+import com.baodanyun.websocket.service.OfuserService;
+import com.baodanyun.websocket.service.impl.OfuserServiceImpl;
+import com.baodanyun.websocket.util.Blowfish;
 import com.baodanyun.websocket.util.ServletUtil;
+import com.baodanyun.websocket.util.SpringContextUtil;
+import com.baodanyun.websocket.util.XMPPUtil;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -13,11 +29,13 @@ import java.io.IOException;
 /**
  * LoginFilter
  */
+@Component
 public class LoginFilter implements Filter {
     private static Logger logger = LoggerFactory.getLogger(LoginFilter.class);
 
-    public void init(FilterConfig var1) throws ServletException {
+    private static final String PLATFORM = "uec"; //uec平台标识
 
+    public void init(FilterConfig var1) throws ServletException {
     }
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -62,5 +80,4 @@ public class LoginFilter implements Filter {
     public void destroy() {
 
     }
-
 }
