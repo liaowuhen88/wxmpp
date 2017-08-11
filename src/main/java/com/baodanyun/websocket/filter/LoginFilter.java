@@ -71,7 +71,11 @@ public class LoginFilter implements Filter {
                 || uri.startsWith(request.getContextPath() + "/sockjs/newVisitor")
                 || uri.startsWith(request.getContextPath() + "/visitorlogin")
                 || uri.startsWith(request.getContextPath() + "/api/customerLogin")
-                || uri.startsWith(request.getContextPath() + "/customerlogin")) {
+                || uri.startsWith(request.getContextPath() + "/customerlogin")
+                || uri.startsWith(request.getContextPath() + "/doLoginForUecUser")
+                || uri.startsWith(request.getContextPath() + "/api/customerAndJoin")
+
+                ) {
             return true;
         }
         return false;

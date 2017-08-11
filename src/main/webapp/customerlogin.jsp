@@ -68,17 +68,17 @@
     <form id="signInBtnForm">
         <input type="hidden" name="type" value="customer">
         <label>
-            <input type="text" name="username" value="111111" id="username" placeholder="账号">
+            <input type="text" name="username" value="hushuanyue" id="username" placeholder="账号">
         </label>
         <label>
-            <input type="password" name="password" value="111111" id="password" placeholder="密码">
+            <input type="password" name="password" value="hsy111111" id="password" placeholder="密码">
         </label>
 
         <label>
             <select id="accessType" name="accessType">
                 <option value="">请选择是否接入用户</option>
                 <option value="1">不接入用户</option>
-                <option value="2">接入用户</option>
+                <option value="2" selected>接入用户</option>
             </select>
         </label>
 
