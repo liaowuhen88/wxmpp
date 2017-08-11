@@ -99,7 +99,7 @@ public class CustomerLogin extends BaseController {
      * @param request
      * @param response
      */
-    @RequestMapping(value = "talkFromUEC")
+    @RequestMapping(value = "customerAndJoin")
     public void talkFromUEC(LoginModel user, HttpServletRequest request, HttpServletResponse response) {
         AccessControlAllowUtils.access(response); //允许跨域
 
