@@ -21,7 +21,12 @@
 <script>
 
     $(function () {
-        talk('${user.username}', '${user.to}');
+        var notExistsCustomer = '${notExistsCustomer}';
+        if (notExistsCustomer) {//客服不存在
+            $('#tipDiv').html(notExistsCustomer);
+        } else {
+            talk('${user.username}', '${user.to}');
+        }
     });
 
     function talk(username, to) {

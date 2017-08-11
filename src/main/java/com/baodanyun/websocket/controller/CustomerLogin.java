@@ -14,7 +14,6 @@ import com.baodanyun.websocket.node.*;
 import com.baodanyun.websocket.service.OfpropertyService;
 import com.baodanyun.websocket.service.OfuserService;
 import com.baodanyun.websocket.service.UserServer;
-import com.baodanyun.websocket.service.impl.OfuserServiceImpl;
 import com.baodanyun.websocket.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -84,10 +83,19 @@ public class CustomerLogin extends BaseController {
      */
     @RequestMapping(value = "customerLogin")
     public ModelAndView customerLogin(LoginModel user, HttpServletRequest request) throws BusinessException {
-        //客服必须填写用户名 和 密码
-        logger.info("user" + JSONUtil.toJson(user));
+        String userName = String.valueOf(request.getParameter("username")); //客服名
+        String to = String.valueOf(request.getParameter("to")); //要接入的用户
+
         ModelAndView mv = new ModelAndView();
-        mv.addObject("user", user);
+        Ofuser ofuser = ofuserService.getUserByUsername(userName);
+        if (ofuser == null) {
+            mv.addObject("notExistsCustomer", "用户[" + userName + "]不存在");
+        } else {
+            //客服必须填写用户名 和 密码
+            logger.info("user" + JSONUtil.toJson(user));
+            mv.addObject("user", user);
+        }
+
         mv.setViewName("/talkFromUec");
         return mv;
     }
@@ -187,21 +195,33 @@ public class CustomerLogin extends BaseController {
     @RequestMapping(value = "doLoginForUecUser")
     public ModelAndView talkFromUEC(LoginModel user, HttpServletRequest request) {
         ModelAndView mv = new ModelAndView();
-        this.startTalkFromUEC(request);
+        try {
+            this.startTalkFromUEC(request);
+            mv.setViewName("redirect:customer_chat");
+        } catch (BusinessException e) {
+            logger.error("error", e);
+            mv.addObject("msg", e.getMessage());
+            mv.setViewName("/talkFromUec");
 
-        mv.setViewName("redirect:customer_chat");
+        } catch (Exception e) {
+            logger.error("error", e);
+            mv.addObject("msg", "系统异常");
+            mv.setViewName("/talkFromUec");
+
+        }
+
         return mv;
     }
 
     /**
      * UEC平台用客户名就可以登陆
      */
-    private void startTalkFromUEC(HttpServletRequest req) {
+    private void startTalkFromUEC(HttpServletRequest req) throws BusinessException {
         String userName = String.valueOf(req.getParameter("username")); //客服名
         String to = String.valueOf(req.getParameter("to")); //要接入的用户
         Ofuser ofuser = ofuserService.getUserByUsername(userName);
         if (ofuser == null) {
-            return;
+            throw new BusinessException("账号[" + userName + "]不存在");
         }
 
         LoginModel loginModel = new LoginModel();
