@@ -26,10 +26,6 @@ ${msg}
     });
 
     function talk(username, to) {
-        if (!to) {
-            alert('用户为空');
-            return false;
-        }
         var url = window.base || '' + '/api/customerAndJoin?username=' + username + '&to=' + to;
         $.ajax({
             url: url,
