@@ -16,16 +16,24 @@
 
 </head>
 <body>
-${msg}
 <div align="center" id="tipDiv"></div>
 </body>
 <script>
 
     $(function () {
-        talk('${user.username}', '${user.to}');
+        var notExistsCustomer = '${notExistsCustomer}';
+        if (notExistsCustomer) {//客服不存在
+            $('#tipDiv').html(notExistsCustomer);
+        } else {
+            talk('${user.username}', '${user.to}');
+        }
     });
 
     function talk(username, to) {
+        if (!username || !to) {
+            alert('客户名或者用户为空');
+            return false;
+        }
         var url = window.base || '' + '/api/customerAndJoin?username=' + username + '&to=' + to;
         $.ajax({
             url: url,

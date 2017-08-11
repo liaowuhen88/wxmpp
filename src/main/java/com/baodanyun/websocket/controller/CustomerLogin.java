@@ -83,10 +83,19 @@ public class CustomerLogin extends BaseController {
      */
     @RequestMapping(value = "customerLogin")
     public ModelAndView customerLogin(LoginModel user, HttpServletRequest request) throws BusinessException {
-        //客服必须填写用户名 和 密码
-        logger.info("user" + JSONUtil.toJson(user));
+        String userName = String.valueOf(request.getParameter("username")); //客服名
+        String to = String.valueOf(request.getParameter("to")); //要接入的用户
+
         ModelAndView mv = new ModelAndView();
-        mv.addObject("user", user);
+        Ofuser ofuser = ofuserService.getUserByUsername(userName);
+        if (ofuser == null) {
+            mv.addObject("notExistsCustomer", "用户[" + userName + "]不存在");
+        } else {
+            //客服必须填写用户名 和 密码
+            logger.info("user" + JSONUtil.toJson(user));
+            mv.addObject("user", user);
+        }
+
         mv.setViewName("/talkFromUec");
         return mv;
     }
