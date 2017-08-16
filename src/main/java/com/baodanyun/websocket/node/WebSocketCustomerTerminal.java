@@ -46,7 +46,7 @@ public class WebSocketCustomerTerminal extends CustomerTerminal {
         Msg hello = getMsgHelloToCustomer(abstractUser);
 
         SessionSendUtils.send(this.getAbstractUser(), getSession(), online);
-        SessionSendUtils.send(this.getAbstractUser(), getSession(), hello);//websokect推送客服自己一条仅为知晓
+        //SessionSendUtils.send(this.getAbstractUser(), getSession(), hello);//websokect推送客服自己一条仅为知晓(8月16不再显示)
 
         return true;
     }
