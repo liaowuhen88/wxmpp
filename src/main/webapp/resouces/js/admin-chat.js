@@ -813,7 +813,21 @@ xchat.claimsComb = function (data) {
         } else {
             val.doneTime = '';
         }
-        html += '<li><span class="tag">理赔单号:</span>' + val.applycode + '</li>';
+        html += '<li><span class="tag">理赔单号:</span><a href="#" target="_blank">' + val.applycode + '</a></li>';
+
+        //根据接口返回的process_type=1走新流程否则老流程(分为两个连接)
+        var processType = val.processType;
+        console.log(val);
+        var href = '';
+        if (processType != undefined && (processType == null || processType == '')) {//老流程
+            href = 'http://qd.17doubao.com/claims/search/outlinktoClaimsDetials/' + val.applyId;
+        } else if (processType && processType == 1) {//新理赔接口
+            href = 'http://qd.17doubao.com/claimsV4/claimsSearch/toclaimsSearchDetail/' + val.applyId;
+        } else {
+            href = 'javascript:void(0)';
+        }
+        html = html.replace('#', href);
+
         html += '<li><span class="tag">承保公司:</span>' + val.insuranceCompany + '</li>';
         html += '<li><span class="tag">申请人姓名:</span>' + val.applyPerson + '</li>';
         html += '<li><span class="tag">受益人姓名:</span>' + val.dangerPerson + '</li>';
@@ -873,7 +887,9 @@ xchat.orderComb = function (data) {
             default:
                 val.isMarried = '保密';
         }
-        html += '<li><span class="tag">套餐名称:</span>' + val.caseName + '</li>';
+        html += '<li><span class="tag">套餐名称:</span><a target="_blank" href="http://qd.17doubao.com/examinationProject/toseeEditTJProgram/#pid#">' + val.caseName + '</a></li>';
+        html = html.replace("#pid#", val.pid || 0);
+
         html += '<li><span class="tag">开始日期:</span>' + val.startTime + '</li>';
         html += '<li><span class="tag">结束日期:</span>' + val.endTime + '</li>';
         html += '<li><span class="tag">性别:</span>' + val.gender + '</li>';
@@ -904,8 +920,11 @@ xchat.contractComb = function (data) {
         } else {
             item.expirydate = '';
         }
-        html += '<li><span class="tag">合同名称4:</span>' + item.name + '</li>';
-        html += '<li><span class="tag">合同编号:</span>' + item.code + '</li>';
+        html += '<li><span class="tag">合同名称:</span><a href="http://qd.17doubao.com/kf/contractmanager/outlinktoenContractDetil/#id#" target="_blank">' + item.name + '</a></li>';
+        html += '<li><span class="tag">合同编号:</span><a href="http://qd.17doubao.com/kf/contractmanager/outlinktoenContractDetil/#id#" target="_blank">' + item.code + '</a></li>';
+        //通过合同编号直接打开渠道系统
+        html = html.replace(/#id#/g, item.id);
+
         html += '<li><span class="tag">生效日期:</span>' + item.effectivedate + '</li>';
         html += '<li><span class="tag">失效日期:</span>' + item.expirydate + '</li>';
         html += '<li><span class="tag">总保费合计:</span>' + item.money + '</li>';

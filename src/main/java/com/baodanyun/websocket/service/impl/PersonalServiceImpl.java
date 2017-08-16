@@ -43,7 +43,7 @@ public class PersonalServiceImpl implements PersonalService {
         if (StringUtils.isBlank(userInfo) && null != uid) {
             RequestBean requestBean = new RequestBean(uid);
             userInfo = KdtApiClient.postJson(KdtApiClient.APiMethods.getUserInfo.getValue(), requestBean);
-            cacheService.setOneDay(CommonConfig.USER_INFO_KEY + uid, userInfo);
+            cacheService.setFiveMin(CommonConfig.USER_INFO_KEY + uid, userInfo);
         }
 
         if (!StringUtils.isEmpty(userInfo)) {
@@ -167,7 +167,7 @@ public class PersonalServiceImpl implements PersonalService {
         if (StringUtils.isBlank(orderInfo)) {
             RequestBean requestBean = new RequestBean(uid);
             orderInfo = KdtApiClient.postJson(KdtApiClient.APiMethods.getOrderInfo.getValue(), requestBean);
-            cacheService.setOneDay(CommonConfig.USER_ORDER_KEY + uid, orderInfo);
+            cacheService.setFiveMin(CommonConfig.USER_ORDER_KEY + uid, orderInfo);
 
         }
 
@@ -203,7 +203,7 @@ public class PersonalServiceImpl implements PersonalService {
         if (StringUtils.isBlank(claimsInfo)) {
             RequestBean requestBean = new RequestBean(uid);
             claimsInfo = KdtApiClient.postJson(KdtApiClient.APiMethods.getClaimsInfo.getValue(), requestBean);
-            cacheService.setOneDay(CommonConfig.USER_CLAIMS_KEY + uid, claimsInfo);
+            cacheService.setFiveMin(CommonConfig.USER_CLAIMS_KEY + uid, claimsInfo);
 
         }
 
@@ -237,7 +237,7 @@ public class PersonalServiceImpl implements PersonalService {
         if (StringUtils.isBlank(contractInfo)) {
             RequestBean requestBean = new RequestBean(uid);
             contractInfo = KdtApiClient.postJson(KdtApiClient.APiMethods.getContract.getValue(), requestBean);
-            cacheService.setOneDay(CommonConfig.USER_CONTRACT_KEY + uid, contractInfo);
+            cacheService.setFiveMin(CommonConfig.USER_CONTRACT_KEY + uid, contractInfo);
 
         }
 
