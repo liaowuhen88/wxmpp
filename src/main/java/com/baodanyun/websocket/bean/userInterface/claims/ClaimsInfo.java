@@ -15,6 +15,10 @@ public class ClaimsInfo {
     private String handleStatus;//处理状态
     private Long uid;
 
+    private Integer processType;
+
+    private Long applyId;
+
     public Long getUid() {
         return uid;
     }
@@ -101,6 +105,22 @@ public class ClaimsInfo {
 
     public void setHandleStatus(String handleStatus) {
         this.handleStatus = handleStatus;
+    }
+
+    public Integer getProcessType() {
+        return processType;
+    }
+
+    public void setProcessType(Integer processType) {
+        this.processType = processType;
+    }
+
+    public Long getApplyId() {
+        return applyId;
+    }
+
+    public void setApplyId(Long applyId) {
+        this.applyId = applyId;
     }
 
     @Override
