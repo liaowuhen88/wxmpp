@@ -13,7 +13,7 @@ import java.util.Date;
 /**
  * Created by liaowuhen on 2017/3/13.
  */
-@Service
+@Service("cacheService")
 public class MemCacheServiceImpl implements CacheService{
 
     private static final Logger logger = LoggerFactory.getLogger(MemCacheServiceImpl.class);

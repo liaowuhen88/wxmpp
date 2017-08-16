@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -34,7 +35,9 @@ import java.util.Map;
 @Service
 public class PersonalServiceImpl implements PersonalService {
     protected static Logger logger = LoggerFactory.getLogger(CustomerApi.class);
+
     @Autowired
+    @Qualifier(value = "nullMemCacheServiceImpl")
     private CacheService cacheService;
 
     @Override
@@ -43,7 +46,7 @@ public class PersonalServiceImpl implements PersonalService {
         if (StringUtils.isBlank(userInfo) && null != uid) {
             RequestBean requestBean = new RequestBean(uid);
             userInfo = KdtApiClient.postJson(KdtApiClient.APiMethods.getUserInfo.getValue(), requestBean);
-            cacheService.setFiveMin(CommonConfig.USER_INFO_KEY + uid, userInfo);
+            cacheService.setOneDay(CommonConfig.USER_INFO_KEY + uid, userInfo);
         }
 
         if (!StringUtils.isEmpty(userInfo)) {
@@ -167,7 +170,7 @@ public class PersonalServiceImpl implements PersonalService {
         if (StringUtils.isBlank(orderInfo)) {
             RequestBean requestBean = new RequestBean(uid);
             orderInfo = KdtApiClient.postJson(KdtApiClient.APiMethods.getOrderInfo.getValue(), requestBean);
-            cacheService.setFiveMin(CommonConfig.USER_ORDER_KEY + uid, orderInfo);
+            cacheService.setOneDay(CommonConfig.USER_ORDER_KEY + uid, orderInfo);
 
         }
 
@@ -203,7 +206,7 @@ public class PersonalServiceImpl implements PersonalService {
         if (StringUtils.isBlank(claimsInfo)) {
             RequestBean requestBean = new RequestBean(uid);
             claimsInfo = KdtApiClient.postJson(KdtApiClient.APiMethods.getClaimsInfo.getValue(), requestBean);
-            cacheService.setFiveMin(CommonConfig.USER_CLAIMS_KEY + uid, claimsInfo);
+            cacheService.setOneDay(CommonConfig.USER_CLAIMS_KEY + uid, claimsInfo);
 
         }
 
@@ -237,7 +240,7 @@ public class PersonalServiceImpl implements PersonalService {
         if (StringUtils.isBlank(contractInfo)) {
             RequestBean requestBean = new RequestBean(uid);
             contractInfo = KdtApiClient.postJson(KdtApiClient.APiMethods.getContract.getValue(), requestBean);
-            cacheService.setFiveMin(CommonConfig.USER_CONTRACT_KEY + uid, contractInfo);
+            cacheService.setOneDay(CommonConfig.USER_CONTRACT_KEY + uid, contractInfo);
 
         }
 
