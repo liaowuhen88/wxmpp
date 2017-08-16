@@ -71,7 +71,7 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
     }
 
     public void sendToVisitor(AbstractUser visitor) {
-        try {
+        /*try {
             Message helloMsgToVisitor = new Message();
             helloMsgToVisitor.setBody(Config.greetingWord);
             helloMsgToVisitor.setFrom(this.getAbstractUser().getId());
@@ -83,7 +83,7 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
 
         } catch (SmackException.NotConnectedException e) {
             logger.error(e.getMessage());
-        }
+        }*/
     }
     public boolean joinQueue(VisitorChatNode visitorChatNode) {
         ConversationCustomer cc = new ConversationCustomer();
