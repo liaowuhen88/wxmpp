@@ -1,9 +1,8 @@
 .idea
 *.class
-
-# Package Files #
+*.iml
 *.jar
 *.war
 *.ear
-kf.iml
 target
+*.svn
