@@ -36,9 +36,7 @@ public class SessionSendUtils {
                 session.sendMessage(new TextMessage(content));
                 flag = true;
 
-                if (String.valueOf(sendMsg.getContent()).equals(Config.greetingWord)) {
-                    MsgSourceUtil.remove(sendMsg.getTo()); //删除标识
-                }
+                MsgSourceUtil.remove(sendMsg.getFrom()); //删除从UEC接入的用户缓存标识
                 logger.info("user {} session {} msg ---" + JSONUtil.toJson(content) + "send to webSocket --->:" + flag, abstractUser.getId(), session.getId());
             }
         } catch (Exception e) {
