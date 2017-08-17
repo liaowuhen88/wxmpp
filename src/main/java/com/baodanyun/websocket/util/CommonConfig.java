@@ -25,6 +25,8 @@ public class CommonConfig {
     public static final String MSG_SOURCE_H5 = "010901"; //消息来源于H5
     public static final String MSG_SOURCE_WE_CHAT_ACTIVE = "010801"; //用户消息主动从来源于微信
     public static final String MSG_SOURCE_WE_CHAT_PASSIVE = "010601"; //用户被动从微信进入
+    public static final String MSG_SOURCE_kf = "0110"; //坐席客服回复用户消息
+
 
 
     // 缓存常量

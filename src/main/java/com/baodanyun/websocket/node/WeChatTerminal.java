@@ -70,11 +70,19 @@ public class WeChatTerminal extends VisitorTerminal {
                  */
             } else {
                 we.setMsgStatus((byte) 1);
+
+                //坐席客服回复用户消息
+                VisitorReciveMsgEvent msgEvent = new VisitorReciveMsgEvent(this.getAbstractUser(),
+                        this.getChatNodeAdaptation().getAbstractUser(), msg.getContent(), CommonConfig.MSG_SOURCE_H5);
+                EventBusUtils.post(msgEvent);
+
             }
             we.setContent(content);
             we.setType("send");
+
             SendMsgToWeChatEvent sme = new SendMsgToWeChatEvent(we);
             EventBusUtils.post(sme);
+
         } catch (Exception e) {
             logger.error("error", "", e);
         }
