@@ -40,7 +40,19 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
 
     @Override
     public boolean sendMsgToGod(Msg msg) {
-        return SessionSendUtils.send(this.getAbstractUser(), getSession(), msg);
+        boolean flag = SessionSendUtils.send(this.getAbstractUser(), getSession(), msg);
+
+        if (flag) {
+            //坐席客服回复用户消息
+            VisitorReciveMsgEvent msgEvent = new VisitorReciveMsgEvent(this.getAbstractUser(),
+                    this.getChatNodeAdaptation().getAbstractUser(), msg.getContent(), CommonConfig.MSG_SOURCE_H5);
+            EventBusUtils.post(msgEvent);
+        } else {
+            logger.info("发送消息失败{}", msg.getId());
+        }
+
+
+        return flag;
     }
 
     @Override
