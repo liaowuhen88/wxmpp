@@ -42,6 +42,13 @@ public abstract class CustomerTerminal extends AbstractTerminal {
         }
         statusSysMsg.setStatus(status);
         statusSysMsg.setTo(this.getAbstractUser().getId());
+
+        Integer uec = MsgSourceUtil.get(visitor.getId()); //uec用户来源
+        if (uec != null) {
+            statusSysMsg.setSource(uec);
+            statusSysMsg.setSourceDesc(TeminalTypeEnum.H5.getDesc(uec));
+        }
+
         return statusSysMsg;
     }
 

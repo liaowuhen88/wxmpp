@@ -157,6 +157,7 @@ xchat.closeFriendWindow = function () {
 
 //接收到消息
 xchat.recvMsgEvent = function (json) {
+    debugger;
     // 是否打开当前窗口
     console.log(json)
     if (json.from != window.destJid) {
@@ -198,7 +199,6 @@ xchat.recvMsgEvent = function (json) {
 
             $(obj).addClass("active");
         }
-
     }
 };
 
@@ -341,7 +341,20 @@ xchat.onlineQueueSuccessStatusHandelEvent = function (json) {
         json.onlineStatus = 'online';
         json.time = myUtils.formatDate(json.loginTime);
         myUtils.renderDivPrepend('onlinefriendListTpl', json, 'friendList');
+
     })
+
+    if (json.source && json.source == 3) {//消息来源是UEC打开聊天窗口
+        document.getElementById("msgTipAudio").play();//提示音
+
+        var obj = $(document.getElementById(json.from));
+        var myFriendId = $(obj).attr("id");
+        var openId = $(obj).attr("openId");
+        var nickname = $(obj).find('.name').text();
+        xchat.openFriendWindow("changeOffline", myFriendId, nickname, openId);
+
+        $(obj).addClass("active");
+    }
 };
 //等待队列
 xchat.waitQueueSuccessStatusHandelEvent = function (json) {
@@ -817,14 +830,13 @@ xchat.claimsComb = function (data) {
 
         //根据接口返回的process_type=1走新流程否则老流程(分为两个连接)
         var processType = val.processType;
-        console.log(val);
         var href = '';
         if (processType == undefined || processType == null || processType == '') {//老流程
             href = 'http://qd.17doubao.com/claims/search/outlinktoClaimsDetials/' + val.applyId;
         } else if (processType && processType == 1) {//新理赔接口
-            href = 'http://qd.17doubao.com/claimsV4/claimsSearch/toclaimsSearchDetail/' + val.applyId;
+            href = 'http://qd.17doubao.com/claimsV4/claimsSearch/outlinktoclaimsSearchDetail/' + val.applyId;
         } else {
-            href = 'javascript:void(0)';
+            href = 'javascript:void(0)'; //参数无效禁止链接
         }
         html = html.replace('#', href);
 
