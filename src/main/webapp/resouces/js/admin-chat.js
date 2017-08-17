@@ -819,7 +819,7 @@ xchat.claimsComb = function (data) {
         var processType = val.processType;
         console.log(val);
         var href = '';
-        if (processType != undefined && (processType == null || processType == '')) {//老流程
+        if (processType == undefined || processType == null || processType == '') {//老流程
             href = 'http://qd.17doubao.com/claims/search/outlinktoClaimsDetials/' + val.applyId;
         } else if (processType && processType == 1) {//新理赔接口
             href = 'http://qd.17doubao.com/claimsV4/claimsSearch/toclaimsSearchDetail/' + val.applyId;
