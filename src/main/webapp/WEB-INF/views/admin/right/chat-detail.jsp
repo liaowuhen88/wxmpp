@@ -31,9 +31,10 @@
 
             </div>
             <div class="modal_body modal_scroll" id="tabContentList" style="max-height: 700px;">
-                <div class="iframe-info active">
-                    <iframe src="<%=request.getContextPath()%>/resouces/exam/index.html" frameborder="0"></iframe>
-                </div>
+                <%-- <div class="iframe-info active">
+                     <iframe src="<%=request.getContextPath()%>/resouces/exam/index.html" frameborder="0"></iframe>
+                 </div>--%>
+                <div class="modal_body modal_scroll active" id="cardListContainer"></div>
 
                 <div class="modal_body modal_scroll" id="claimsContainer"></div>
                 <div class="modal_body modal_scroll" id="contractsContainer"></div>
