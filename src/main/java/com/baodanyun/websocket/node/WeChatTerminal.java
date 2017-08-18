@@ -73,7 +73,7 @@ public class WeChatTerminal extends VisitorTerminal {
 
                 //坐席客服回复用户消息
                 VisitorReciveMsgEvent msgEvent = new VisitorReciveMsgEvent(this.getAbstractUser(),
-                        this.getChatNodeAdaptation().getAbstractUser(), msg.getContent(), CommonConfig.MSG_SOURCE_H5);
+                        this.getChatNodeAdaptation().getAbstractUser(), msg.getContent(), CommonConfig.MSG_SOURCE_kf);
                 EventBusUtils.post(msgEvent);
 
             }

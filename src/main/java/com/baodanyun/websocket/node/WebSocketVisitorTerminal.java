@@ -45,7 +45,7 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
         if (flag) {
             //坐席客服回复用户消息
             VisitorReciveMsgEvent msgEvent = new VisitorReciveMsgEvent(this.getAbstractUser(),
-                    this.getChatNodeAdaptation().getAbstractUser(), msg.getContent(), CommonConfig.MSG_SOURCE_H5);
+                    this.getChatNodeAdaptation().getAbstractUser(), msg.getContent(), CommonConfig.MSG_SOURCE_kf);
             EventBusUtils.post(msgEvent);
         } else {
             logger.info("发送消息失败{}", msg.getId());
