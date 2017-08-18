@@ -1,5 +1,6 @@
 package com.baodanyun.websocket.controller;
 
+import com.baodanyun.robot.common.KeywordsUtils;
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
@@ -59,13 +60,16 @@ public class RecieveWeiXinMessageApi extends BaseController {
 
     @RequestMapping(value = "receiveMsg")
     public void getMessageByCId(HttpServletRequest request, HttpServletResponse httpServletResponse) {
-
-
         Response response;
         try {
             String body = HttpServletRequestUtils.getBody(request);
             Msg msg = msg(body);
             msg.setSource(TeminalTypeEnum.WE_CHAT.getCode()); //消息来源是微信
+
+            if (KeywordsUtils.checkKeywords(msg)) {//存在机器人关键字进入机器人流程
+
+                return;
+            }
 
             VisitorChatNode visitorChatNode = initVisitorChatNode(msg);
 
