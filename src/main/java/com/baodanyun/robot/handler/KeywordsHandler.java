@@ -40,10 +40,10 @@ public class KeywordsHandler extends AbstractRobotHandler {
             msg.setContent(RobotConstant.SUCCESS_TIP);
             super.sendWechatTip(msg); //微信提示
 
-            CacheService cacheService = SpringContextUtil.getBean("cacheService", MemCacheServiceImpl.class);
-            cacheService.remove(RobotConstant.ROBOT_KEYP_REFIX);
-        } else if (content.equals(RobotConstant.CLOSE)) {//关闭重新申请,撤销
+            //写库
 
+            CacheService cacheService = SpringContextUtil.getBean("cacheService", MemCacheServiceImpl.class);
+            cacheService.remove(RobotConstant.ROBOT_KEYP_REFIX + message.getId());
         } else {
             if (getNextRobotHandler() != null)
                 getNextRobotHandler().flow(message);

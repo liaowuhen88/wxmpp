@@ -1,8 +1,8 @@
 package com.baodanyun.robot.service;
 
+import com.baodanyun.robot.handler.CancelHandler;
 import com.baodanyun.robot.handler.EndFlowHandler;
 import com.baodanyun.robot.handler.KeywordsHandler;
-import com.baodanyun.robot.handler.WriteDbHandler;
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.msg.Msg;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +29,8 @@ public class WeChatRobotService implements RobotService {
 
         if (robotCheckerService.beginFlow(msg)) {
             EndFlowHandler endFlowHandler = new EndFlowHandler();
-            WriteDbHandler writeDbHandler = new WriteDbHandler.Builder().nextHandler(endFlowHandler).build();
-            KeywordsHandler keywordsHandler = new KeywordsHandler.Builder().nextHandler(writeDbHandler).build();
+            CancelHandler cancelHandler = new CancelHandler.Builder().nextHandler(endFlowHandler).build();
+            KeywordsHandler keywordsHandler = new KeywordsHandler.Builder().nextHandler(cancelHandler).build();
 
             keywordsHandler.flow(msg);
         }

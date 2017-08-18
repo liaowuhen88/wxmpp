@@ -9,25 +9,23 @@ import com.baodanyun.websocket.util.SpringContextUtil;
 /**
  * 消息记录到库
  */
-public class WriteDbHandler extends AbstractRobotHandler {
+public class WritDBHandler extends AbstractRobotHandler {
 
-    public WriteDbHandler() {
+    public WritDBHandler() {
     }
 
-    public WriteDbHandler(Builder builder) {
+    public WritDBHandler(Builder builder) {
         this.nextRobotHandler = builder.nextHandler;
     }
 
     @Override
     public void flow(Msg message) {
-        if (!message.getContent().equals(RobotConstant.CLOSE)) {//非关闭
-            Msg msg = new Msg();
-            msg.setOpenId(message.getOpenId());
-            msg.setFrom(message.getOpenId());
-            msg.setType("text");
-            msg.setContentType("text");
-            msg.setContent(RobotConstant.HAS_REGIST_TIP);
-            super.sendWechatTip(msg); //微信提示
+        if (message.getContent().equals(RobotConstant.FINISH)) {//完成上传则更新记录
+            CacheService cacheService = SpringContextUtil.getBean("cacheService", MemCacheServiceImpl.class);
+            Msg cacheMsg = (Msg) cacheService.get(RobotConstant.ROBOT_KEYP_REFIX + message.getId());
+            String serialNum = cacheMsg.getSerialNumber();
+
+            //根据批次号更新
         } else {
             if (getNextRobotHandler() != null)
                 getNextRobotHandler().flow(message);
@@ -42,8 +40,8 @@ public class WriteDbHandler extends AbstractRobotHandler {
             return this;
         }
 
-        public WriteDbHandler build() {
-            return new WriteDbHandler(this);
+        public WritDBHandler build() {
+            return new WritDBHandler(this);
         }
     }
 

@@ -88,9 +88,8 @@ public class RobotCheckerService {
         }
     }
 
-
     /**
-     * 用户是否注册
+     * 用户是否已登陆
      *
      * @param id
      * @return
