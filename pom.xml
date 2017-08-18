@@ -586,7 +586,13 @@
 			<version>2.9.9</version>
 		</dependency>
 
+		<!-- fasterxml end -->
 
+		<dependency>
+			<groupId>com.doubao.open</groupId>
+			<artifactId>doubao-open-client</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 </project>
