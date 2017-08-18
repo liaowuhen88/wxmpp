@@ -121,7 +121,17 @@
 		</profile>
 
 	</profiles>
+	<repositories>
+		<repository>
+			<id>thirdparty</id>
+			<url>http://repo.baodanyun-inc.com:8011/nexus/content/repositories/doubao-releases</url>
+		</repository>
 
+		<repository>
+			<id>snapshots</id>
+			<url>http://repo.baodanyun-inc.com:8011/nexus/content/repositories/doubao-snapshots</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<finalName>kf</finalName>
@@ -587,7 +597,6 @@
 		</dependency>
 
 		<!-- fasterxml end -->
-
 		<dependency>
 			<groupId>com.doubao.open</groupId>
 			<artifactId>doubao-open-client</artifactId>
