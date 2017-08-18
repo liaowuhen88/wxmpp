@@ -16,8 +16,8 @@
             <div class="modal_header">
                 <span class="modal_close">X</span>
                 <ul class="tab-title-list" id="tabTitleList">
-                    <%--<li class="item active">体检报告</li>--%>
-                    <li class="item active" id="chatClaimsBtn">理赔</li>
+                    <li class="item" id="chatCardBtn" active>卡单</li>
+                    <li class="item" id="chatClaimsBtn">理赔</li>
                     <li class="item" id="chatContractsBtn">合同</li>
                     <li class="item" id="chatOrderBtn">订单</li>
                 </ul>
