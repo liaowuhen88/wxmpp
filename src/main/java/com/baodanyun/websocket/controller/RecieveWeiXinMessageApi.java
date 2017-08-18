@@ -1,6 +1,6 @@
 package com.baodanyun.websocket.controller;
 
-import com.baodanyun.robot.common.KeywordsUtils;
+import com.baodanyun.robot.service.RobotService;
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
@@ -21,6 +21,7 @@ import org.jivesoftware.smack.XMPPException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -58,6 +59,10 @@ public class RecieveWeiXinMessageApi extends BaseController {
      */
     private String keywords = "@客服";
 
+    @Autowired
+    @Qualifier("weChatRobotService")
+    private RobotService robotService;
+
     @RequestMapping(value = "receiveMsg")
     public void getMessageByCId(HttpServletRequest request, HttpServletResponse httpServletResponse) {
         Response response;
@@ -66,8 +71,8 @@ public class RecieveWeiXinMessageApi extends BaseController {
             Msg msg = msg(body);
             msg.setSource(TeminalTypeEnum.WE_CHAT.getCode()); //消息来源是微信
 
-            if (KeywordsUtils.checkKeywords(msg)) {//存在机器人关键字进入机器人流程
-
+            Response robotRes = robotService.executeRobotFlow(msg);
+            if (robotRes.isSuccess()) {//存在机器人关键字进入机器人流程
                 return;
             }
 
@@ -119,6 +124,11 @@ public class RecieveWeiXinMessageApi extends BaseController {
         }
         logger.info(body);
         Msg msg = JSONUtil.toObject(Msg.class, body);
+
+        if (msg.getCt() == null) {
+            msg.setCt(System.currentTimeMillis()); //系统时间
+        }
+
         /**
          * 设置默认接入客服
          */

@@ -39,6 +39,7 @@ public class Msg implements Serializable {
 
     private Integer source; //终端来源标识
     private String sourceDesc; //端来源描述
+    private String serialNumber; //批次
 
     public Msg(String content) {
         this.content = content;
@@ -237,6 +238,14 @@ public class Msg implements Serializable {
 
     public void setSourceDesc(String sourceDesc) {
         this.sourceDesc = sourceDesc;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     //receiptMsg 回执消息
