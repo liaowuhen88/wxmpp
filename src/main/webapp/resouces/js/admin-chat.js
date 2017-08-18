@@ -900,6 +900,7 @@ xchat.orderComb = function (data) {
         html += '<li><span class="tag">婚姻状态:</span>' + val.isMarried + '</li>';
         html += '<li><span class="tag">销售模式:</span>' + val.saleModelName + '</li>';
         html += '<li><span class="tag">订单状态:</span>' + val.statusName + '</li>';
+        html += '<li><span class="tag">体检报告：</span><a target="_blank" href="http://qd.17doubao.com/physicalExamination/tobodyView/' + val.oid + '">查看详情</a></li>';
         itemHtml += '<ul class="modal_ul">' + html + '</ul>';
         html = '';
     });
