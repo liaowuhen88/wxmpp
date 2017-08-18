@@ -44,6 +44,8 @@ xchat.controls = {
     contractsContainer: '#contractsContainer',
     //订单
     orderContainer: '#orderContainer',
+    //卡单
+    cardListContainer: '#cardListContainer',
 
     waitReplyPerson: '#waitReplyPerson'
 };
@@ -633,6 +635,7 @@ xchat.getUserInfo = function (currentId, destJid, openId) {
     $(_this.controls.claimsContainer).empty();
     $(_this.controls.contractsContainer).empty();
     $(_this.controls.orderContainer).empty();
+    $(_this.controls.cardListContainer).empty();
 
 
     $.ajax({
@@ -650,6 +653,7 @@ xchat.getUserInfo = function (currentId, destJid, openId) {
                         var company = basic.company;
                         var order = basic.orderInfos;
                         var contract = basic.contractInfos;
+                        var cardList = basic.cardList;
                         if (personalInfo) {
                             switch (personalInfo.sex) {
                                 case 1:
@@ -695,6 +699,9 @@ xchat.getUserInfo = function (currentId, destJid, openId) {
 
                         if (contract) {
                             _this.contractComb(contract);   //合同
+                        }
+                        if (cardList) {
+                            _this.cardComb(cardList);   //卡单
                         }
                     }
 
@@ -900,11 +907,60 @@ xchat.orderComb = function (data) {
         html += '<li><span class="tag">婚姻状态:</span>' + val.isMarried + '</li>';
         html += '<li><span class="tag">销售模式:</span>' + val.saleModelName + '</li>';
         html += '<li><span class="tag">订单状态:</span>' + val.statusName + '</li>';
+        html += '<li><span class="tag">体检报告：</span><a target="_blank" href="http://qd.17doubao.com/physicalExamination/tobodyView/' + val.oid + '">查看详情</a></li>';
         itemHtml += '<ul class="modal_ul">' + html + '</ul>';
         html = '';
     });
     $(this.controls.orderContainer).html(itemHtml);
 };
+
+
+xchat.cardComb = function (data) {//卡单
+    var html = '';
+    var itemHtml = '';
+    data.map(function (val, index) {
+        var item = val;
+        if (item.expiredDate) {
+            item.expiredDate = myUtils.formatDate(item.expiredDate, 'yyyy-MM-dd hh:mm:ss');
+        } else {
+            item.expiredDate = '';
+        }
+        if (item.activeTime) {
+            item.activeTime = myUtils.formatDate(item.activeTime, 'yyyy-MM-dd hh:mm:ss');
+        } else {
+            item.activeTime = '';
+        }
+        if (item.effectiveDate) {
+            item.effectiveDate = myUtils.formatDate(item.effectiveDate, 'yyyy-MM-dd  hh:mm:ss');
+        } else {
+            item.effectiveDate = '';
+        }
+
+
+        html += '<li><span class="tag">卡号:</span>' + (item.hasOwnProperty('cardNo') ? item.cardNo : '') + '</li>';
+        html += '<li><span class="tag">账户ID:</span>' + item.accountId + '</a></li>';
+        html += '<li><span class="tag">合同失效日期:</span>' + item.expiredDate + '</li>';
+        html += '<li><span class="tag">合同状态:</span>' + (item.status == 1 ? '有效' : '无效') + '</li>';
+        var type = item.contractType;
+        var type_txt = '';
+        if (type == 1) {//投保单合同
+            type_txt = '投保单合同'
+        } else if (type == 2) {//众安业务合同
+            type_txt = '众安业务合同'
+        } else if (type == 3) {//商城批量解析excel过来的数据
+            type_txt = '商城批量解析excel过来的数据'
+        }
+        html += '<li><span class="tag">合同类型:</span>' + type_txt + '</li>';
+        html += '<li><span class="tag">合同激活时间:</span>' + item.activeTime + '</li>';
+        html += '<li><span class="tag">合同ID:</span>' + item.contractId + '</li>';
+        html += '<li><span class="tag">合同生效时间:</span>' + item.effectiveDate + '</li>';
+        html += '<li><span class="tag">保单号:</span>' + item.contractCode + '</li>';
+        itemHtml += '<ul class="modal_ul">' + html + '</ul>';
+        html = '';
+    });
+    $(this.controls.cardListContainer).html(itemHtml);
+};
+
 //合同拼接
 xchat.contractComb = function (data) {
     var html = '';

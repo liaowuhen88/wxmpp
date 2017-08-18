@@ -1,9 +1,11 @@
 package com.baodanyun.websocket.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baodanyun.websocket.bean.hr.HrUser;
 import com.baodanyun.websocket.bean.userInterface.Company;
 import com.baodanyun.websocket.bean.userInterface.PersonalDetail;
 import com.baodanyun.websocket.bean.userInterface.RequestBean;
+import com.baodanyun.websocket.bean.userInterface.card.PcontractBaseMessDto;
 import com.baodanyun.websocket.bean.userInterface.claims.ClaimsInfo;
 import com.baodanyun.websocket.bean.userInterface.order.OrderInfo;
 import com.baodanyun.websocket.bean.userInterface.policy.EnterpriseContractByUidBean;
@@ -16,6 +18,12 @@ import com.baodanyun.websocket.service.PersonalService;
 import com.baodanyun.websocket.util.CommonConfig;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.KdtApiClient;
+import com.doubao.open.api.Constants;
+import com.doubao.open.api.DefaultRequest;
+import com.doubao.open.api.DefaultResponse;
+import com.doubao.open.client.DoubaoClient;
+import com.doubao.open.client.env.DouBaoEnvEnum;
+import com.doubao.open.client.exception.DouBaoOpenException;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -290,12 +298,15 @@ public class PersonalServiceImpl implements PersonalService {
         List<OrderInfo> orderInfos = getOrderInfo(uid);//体检订单
         List<EnterpriseContractByUidBean> contractInfos = getContractInfo(uid);//合同订单
 
+        List<PcontractBaseMessDto> cardList = this.getUidQandan(uid); //卡单
+
         pd.setPersonalInfo(personalInfo);
         pd.setPersonalInfos(personalInfos);
         pd.setOrderInfos(orderInfos);
         pd.setClaimsInfos(claimsInfos);
         pd.setContractInfos(contractInfos);
         pd.setCompany(company);
+        pd.setCardList(cardList);
 
         return pd;
     }
@@ -375,5 +386,55 @@ public class PersonalServiceImpl implements PersonalService {
         return null;
     }
 
+    @Override
+    public List<PcontractBaseMessDto> getUidQandan(Long uid) {
+        List<PcontractBaseMessDto> cardList = null;
 
+        final String serviceName = "doubao.pcontract.IPcontractService.getPcontractBaseMess";
+//      final String serviceName = "com.doubao.dubbo.service.pcontract.IPcontractService";
+        final String appKey = "2030IM4SKD93FE03RLDF078E";
+        final String appSecret = "kpSR6uZq8yU6djrkZzgzxlASaU1PNa1oiGOws7unTy";
+        final String privateKey = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAMN29oorf0QU/EAV" +
+                "dBUTR7JZM/NX9Jj2Ms5rkCmbmZyIkFx9c/dokYBnZ/936lJOKrFRwW+L7hUpSWJW" +
+                "8r06FUWnr34tPExStM/kpSR6uZq8yU6djrkZzgzxlASaU1PNa1oiGOws7unTy/zv" +
+                "AhccrpS/eY21ni0Lwx9vxmmgpA/BAgMBAAECgYBg3zSQhb4tH7lkiT1etI9z9IGq" +
+                "uIygwmOrqeNou5UF3yisrgArPcfeu2DvW57l65d9Cee0QMVd93hHJJBo98BSR2uo" +
+                "f7H+0/VcAK8EdElx7/ElMbOWOybyCKfEP3qNTnQbHNwrz18dkg0Vy5EIgL4F/Fn9" +
+                "PpPoYzfcZcFYvgvBgQJBAOHw0YCDc11XRvZyYTCS4KlwSvjAu0mgqweX7rZj0yLu" +
+                "RfoNODvOHD14aBOn4bP6jtQLtv4OW7ZHsyjVqVgV07sCQQDdeC45gJ1jbMtXiby0" +
+                "urqh02zLs/NbK8PnQlovGwkLVCTr1akBb6UY5AoyD6WBXnf3SI+mhy/8Mgfp4+Zf" +
+                "eMyzAkBfAqymtSBDJRtzMSALlAgjWFQ+jJV1XbnuBIbebdXwf3AvuXVnOMIJW2Ow" +
+                "uE0iKP/8zTxTU2hfm4EMb+S5ZNxXAkBJobRUn+Mz9C7i6sNXnyF/vghU7X5CWJmo" +
+                "YJIVSTrHjnE8C2xGMvVEAkU1gag4C8185J4F8rpMceHZrFCie0orAkEArItl/bNp" +
+                "ksoF9Clf303HlgwOkAgGhAH47ya0TsC+U5z1TAagiMgB/rtExprUmwnbviA01g9p" +
+                "EIC5wQ16UaULhw==";
+
+        DefaultRequest defaultRequest = new DefaultRequest() {
+            @Override
+            public String serviceName() {
+                return serviceName;
+            }
+
+            @Override
+            public void checkBizParams() throws DouBaoOpenException {
+
+            }
+        };
+
+        defaultRequest.setSignType(Constants.MD5);
+        defaultRequest.setEncrypt(true);
+        defaultRequest.setContent("{\"accountId\":" + uid + "}");
+        DoubaoClient client = new DoubaoClient(DouBaoEnvEnum.PRD, appKey, appSecret, privateKey);
+        try {
+            DefaultResponse response = client.call(defaultRequest);
+            logger.info("个人卡单: " + JSON.toJSONString(response));
+
+            if (response != null) {
+                cardList = JSON.parseArray(response.getContent(), PcontractBaseMessDto.class);
+            }
+        } catch (DouBaoOpenException e) {
+            e.printStackTrace();
+        }
+        return cardList;
+    }
 }

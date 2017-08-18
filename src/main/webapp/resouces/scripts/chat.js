@@ -20,6 +20,7 @@ var Chat = function (options) {
         chatClaimsBtn: '#chatClaimsBtn',
         chatContractsBtn: '#chatContractsBtn',
         chatOrderBtn: '#chatOrderBtn',
+        chatCardBtn: '#chatCardBtn',
         signOutBtn: '.signOut'
     };
 
