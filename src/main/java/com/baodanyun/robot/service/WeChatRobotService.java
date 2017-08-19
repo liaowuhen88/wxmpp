@@ -1,10 +1,11 @@
 package com.baodanyun.robot.service;
 
 import com.baodanyun.robot.handler.CancelHandler;
-import com.baodanyun.robot.handler.EndFlowHandler;
-import com.baodanyun.robot.handler.KeywordsHandler;
-import com.baodanyun.websocket.bean.Response;
+import com.baodanyun.robot.handler.FinishHandler;
+import com.baodanyun.robot.handler.WriteDBHandler;
 import com.baodanyun.websocket.bean.msg.Msg;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,28 +14,27 @@ import org.springframework.stereotype.Service;
  */
 @Service("weChatRobotService")
 public class WeChatRobotService implements RobotService {
+    private final Logger LOGGER = LoggerFactory.getLogger(WeChatRobotService.class);
 
     @Autowired
     private RobotCheckerService robotCheckerService;
 
-    /**
-     * 机器人流程
-     *
-     * @param msg 用户消息
-     * @return
-     */
     @Override
-    public Response executeRobotFlow(Msg msg) {
-        Response response = new Response();
+    public boolean executeRobotFlow(Msg msg) {
+        boolean flag = false;
+        try {
+            if (robotCheckerService.beginFlow(msg)) {
+                CancelHandler cancelHandler = new CancelHandler.Builder().nextHandler(null).build();
+                FinishHandler finishHandler = new FinishHandler.Builder().nextHandler(cancelHandler).build();
+                WriteDBHandler writeDBHandler = new WriteDBHandler.Builder().nextHandler(finishHandler).build();
 
-        if (robotCheckerService.beginFlow(msg)) {
-            EndFlowHandler endFlowHandler = new EndFlowHandler();
-            CancelHandler cancelHandler = new CancelHandler.Builder().nextHandler(endFlowHandler).build();
-            KeywordsHandler keywordsHandler = new KeywordsHandler.Builder().nextHandler(cancelHandler).build();
-
-            keywordsHandler.flow(msg);
+                writeDBHandler.flow(msg);
+                flag = true;
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
         }
 
-        return response;
+        return flag;
     }
 }

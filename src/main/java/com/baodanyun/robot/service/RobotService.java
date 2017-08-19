@@ -2,8 +2,9 @@ package com.baodanyun.robot.service;
 
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.msg.Msg;
+import com.baodanyun.websocket.exception.BusinessException;
 
 public interface RobotService {
 
-    Response executeRobotFlow(Msg msg);
+    boolean executeRobotFlow(Msg msg);
 }

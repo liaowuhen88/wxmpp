@@ -8,6 +8,9 @@ public class RobotConstant {
     /*我要报案缓存key前缀*/
     public static final String ROBOT_KEYP_REFIX = "kf_robot_";
 
+    /*30分钟*/
+    public static final long RULE_TIME = 1800;
+
     public static final String REPORT_CASE = "我要报案";
     public static final String FINISH = "Y";
     public static final String CLOSE = "关闭";

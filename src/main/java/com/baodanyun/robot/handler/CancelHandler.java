@@ -1,6 +1,7 @@
 package com.baodanyun.robot.handler;
 
 import com.baodanyun.robot.common.RobotConstant;
+import com.baodanyun.robot.service.ReportCaseService;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.service.CacheService;
 import com.baodanyun.websocket.service.impl.MemCacheServiceImpl;
@@ -20,8 +21,9 @@ public class CancelHandler extends AbstractRobotHandler {
 
     @Override
     public void flow(Msg message) {
-        if (message.getContent().equals(RobotConstant.CLOSE)) {//关闭则撤销保存的记录
-
+        if (message.getContent().equals(RobotConstant.CLOSE)) {//关闭则删除保存的记录
+            ReportCaseService reportCaseService = SpringContextUtil.getBean("reportCaseService", ReportCaseService.class);
+            reportCaseService.withdraw(message); //撤消
         } else {
             if (getNextRobotHandler() != null)
                 getNextRobotHandler().flow(message);

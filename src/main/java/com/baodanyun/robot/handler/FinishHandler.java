@@ -1,14 +1,18 @@
 package com.baodanyun.robot.handler;
 
+import com.alibaba.fastjson.JSON;
 import com.baodanyun.robot.common.RobotConstant;
-import com.baodanyun.websocket.bean.Response;
+import com.baodanyun.robot.service.ReportCaseService;
 import com.baodanyun.websocket.bean.msg.Msg;
+import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.enums.ReportCaseEnum;
+import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.service.CacheService;
 import com.baodanyun.websocket.service.impl.MemCacheServiceImpl;
 import com.baodanyun.websocket.util.SpringContextUtil;
 
 /**
- * 关键字handler
+ *
  * <ol>
  * <li>第一句是:我要报案</li>
  * <li>后面的消息，语音，图片都执行流程</li>
@@ -19,12 +23,12 @@ import com.baodanyun.websocket.util.SpringContextUtil;
  * @author hubo
  * @since 2017-08-18
  */
-public class KeywordsHandler extends AbstractRobotHandler {
+public class FinishHandler extends AbstractRobotHandler {
 
-    public KeywordsHandler() {
+    public FinishHandler() {
     }
 
-    public KeywordsHandler(Builder builder) {
+    public FinishHandler(Builder builder) {
         this.nextRobotHandler = builder.nextHandler;
     }
 
@@ -32,18 +36,18 @@ public class KeywordsHandler extends AbstractRobotHandler {
     public void flow(Msg message) {
         String content = message.getContent();
         if (content.equals(RobotConstant.FINISH)) {//输入Y成功
+            String openId = message.getFrom();
             Msg msg = new Msg();
-            msg.setOpenId(message.getOpenId());
-            msg.setFrom(message.getOpenId());
+            msg.setOpenId(openId);
+            msg.setFrom(openId);
             msg.setType("text");
             msg.setContentType("text");
             msg.setContent(RobotConstant.SUCCESS_TIP);
-            super.sendWechatTip(msg); //微信提示
+            super.sendWechatTip(msg); //微信提示完成
 
-            //写库
-
-            CacheService cacheService = SpringContextUtil.getBean("cacheService", MemCacheServiceImpl.class);
-            cacheService.remove(RobotConstant.ROBOT_KEYP_REFIX + message.getId());
+            //更新数据
+            ReportCaseService reportCaseService = SpringContextUtil.getBean("reportCaseService", ReportCaseService.class);
+            reportCaseService.updateReportCaseSuccess(msg); //更新成功，完成上传
         } else {
             if (getNextRobotHandler() != null)
                 getNextRobotHandler().flow(message);
@@ -58,8 +62,8 @@ public class KeywordsHandler extends AbstractRobotHandler {
             return this;
         }
 
-        public KeywordsHandler build() {
-            return new KeywordsHandler(this);
+        public FinishHandler build() {
+            return new FinishHandler(this);
         }
     }
 
