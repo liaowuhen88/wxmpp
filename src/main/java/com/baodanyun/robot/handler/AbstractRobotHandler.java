@@ -30,4 +30,15 @@ public abstract class AbstractRobotHandler {
      * @param msg 微信消息
      */
     protected abstract void flow(Msg msg);
+
+    protected final void sendWechatTip(Msg msg) {
+        LOGGER.info("发送微信提示: " + JSON.toJSONString(msg));
+        WeChatResponse response = WeChatSendUtils.send(msg);
+
+        if (null == response || !response.getAccept()) {
+            LOGGER.info("发送微信失败:" + JSON.toJSONString(msg));
+        } else {
+            LOGGER.info("发送微信成功: " + JSON.toJSONString(response));
+        }
+    }
 }
