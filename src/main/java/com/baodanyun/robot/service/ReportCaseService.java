@@ -13,11 +13,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
+import java.util.List;
 
 /**
- * 机器人之我要报案入库操作
+ * 机器人之我要报案
+ * @author hubo
+ * @since 2017-08-21
  */
 @Service
 public class ReportCaseService {
@@ -33,12 +37,21 @@ public class ReportCaseService {
      *
      * @param user
      * @param msg
-     * @param state
+     * @param state 状态:1上传中(用户未提交)2完成上传
      */
     public boolean saveReportCase(AbstractUser user, Msg msg, int state) {
         boolean flag = false;
 
         try {
+            String serialNumber;//批次号
+            String cacheKey = RobotConstant.ROBOT_KEYP_REFIX + msg.getFrom();
+            Msg cacheMsg = (Msg) cacheService.get(cacheKey);
+            if (cacheMsg != null) {
+                serialNumber = cacheMsg.getSerialNumber();
+            } else {
+                return false;
+            }
+
             RobotReportCase reportCase = new RobotReportCase();
             reportCase.setContent(msg.getContent().trim());
             reportCase.setContentTime(new Date(msg.getCt()));
@@ -46,14 +59,9 @@ public class ReportCaseService {
             reportCase.setLoginUserName(user.getLoginUsername());
             reportCase.setIcon(user.getIcon());
             reportCase.setState((byte) state);
-            reportCase.setOpenId(user.getOpenId() == null ? user.getOpenId() : msg.getFrom());
+            reportCase.setSerialNumber(serialNumber);
+            reportCase.setOpenId(user.getOpenId() != null ? user.getOpenId() : msg.getFrom());
             reportCase.setCreateTime(new Date());
-
-            String cacheKey = RobotConstant.ROBOT_KEYP_REFIX + msg.getFrom();
-            Msg cacheMsg = (Msg) cacheService.get(cacheKey);
-            if (cacheMsg != null) {
-                reportCase.setSerialNumber(cacheMsg.getSerialNumber()); //批次号
-            }
 
             flag = robotReportCaseMapper.insertSelective(reportCase) > 0; //保存
             LOGGER.info(String.format("保存报案消息: %s, 状态上传中", JSON.toJSONString(msg)));
@@ -112,11 +120,8 @@ public class ReportCaseService {
             Msg cacheMsg = (Msg) cacheService.get(cacheKey);
             if (cacheMsg != null) {
                 String serialNum = cacheMsg.getSerialNumber(); //批次号
-                RobotReportCaseExample example = new RobotReportCaseExample();
-                example.createCriteria().andSerialNumberEqualTo(serialNum)
-                        .andStateEqualTo((byte) ReportCaseEnum.REPORTING.getState());
+                flag = this.deleteBySerialNumber(serialNum); //删除
 
-                flag = robotReportCaseMapper.deleteByExample(example) > 0; //删除
                 if (flag) {
                     cacheService.remove(cacheKey);
                     LOGGER.info(String.format("当前用户消息[Y],删除批次号[%s]的所有记录成功", msg.getContent(), serialNum));
@@ -129,4 +134,31 @@ public class ReportCaseService {
 
         return flag;
     }
+
+    /**
+     * 定时清理超过30分钟的[我要报案]机器人流程的用户没有完成上传的数据
+     */
+    public void clearExpireData() {
+        List<RobotReportCase> caseList = robotReportCaseMapper.findNotFinishData();
+        if (!CollectionUtils.isEmpty(caseList)) {
+            for (RobotReportCase reportCase : caseList) {
+                this.deleteBySerialNumber(reportCase.getSerialNumber());
+            }
+        }
+    }
+
+    /**
+     * 根据批次号删除用户未输入Y完成上传成功的记录
+     *
+     * @param serialNumber 批次号
+     * @return
+     */
+    public boolean deleteBySerialNumber(String serialNumber) {
+        RobotReportCaseExample example = new RobotReportCaseExample();
+        example.createCriteria().andSerialNumberEqualTo(serialNumber)
+                .andStateEqualTo((byte) ReportCaseEnum.REPORTING.getState());
+
+        return robotReportCaseMapper.deleteByExample(example) > 0;
+    }
+
 }

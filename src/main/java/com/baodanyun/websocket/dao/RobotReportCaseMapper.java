@@ -29,4 +29,6 @@ public interface RobotReportCaseMapper {
     int updateByPrimaryKeySelective(RobotReportCase record);
 
     int updateByPrimaryKey(RobotReportCase record);
+
+    List<RobotReportCase> findNotFinishData();
 }

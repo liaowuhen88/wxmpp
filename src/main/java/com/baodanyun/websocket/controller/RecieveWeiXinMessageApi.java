@@ -71,7 +71,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
             Msg msg = msg(body);
             msg.setSource(TeminalTypeEnum.WE_CHAT.getCode()); //消息来源是微信
 
-            if (robotService.executeRobotFlow(msg)) {//存在机器人关键字进入机器人流程
+            if (robotService.executeRobotFlow(msg)) {//存在[我要报案]进入机器人流程
                 return;
             }
 

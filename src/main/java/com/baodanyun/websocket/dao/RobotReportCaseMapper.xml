@@ -324,4 +324,11 @@
         create_time = #{createTime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=BIGINT}
     </update>
+
+    <select id="findNotFinishData" resultMap="BaseResultMap"
+            parameterType="com.baodanyun.websocket.model.RobotReportCaseExample">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from robot_report_case where state = 1 GROUP BY by serial_number
+    </select>
 </mapper>

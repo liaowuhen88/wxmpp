@@ -130,14 +130,6 @@ public class CustomerLogin extends BaseController {
                 return;
             }
 
-            Object obj = cacheService.get(RobotConstant.ROBOT_KEYP_REFIX + user.getTo());
-            if (obj != null) {
-                responseMsg.setSuccess(false);
-                responseMsg.setMsg("用户已经开启[我要报案]流程，无法接入");
-                Render.r(response, XMPPUtil.buildJson(responseMsg));
-                return;
-            }
-
             // 客服处理部分，确保客服在线
             Customer customer = customerInitUec(user);
             logger.info(JSONUtil.toJson(customer));

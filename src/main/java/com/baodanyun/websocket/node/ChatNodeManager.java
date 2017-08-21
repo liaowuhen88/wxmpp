@@ -1,7 +1,14 @@
 package com.baodanyun.websocket.node;
 
+import com.baodanyun.robot.common.RobotConstant;
 import com.baodanyun.websocket.bean.user.AbstractUser;
+import com.baodanyun.websocket.exception.BusinessException;
+import com.baodanyun.websocket.service.CacheService;
+import com.baodanyun.websocket.service.impl.MemCacheServiceImpl;
 import com.baodanyun.websocket.util.JSONUtil;
+import com.baodanyun.websocket.util.Render;
+import com.baodanyun.websocket.util.SpringContextUtil;
+import com.baodanyun.websocket.util.XMPPUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +21,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ChatNodeManager {
     private static final Map<String, ChatNode> xmppNodes = new ConcurrentHashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(ChatNodeManager.class);
+
+    private static CacheService cacheService = SpringContextUtil.getBean("cacheService", MemCacheServiceImpl.class);
 
     public synchronized static ChatNode getXmppNode(AbstractUser visitor) {
         ChatNode chatNode = xmppNodes.get(visitor.getId());
@@ -48,7 +57,12 @@ public class ChatNodeManager {
 
     }
 
-    public synchronized static VisitorChatNode getVisitorXmppNode(AbstractUser visitor) {
+    public synchronized static VisitorChatNode getVisitorXmppNode(AbstractUser visitor) throws BusinessException {
+        Object obj = cacheService.get(RobotConstant.ROBOT_KEYP_REFIX + visitor.getOpenId());
+        if (obj != null) {
+            throw new BusinessException("用户已经开启[我要报案]流程，无法接入");
+        }
+
         ChatNode chatNode = getXmppNode(visitor);
         if (null == chatNode) {
             logger.info("create VisitorChatNode [" + JSONUtil.toJson(visitor) + "]");
