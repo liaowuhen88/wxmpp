@@ -40,8 +40,9 @@ public class ReportCaseService {
      * @param state 状态:1上传中(用户未提交)2完成上传
      */
     public boolean saveReportCase(AbstractUser user, Msg msg, int state) {
-        boolean flag = false;
+        LOGGER.info("当前用户信息: " + JSON.toJSONString(user));
 
+        boolean flag = false;
         try {
             String serialNumber;//批次号
             String cacheKey = RobotConstant.ROBOT_KEYP_REFIX + msg.getFrom();
@@ -67,7 +68,7 @@ public class ReportCaseService {
             reportCase.setCreateTime(new Date());
 
             flag = robotReportCaseMapper.insertSelective(reportCase) > 0; //保存
-            LOGGER.info("保存报案消息成功:" + JSON.toJSONString(msg));
+            LOGGER.info("保存报案消息成功:" + JSON.toJSONString(reportCase));
         } catch (Exception e) {
             LOGGER.error(e.getMessage() + "\n" + JSON.toJSONString(user) + "报案消息失败: " + JSON.toJSONString(msg));
         }
