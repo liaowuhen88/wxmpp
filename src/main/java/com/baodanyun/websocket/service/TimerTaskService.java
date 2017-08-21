@@ -2,7 +2,6 @@ package com.baodanyun.websocket.service;
 
 import com.baodanyun.robot.service.ReportCaseService;
 import com.baodanyun.websocket.alarm.AlarmBoxer;
-import com.baodanyun.websocket.dao.RobotReportCaseMapper;
 import com.baodanyun.websocket.node.ChatNodeManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

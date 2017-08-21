@@ -37,6 +37,7 @@ public class WriteDBHandler extends AbstractRobotHandler {
 
             try {
                 AbstractUser user = userServer.initUserByOpenId(message.getFrom());
+                LOGGER.info("当前用户信息: " + JSON.toJSONString(user));
                 //记录入库，状态为报案中
                 reportCaseService.saveReportCase(user, message, ReportCaseEnum.REPORTING.getState());
             } catch (BusinessException e) {

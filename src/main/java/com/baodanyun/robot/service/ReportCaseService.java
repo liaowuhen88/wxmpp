@@ -54,7 +54,9 @@ public class ReportCaseService {
 
             RobotReportCase reportCase = new RobotReportCase();
             reportCase.setContent(msg.getContent().trim());
+            reportCase.setContentType(msg.getContentType());
             reportCase.setContentTime(new Date(msg.getCt()));
+            reportCase.setUid(user.getUid());
             reportCase.setUserName(user.getUserName());
             reportCase.setLoginUserName(user.getLoginUsername());
             reportCase.setIcon(user.getIcon());
@@ -86,6 +88,7 @@ public class ReportCaseService {
             if (cacheMsg != null) {
                 RobotReportCase record = new RobotReportCase();
                 record.setState((byte) ReportCaseEnum.SUCCESS.getState());
+                record.setUpdateTime(new Date());
 
                 String serialNum = cacheMsg.getSerialNumber(); //批次号
                 RobotReportCaseExample example = new RobotReportCaseExample();

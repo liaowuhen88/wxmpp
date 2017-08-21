@@ -2,9 +2,7 @@ package com.baodanyun.websocket.dao;
 
 import com.baodanyun.websocket.model.RobotReportCase;
 import com.baodanyun.websocket.model.RobotReportCaseExample;
-
 import java.util.List;
-
 import org.apache.ibatis.annotations.Param;
 
 public interface RobotReportCaseMapper {

@@ -17,6 +17,8 @@ public class RobotReportCase {
 
     private String content;
 
+    private String contentType;
+
     private Date contentTime;
 
     private String serialNumber;
@@ -26,6 +28,8 @@ public class RobotReportCase {
     private String remark;
 
     private Date createTime;
+
+    private Date updateTime;
 
     public Long getId() {
         return id;
@@ -83,6 +87,14 @@ public class RobotReportCase {
         this.content = content == null ? null : content.trim();
     }
 
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType == null ? null : contentType.trim();
+    }
+
     public Date getContentTime() {
         return contentTime;
     }
@@ -121,5 +133,13 @@ public class RobotReportCase {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

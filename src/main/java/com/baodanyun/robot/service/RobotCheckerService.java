@@ -45,7 +45,7 @@ public class RobotCheckerService {
         Object obj = cacheService.get(cacheKey);
 
         if (content.equals(RobotConstant.REPORT_CASE) && obj == null) {//第一次我要报案
-            boolean isLogin = personalService.getUidByOpenId(openId) == null;
+            boolean isLogin = personalService.getUidByOpenId(openId) != null;
             if (isLogin) {
                 String serialNumber = UUID.randomUUID().toString();
                 serialNumber = serialNumber.replaceAll("-", "");
