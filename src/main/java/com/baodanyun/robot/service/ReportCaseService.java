@@ -67,9 +67,9 @@ public class ReportCaseService {
             reportCase.setCreateTime(new Date());
 
             flag = robotReportCaseMapper.insertSelective(reportCase) > 0; //保存
-            LOGGER.info(String.format("保存报案消息: %s, 结果: %s", JSON.toJSONString(msg)), flag ? "成功" : "失败");
+            LOGGER.info("保存报案消息成功:" + JSON.toJSONString(msg));
         } catch (Exception e) {
-            LOGGER.error(e.getMessage() + JSON.toJSONString(user) + "报案消息失败: " + JSON.toJSONString(msg));
+            LOGGER.error(e.getMessage() + "\n" + JSON.toJSONString(user) + "报案消息失败: " + JSON.toJSONString(msg));
         }
 
         return flag;
@@ -147,6 +147,8 @@ public class ReportCaseService {
         if (!CollectionUtils.isEmpty(caseList)) {
             for (RobotReportCase reportCase : caseList) {
                 this.deleteBySerialNumber(reportCase.getSerialNumber());
+
+                LOGGER.info("清除超时求提交的数据批次号: " + reportCase.getSerialNumber());
             }
         }
     }

@@ -41,7 +41,7 @@ public class WriteDBHandler extends AbstractRobotHandler {
                 //记录入库，状态为报案中
                 reportCaseService.saveReportCase(user, message, ReportCaseEnum.REPORTING.getState());
             } catch (BusinessException e) {
-                LOGGER.error(e.getMessage() + JSON.toJSON(message));
+                LOGGER.error(e.getMessage() + "\n" + JSON.toJSON(message));
             }
         } else {
             if (getNextRobotHandler() != null)
