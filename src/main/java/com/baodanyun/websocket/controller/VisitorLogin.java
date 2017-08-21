@@ -8,7 +8,9 @@ import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.ChatNodeManager;
 import com.baodanyun.websocket.node.CustomerChatNode;
 import com.baodanyun.websocket.node.VisitorChatNode;
-import com.baodanyun.websocket.service.*;
+import com.baodanyun.websocket.service.CustomerDispatcherTactics;
+import com.baodanyun.websocket.service.UserServer;
+import com.baodanyun.websocket.service.XmppUserOnlineServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
@@ -33,9 +35,6 @@ public class VisitorLogin extends BaseController {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private UserServer userServer;
-
-    @Autowired
-    private VcardService vcardService;
 
     @Autowired
     private XmppUserOnlineServer xmppUserOnlineServer;

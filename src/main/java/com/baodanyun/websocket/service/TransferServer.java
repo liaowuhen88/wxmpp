@@ -13,10 +13,20 @@ import java.io.IOException;
  * Created by liaowuhen on 2016/11/11.
  */
 public interface TransferServer {
-
+    /**
+     * 转接
+     *
+     * @param tm
+     * @param visitor
+     * @return
+     * @throws BusinessException
+     * @throws XMPPException
+     * @throws IOException
+     * @throws SmackException
+     */
      boolean changeVisitorTo(Transferlog tm, Visitor visitor) throws BusinessException, XMPPException, IOException, SmackException;
 
-     boolean bindVisitor(AbstractUser customerFrom, AbstractUser customer, Visitor visitor);
+    boolean bindVisitor(AbstractUser customer, Visitor visitor);
 
      boolean changeVisitorTo(Transferlog tm, Visitor visitor, AbstractUser customer) throws BusinessException, XMPPException, IOException, SmackException;
 

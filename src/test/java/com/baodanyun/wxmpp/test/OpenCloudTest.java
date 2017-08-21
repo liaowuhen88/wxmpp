@@ -1,6 +1,7 @@
 package com.baodanyun.wxmpp.test;
 
 import com.alibaba.fastjson.JSON;
+import com.baodanyun.websocket.util.JSONUtil;
 import com.doubao.open.api.Constants;
 import com.doubao.open.api.DefaultRequest;
 import com.doubao.open.api.DefaultResponse;
@@ -83,9 +84,13 @@ public class OpenCloudTest {
         };
         defaultRequest.setSignType(Constants.MD5);
         defaultRequest.setEncrypt(true);
-        defaultRequest.setContent("{\"accountId\":86603}");
+        // 86603
+        defaultRequest.setContent("{\"accountId\":97948}");
+
         DoubaoClient client = new DoubaoClient(DouBaoEnvEnum.PRD, appKey, appSecret, privateKey);
         try {
+            logger.info(JSONUtil.toJson(defaultRequest));
+            logger.info(JSONUtil.toJson(client));
             DefaultResponse response = client.call(defaultRequest);
             logger.info(JSON.toJSONString(response));
         } catch (DouBaoOpenException e) {

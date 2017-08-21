@@ -10,12 +10,12 @@ import com.baodanyun.websocket.exception.BusinessException;
  */
 public interface AppKeyService {
     /**
-     * 根据appkey获取绑定用户信息
+     * 根据AppKeyVisitorLoginBean获取绑定用户信息
      *
-     * @param appkey
+     * @param re
      * @return
      */
-    AppCustomer getCustomerByAppKey(String appkey, String url) throws BusinessException;
+    AppCustomer getCustomerByAppKey(AppKeyVisitorLoginBean re, String url) throws BusinessException;
 
     Visitor getVisitor(AppKeyVisitorLoginBean re, String token) throws BusinessException;
 

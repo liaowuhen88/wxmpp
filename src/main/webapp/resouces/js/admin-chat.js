@@ -1108,9 +1108,13 @@ xchat.turn = function (vjid, toJid) {
     $.ajax({
         url: _this.interface.turn + '?vjid=' + vjid + '&fromJid=' + window.currentId + '&toJid=' + toJid,
         type: 'POST',
-        success: function () {
-            $('[data-target="turnBtn"]').hide();
-            _this.closeFriendWindow();
+        success: function (res) {
+            if (res.success) {
+                $('[data-target="turnBtn"]').hide();
+                _this.closeFriendWindow();
+            } else {
+                alert(res.msg);
+            }
         },
         error: function () {
             alert('转接失败');

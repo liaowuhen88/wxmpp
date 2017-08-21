@@ -81,7 +81,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
                 // 客服不在线
                 if (!cFlag) {
                     String url = request.getRequestURL().toString();
-                    response = getLeaveMessageResponse(visitorChatNode.getCurrentChatNode().getAbstractUser(), url, msg);
+                    response = getLeaveMessageResponse(visitorChatNode, url, msg);
 
                     Render.r(httpServletResponse, JSONUtil.toJson(response)); //客服不在线直接返回
                     return;
@@ -125,16 +125,21 @@ public class RecieveWeiXinMessageApi extends BaseController {
     }
 
 
-    public Response getLeaveMessageResponse(AbstractUser customer, String url, Msg msg) {
+    public Response getLeaveMessageResponse(VisitorChatNode visitorChatNode, String url, Msg msg) {
         Response response = new Response();
-
+        AbstractUser visitor = visitorChatNode.getAbstractUser();
+        AbstractUser customer = visitorChatNode.getCurrentChatNode().getAbstractUser();
         logger.info("customer[" + customer.getId() + "] not online");
-
-        int end = url.indexOf("/api/");
-        String base = url.substring(0, end);
-        String u = base + "/visitorlogin?t=" + msg.getTo() + "&u=" + msg.getFrom();
-        String info = me + "[<a href=\\\"" + u + "\\\">我要留言</a>]";
-        logger.info("info:" + info);
+        String info;
+        if (null == visitor.getUid() || 0 == visitor.getUid()) {
+            info = "请您到个人中心注册";
+        } else {
+            int end = url.indexOf("/api/");
+            String base = url.substring(0, end);
+            String u = base + "/visitorlogin?t=" + msg.getTo() + "&u=" + msg.getFrom();
+            info = me + "[<a href=\\\"" + u + "\\\">我要留言</a>]";
+            logger.info("info:" + info);
+        }
         Msg sendMsg = new Msg(info);
         sendMsg.setContentType(Msg.MsgContentType.text.toString());
         Long ct = new Date().getTime();
@@ -143,7 +148,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
         messageSendToWeixin.send(sendMsg, msg.getFrom(), customer.getId());
         response.setSuccess(true);
 
-        response.setMsg("[<a href=\\\"" + u + "\\\">我要留言</a>]");
+        response.setMsg(info);
         return response;
     }
 
