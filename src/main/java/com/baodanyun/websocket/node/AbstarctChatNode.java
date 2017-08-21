@@ -164,9 +164,7 @@ public class AbstarctChatNode implements ChatNode {
 
     @Override
     public boolean login() throws BusinessException, IOException, XMPPException, SmackException {
-        if (this.isXmppOnline()) {
-            return this.isXmppOnline();
-        }
+
         AbstractUser user = getAbstractUser();
         boolean flag;
         try {
