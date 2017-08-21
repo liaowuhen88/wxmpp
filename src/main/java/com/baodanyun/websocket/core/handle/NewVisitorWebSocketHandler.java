@@ -44,7 +44,7 @@ public class NewVisitorWebSocketHandler extends VisitorWebSocketHandler {
             if (null == customerChatNode) {
                 throw new BusinessException("未绑定客服");
             }
-            if (!customerChatNode.xmppOnlineServer()) {
+            if (!customerChatNode.isXmppOnline()) {
                 throw new BusinessException("客服不在线");
             }
             WebSocketTerminal webSocketTerminal = new WebSocketTerminal(visitor, session);

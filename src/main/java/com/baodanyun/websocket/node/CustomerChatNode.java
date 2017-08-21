@@ -1,6 +1,5 @@
 package com.baodanyun.websocket.node;
 
-import com.alibaba.fastjson.JSON;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.enums.AlarmEnum;
 import com.baodanyun.websocket.enums.MsgStatus;
@@ -11,7 +10,6 @@ import com.baodanyun.websocket.node.dispatcher.CustomerDispather;
 import com.baodanyun.websocket.service.ConversationCustomerService;
 import com.baodanyun.websocket.service.CustomerDispatcherTactics;
 import com.baodanyun.websocket.service.XmppUserOnlineServer;
-import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.EventBusUtils;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
@@ -199,13 +197,6 @@ public class CustomerChatNode extends AbstarctChatNode implements CustomerDispat
         }
     }
 
-    public boolean xmppOnlineServer() throws InterruptedException, BusinessException {
-        boolean cFlag = xmppServer.isAuthenticated(this.getAbstractUser().getId());
-        if (!cFlag) {
-            cFlag = xmppUserOnlineServer.isOnline(this.getAbstractUser().getLoginUsername());
-        }
-        return cFlag;
-    }
 
     @Override
     public void processMessage(Chat chat, Message message) {

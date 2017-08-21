@@ -60,7 +60,6 @@ public class RecieveWeiXinMessageApi extends BaseController {
     @RequestMapping(value = "receiveMsg")
     public void getMessageByCId(HttpServletRequest request, HttpServletResponse httpServletResponse) {
 
-
         Response response;
         try {
             String body = HttpServletRequestUtils.getBody(request);
@@ -75,7 +74,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
             if (!StringUtils.isEmpty(msg.getContent()) && msg.getContent().startsWith(keywords)) {
                 response = getBindCustomerResponse(visitorChatNode.getAbstractUser(), msg);
             } else {
-                boolean cFlag = visitorChatNode.getCurrentChatNode().xmppOnlineServer();
+                boolean cFlag = visitorChatNode.getCurrentChatNode().isOnline();
                 logger.info("客服是否在线" + cFlag);
                 AbstractTerminal node = visitorChatNode.getNode(weChatTerminalVisitorFactory.getId(visitorChatNode.getAbstractUser()));
                 // 客服不在线
@@ -197,7 +196,7 @@ public class RecieveWeiXinMessageApi extends BaseController {
 
         logger.info(JSONUtil.toJson(visitorChatNode.getAbstractUser()));
 
-        if (!visitorChatNode.isOnline()) {
+        if (!visitorChatNode.isXmppOnline()) {
             visitorChatNode.login();
             if (null != node) {
                 visitorChatNode.online(node);
