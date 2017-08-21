@@ -60,13 +60,14 @@ public class ReportCaseService {
             reportCase.setUserName(user.getUserName());
             reportCase.setLoginUserName(user.getLoginUsername());
             reportCase.setIcon(user.getIcon());
+            reportCase.setRemark(user.getNickName());
             reportCase.setState((byte) state);
             reportCase.setSerialNumber(serialNumber);
             reportCase.setOpenId(user.getOpenId() != null ? user.getOpenId() : msg.getFrom());
             reportCase.setCreateTime(new Date());
 
             flag = robotReportCaseMapper.insertSelective(reportCase) > 0; //保存
-            LOGGER.info(String.format("保存报案消息: %s, 状态上传中", JSON.toJSONString(msg)));
+            LOGGER.info(String.format("保存报案消息: %s, 结果: %s", JSON.toJSONString(msg)), flag ? "成功" : "失败");
         } catch (Exception e) {
             LOGGER.error(e.getMessage() + JSON.toJSONString(user) + "报案消息失败: " + JSON.toJSONString(msg));
         }
@@ -127,7 +128,7 @@ public class ReportCaseService {
 
                 if (flag) {
                     cacheService.remove(cacheKey);
-                    LOGGER.info(String.format("当前用户消息[Y],删除批次号[%s]的所有记录成功", msg.getContent(), serialNum));
+                    LOGGER.info(String.format("当前用户消息[%s],删除批次号[%s]的所有记录成功", msg.getContent(), serialNum));
                 }
             }
         } catch (Exception e) {
