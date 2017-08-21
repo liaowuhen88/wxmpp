@@ -1110,11 +1110,15 @@ xchat.bindCustomer = function (uid, vjid) {
         url: _this.interface.bindCustomer + '?from=' + vjid,
         type: 'POST',
         success: function (res) {
-            if (res.data) {
-                //$('#wx_tdName' + uid).html(res.data.vCardUser.userName);
-                $('#wx_tdLName' + uid).html(res.data.id);
+            if (res.success) {
+                if (res.data) {
+                    //$('#wx_tdName' + uid).html(res.data.vCardUser.userName);
+                    $('#wx_tdLName' + uid).html(res.data.id);
+                }
+                $('#wx_td' + uid).html('接入成功');
+            } else {//异常提示
+                $('#wx_td' + uid).html(res.msg);
             }
-            $('#wx_td' + uid).html('接入成功');
         },
         error: function () {
             alert('接入微信用户失败');
