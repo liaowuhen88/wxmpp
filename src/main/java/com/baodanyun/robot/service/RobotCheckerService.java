@@ -71,8 +71,8 @@ public class RobotCheckerService {
         msg.setContent(isLogin ? RobotConstant.HAS_REGIST_TIP : RobotConstant.NOT_REGIST_TIP);
 
         if (message.getSource() == TeminalTypeEnum.WE_CHAT.getCode()) {//微信端
-            msg.setOpenId(message.getOpenId());
-            msg.setFrom(message.getOpenId());
+            msg.setOpenId(message.getFrom());
+            msg.setFrom(message.getFrom());
             msg.setType("text");
             msg.setContentType("text");
         }

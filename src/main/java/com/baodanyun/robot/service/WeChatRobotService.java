@@ -1,5 +1,6 @@
 package com.baodanyun.robot.service;
 
+import com.alibaba.fastjson.JSON;
 import com.baodanyun.robot.handler.CancelHandler;
 import com.baodanyun.robot.handler.FinishHandler;
 import com.baodanyun.robot.handler.WriteDBHandler;
@@ -21,6 +22,7 @@ public class WeChatRobotService implements RobotService {
 
     @Override
     public boolean executeRobotFlow(Msg msg) {
+        LOGGER.info("报案消息: " + JSON.toJSONString(msg));
         boolean flag = false;
         try {
             if (robotCheckerService.beginFlow(msg)) {
