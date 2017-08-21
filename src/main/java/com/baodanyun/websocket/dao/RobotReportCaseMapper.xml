@@ -329,6 +329,6 @@
             parameterType="com.baodanyun.websocket.model.RobotReportCaseExample">
         SELECT
         <include refid="Base_Column_List"/>
-        from robot_report_case where state = 1 GROUP BY by serial_number
+        from robot_report_case where state = 1 GROUP BY serial_number
     </select>
 </mapper>
