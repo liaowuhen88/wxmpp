@@ -4,6 +4,8 @@ package com.baodanyun.websocket.model;
  * Created by liaowuhen on 2016/11/1.
  */
 public class LoginModel {
+    public final static String NOT_ACCESS = "1";
+    public final static String ACCESS = "2";
     private String username;
     private String password;
     private String accessType;
