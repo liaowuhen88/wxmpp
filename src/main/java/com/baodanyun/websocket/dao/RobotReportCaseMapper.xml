@@ -353,13 +353,13 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
-    <!-- 查询所有状态等1且超过30分钟的消息--->
+  <!-- 查询所有状态等1且超过30分钟的消息-->
   <select id="findNotFinishData" resultMap="BaseResultMap"
           parameterType="com.baodanyun.websocket.model.RobotReportCaseExample">
     SELECT
     <include refid="Base_Column_List"/>
       FROM robot_report_case
-      WHERE TIMESTAMPDIFF(MINUTE,content_time,CURRENT_TIMESTAMP()) > 30 AND state = 1
+    WHERE TIMESTAMPDIFF(MINUTE,content_time,CURRENT_TIMESTAMP()) > 15 AND state = 1
       GROUP BY serial_number
   </select>
 </mapper>

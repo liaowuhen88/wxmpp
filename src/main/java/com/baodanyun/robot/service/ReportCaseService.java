@@ -132,7 +132,7 @@ public class ReportCaseService {
 
                 if (flag) {
                     cacheService.remove(cacheKey);
-                    LOGGER.info(String.format("当前用户消息[%s],删除批次号[%s]的所有记录成功", msg.getContent(), serialNum));
+                    LOGGER.info(String.format("当前用户消息[%s],更新批次号[%s]的所有状态为3(撤消)", msg.getContent(), serialNum));
                 }
             }
         } catch (Exception e) {
