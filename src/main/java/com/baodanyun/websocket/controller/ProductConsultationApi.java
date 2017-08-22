@@ -11,6 +11,7 @@ import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.*;
 import com.baodanyun.websocket.service.MessageSendToWeixin;
 import com.baodanyun.websocket.service.UserServer;
+import com.baodanyun.websocket.util.AccessControlAllowUtils;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
 import org.jivesoftware.smack.SmackException;
@@ -80,12 +81,18 @@ public class ProductConsultationApi extends BaseController {
             messageSendToWeixin.send(msg, pc.getU(), null);
             visitorChatNode.receiveFromGod(node, msg);
 
-        } catch (Exception e) {
+        } catch (BusinessException e) {
             logger.error("error", e);
             response = new Response();
             response.setMsg(e.getMessage());
             response.setSuccess(false);
+        } catch (Exception e) {
+            logger.error("error", e);
+            response = new Response();
+            response.setMsg("客服不在线");
+            response.setSuccess(false);
         }
+        AccessControlAllowUtils.access(httpServletResponse);
         Render.r(httpServletResponse, JSONUtil.toJson(response));
     }
 
