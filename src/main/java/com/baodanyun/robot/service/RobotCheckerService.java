@@ -33,7 +33,7 @@ public class RobotCheckerService {
      * @param msg
      * @return
      */
-    public boolean beginFlow(Msg msg) throws Exception {
+    public boolean validate(Msg msg) throws Exception {
         boolean pass = false;
         String content = msg.getContent(); //消息内容
         if (StringUtils.isBlank(content)) {
@@ -54,27 +54,33 @@ public class RobotCheckerService {
                 cacheService.setHalfHour(cacheKey, msg);
                 LOGGER.info(cacheKey + "成功缓存,时间:" + DateTime.now().toString());
             }
-            this.sendWechatTip(msg, isLogin); //微信提示操作
+
+            msg.setContent(isLogin ? RobotConstant.HAS_REGIST_TIP : RobotConstant.NOT_REGIST_TIP);
+            this.sendWechatTip(msg); //微信提示操作
             pass = true;
         }
 
-        if (obj != null) {//缓存中存在且是30分钟内的报案
+        if (obj != null) {//缓存中存在即本次批次有效报案
             Msg message = (Msg) obj;
             pass = message.getCt() + RobotConstant.RULE_TIME <= System.currentTimeMillis();
+
+            if (pass && RobotConstant.WECHAT_TEXT.equals(msg.getContentType())) {//文本消息都提示非法输入
+                msg.setContent(RobotConstant.FORBIDDEN_TEXT);
+                this.sendWechatTip(msg);
+            }
         }
 
         return pass;
     }
 
-    public boolean sendWechatTip(Msg message, boolean isLogin) {
+    public boolean sendWechatTip(Msg message) {
         Msg msg = new Msg();
-        msg.setContent(isLogin ? RobotConstant.HAS_REGIST_TIP : RobotConstant.NOT_REGIST_TIP);
-
         if (message.getSource() == TeminalTypeEnum.WE_CHAT.getCode()) {//微信端
+            msg.setContent(message.getContent());
             msg.setOpenId(message.getFrom());
             msg.setFrom(message.getFrom());
-            msg.setType("text");
-            msg.setContentType("text");
+            msg.setType(RobotConstant.WECHAT_TEXT);
+            msg.setContentType(RobotConstant.WECHAT_TEXT);
         }
         return this.sendWechat(msg); //微信提示
     }

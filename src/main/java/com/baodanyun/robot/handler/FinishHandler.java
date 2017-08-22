@@ -27,7 +27,7 @@ public class FinishHandler extends AbstractRobotHandler {
     }
 
     @Override
-    public void flow(Msg message) {
+    public void flow(Msg message, AbstractUser user) {
         String content = message.getContent();
         if (content.equals(RobotConstant.FINISH)) {//输入Y成功
             String openId = message.getFrom();
@@ -39,12 +39,12 @@ public class FinishHandler extends AbstractRobotHandler {
             msg.setContent(RobotConstant.SUCCESS_TIP);
             super.sendWechatTip(msg); //微信提示完成
 
-            //更新数据
             ReportCaseService reportCaseService = SpringContextUtil.getBean("reportCaseService", ReportCaseService.class);
+            reportCaseService.saveReportCase(user, message, ReportCaseEnum.REPORTING.getState());
             reportCaseService.updateReportCaseSuccess(msg); //更新成功，完成上传
         } else {
             if (getNextRobotHandler() != null)
-                getNextRobotHandler().flow(message);
+                getNextRobotHandler().flow(message, user);
         }
     }
 

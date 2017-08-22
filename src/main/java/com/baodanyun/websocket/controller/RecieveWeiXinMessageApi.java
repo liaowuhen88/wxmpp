@@ -69,9 +69,18 @@ public class RecieveWeiXinMessageApi extends BaseController {
         try {
             String body = HttpServletRequestUtils.getBody(request);
             Msg msg = msg(body);
-            msg.setSource(TeminalTypeEnum.WE_CHAT.getCode()); //消息来源是微信
 
-            if (robotService.executeRobotFlow(msg)) {//存在[我要报案]进入机器人流程
+            if (StringUtils.isBlank(msg.getFrom())) {
+                response = new Response();
+                response.setMsg("openId不能为空");
+                response.setSuccess(false);
+                Render.r(httpServletResponse, JSONUtil.toJson(response));
+                return;
+            }
+
+            msg.setSource(TeminalTypeEnum.WE_CHAT.getCode()); //消息来源是微信
+            AbstractUser user = userServer.initUserByOpenId(msg.getFrom());
+            if (robotService.executeRobotFlow(msg, user)) {//存在[我要报案]进入机器人流程
                 return;
             }
 

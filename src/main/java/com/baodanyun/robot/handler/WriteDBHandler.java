@@ -29,24 +29,15 @@ public class WriteDBHandler extends AbstractRobotHandler {
     }
 
     @Override
-    public void flow(Msg message) {
+    public void flow(Msg message, AbstractUser user) {
         String content = message.getContent();
         if (!content.equals(RobotConstant.FINISH) && !content.equals(RobotConstant.CLOSE)) {
-
-            UserServer userServer = SpringContextUtil.getBean("userServerImpl", UserServer.class);
+            //记录入库，状态为报案中
             ReportCaseService reportCaseService = SpringContextUtil.getBean("reportCaseService", ReportCaseService.class);
-
-            try {
-                AbstractUser user = userServer.initUserByOpenId(message.getFrom());
-
-                //记录入库，状态为报案中
-                reportCaseService.saveReportCase(user, message, ReportCaseEnum.REPORTING.getState());
-            } catch (BusinessException e) {
-                LOGGER.error(e.getMessage() + "\n" + JSON.toJSON(message));
-            }
+            reportCaseService.saveReportCase(user, message, ReportCaseEnum.REPORTING.getState());
         } else {
             if (getNextRobotHandler() != null)
-                getNextRobotHandler().flow(message);
+                getNextRobotHandler().flow(message, user);
         }
     }
 

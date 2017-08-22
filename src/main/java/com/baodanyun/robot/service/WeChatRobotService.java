@@ -5,6 +5,7 @@ import com.baodanyun.robot.handler.CancelHandler;
 import com.baodanyun.robot.handler.FinishHandler;
 import com.baodanyun.robot.handler.WriteDBHandler;
 import com.baodanyun.websocket.bean.msg.Msg;
+import com.baodanyun.websocket.bean.user.AbstractUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +22,16 @@ public class WeChatRobotService implements RobotService {
     private RobotCheckerService robotCheckerService;
 
     @Override
-    public boolean executeRobotFlow(Msg msg) {
+    public boolean executeRobotFlow(Msg msg, AbstractUser user) {
         LOGGER.info("报案消息: " + JSON.toJSONString(msg));
         boolean flag = false;
         try {
-            if (robotCheckerService.beginFlow(msg)) {
+            if (robotCheckerService.validate(msg)) {
                 CancelHandler cancelHandler = new CancelHandler.Builder().nextHandler(null).build();
                 FinishHandler finishHandler = new FinishHandler.Builder().nextHandler(cancelHandler).build();
                 WriteDBHandler writeDBHandler = new WriteDBHandler.Builder().nextHandler(finishHandler).build();
 
-                writeDBHandler.flow(msg);
+                writeDBHandler.flow(msg, user);
                 flag = true;
             }
         } catch (Exception e) {

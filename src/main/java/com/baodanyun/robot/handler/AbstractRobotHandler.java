@@ -3,6 +3,7 @@ package com.baodanyun.robot.handler;
 import com.alibaba.fastjson.JSON;
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.msg.Msg;
+import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.node.sendUtils.WeChatResponse;
 import com.baodanyun.websocket.node.sendUtils.WeChatSendUtils;
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ public abstract class AbstractRobotHandler {
      *
      * @param msg 微信消息
      */
-    protected abstract void flow(Msg msg);
+    protected abstract void flow(Msg msg, AbstractUser user);
 
     protected final void sendWechatTip(Msg msg) {
         LOGGER.info("发送微信提示: " + JSON.toJSONString(msg));

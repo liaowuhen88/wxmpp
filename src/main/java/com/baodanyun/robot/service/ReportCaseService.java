@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
@@ -39,6 +40,7 @@ public class ReportCaseService {
      * @param msg
      * @param state 状态:1上传中(用户未提交)2完成上传
      */
+    @Transactional
     public boolean saveReportCase(AbstractUser user, Msg msg, int state) {
         LOGGER.info("当前用户信息: " + JSON.toJSONString(user));
 
@@ -81,6 +83,7 @@ public class ReportCaseService {
      *
      * @return
      */
+    @Transactional
     public boolean updateReportCaseSuccess(Msg msg) {
         boolean flag = false;
 
@@ -125,7 +128,7 @@ public class ReportCaseService {
             Msg cacheMsg = (Msg) cacheService.get(cacheKey);
             if (cacheMsg != null) {
                 String serialNum = cacheMsg.getSerialNumber(); //批次号
-                flag = this.deleteBySerialNumber(serialNum); //删除
+                flag = this.updateStateBySerailNumber(serialNum, ReportCaseEnum.WITHDRAW.getState()); //撤消
 
                 if (flag) {
                     cacheService.remove(cacheKey);
@@ -160,12 +163,32 @@ public class ReportCaseService {
      * @param serialNumber 批次号
      * @return
      */
+    @Transactional
     public boolean deleteBySerialNumber(String serialNumber) {
         RobotReportCaseExample example = new RobotReportCaseExample();
         example.createCriteria().andSerialNumberEqualTo(serialNumber)
                 .andStateEqualTo((byte) ReportCaseEnum.REPORTING.getState());
 
         return robotReportCaseMapper.deleteByExample(example) > 0;
+    }
+
+    /**
+     * 根据批次号更新状态
+     *
+     * @param serialNumber
+     * @param state
+     * @return
+     */
+    @Transactional
+    public boolean updateStateBySerailNumber(String serialNumber, int state) {
+        RobotReportCase record = new RobotReportCase();
+        record.setState((byte) state);
+        record.setUpdateTime(new Date());
+
+        RobotReportCaseExample example = new RobotReportCaseExample();
+        example.createCriteria().andSerialNumberEqualTo(serialNumber);
+
+        return robotReportCaseMapper.updateByExample(record, example) > 0;
     }
 
 }
