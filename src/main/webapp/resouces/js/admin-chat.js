@@ -500,16 +500,14 @@ xchat.loadChatListEvent = function () {
         $(this).addClass("active");
     });
 
-
     $(".chat-source-detail-btn").click(function () {
         _this.visitorProperties();
     });
-
 };
 /*=====================================================================================队列事件=====================================================================================*/
 //ws关闭后的处理方式
 xchat.wsClose = function () {
-    window.location.href = this.interface.login;
+    window.location.href = window.base + "/api/customer_chat";
 };
 //本地缓存历史数据
 xchat.getLocalHistory = function (id) {

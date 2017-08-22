@@ -7,7 +7,7 @@ package com.baodanyun.websocket.enums;
  * @since 2017-07-13 18:07
  **/
 public enum TeminalTypeEnum {
-    WE_CHAT(1, "微信"), H5(2, "H5"), UEC(3, "UEC");
+    WE_CHAT(1, "微信"), H5(2, "H5"), UEC(3, "UEC"), PRODUCT(4, "PRODUCT");
 
     private int code;
 
