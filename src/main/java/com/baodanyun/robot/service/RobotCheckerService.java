@@ -78,13 +78,12 @@ public class RobotCheckerService {
 
     public boolean sendWechatTip(Msg message) {
         Msg msg = new Msg();
-        if (message.getSource() == TeminalTypeEnum.WE_CHAT.getCode()) {//微信端
-            msg.setContent(message.getContent());
-            msg.setOpenId(message.getFrom());
-            msg.setFrom(message.getFrom());
-            msg.setType(RobotConstant.WECHAT_TEXT);
-            msg.setContentType(RobotConstant.WECHAT_TEXT);
-        }
+        msg.setContent(message.getContent());
+        msg.setOpenId(message.getFrom());
+        msg.setFrom(message.getFrom());
+        msg.setType(RobotConstant.WECHAT_TEXT);
+        msg.setContentType(RobotConstant.WECHAT_TEXT);
+
         return this.sendWechat(msg); //微信提示
     }
 
