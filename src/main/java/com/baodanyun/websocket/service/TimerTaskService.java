@@ -89,9 +89,9 @@ public class TimerTaskService {
     }
 
     /**
-     * 定时清理超过30分钟的[我要报案]机器人流程的用户没有完成上传的数据
+     * 定时清理超过15分钟的[我要报案]机器人流程的用户没有完成上传的数据
      */
-    @Scheduled(cron = "0 0/31 * * * ?")
+    //@Scheduled(cron = "0 0/5 * * * ?")
     public void clearExpireDataFromRobotCase() {
         try {
             reportCaseService.clearExpireData();
