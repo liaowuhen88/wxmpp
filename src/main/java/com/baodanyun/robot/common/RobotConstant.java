@@ -27,5 +27,5 @@ public class RobotConstant {
 
     public static final String FORBIDDEN_TEXT = "您输入有误，全部上传完请输入'Y'结束，终止此次自助服务请输入'关闭'。";
 
-
+    public static final String EXPIRE_TIP = "此次自助服务已超过15分钟,服务关闭。";
 }

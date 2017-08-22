@@ -21,6 +21,7 @@ import java.util.List;
 
 /**
  * 机器人之我要报案操作表service
+ *
  * @author hubo
  * @since 2017-08-21
  */
@@ -32,6 +33,8 @@ public class ReportCaseService {
 
     @Autowired
     private CacheService cacheService;
+    @Autowired
+    private RobotCheckerService robotCheckerService;
 
     /**
      * 插入我要报案记录
@@ -56,7 +59,8 @@ public class ReportCaseService {
             }
 
             RobotReportCase reportCase = new RobotReportCase();
-            reportCase.setContent(msg.getContent().trim());
+            //emoji表情中有\x09f的字符直接过滤x
+            reportCase.setContent(msg.getContent().replaceAll("x", "").trim());
             reportCase.setContentType(msg.getContentType());
             reportCase.setContentTime(new Date(msg.getCt()));
             reportCase.setUid(user.getUid());
@@ -144,32 +148,28 @@ public class ReportCaseService {
     }
 
     /**
-     * 定时清理超过30分钟的[我要报案]机器人流程的用户没有完成上传的数据
+     * 定时清理超过15分钟的[我要报案]机器人流程的用户没有完成上传的数据
      */
     public void clearExpireData() {
-        List<RobotReportCase> caseList = robotReportCaseMapper.findNotFinishData();
-        if (!CollectionUtils.isEmpty(caseList)) {
-            for (RobotReportCase reportCase : caseList) {
-                this.deleteBySerialNumber(reportCase.getSerialNumber());
+        List<String> openIdList = robotReportCaseMapper.findNotFinishData();
+        if (!CollectionUtils.isEmpty(openIdList)) {
+            for (String openId : openIdList) {
+                this.modifyExpireData(openId, ReportCaseEnum.EXPIRE.getState());
 
-                LOGGER.info("清除超时求提交的数据批次号: " + reportCase.getSerialNumber());
+                this.expireWechatTip(openId);
             }
         }
     }
 
     /**
-     * 根据批次号删除用户未输入Y完成上传成功的记录
-     *
-     * @param serialNumber 批次号
-     * @return
+     * 用户微信消息超时未提交提示
+     * @param openId
      */
-    @Transactional
-    public boolean deleteBySerialNumber(String serialNumber) {
-        RobotReportCaseExample example = new RobotReportCaseExample();
-        example.createCriteria().andSerialNumberEqualTo(serialNumber)
-                .andStateEqualTo((byte) ReportCaseEnum.REPORTING.getState());
-
-        return robotReportCaseMapper.deleteByExample(example) > 0;
+    private void expireWechatTip(String openId) {
+        Msg msg = new Msg();
+        msg.setOpenId(openId);
+        msg.setFrom(openId);
+        robotCheckerService.sendWechatTip(msg);
     }
 
     /**
@@ -188,7 +188,31 @@ public class ReportCaseService {
         RobotReportCaseExample example = new RobotReportCaseExample();
         example.createCriteria().andSerialNumberEqualTo(serialNumber);
 
-        return robotReportCaseMapper.updateByExample(record, example) > 0;
+        return robotReportCaseMapper.updateByExampleSelective(record, example) > 0;
+    }
+
+    /**
+     * 清理超时的数据
+     *
+     * @param openId
+     * @param state
+     * @return
+     */
+    @Transactional
+    public boolean modifyExpireData(String openId, int state) {
+        try {
+            RobotReportCase record = new RobotReportCase();
+            record.setState((byte) state);
+            record.setUpdateTime(new Date());
+
+            RobotReportCaseExample example = new RobotReportCaseExample();
+            example.createCriteria().andOpenIdEqualTo(openId);
+
+            return robotReportCaseMapper.updateByExampleSelective(record, example) > 0;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            return false;
+        }
     }
 
 }

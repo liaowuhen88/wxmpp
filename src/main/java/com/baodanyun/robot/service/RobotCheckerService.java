@@ -40,6 +40,7 @@ public class RobotCheckerService {
             return false;
         }
 
+        String originalContent = msg.getContent(); //用户输入的内容
         String openId = msg.getFrom();
         String cacheKey = RobotConstant.ROBOT_KEYP_REFIX + openId;
         Object obj = cacheService.get(cacheKey);
@@ -64,12 +65,14 @@ public class RobotCheckerService {
             Msg message = (Msg) obj;
             pass = message.getCt() + RobotConstant.RULE_TIME <= System.currentTimeMillis();
 
-            if (pass && RobotConstant.WECHAT_TEXT.equals(msg.getContentType())) {//文本消息都提示非法输入
+            if (pass && RobotConstant.WECHAT_TEXT.equals(msg.getContentType())
+                    && !content.equals(RobotConstant.FINISH) && !content.equals(RobotConstant.CLOSE)) {//文本消息都提示非法输入
                 msg.setContent(RobotConstant.FORBIDDEN_TEXT);
                 this.sendWechatTip(msg);
             }
         }
 
+        msg.setContent(originalContent);
         return pass;
     }
 

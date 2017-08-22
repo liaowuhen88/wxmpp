@@ -354,12 +354,13 @@
   </update>
 
   <!-- 查询所有状态等1且超过30分钟的消息-->
-  <select id="findNotFinishData" resultMap="BaseResultMap"
-          parameterType="com.baodanyun.websocket.model.RobotReportCaseExample">
-    SELECT
-    <include refid="Base_Column_List"/>
-      FROM robot_report_case
-    WHERE TIMESTAMPDIFF(MINUTE,content_time,CURRENT_TIMESTAMP()) > 15 AND state = 1
-      GROUP BY serial_number
+  <select id="findNotFinishData" resultType="java.lang.String">
+    SELECT r.open_id from robot_report_case r INNER JOIN
+    (
+    SELECT open_id, serial_number,max(content_time) as contenttime from robot_report_case
+    WHERE state = 1
+    GROUP BY serial_number
+    ) tb on r.open_id = tb.open_id and r.content_time = tb.contenttime
+    WHERE TIMESTAMPDIFF(MINUTE,r.content_time,CURRENT_TIMESTAMP()) > 15
   </select>
 </mapper>
