@@ -8,7 +8,8 @@ import com.baodanyun.websocket.service.impl.MemCacheServiceImpl;
 import com.baodanyun.websocket.util.SpringContextUtil;
 
 /**
- * 消息记录到库
+ * 取消责任链
+ * 用户输入[关闭]关键字时撤消上传的数据记录
  */
 public class CancelHandler extends AbstractRobotHandler {
 

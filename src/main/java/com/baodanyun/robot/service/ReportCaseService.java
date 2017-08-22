@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 机器人之我要报案
+ * 机器人之我要报案操作表service
  * @author hubo
  * @since 2017-08-21
  */

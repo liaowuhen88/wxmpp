@@ -12,14 +12,8 @@ import com.baodanyun.websocket.service.impl.MemCacheServiceImpl;
 import com.baodanyun.websocket.util.SpringContextUtil;
 
 /**
- *
- * <ol>
- * <li>第一句是:我要报案</li>
- * <li>后面的消息，语音，图片都执行流程</li>
- * <li>30分钟内的重复关键字忽略</li>
- * <li>超过30分钟或者用户输入"Y"结束流程</li>
- * </ol>
- *
+ * 完成责任链
+ * 用户输入[Y]关键字时保存更新上传的数据记录成功
  * @author hubo
  * @since 2017-08-18
  */

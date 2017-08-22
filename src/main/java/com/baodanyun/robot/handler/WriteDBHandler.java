@@ -15,7 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 消息记录到库
+ * 数据入库责任链
+ * 记录报案消息入库
  */
 public class WriteDBHandler extends AbstractRobotHandler {
     private final Logger LOGGER = LoggerFactory.getLogger(WriteDBHandler.class);
