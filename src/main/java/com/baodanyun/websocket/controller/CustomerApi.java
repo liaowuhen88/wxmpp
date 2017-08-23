@@ -14,9 +14,9 @@ import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.PageModel;
 import com.baodanyun.websocket.model.Transferlog;
 import com.baodanyun.websocket.model.UserModel;
+import com.baodanyun.websocket.node.ChatNodeManager;
 import com.baodanyun.websocket.node.CustomerChatNode;
 import com.baodanyun.websocket.node.VisitorChatNode;
-import com.baodanyun.websocket.node.ChatNodeManager;
 import com.baodanyun.websocket.service.*;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.PhoneUtils;
@@ -410,8 +410,7 @@ public class CustomerApi extends BaseController {
             customerFrom = customerDispatcherTactics.getCustomerAcceptByJidOnline(jid);
         }
 
-        transferServer.bindVisitor(customerFrom, customer, visitor);
-
+        transferServer.bindVisitor(customer, visitor);
         response.setData(customer);
         response.setSuccess(true);
 
