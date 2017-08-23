@@ -18,6 +18,8 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 机器人之我要报案操作表service
@@ -59,8 +61,8 @@ public class ReportCaseService {
             }
 
             RobotReportCase reportCase = new RobotReportCase();
-            //emoji表情中有\x09f的字符直接过滤x
-            reportCase.setContent(msg.getContent().replaceAll("x", "").trim());
+            //emoji表情过滤ue开头的
+            reportCase.setContent(msg.getContent().replaceAll("[\\ue000-\\uefff]", ""));
             reportCase.setContentType(msg.getContentType());
             reportCase.setContentTime(new Date(msg.getCt()));
             reportCase.setUid(user.getUid());
@@ -219,5 +221,4 @@ public class ReportCaseService {
 
         return true;
     }
-
 }
