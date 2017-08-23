@@ -936,6 +936,8 @@ xchat.cardComb = function (data) {//卡单
 
 
         html += '<li><span class="tag">卡号:</span>' + (item.hasOwnProperty('cardNo') ? item.cardNo : '') + '</li>';
+        html += '<li><span class="tag">合同名称:</span>' + item.productName + '</a></li>';
+        html += '<li><span class="tag">被保人:</span>' + item.insurantName + '</a></li>';
         html += '<li><span class="tag">账户ID:</span>' + item.accountId + '</a></li>';
         html += '<li><span class="tag">合同失效日期:</span>' + item.expiredDate + '</li>';
         html += '<li><span class="tag">合同状态:</span>' + (item.status == 1 ? '有效' : '无效') + '</li>';
@@ -1170,11 +1172,15 @@ xchat.bindCustomer = function (uid, vjid) {
         url: _this.interface.bindCustomer + '?from=' + vjid,
         type: 'POST',
         success: function (res) {
-            if (res.data) {
-                //$('#wx_tdName' + uid).html(res.data.vCardUser.userName);
-                $('#wx_tdLName' + uid).html(res.data.id);
+            if (res.success) {
+                if (res.data) {
+                    //$('#wx_tdName' + uid).html(res.data.vCardUser.userName);
+                    $('#wx_tdLName' + uid).html(res.data.id);
+                }
+                $('#wx_td' + uid).html('接入成功');
+            } else {//异常提示
+                $('#wx_td' + uid).html(res.msg);
             }
-            $('#wx_td' + uid).html('接入成功');
         },
         error: function () {
             alert('接入微信用户失败');

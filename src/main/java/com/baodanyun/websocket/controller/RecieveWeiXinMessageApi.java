@@ -1,5 +1,6 @@
 package com.baodanyun.websocket.controller;
 
+import com.baodanyun.robot.service.RobotService;
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
@@ -20,6 +21,7 @@ import org.jivesoftware.smack.XMPPException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -57,14 +59,30 @@ public class RecieveWeiXinMessageApi extends BaseController {
      */
     private String keywords = "@客服";
 
+    @Autowired
+    @Qualifier("weChatRobotService")
+    private RobotService robotService;
+
     @RequestMapping(value = "receiveMsg")
     public void getMessageByCId(HttpServletRequest request, HttpServletResponse httpServletResponse) {
-
         Response response;
         try {
             String body = HttpServletRequestUtils.getBody(request);
             Msg msg = msg(body);
+
+            if (StringUtils.isBlank(msg.getFrom())) {
+                response = new Response();
+                response.setMsg("openId不能为空");
+                response.setSuccess(false);
+                Render.r(httpServletResponse, JSONUtil.toJson(response));
+                return;
+            }
+
             msg.setSource(TeminalTypeEnum.WE_CHAT.getCode()); //消息来源是微信
+            AbstractUser user = userServer.initUserByOpenId(msg.getFrom());
+            if (robotService.executeRobotFlow(msg, user)) {//存在[我要报案]进入机器人流程
+                return;
+            }
 
             VisitorChatNode visitorChatNode = initVisitorChatNode(msg);
 
@@ -114,6 +132,11 @@ public class RecieveWeiXinMessageApi extends BaseController {
         }
         logger.info(body);
         Msg msg = JSONUtil.toObject(Msg.class, body);
+
+        if (msg.getCt() == null) {
+            msg.setCt(System.currentTimeMillis()); //系统时间
+        }
+
         /**
          * 设置默认接入客服
          */

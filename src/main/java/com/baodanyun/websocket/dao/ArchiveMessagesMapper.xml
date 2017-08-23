@@ -88,8 +88,8 @@ ORDER BY
     <select id="selectByOwnerJid" resultMap="ResultMapFromAndTo" parameterType="java.lang.String">
 
         SELECT
-        ac.ownerJid 'from',
-        ac.withJid 'to',
+        select SUBSTR(ac.ownerJid, 1, LOCATE('@',ac.ownerJid)-1) 'from',
+        select SUBSTR(ac.withJid, 1, LOCATE('@',ac.withJid)-1) 'to',
         am.`subject` 'contentType',
         am.direction,
         am.body content,

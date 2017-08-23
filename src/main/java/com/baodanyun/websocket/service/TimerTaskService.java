@@ -1,5 +1,6 @@
 package com.baodanyun.websocket.service;
 
+import com.baodanyun.robot.service.ReportCaseService;
 import com.baodanyun.websocket.alarm.AlarmBoxer;
 import com.baodanyun.websocket.node.ChatNodeManager;
 import org.slf4j.Logger;
@@ -28,6 +29,8 @@ public class TimerTaskService {
 
     @Autowired
     private MsgConsumer msgConsumer;
+    @Autowired
+    private ReportCaseService reportCaseService;
 
 
     /**
@@ -82,6 +85,18 @@ public class TimerTaskService {
             AlarmBoxer.getInstance().doAlarmJob();
         } catch (Exception e) {
             logger.error("error", "告警任务操作失败", e);
+        }
+    }
+
+    /**
+     * 定时清理超过15分钟的[我要报案]机器人流程的用户没有完成上传的数据
+     */
+    @Scheduled(cron = "0 0/5 * * * ?")
+    public void clearExpireDataFromRobotCase() {
+        try {
+            reportCaseService.clearExpireData();
+        } catch (Exception e) {
+            logger.error("error", "定时清理超过15分钟的[我要报案]机器人流程失败", e);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.baodanyun.websocket.controller;
 
+import com.baodanyun.robot.common.RobotConstant;
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.UserSetPW;
 import com.baodanyun.websocket.bean.user.AbstractUser;
@@ -70,6 +71,8 @@ public class CustomerApi extends BaseController {
 
     @Autowired
     private CustomerDispatcherTactics customerDispatcherTactics;
+    @Autowired
+    private CacheService cacheService;
 
     /**
      * 获取客服的信息
@@ -384,11 +387,30 @@ public class CustomerApi extends BaseController {
     public void bindCustomer(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, String from) throws BusinessException, InterruptedException {
         // 获取当前客服
         // from 为openId
+        Response response = new Response();
+
+        if (StringUtils.isBlank(from)) {
+            response.setMsg("openId不能为空");
+            Render.r(httpServletResponse, XMPPUtil.buildJson(response));
+            return;
+        }
+        Object obj = cacheService.get(RobotConstant.ROBOT_KEYP_REFIX + from);
+        if (obj != null) {
+            response.setMsg("用户已经开启[我要报案]流程，无法接入");
+            Render.r(httpServletResponse, XMPPUtil.buildJson(response));
+            return;
+        }
+
         AbstractUser customer = (AbstractUser) httpServletRequest.getSession().getAttribute(Common.USER_KEY);
         Visitor visitor = userServer.initUserByOpenId(from);
 
+        String jid = userCacheServer.getCustomerIdByVisitorOpenId(visitor.getOpenId());
+        AbstractUser customerFrom = null;
+        if (StringUtils.isNotEmpty(jid)) {
+            customerFrom = customerDispatcherTactics.getCustomerAcceptByJidOnline(jid);
+        }
+
         transferServer.bindVisitor(customer, visitor);
-        Response response = new Response();
         response.setData(customer);
         response.setSuccess(true);
 

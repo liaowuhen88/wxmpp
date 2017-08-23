@@ -1,6 +1,8 @@
 package com.baodanyun.websocket.controller;
 
+import com.baodanyun.robot.common.RobotConstant;
 import com.baodanyun.websocket.bean.Response;
+import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.bean.user.Visitor;
@@ -11,6 +13,7 @@ import com.baodanyun.websocket.model.LoginModel;
 import com.baodanyun.websocket.model.Ofproperty;
 import com.baodanyun.websocket.model.Ofuser;
 import com.baodanyun.websocket.node.*;
+import com.baodanyun.websocket.service.CacheService;
 import com.baodanyun.websocket.service.OfpropertyService;
 import com.baodanyun.websocket.service.OfuserService;
 import com.baodanyun.websocket.service.UserServer;
@@ -46,6 +49,8 @@ public class CustomerLogin extends BaseController {
     private OfuserService ofuserService;
     @Autowired
     private AccessWeChatTerminalVisitorFactory accessWeChatTerminalVisitorFactory;
+    @Autowired
+    private CacheService cacheService;
 
     @RequestMapping(value = "loginApi", method = RequestMethod.POST)
     public void api(LoginModel user, HttpServletRequest request, HttpServletResponse response) {
