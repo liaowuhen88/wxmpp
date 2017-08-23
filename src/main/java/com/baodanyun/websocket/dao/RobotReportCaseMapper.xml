@@ -353,14 +353,14 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
-  <!-- 查询所有状态等1且超过30分钟的消息-->
-  <select id="findNotFinishData" resultType="java.lang.String">
-    SELECT r.open_id from robot_report_case r INNER JOIN
+  <!-- 查询每个批次最后一条消息是否超时15分钟未提交的批次号再用定时任务更新为无效-->
+  <select id="findNotFinishData" resultType="com.baodanyun.websocket.model.RobotReportCase">
+    SELECT r.open_id as openId, r.serial_number as serialNumber FROM robot_report_case r INNER JOIN
     (
     SELECT open_id, serial_number,max(content_time) as contenttime from robot_report_case
     WHERE state = 1
-    GROUP BY serial_number
-    ) tb on r.open_id = tb.open_id and r.content_time = tb.contenttime
+    GROUP BY open_id,serial_number
+    ) tb ON r.open_id = tb.open_id AND r.content_time = tb.contenttime
     WHERE TIMESTAMPDIFF(MINUTE,r.content_time,CURRENT_TIMESTAMP()) > 15
   </select>
 </mapper>

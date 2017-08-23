@@ -12,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +41,6 @@ public class RobotCheckerService {
             return false;
         }
 
-        String originalContent = msg.getContent(); //用户输入的内容
         String openId = msg.getFrom();
         String cacheKey = RobotConstant.ROBOT_KEYP_REFIX + openId;
         Object obj = cacheService.get(cacheKey);
@@ -56,8 +56,9 @@ public class RobotCheckerService {
                 LOGGER.info(cacheKey + "成功缓存,时间:" + DateTime.now().toString());
             }
 
-            msg.setContent(isLogin ? RobotConstant.HAS_REGIST_TIP : RobotConstant.NOT_REGIST_TIP);
-            this.sendWechatTip(msg); //微信提示操作
+            String tipContent = isLogin ? RobotConstant.HAS_REGIST_TIP : RobotConstant.NOT_REGIST_TIP;
+            this.sendGuideMsg(msg, tipContent);
+
             pass = true;
         }
 
@@ -65,17 +66,36 @@ public class RobotCheckerService {
             Msg message = (Msg) obj;
             pass = message.getCt() + RobotConstant.RULE_TIME <= System.currentTimeMillis();
 
+            //文本消息都提示非法输入
             if (pass && RobotConstant.WECHAT_TEXT.equals(msg.getContentType())
-                    && !content.equals(RobotConstant.FINISH) && !content.equals(RobotConstant.CLOSE)) {//文本消息都提示非法输入
-                msg.setContent(RobotConstant.FORBIDDEN_TEXT);
-                this.sendWechatTip(msg);
+                    && !content.equals(RobotConstant.FINISH) && !content.equals(RobotConstant.CLOSE)) {
+                this.sendGuideMsg(msg, RobotConstant.FORBIDDEN_TEXT);
             }
         }
 
-        msg.setContent(originalContent);
         return pass;
     }
 
+    /**
+     * 引导语微信消息提示
+     *
+     * @param msg
+     * @param tipContent 消息内容
+     */
+    private void sendGuideMsg(Msg msg, String tipContent) {
+        Msg tipMsg = new Msg();
+        BeanUtils.copyProperties(msg, tipMsg);
+        tipMsg.setContent(tipContent);
+
+        this.sendWechatTip(tipMsg);
+    }
+
+    /**
+     * 发送微信消息
+     *
+     * @param message
+     * @return
+     */
     public boolean sendWechatTip(Msg message) {
         Msg msg = new Msg();
         msg.setContent(message.getContent());

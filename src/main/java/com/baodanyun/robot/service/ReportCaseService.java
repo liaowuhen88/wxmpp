@@ -151,12 +151,12 @@ public class ReportCaseService {
      * 定时清理超过15分钟的[我要报案]机器人流程的用户没有完成上传的数据
      */
     public void clearExpireData() {
-        List<String> openIdList = robotReportCaseMapper.findNotFinishData();
-        if (!CollectionUtils.isEmpty(openIdList)) {
-            for (String openId : openIdList) {
-                this.modifyExpireData(openId, ReportCaseEnum.EXPIRE.getState());
+        List<RobotReportCase> caseList = robotReportCaseMapper.findNotFinishData();
+        if (!CollectionUtils.isEmpty(caseList)) {
+            for (RobotReportCase reportCase : caseList) {
+                this.modifyExpireData(reportCase.getOpenId(), reportCase.getSerialNumber());
 
-                this.expireWechatTip(openId);
+                this.expireWechatTip(reportCase.getOpenId()); //超时未提交微信提示
             }
         }
     }
@@ -169,6 +169,7 @@ public class ReportCaseService {
         Msg msg = new Msg();
         msg.setOpenId(openId);
         msg.setFrom(openId);
+        msg.setContent(RobotConstant.EXPIRE_TIP);
         robotCheckerService.sendWechatTip(msg);
     }
 
@@ -195,18 +196,18 @@ public class ReportCaseService {
      * 清理超时的数据
      *
      * @param openId
-     * @param state
+     * @param serialNumber 批次号
      * @return
      */
     @Transactional
-    public boolean modifyExpireData(String openId, int state) {
+    public boolean modifyExpireData(String openId, String serialNumber) {
         try {
             RobotReportCase record = new RobotReportCase();
-            record.setState((byte) state);
+            record.setState((byte) ReportCaseEnum.EXPIRE.getState());
             record.setUpdateTime(new Date());
 
             RobotReportCaseExample example = new RobotReportCaseExample();
-            example.createCriteria().andOpenIdEqualTo(openId);
+            example.createCriteria().andOpenIdEqualTo(openId).andSerialNumberEqualTo(serialNumber);
 
             return robotReportCaseMapper.updateByExampleSelective(record, example) > 0;
         } catch (Exception e) {
