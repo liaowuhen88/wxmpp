@@ -11,6 +11,8 @@ public class RobotReportCase {
 
     private String loginUserName;
 
+    private String nickName;
+
     private String icon;
 
     private String openId;
@@ -61,6 +63,14 @@ public class RobotReportCase {
 
     public void setLoginUserName(String loginUserName) {
         this.loginUserName = loginUserName == null ? null : loginUserName.trim();
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName == null ? null : nickName.trim();
     }
 
     public String getIcon() {

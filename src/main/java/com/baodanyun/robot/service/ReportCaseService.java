@@ -18,8 +18,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 机器人之我要报案操作表service
@@ -69,7 +67,7 @@ public class ReportCaseService {
             reportCase.setUserName(user.getUserName());
             reportCase.setLoginUserName(user.getLoginUsername());
             reportCase.setIcon(user.getIcon());
-            reportCase.setRemark(user.getNickName());
+            reportCase.setNickName(user.getNickName());
             reportCase.setState((byte) state);
             reportCase.setSerialNumber(serialNumber);
             reportCase.setOpenId(user.getOpenId() != null ? user.getOpenId() : msg.getFrom());
@@ -207,6 +205,7 @@ public class ReportCaseService {
             RobotReportCase record = new RobotReportCase();
             record.setState((byte) ReportCaseEnum.EXPIRE.getState());
             record.setUpdateTime(new Date());
+            record.setRemark("超过15分钟定时任务更新状态");
 
             RobotReportCaseExample example = new RobotReportCaseExample();
             example.createCriteria().andOpenIdEqualTo(openId).andSerialNumberEqualTo(serialNumber);
