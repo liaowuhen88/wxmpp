@@ -2,6 +2,7 @@ package com.baodanyun.websocket.service;
 
 import com.baodanyun.websocket.bean.userInterface.Company;
 import com.baodanyun.websocket.bean.userInterface.PersonalDetail;
+import com.baodanyun.websocket.bean.userInterface.card.PcontractBaseMessDto;
 import com.baodanyun.websocket.bean.userInterface.claims.ClaimsInfo;
 import com.baodanyun.websocket.bean.userInterface.order.OrderInfo;
 import com.baodanyun.websocket.bean.userInterface.policy.EnterpriseContractByUidBean;
@@ -95,4 +96,13 @@ public interface PersonalService {
     List<Company> getCompany(Long uid) throws Exception;
 
     Long getUidByOpenId(String openId) throws BusinessException;
+
+    /**
+     * 用户卡单
+     *
+     * @param uid 用户id
+     * @return
+     * @throws BusinessException
+     */
+    List<PcontractBaseMessDto> getUidQandan(Long uid);
 }

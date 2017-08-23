@@ -16,8 +16,8 @@
             <div class="modal_header">
                 <span class="modal_close">X</span>
                 <ul class="tab-title-list" id="tabTitleList">
-                    <li class="item active">体检报告</li>
-                    <li class="item active" id="chatClaimsBtn">理赔</li>
+                    <li class="item" id="chatCardBtn" active>卡单</li>
+                    <li class="item" id="chatClaimsBtn">理赔</li>
                     <li class="item" id="chatContractsBtn">合同</li>
                     <li class="item" id="chatOrderBtn">订单</li>
                 </ul>
@@ -31,9 +31,10 @@
 
             </div>
             <div class="modal_body modal_scroll" id="tabContentList" style="max-height: 700px;">
-                <div class="iframe-info active">
-                    <iframe src="<%=request.getContextPath()%>/resouces/exam/index.html" frameborder="0"></iframe>
-                </div>
+                <%-- <div class="iframe-info active">
+                     <iframe src="<%=request.getContextPath()%>/resouces/exam/index.html" frameborder="0"></iframe>
+                 </div>--%>
+                <div class="modal_body modal_scroll active" id="cardListContainer"></div>
 
                 <div class="modal_body modal_scroll" id="claimsContainer"></div>
                 <div class="modal_body modal_scroll" id="contractsContainer"></div>

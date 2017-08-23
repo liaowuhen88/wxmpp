@@ -43,9 +43,10 @@ public class AppKeyVisitorLogin extends BaseController {
         try {
             //String url = "";
             String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-            logger.info("visitorLogin:[" + JSONUtil.toJson(re.getAppKey()) + "]---- url {}", url);
+            logger.info("visitorLogin:[" + JSONUtil.toJson(re) + "]---- url {}", url);
             // 初始化用户,以及用户节点
-            customer = appKeyService.getCustomerByAppKey(re.getAppKey(), url);
+            customer = appKeyService.getCustomerByAppKey(re, url);
+            logger.info("customer:[" + JSONUtil.toJson(customer) + "]");
             AbstractUser visitor = appKeyService.getVisitor(re, customer.getToken());
             VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
             // 获取客服节点

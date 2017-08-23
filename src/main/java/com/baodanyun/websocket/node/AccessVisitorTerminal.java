@@ -57,8 +57,6 @@ public class AccessVisitorTerminal extends WeChatTerminal {
     @Override
     public void receiveFromGod(Msg msg) throws InterruptedException, BusinessException, SmackException.NotConnectedException {
         super.receiveFromGod(msg);
-
-        this.wechatMsgEvt(msg);
     }
 
     public void wechatMsgEvt(Msg msg) {

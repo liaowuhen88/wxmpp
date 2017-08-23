@@ -149,17 +149,17 @@ public class VisitorChatNode extends AbstarctChatNode {
             return currentChatNode;
         }
 
+        logger.info(JSONUtil.toJson(this.getAbstractUser()));
+        currentChatNode.joinQueue(this);
+
         if (this.isXmppOnline()) {
-            if(null != old){
+            if (null != old) {
                 if (!old.uninstall(this)) {
                     throw new BusinessException("从当前客服卸载失败");
                 }
             }
         }
-        logger.info(JSONUtil.toJson(this.getAbstractUser()));
 
-
-        currentChatNode.joinQueue(this);
         return old;
     }
 

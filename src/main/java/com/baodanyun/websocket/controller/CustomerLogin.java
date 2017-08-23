@@ -231,7 +231,8 @@ public class CustomerLogin extends BaseController {
         }
 
         LoginModel loginModel = new LoginModel();
-        loginModel.setAccessType("2");
+        // 不接入用户
+        loginModel.setAccessType(LoginModel.NOT_ACCESS);
         loginModel.setType("customer");
         loginModel.setUsername(userName);
         loginModel.setTo(to);

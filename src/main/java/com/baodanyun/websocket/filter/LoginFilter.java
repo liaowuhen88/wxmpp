@@ -1,24 +1,9 @@
 package com.baodanyun.websocket.filter;
 
-import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.core.common.Common;
-import com.baodanyun.websocket.exception.BusinessException;
-import com.baodanyun.websocket.model.LoginModel;
-import com.baodanyun.websocket.model.Ofproperty;
-import com.baodanyun.websocket.model.Ofuser;
-import com.baodanyun.websocket.service.OfpropertyService;
-import com.baodanyun.websocket.service.OfuserService;
-import com.baodanyun.websocket.service.impl.OfuserServiceImpl;
-import com.baodanyun.websocket.util.Blowfish;
 import com.baodanyun.websocket.util.ServletUtil;
-import com.baodanyun.websocket.util.SpringContextUtil;
-import com.baodanyun.websocket.util.XMPPUtil;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -31,9 +16,8 @@ import java.io.IOException;
  */
 @Component
 public class LoginFilter implements Filter {
-    private static Logger logger = LoggerFactory.getLogger(LoginFilter.class);
-
     private static final String PLATFORM = "uec"; //uec平台标识
+    private static Logger logger = LoggerFactory.getLogger(LoginFilter.class);
 
     public void init(FilterConfig var1) throws ServletException {
     }
@@ -78,6 +62,12 @@ public class LoginFilter implements Filter {
                 || uri.startsWith(request.getContextPath() + "/api/doLoginForUecUser")
                 || uri.startsWith(request.getContextPath() + "/api/customerAndJoin")
                 || uri.startsWith(request.getContextPath() + "/talkFromUec")
+                //留言
+                || uri.startsWith(request.getContextPath() + "/ kf/api/addMessage")
+                //新版网页端用户客服
+                || uri.startsWith(request.getContextPath() + "/sockjs/newVisitor")
+                // 产品咨询
+                || uri.startsWith(request.getContextPath() + "/api/productConsultation")
 
                 ) {
             return true;

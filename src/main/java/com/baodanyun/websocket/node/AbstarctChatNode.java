@@ -6,6 +6,7 @@ import com.baodanyun.websocket.enums.MsgStatus;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.service.VcardService;
 import com.baodanyun.websocket.service.XmppServer;
+import com.baodanyun.websocket.service.XmppUserOnlineServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.apache.commons.lang.StringUtils;
@@ -31,6 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class AbstarctChatNode implements ChatNode {
     private static final Logger logger = LoggerFactory.getLogger(AbstarctChatNode.class);
+    XmppUserOnlineServer xmppUserOnlineServer = SpringContextUtil.getBean("xmppUserOnlineServer", XmppUserOnlineServer.class);
 
     XmppServer xmppServer = SpringContextUtil.getBean("xmppServer", XmppServer.class);
     VcardService vcardService = SpringContextUtil.getBean("vcardService", VcardService.class);
@@ -164,9 +166,7 @@ public class AbstarctChatNode implements ChatNode {
 
     @Override
     public boolean login() throws BusinessException, IOException, XMPPException, SmackException {
-        if (this.isXmppOnline()) {
-            return this.isXmppOnline();
-        }
+
         AbstractUser user = getAbstractUser();
         boolean flag;
         try {
@@ -227,7 +227,11 @@ public class AbstarctChatNode implements ChatNode {
 
     @Override
     public boolean isOnline() {
-        return this.isXmppOnline();
+        boolean cFlag = xmppServer.isAuthenticated(this.getAbstractUser().getId());
+        if (!cFlag) {
+            cFlag = xmppUserOnlineServer.isOnline(this.getAbstractUser().getLoginUsername());
+        }
+        return cFlag;
     }
 
     @Override
