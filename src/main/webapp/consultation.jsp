@@ -30,6 +30,7 @@
 <head>
     <title>豆包客服</title>
     <script src="<%=request.getContextPath()%>/resouces/js/jquery.js"></script>
+    <script src="<%=request.getContextPath()%>/resouces/js/hotcss.js"></script>
 
     <script>
         window.base = "<%=base%>";
