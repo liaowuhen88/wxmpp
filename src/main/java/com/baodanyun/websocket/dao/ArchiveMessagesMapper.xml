@@ -103,11 +103,10 @@ ORDER BY
         archiveconversations
         WHERE
         ownerJid = #{ownerJid,jdbcType=BIGINT}
-
-        ORDER BY conversationId DESC
         ) ac
         LEFT JOIN archivemessages am ON ac.conversationId = am.conversationId
-        LIMIT 100;
+        ORDER BY ct DESC
+        LIMIT 300;
 
     </select>
 
