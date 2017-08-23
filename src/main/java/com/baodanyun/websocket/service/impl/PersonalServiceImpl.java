@@ -429,7 +429,7 @@ public class PersonalServiceImpl implements PersonalService {
             DefaultResponse response = client.call(defaultRequest);
             logger.info("个人卡单: " + JSON.toJSONString(response));
 
-            if (response != null) {
+            if (response != null && response.getCode() == 200) {
                 cardList = JSON.parseArray(response.getContent(), PcontractBaseMessDto.class);
             }
         } catch (DouBaoOpenException e) {
