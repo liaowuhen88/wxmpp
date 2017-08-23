@@ -96,7 +96,7 @@ public class TimerTaskService {
         try {
             reportCaseService.clearExpireData();
         } catch (Exception e) {
-            logger.error("error", "定时清理超过30分钟的[我要报案]机器人流程失败", e);
+            logger.error("error", "定时清理超过15分钟的[我要报案]机器人流程失败", e);
         }
     }
 

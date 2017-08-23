@@ -209,11 +209,15 @@ public class ReportCaseService {
             RobotReportCaseExample example = new RobotReportCaseExample();
             example.createCriteria().andOpenIdEqualTo(openId).andSerialNumberEqualTo(serialNumber);
 
-            return robotReportCaseMapper.updateByExampleSelective(record, example) > 0;
+            robotReportCaseMapper.updateByExampleSelective(record, example);
+            LOGGER.info("定时任务成功更新(state=4):openId=" + openId + ";批次号=" + serialNumber);
         } catch (Exception e) {
+            LOGGER.info("定时任务失败更新(state=4):openId=" + openId + ";批次号=" + serialNumber);
             LOGGER.error(e.getMessage());
             return false;
         }
+
+        return true;
     }
 
 }
