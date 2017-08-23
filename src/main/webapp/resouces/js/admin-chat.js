@@ -936,6 +936,8 @@ xchat.cardComb = function (data) {//卡单
 
 
         html += '<li><span class="tag">卡号:</span>' + (item.hasOwnProperty('cardNo') ? item.cardNo : '') + '</li>';
+        html += '<li><span class="tag">合同名称:</span>' + item.productName + '</a></li>';
+        html += '<li><span class="tag">被保人:</span>' + item.insurantName + '</a></li>';
         html += '<li><span class="tag">账户ID:</span>' + item.accountId + '</a></li>';
         html += '<li><span class="tag">合同失效日期:</span>' + item.expiredDate + '</li>';
         html += '<li><span class="tag">合同状态:</span>' + (item.status == 1 ? '有效' : '无效') + '</li>';

@@ -15,6 +15,8 @@ public class PcontractBaseMessDto implements Serializable {
     private Long contractId;
     private String contractCode;
     private Integer contractType;
+    private String insurantName;
+    private String productName;
 
     public Long getAccountId() {
         return accountId;
@@ -86,5 +88,21 @@ public class PcontractBaseMessDto implements Serializable {
 
     public void setContractType(Integer contractType) {
         this.contractType = contractType;
+    }
+
+    public String getInsurantName() {
+        return insurantName;
+    }
+
+    public void setInsurantName(String insurantName) {
+        this.insurantName = insurantName;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 }
