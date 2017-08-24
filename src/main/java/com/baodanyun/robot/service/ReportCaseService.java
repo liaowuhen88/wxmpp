@@ -237,12 +237,12 @@ public class ReportCaseService {
      */
     public List<RobotDto> getReportCaseByUid(Long uid) {
         List<RobotDto> resultList = null;
-
         List<RobotReportCase> serialList = robotReportCaseMapper.findSerialNumberList(uid);
         if (CollectionUtils.isNotEmpty(serialList)) {
             resultList = new ArrayList<>();
+            List<RobotReportCase> dataList = this.findListByUid(uid);
             for (RobotReportCase robot : serialList) {
-                List<RobotImages> imagesList = this.buildRobotImageList(uid, robot.getSerialNumber());
+                List<RobotImages> imagesList = this.buildRobotImageList(dataList, robot.getSerialNumber());
                 RobotDto robotDto = new RobotDto();
                 BeanUtils.copyProperties(robot, robotDto);
                 robotDto.setRobotImages(imagesList);
@@ -254,6 +254,12 @@ public class ReportCaseService {
         return resultList;
     }
 
+    /**
+     * 查询用户上传的报案
+     *
+     * @param uid
+     * @return
+     */
     public List<RobotReportCase> findListByUid(Long uid) {
         RobotReportCaseExample example = new RobotReportCaseExample();
         example.setOrderByClause("content_time ASC"); //消息时间
@@ -265,10 +271,9 @@ public class ReportCaseService {
         return robotReportCaseMapper.selectByExample(example);
     }
 
-    private List<RobotImages> buildRobotImageList(long uid, final String serialNumber) {
+    private List<RobotImages> buildRobotImageList(List<RobotReportCase> dataList, final String serialNumber) {
         List<RobotImages> imagesList = new ArrayList<>();
 
-        List<RobotReportCase> dataList = this.findListByUid(uid);
         List<RobotReportCase> list = (List<RobotReportCase>) CollectionUtils.select(dataList, new Predicate<RobotReportCase>() {
             @Override
             public boolean evaluate(RobotReportCase robotReportCase) {
