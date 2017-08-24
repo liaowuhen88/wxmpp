@@ -10,8 +10,10 @@ import com.baodanyun.websocket.enums.TeminalTypeEnum;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.*;
 import com.baodanyun.websocket.service.MessageSendToWeixin;
+import com.baodanyun.websocket.service.OffLineMessageService;
 import com.baodanyun.websocket.service.UserServer;
 import com.baodanyun.websocket.util.AccessControlAllowUtils;
+import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
 import org.jivesoftware.smack.SmackException;
@@ -25,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -40,14 +41,14 @@ public class ProductConsultationApi extends BaseController {
     private static Map<String, Visitor> visitors = new ConcurrentHashMap<>();
     @Autowired
     private UserServer userServer;
+    @Autowired
+    private OffLineMessageService offLineMessageService;
 
     @Autowired
     private MessageSendToWeixin messageSendToWeixin;
 
     @Autowired
     private WeChatTerminalVisitorFactory weChatTerminalVisitorFactory;
-
-    private String me = "当前客服不在线，请点击以下链接留言";
 
     @RequestMapping(value = "productConsultation")
     public void getMessageByCId(ProductConsultation pc, HttpServletRequest request, HttpServletResponse httpServletResponse) {
@@ -57,28 +58,23 @@ public class ProductConsultationApi extends BaseController {
             logger.info(JSONUtil.toJson(pc));
             VisitorChatNode visitorChatNode = initVisitorChatNode(pc.getU());
             CustomerChatNode customerChatNode = visitorChatNode.getCurrentChatNode();
-
-
-            boolean cFlag = visitorChatNode.getCurrentChatNode().isXmppOnline();
-            logger.info("客服是否在线" + cFlag);
-            AbstractTerminal node = visitorChatNode.getNode(weChatTerminalVisitorFactory.getId(visitorChatNode.getAbstractUser()));
-            // 客服不在线
-            if (!cFlag) {
-                String url = request.getRequestURL().toString();
-                response = getLeaveMessageResponse(visitorChatNode, url, customerChatNode.getAbstractUser().getId(), pc.getU());
-                Render.r(httpServletResponse, JSONUtil.toJson(response)); //客服不在线直接返回
-                return;
-            } else {
-                response = getOnlineResponse();
-            }
-
             String body = "您好，我是豆包网的专属客服，您刚浏览了<a href=\\\"" + pc.getGoodUrl() + "\\\">" + pc.getName() + "</a>，不知道您有什么疑问可以帮到您^_^";
             Msg msg = new TextMsg(body);
             msg.setSource(TeminalTypeEnum.PRODUCT.getCode()); //消息来源是微信
             msg.setTo(customerChatNode.getAbstractUser().getId());
             msg.setFrom(pc.getU());
 
-            messageSendToWeixin.send(msg, pc.getU(), null);
+            boolean cFlag = visitorChatNode.getCurrentChatNode().isXmppOnline();
+            logger.info("客服是否在线" + cFlag);
+            AbstractTerminal node = visitorChatNode.getNode(weChatTerminalVisitorFactory.getId(visitorChatNode.getAbstractUser()));
+            // 客服不在线
+            if (!cFlag) {
+                response = getLeaveMessageResponse(visitorChatNode, msg);
+            } else {
+                messageSendToWeixin.send(msg, pc.getU(), null);
+                response = getOnlineResponse();
+            }
+
             visitorChatNode.receiveFromGod(node, msg);
 
         } catch (BusinessException e) {
@@ -97,29 +93,12 @@ public class ProductConsultationApi extends BaseController {
     }
 
 
-    public Response getLeaveMessageResponse(VisitorChatNode visitorChatNode, String url, String to, String openId) {
+    public Response getLeaveMessageResponse(VisitorChatNode visitorChatNode, Msg msg) {
         Response response = new Response();
-        AbstractUser visitor = visitorChatNode.getAbstractUser();
-        AbstractUser customer = visitorChatNode.getCurrentChatNode().getAbstractUser();
-        logger.info("customer[" + customer.getId() + "] not online");
-        String info;
-        if (null == visitor.getUid() || 0 == visitor.getUid()) {
-            info = "请您到个人中心注册";
-        } else {
-            int end = url.indexOf("/api/");
-            String base = url.substring(0, end);
-            String u = base + "/visitorlogin?t=" + to + "&u=" + openId;
-            info = me + "[<a href=\\\"" + u + "\\\">我要留言</a>]";
-            logger.info("info:" + info);
-        }
-        Msg sendMsg = new Msg(info);
-        sendMsg.setContentType(Msg.MsgContentType.text.toString());
-        Long ct = new Date().getTime();
-        sendMsg.setTo(customer.getId());
-        sendMsg.setCt(ct);
-        messageSendToWeixin.send(sendMsg, openId, customer.getId());
-        response.setSuccess(true);
+        String info = Config.offlineWord;
+        offLineMessageService.dealOfflineMessage(visitorChatNode, msg.getContent());
 
+        response.setSuccess(true);
         response.setMsg(info);
         return response;
     }

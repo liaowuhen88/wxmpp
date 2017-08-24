@@ -4,12 +4,11 @@ import com.baodanyun.robot.service.RobotService;
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.enums.TeminalTypeEnum;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.node.*;
-import com.baodanyun.websocket.service.CustomerDispatcherTactics;
 import com.baodanyun.websocket.service.MessageSendToWeixin;
+import com.baodanyun.websocket.service.OffLineMessageService;
 import com.baodanyun.websocket.service.UserServer;
 import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.HttpServletRequestUtils;
@@ -29,8 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by yutao on 2016/10/4.
@@ -40,20 +37,18 @@ import java.util.concurrent.ConcurrentHashMap;
 @RestController
 public class RecieveWeiXinMessageApi extends BaseController {
     protected static Logger logger = LoggerFactory.getLogger(RecieveWeiXinMessageApi.class);
-    private static Map<String, Visitor> visitors = new ConcurrentHashMap<>();
+
     @Autowired
     private UserServer userServer;
+
+    @Autowired
+    private OffLineMessageService offLineMessageService;
 
     @Autowired
     private MessageSendToWeixin messageSendToWeixin;
 
     @Autowired
-    private CustomerDispatcherTactics customerDispatcherTactics;
-
-    @Autowired
     private WeChatTerminalVisitorFactory weChatTerminalVisitorFactory;
-
-    private String me = "当前客服不在线，请点击以下链接留言";
     /**
      * 指定客服关键字
      */
@@ -67,50 +62,40 @@ public class RecieveWeiXinMessageApi extends BaseController {
     public void getMessageByCId(HttpServletRequest request, HttpServletResponse httpServletResponse) {
         Response response;
         try {
+            // 初始化数据
             String body = HttpServletRequestUtils.getBody(request);
+            logger.info(body);
             Msg msg = msg(body);
-
-            if (StringUtils.isBlank(msg.getFrom())) {
-                response = new Response();
-                response.setMsg("openId不能为空");
-                response.setSuccess(false);
-                Render.r(httpServletResponse, JSONUtil.toJson(response));
-                return;
-            }
+            logger.info(JSONUtil.toJson(msg));
 
             msg.setSource(TeminalTypeEnum.WE_CHAT.getCode()); //消息来源是微信
             AbstractUser user = userServer.initUserByOpenId(msg.getFrom());
-
             boolean tobot = robotService.executeRobotFlow(msg, user);
             logger.info("tobot {}", tobot);
             if (tobot) {//存在[我要报案]进入机器人流程
                 return;
             }
 
-            VisitorChatNode visitorChatNode = initVisitorChatNode(msg);
+            VisitorChatNode visitorChatNode = initVisitorChatNode(user, msg);
 
             CustomerChatNode customerChatNode = visitorChatNode.getCurrentChatNode();
             msg.setTo(customerChatNode.getAbstractUser().getId());
+            AbstractTerminal node = visitorChatNode.getNode(weChatTerminalVisitorFactory.getId(visitorChatNode.getAbstractUser()));
 
             if (!StringUtils.isEmpty(msg.getContent()) && msg.getContent().startsWith(keywords)) {
                 response = getBindCustomerResponse(visitorChatNode.getAbstractUser(), msg);
             } else {
                 boolean cFlag = visitorChatNode.getCurrentChatNode().isOnline();
                 logger.info("客服是否在线" + cFlag);
-                AbstractTerminal node = visitorChatNode.getNode(weChatTerminalVisitorFactory.getId(visitorChatNode.getAbstractUser()));
                 // 客服不在线
                 if (!cFlag) {
-                    String url = request.getRequestURL().toString();
-                    response = getLeaveMessageResponse(visitorChatNode, url, msg);
-
-                    Render.r(httpServletResponse, JSONUtil.toJson(response)); //客服不在线直接返回
-                    return;
+                    //String url = request.getRequestURL().toString();
+                    response = getLeaveMessageResponse(visitorChatNode, msg);
                 } else {
                     response = getOnlineResponse();
                 }
-                visitorChatNode.receiveFromGod(node, msg);
             }
-
+            visitorChatNode.receiveFromGod(node, msg);
         } catch (Exception e) {
             logger.error("error", e);
             response = new Response();
@@ -133,8 +118,11 @@ public class RecieveWeiXinMessageApi extends BaseController {
         if (StringUtils.isEmpty(body)) {
             throw new BusinessException("body is null");
         }
-        logger.info(body);
         Msg msg = JSONUtil.toObject(Msg.class, body);
+
+        if (StringUtils.isBlank(msg.getFrom())) {
+            throw new BusinessException("openId不能为空");
+        }
 
         if (msg.getCt() == null) {
             msg.setCt(System.currentTimeMillis()); //系统时间
@@ -149,30 +137,11 @@ public class RecieveWeiXinMessageApi extends BaseController {
         return msg;
     }
 
-
-    public Response getLeaveMessageResponse(VisitorChatNode visitorChatNode, String url, Msg msg) {
+    public Response getLeaveMessageResponse(VisitorChatNode visitorChatNode, Msg msg) {
         Response response = new Response();
-        AbstractUser visitor = visitorChatNode.getAbstractUser();
-        AbstractUser customer = visitorChatNode.getCurrentChatNode().getAbstractUser();
-        logger.info("customer[" + customer.getId() + "] not online");
-        String info;
-        if (null == visitor.getUid() || 0 == visitor.getUid()) {
-            info = "请您到个人中心注册";
-        } else {
-            int end = url.indexOf("/api/");
-            String base = url.substring(0, end);
-            String u = base + "/visitorlogin?t=" + msg.getTo() + "&u=" + msg.getFrom();
-            info = me + "[<a href=\\\"" + u + "\\\">我要留言</a>]";
-            logger.info("info:" + info);
-        }
-        Msg sendMsg = new Msg(info);
-        sendMsg.setContentType(Msg.MsgContentType.text.toString());
-        Long ct = new Date().getTime();
-        sendMsg.setTo(customer.getId());
-        sendMsg.setCt(ct);
-        messageSendToWeixin.send(sendMsg, msg.getFrom(), customer.getId());
+        offLineMessageService.dealOfflineMessage(visitorChatNode, msg.getContent());
+        String info = Config.offlineWord;
         response.setSuccess(true);
-
         response.setMsg(info);
         return response;
     }
@@ -202,13 +171,9 @@ public class RecieveWeiXinMessageApi extends BaseController {
         return response;
     }
 
-    public VisitorChatNode initVisitorChatNode(Msg msg) throws BusinessException, XMPPException, IOException, SmackException, InterruptedException {
-        AbstractUser visitor = userServer.initUserByOpenId(msg.getFrom());
-        VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
+    public VisitorChatNode initVisitorChatNode(AbstractUser visitor, Msg msg) throws BusinessException, XMPPException, IOException, SmackException, InterruptedException {
 
-        if (null == visitorChatNode || !visitorChatNode.isXmppOnline()) {
-            visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
-        }
+        VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
 
         String id = weChatTerminalVisitorFactory.getId(visitor);
         AbstractTerminal node = visitorChatNode.getNode(id);
@@ -220,15 +185,9 @@ public class RecieveWeiXinMessageApi extends BaseController {
 
         visitorChatNode.initCurrentChatNode();
 
-        logger.info(JSONUtil.toJson(visitorChatNode.getAbstractUser()));
-
         if (!visitorChatNode.isXmppOnline()) {
             visitorChatNode.login();
-            if (null != node) {
-                visitorChatNode.online(node);
-            } else {
-                logger.error("node is null");
-            }
+            visitorChatNode.online(node);
         }
 
         return visitorChatNode;

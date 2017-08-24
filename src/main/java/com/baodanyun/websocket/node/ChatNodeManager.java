@@ -6,9 +6,7 @@ import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.service.CacheService;
 import com.baodanyun.websocket.service.impl.MemCacheServiceImpl;
 import com.baodanyun.websocket.util.JSONUtil;
-import com.baodanyun.websocket.util.Render;
 import com.baodanyun.websocket.util.SpringContextUtil;
-import com.baodanyun.websocket.util.XMPPUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,6 +56,7 @@ public class ChatNodeManager {
     }
 
     public synchronized static VisitorChatNode getVisitorXmppNode(AbstractUser visitor) throws BusinessException {
+        // 报案阻断聊天
         Object obj = cacheService.get(RobotConstant.ROBOT_KEYP_REFIX + visitor.getOpenId());
         if (obj != null) {
             throw new BusinessException("用户已经开启[我要报案]流程，无法接入");

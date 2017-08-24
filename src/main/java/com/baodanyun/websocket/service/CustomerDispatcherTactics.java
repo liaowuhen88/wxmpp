@@ -20,6 +20,8 @@ public interface CustomerDispatcherTactics {
 
     AbstractUser getCustomerAcceptByJidOnline(String jid) throws BusinessException;
 
+    AbstractUser getCustomerRefusedJidOnline(String jid) throws BusinessException;
+
     AbstractUser saveCustomer(AbstractUser customer);
 
     AbstractUser deleteCustomer(String cJid);

@@ -21,6 +21,7 @@ public class Config {
     public static final String weiXinCallback;
     public static final String controlId;
     public static final String greetingWord;
+    public static final String offlineWord;
     public static final String bdyEnv;
 
     static {
@@ -56,6 +57,7 @@ public class Config {
         weiXinCallback = p.getProperty("weiXin.callback");
         controlId = p.getProperty("control.id");
         greetingWord = p.getProperty("greeting.word");
+        offlineWord = p.getProperty("offline.word");
         bdyEnv = p.getProperty("bdy.env");
 
     }

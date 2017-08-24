@@ -37,4 +37,8 @@ public class MessageSendToWeixin {
 
     }
 
+    public void send(Msg sendMsg, String openId) {
+        send(sendMsg, openId, null);
+    }
+
 }

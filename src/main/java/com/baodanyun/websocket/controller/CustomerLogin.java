@@ -11,7 +11,6 @@ import com.baodanyun.websocket.model.LoginModel;
 import com.baodanyun.websocket.model.Ofproperty;
 import com.baodanyun.websocket.model.Ofuser;
 import com.baodanyun.websocket.node.*;
-import com.baodanyun.websocket.service.CacheService;
 import com.baodanyun.websocket.service.OfpropertyService;
 import com.baodanyun.websocket.service.OfuserService;
 import com.baodanyun.websocket.service.UserServer;
@@ -47,14 +46,12 @@ public class CustomerLogin extends BaseController {
     private OfuserService ofuserService;
     @Autowired
     private AccessWeChatTerminalVisitorFactory accessWeChatTerminalVisitorFactory;
-    @Autowired
-    private CacheService cacheService;
 
     @RequestMapping(value = "loginApi", method = RequestMethod.POST)
     public void api(LoginModel user, HttpServletRequest request, HttpServletResponse response) {
         //客服必须填写用户名 和 密码
         logger.info("user" + JSONUtil.toJson(user));
-        Customer customer = null;
+        Customer customer;
         Response responseMsg = new Response();
         try {
             // 初始化客服，客服登录

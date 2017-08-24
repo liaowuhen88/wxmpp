@@ -1,6 +1,5 @@
 package com.baodanyun.websocket.springConfig;
 
-import com.baodanyun.websocket.core.handle.CustomerSimpleWebSocketHandler;
 import com.baodanyun.websocket.core.handle.CustomerWebSocketHandler;
 import com.baodanyun.websocket.core.handle.NewVisitorWebSocketHandler;
 import com.baodanyun.websocket.core.handle.VisitorWebSocketHandler;
@@ -27,7 +26,7 @@ public class WebSocketConfig extends WebMvcConfigurerAdapter implements WebSocke
 		registry.addHandler(new VisitorWebSocketHandler(), "/sockjs/visitor").addInterceptors(new VisitorWebHandshakeInterceptor()).withSockJS().setHeartbeatTime(15000);
 		registry.addHandler(new NewVisitorWebSocketHandler(), "/sockjs/newVisitor").addInterceptors(new VisitorWebHandshakeInterceptor()).withSockJS().setHeartbeatTime(15000);
 		registry.addHandler(new CustomerWebSocketHandler(),"/sockjs/customer/chat").addInterceptors(new CustomerWebHandshakeInterceptor()).withSockJS().setHeartbeatTime(15000);
-		registry.addHandler(new CustomerSimpleWebSocketHandler(), "/sockjs/customerSimple-chat").addInterceptors(new CustomerWebHandshakeInterceptor()).withSockJS().setHeartbeatTime(15000);
+		//registry.addHandler(new CustomerSimpleWebSocketHandler(), "/sockjs/customerSimple-chat").addInterceptors(new CustomerWebHandshakeInterceptor()).withSockJS().setHeartbeatTime(15000);
 
 	}
 

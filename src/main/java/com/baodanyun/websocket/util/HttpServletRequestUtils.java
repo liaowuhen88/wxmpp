@@ -10,7 +10,7 @@ import java.io.IOException;
 public class HttpServletRequestUtils {
 
 
-    public static String getBody(HttpServletRequest request) {
+    public static String getBody(HttpServletRequest request) throws IOException {
         StringBuffer buffer = new StringBuffer();
 
         BufferedReader reader = null;
@@ -21,8 +21,6 @@ public class HttpServletRequestUtils {
                 buffer.append(inputLine);
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
         } finally {
             if (reader != null) {
                 try {

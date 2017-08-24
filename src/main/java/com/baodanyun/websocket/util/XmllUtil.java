@@ -1,16 +1,14 @@
 package com.baodanyun.websocket.util;
 
-import org.xml.sax.InputSource;
-
-import java.io.StringReader;
-import java.util.List;
-import java.io.IOException;
-
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
+import org.xml.sax.InputSource;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.List;
 
 /**
  * Created by liaowuhen on 2016/11/9.
@@ -60,28 +58,20 @@ public class XmllUtil {
         return null;
     }
 
-    public static Element xmlElementRoot(String xmlDoc) {
+    public static Element xmlElementRoot(String xmlDoc) throws JDOMException, IOException {
         //创建一个新的字符串
         StringReader read = new StringReader(xmlDoc);
         //创建新的输入源SAX 解析器将使用 InputSource 对象来确定如何读取 XML 输入
         InputSource source = new InputSource(read);
         //创建一个新的SAXBuilder
         SAXBuilder sb = new SAXBuilder();
-        try {
-            //通过输入源构造一个Document
-            Document doc = sb.build(source);
-            //取的根元素
-            Element root = doc.getRootElement();
+        //通过输入源构造一个Document
+        Document doc = sb.build(source);
+        //取的根元素
+        Element root = doc.getRootElement();
 
-            return root;
-        } catch (JDOMException e) {
-            // TODO 自动生成 catch 块
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO 自动生成 catch 块
-            e.printStackTrace();
-        }
-        return null;
+        return root;
+
     }
 
     /*public static void main(String[] args){

@@ -55,6 +55,20 @@ public abstract class AbstarctCustomerDispatcherTacticsImpl implements CustomerD
     }
 
     @Override
+    public AbstractUser getCustomerRefusedJidOnline(String jid) throws BusinessException {
+        if (!StringUtils.isEmpty(jid) && xmppServer.isAuthenticated(jid)) {
+            AbstractUser customer = refuseCustomers.get(jid);
+            if (null != customer) {
+                return customer;
+            }
+        } else {
+            logger.info(" jid:{}  customer is not online", jid);
+        }
+        return null;
+    }
+
+
+    @Override
     public synchronized AbstractUser saveCustomer(AbstractUser customer) {
         // 接入用户
         if (!StringUtils.isEmpty(((Customer) customer).getAccessType()) && ((Customer) customer).getAccessType().equals("2")) {

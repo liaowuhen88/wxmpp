@@ -481,6 +481,7 @@ var xChat = function (options) {
             return;
         }
         _ws = new SockJS(_url, undefined, {protocols_whitelist: _transports});
+
         _ws.onopen = function () {
             _this.handsUp();
         };

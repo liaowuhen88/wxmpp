@@ -14,7 +14,6 @@ import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.MsgSourceUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -58,6 +57,11 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
             AbstractUser au = (AbstractUser) session.getHandshakeAttributes().get(Common.USER_KEY);
             logger.info("webSocket receive message:" + JSONUtil.toJson(message));
             String content = message.getPayload();
+
+            if ("HeartBeat".equals(content)) {
+                //session.sendMessage();
+            }
+
             WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au, session);
 
             chatNode = ChatNodeManager.getCustomerXmppNode(au);

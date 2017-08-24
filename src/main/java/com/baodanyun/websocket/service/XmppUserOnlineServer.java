@@ -77,6 +77,7 @@ public class XmppUserOnlineServer {
             if (StringUtils.isEmpty(str)) {
                 return false;
             }
+
             Element el = XmllUtil.xmlElementRoot(str);
 
             if (null != el && StringUtils.isEmpty(el.getName())) {
