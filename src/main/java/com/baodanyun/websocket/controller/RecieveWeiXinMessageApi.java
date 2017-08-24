@@ -80,7 +80,10 @@ public class RecieveWeiXinMessageApi extends BaseController {
 
             msg.setSource(TeminalTypeEnum.WE_CHAT.getCode()); //消息来源是微信
             AbstractUser user = userServer.initUserByOpenId(msg.getFrom());
-            if (robotService.executeRobotFlow(msg, user)) {//存在[我要报案]进入机器人流程
+
+            boolean tobot = robotService.executeRobotFlow(msg, user);
+            logger.info("tobot {}", tobot);
+            if (tobot) {//存在[我要报案]进入机器人流程
                 return;
             }
 

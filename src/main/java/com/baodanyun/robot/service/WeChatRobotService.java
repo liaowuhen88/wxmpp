@@ -35,7 +35,7 @@ public class WeChatRobotService implements RobotService {
                 flag = true;
             }
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error("error", e);
         }
 
         return flag;

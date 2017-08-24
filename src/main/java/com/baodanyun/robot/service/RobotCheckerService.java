@@ -3,13 +3,10 @@ package com.baodanyun.robot.service;
 import com.alibaba.fastjson.JSON;
 import com.baodanyun.robot.common.RobotConstant;
 import com.baodanyun.websocket.bean.msg.Msg;
-import com.baodanyun.websocket.enums.TeminalTypeEnum;
 import com.baodanyun.websocket.node.sendUtils.WeChatResponse;
 import com.baodanyun.websocket.node.sendUtils.WeChatSendUtils;
 import com.baodanyun.websocket.service.CacheService;
 import com.baodanyun.websocket.service.PersonalService;
-import org.apache.commons.lang.StringUtils;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -37,23 +34,22 @@ public class RobotCheckerService {
     public boolean validate(Msg msg) throws Exception {
         boolean pass = false;
         String content = msg.getContent(); //消息内容
-        if (StringUtils.isBlank(content)) {
-            return false;
-        }
-
         String openId = msg.getFrom();
+
         String cacheKey = RobotConstant.ROBOT_KEYP_REFIX + openId;
         Object obj = cacheService.get(cacheKey);
+        LOGGER.info("cacheKey:{},obj: {}", cacheKey, obj);
 
-        if (content.equals(RobotConstant.REPORT_CASE) && obj == null) {//第一次我要报案
+        if (RobotConstant.REPORT_CASE.equals(content.trim()) && obj == null) {//第一次我要报案
             boolean isLogin = personalService.getUidByOpenId(openId) != null;
             if (isLogin) {
                 String serialNumber = UUID.randomUUID().toString();
                 serialNumber = serialNumber.replaceAll("-", "");
                 msg.setSerialNumber(serialNumber.toUpperCase());//UUID批次号
-
-                cacheService.setHalfHour(cacheKey, msg);
-                LOGGER.info(cacheKey + "成功缓存,时间:" + DateTime.now().toString());
+                boolean flag = cacheService.setHalfHour(cacheKey, msg);
+                LOGGER.info("{}缓存{}", cacheKey, flag);
+            } else {
+                LOGGER.info("isLogin {}", isLogin);
             }
 
             String tipContent = isLogin ? RobotConstant.HAS_REGIST_TIP : RobotConstant.NOT_REGIST_TIP;
@@ -64,8 +60,9 @@ public class RobotCheckerService {
 
         if (obj != null) {//缓存中存在即本次批次有效报案
             Msg message = (Msg) obj;
-            pass = message.getCt() + RobotConstant.RULE_TIME <= System.currentTimeMillis();
+            pass = System.currentTimeMillis() - message.getCt() < RobotConstant.RULE_TIME;
 
+            LOGGER.info(pass + "");
             //文本消息都提示非法输入
             if (pass && RobotConstant.WECHAT_TEXT.equals(msg.getContentType())
                     && !content.equals(RobotConstant.FINISH) && !content.equals(RobotConstant.CLOSE)) {

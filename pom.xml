@@ -100,7 +100,7 @@
 				<!-- mall order interface  -->
 				<mall.info.order>http://localhost/baodan/api/orderAll</mall.info.order>
 				<!--<cache.url>4af035dc9c6148a1.m.cnbjalicm12pub001.ocs.aliyuncs.com</cache.url>-->
-				<cache.url>10.44.11.156</cache.url>
+				<cache.url>4af035dc9c6148a1.m.cnbjalicm12pub001.ocs.aliyuncs.com</cache.url>
 				<cache.port>11211</cache.port>
 				<xmpp.ip>101.201.211.108</xmpp.ip>
 				<xmpp.port>5222</xmpp.port>

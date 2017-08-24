@@ -44,30 +44,26 @@ public class TransferServerImpl implements TransferServer {
     }
 
     @Override
-    public boolean bindVisitor(AbstractUser customer, Visitor visitor) {
+    public boolean bindVisitor(AbstractUser customer, Visitor visitor) throws BusinessException, XMPPException, IOException, SmackException, InterruptedException {
         boolean flag = false;
-        try {
-            if (null == visitor) {
-                throw new BusinessException("访客未在线");
-            }
-            VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
-            ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(visitorChatNode);
-            AbstractTerminal at = accessWeChatTerminalVisitorFactory.getNode(chatNodeAdaptation, visitor);
-
-            CustomerChatNode chatNodeFrom = visitorChatNode.getCurrentChatNode();
-            CustomerChatNode chatNodeTo = ChatNodeManager.getCustomerXmppNode(customer);
-            if (null == chatNodeFrom) {
-                visitorChatNode.setCurrentChatNode(chatNodeTo);
-            } else {
-                visitorChatNode.changeCurrentChatNode(chatNodeTo);
-            }
-
-            visitorChatNode.login();
-            visitorChatNode.online(at);
-        } catch (Exception e) {
-            logger.error("error", "", e);
-        } finally {
+        if (null == visitor) {
+            throw new BusinessException("访客未在线");
         }
+        VisitorChatNode visitorChatNode = ChatNodeManager.getVisitorXmppNode(visitor);
+        ChatNodeAdaptation chatNodeAdaptation = new ChatNodeAdaptation(visitorChatNode);
+        AbstractTerminal at = accessWeChatTerminalVisitorFactory.getNode(chatNodeAdaptation, visitor);
+
+        CustomerChatNode chatNodeFrom = visitorChatNode.getCurrentChatNode();
+        CustomerChatNode chatNodeTo = ChatNodeManager.getCustomerXmppNode(customer);
+        if (null == chatNodeFrom) {
+            visitorChatNode.setCurrentChatNode(chatNodeTo);
+        } else {
+            visitorChatNode.changeCurrentChatNode(chatNodeTo);
+        }
+
+        visitorChatNode.login();
+        visitorChatNode.online(at);
+
         return flag;
     }
 

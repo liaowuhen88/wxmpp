@@ -26,7 +26,7 @@ public interface TransferServer {
      */
      boolean changeVisitorTo(Transferlog tm, Visitor visitor) throws BusinessException, XMPPException, IOException, SmackException;
 
-    boolean bindVisitor(AbstractUser customer, Visitor visitor);
+    boolean bindVisitor(AbstractUser customer, Visitor visitor) throws BusinessException, XMPPException, IOException, SmackException, InterruptedException;
 
      boolean changeVisitorTo(Transferlog tm, Visitor visitor, AbstractUser customer) throws BusinessException, XMPPException, IOException, SmackException;
 

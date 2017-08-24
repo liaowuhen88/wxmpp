@@ -11,8 +11,8 @@ public class RobotConstant {
     /*微信文本类型标识*/
     public static final String WECHAT_TEXT = "text";
 
-    /*15分钟*/
-    public static final long RULE_TIME = 15 * 60;
+    /*15分钟  毫秒*/
+    public static final long RULE_TIME = 15 * 60 * 1000;
 
     public static final String REPORT_CASE = "我要报案";
     public static final String FINISH = "Y";

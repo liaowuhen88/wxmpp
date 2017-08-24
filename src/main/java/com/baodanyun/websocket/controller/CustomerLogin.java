@@ -1,8 +1,6 @@
 package com.baodanyun.websocket.controller;
 
-import com.baodanyun.robot.common.RobotConstant;
 import com.baodanyun.websocket.bean.Response;
-import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.bean.user.Customer;
 import com.baodanyun.websocket.bean.user.Visitor;
@@ -181,7 +179,7 @@ public class CustomerLogin extends BaseController {
 
             logger.error("error", e);
         } catch (Exception e) {
-            responseMsg.setMsg(e.getMessage());
+            responseMsg.setMsg("系统异常");
             responseMsg.setSuccess(false);
             MsgSourceUtil.remove(cacheKey);
 

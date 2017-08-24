@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,12 +59,11 @@ public class PersonalServiceImpl implements PersonalService {
         }
 
         if (!StringUtils.isEmpty(userInfo)) {
-            java.lang.reflect.Type userInfoType = new TypeToken<List<PersonalInfo>>() {
-            }.getType();
-
             logger.info("uid[" + uid + "]getPersonalInfos[" + userInfo + "]");
-            List<PersonalInfo> userinfoList = JSONUtil.fromJson(userInfo, userInfoType);
-            return userinfoList;
+            PersonalInfo userinfo = JSONUtil.fromJson(userInfo, PersonalInfo.class);
+            List<PersonalInfo> list = new ArrayList<>();
+            list.add(userinfo);
+            return list;
         } else {
             return null;
         }
