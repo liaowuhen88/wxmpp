@@ -1,6 +1,8 @@
 package com.baodanyun.websocket.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baodanyun.robot.dto.RobotDto;
+import com.baodanyun.robot.service.ReportCaseService;
 import com.baodanyun.websocket.bean.hr.HrUser;
 import com.baodanyun.websocket.bean.userInterface.Company;
 import com.baodanyun.websocket.bean.userInterface.PersonalDetail;
@@ -13,6 +15,7 @@ import com.baodanyun.websocket.bean.userInterface.user.PersonalInfo;
 import com.baodanyun.websocket.bean.userInterface.user.WeiXinUser;
 import com.baodanyun.websocket.controller.CustomerApi;
 import com.baodanyun.websocket.exception.BusinessException;
+import com.baodanyun.websocket.model.RobotReportCase;
 import com.baodanyun.websocket.service.CacheService;
 import com.baodanyun.websocket.service.PersonalService;
 import com.baodanyun.websocket.util.CommonConfig;
@@ -48,6 +51,9 @@ public class PersonalServiceImpl implements PersonalService {
     @Autowired
     @Qualifier(value = "nullMemCacheServiceImpl")
     private CacheService cacheService;
+
+    @Autowired
+    private ReportCaseService reportCaseService;
 
     @Override
     public List<PersonalInfo> getPersonalInfos(Long uid) {
@@ -300,6 +306,8 @@ public class PersonalServiceImpl implements PersonalService {
 
         List<PcontractBaseMessDto> cardList = this.getUidQandan(uid); //卡单
 
+        List<RobotDto> robotList = reportCaseService.getReportCaseByUid(uid);//机器人报案
+
         pd.setPersonalInfo(personalInfo);
         pd.setPersonalInfos(personalInfos);
         pd.setOrderInfos(orderInfos);
@@ -307,6 +315,7 @@ public class PersonalServiceImpl implements PersonalService {
         pd.setContractInfos(contractInfos);
         pd.setCompany(company);
         pd.setCardList(cardList);
+        pd.setRobotList(robotList);
 
         return pd;
     }

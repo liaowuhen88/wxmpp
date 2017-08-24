@@ -21,6 +21,7 @@ var Chat = function (options) {
         chatContractsBtn: '#chatContractsBtn',
         chatOrderBtn: '#chatOrderBtn',
         chatCardBtn: '#chatCardBtn',
+        chatRobotBtn: '#chatRobotBtn',
         signOutBtn: '.signOut'
     };
 

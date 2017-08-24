@@ -20,6 +20,7 @@
                     <li class="item" id="chatClaimsBtn">理赔</li>
                     <li class="item" id="chatContractsBtn">合同</li>
                     <li class="item" id="chatOrderBtn">订单</li>
+                    <li class="item" id="chatRobotBtn">机器人报案</li>
                 </ul>
                 <%--<div class="btn" style="float:left" id="chatClaimsBtn">理赔</div>--%>
 
@@ -35,10 +36,10 @@
                      <iframe src="<%=request.getContextPath()%>/resouces/exam/index.html" frameborder="0"></iframe>
                  </div>--%>
                 <div class="modal_body modal_scroll active" id="cardListContainer"></div>
-
                 <div class="modal_body modal_scroll" id="claimsContainer"></div>
                 <div class="modal_body modal_scroll" id="contractsContainer"></div>
                 <div class="modal_body modal_scroll " id="orderContainer"></div>
+                <div class="modal_body modal_scroll " id="robotContainer"></div>
 
             </div>
         </div>

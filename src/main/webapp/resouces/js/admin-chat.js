@@ -46,6 +46,8 @@ xchat.controls = {
     orderContainer: '#orderContainer',
     //卡单
     cardListContainer: '#cardListContainer',
+    //机器人报案
+    robotContainer: '#robotContainer',
 
     waitReplyPerson: '#waitReplyPerson'
 };
@@ -634,6 +636,7 @@ xchat.getUserInfo = function (currentId, destJid, openId) {
     $(_this.controls.contractsContainer).empty();
     $(_this.controls.orderContainer).empty();
     $(_this.controls.cardListContainer).empty();
+    $(_this.controls.robotContainer).empty();
 
 
     $.ajax({
@@ -652,6 +655,8 @@ xchat.getUserInfo = function (currentId, destJid, openId) {
                         var order = basic.orderInfos;
                         var contract = basic.contractInfos;
                         var cardList = basic.cardList;
+                        var robotList = basic.robotList; //机器人报案
+
                         if (personalInfo) {
                             switch (personalInfo.sex) {
                                 case 1:
@@ -700,6 +705,9 @@ xchat.getUserInfo = function (currentId, destJid, openId) {
                         }
                         if (cardList) {
                             _this.cardComb(cardList);   //卡单
+                        }
+                        if (robotList) {
+                            _this.robotComb(robotList);   //机器人
                         }
                     }
 
@@ -960,6 +968,48 @@ xchat.cardComb = function (data) {//卡单
     });
     $(this.controls.cardListContainer).html(itemHtml);
 };
+
+//机器人报案拼接
+xchat.robotComb = function (data) {
+    var html = '';
+    var itemHtml = '';
+    data.map(function (item, index) {
+        if (item.contentTime) {
+            item.contentTime = myUtils.formatDate(item.contentTime, 'yyyy-MM-dd hh:mm:ss');
+        } else {
+            item.contentTime = '';
+        }
+        if (item.updateTime) {
+            item.updateTime = myUtils.formatDate(item.updateTime, 'yyyy-MM-dd hh:mm:ss');
+        } else {
+            item.updateTime = '';
+        }
+
+        html += '<li><span class="tag">用户id:</span>' + item.uid + '</li>';
+        html += '<li><span class="tag">用户名:</span>' + item.userName + '</a></li>';
+        html += '<li><span class="tag">用户昵称:</span>' + item.nickName + '</a></li>';
+        html += '<li><span class="tag">openId:</span>' + item.openId + '</a></li>';
+        html += '<li><span class="tag">批次:</span>' + item.serialNumber + '</a></li>';
+        html += '<li><span class="tag">报案时间:</span>' + item.updateTime + '</a></li>';
+        html += '<li><div class="tag">报案图片:@</div></li>';
+
+        var list = item.robotImages;
+        var imgArr = [];
+        if (list && list.length > 0) {
+            for (var k = 0; k < list.length; k++) {
+                var imgObj = list[k];
+                var img = '<a target="_blank" href="' + imgObj.imgPath + '"><img height="50" width="50" style="margin: 3px 3px" src="' + imgObj.imgPath + '" alt="上传时间:' + myUtils.formatDate(imgObj.uploadTime, 'yyyy-MM-dd hh:mm:ss') + '"/></a>';
+                imgArr.push(img);
+            }
+        }
+        html = html.replace("@", imgArr.join(""));
+
+        itemHtml += '<ul class="modal_ul">' + html + '</ul>';
+        html = '';
+    });
+    $(this.controls.robotContainer).html(itemHtml);
+};
+
 
 //合同拼接
 xchat.contractComb = function (data) {

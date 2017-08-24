@@ -380,4 +380,14 @@
     ) tb ON r.open_id = tb.open_id AND r.content_time = tb.contenttime
     WHERE TIMESTAMPDIFF(MINUTE,r.content_time,CURRENT_TIMESTAMP()) > 15
   </select>
+
+  <!--按时间倒序查询uid的所有批次号-->
+  <select id="findSerialNumberList" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM robot_report_case
+    WHERE uid =#{uid} AND state = 2 AND content_type='image'
+    GROUP BY serial_number
+    ORDER BY content_time DESC;
+  </select>
 </mapper>

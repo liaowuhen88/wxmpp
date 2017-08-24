@@ -2,6 +2,8 @@ package com.baodanyun.robot.service;
 
 import com.alibaba.fastjson.JSON;
 import com.baodanyun.robot.common.RobotConstant;
+import com.baodanyun.robot.dto.RobotDto;
+import com.baodanyun.robot.dto.RobotImages;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.dao.RobotReportCaseMapper;
@@ -9,15 +11,20 @@ import com.baodanyun.websocket.enums.ReportCaseEnum;
 import com.baodanyun.websocket.model.RobotReportCase;
 import com.baodanyun.websocket.model.RobotReportCaseExample;
 import com.baodanyun.websocket.service.CacheService;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 机器人之我要报案操作表service
@@ -163,6 +170,7 @@ public class ReportCaseService {
 
     /**
      * 用户微信消息超时未提交提示
+     *
      * @param openId
      */
     private void expireWechatTip(String openId) {
@@ -219,5 +227,62 @@ public class ReportCaseService {
         }
 
         return true;
+    }
+
+    /**
+     * 根据uid查询机器人数据
+     *
+     * @param uid 用户id
+     * @return
+     */
+    public List<RobotDto> getReportCaseByUid(Long uid) {
+        List<RobotDto> resultList = null;
+
+        List<RobotReportCase> serialList = robotReportCaseMapper.findSerialNumberList(uid);
+        if (CollectionUtils.isNotEmpty(serialList)) {
+            resultList = new ArrayList<>();
+            for (RobotReportCase robot : serialList) {
+                List<RobotImages> imagesList = this.buildRobotImageList(uid, robot.getSerialNumber());
+                RobotDto robotDto = new RobotDto();
+                BeanUtils.copyProperties(robot, robotDto);
+                robotDto.setRobotImages(imagesList);
+
+                resultList.add(robotDto);
+            }
+        }
+
+        return resultList;
+    }
+
+    public List<RobotReportCase> findListByUid(Long uid) {
+        RobotReportCaseExample example = new RobotReportCaseExample();
+        example.setOrderByClause("content_time ASC"); //消息时间
+        example.createCriteria()
+                .andUidEqualTo(uid)
+                .andContentTypeEqualTo("image")
+                .andStateEqualTo((byte) ReportCaseEnum.SUCCESS.getState());
+
+        return robotReportCaseMapper.selectByExample(example);
+    }
+
+    private List<RobotImages> buildRobotImageList(long uid, final String serialNumber) {
+        List<RobotImages> imagesList = new ArrayList<>();
+
+        List<RobotReportCase> dataList = this.findListByUid(uid);
+        List<RobotReportCase> list = (List<RobotReportCase>) CollectionUtils.select(dataList, new Predicate<RobotReportCase>() {
+            @Override
+            public boolean evaluate(RobotReportCase robotReportCase) {
+                return serialNumber.equals(robotReportCase.getSerialNumber());
+            }
+        });
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (RobotReportCase reportCase : list) {
+                RobotImages images = new RobotImages(reportCase.getContent(), reportCase.getContentTime());
+                imagesList.add(images);
+            }
+        }
+
+        return imagesList;
     }
 }
