@@ -416,6 +416,30 @@ Utils = (function () {
             console.log("浏览器不支持本地存储");
         }
     };
+// 统计一个用户有多少消息未读
+    var recvMsgOne = {};
+    //本地存储
+    Utils.prototype.storage_unread = function (src, count) {
+        if (localStorage) {
+            //存储to的id
+            localStorage.setItem("count:" + src, count);
+        } else {
+            recvMsgOne[src] = count;
+            console.log("浏览器不支持本地存储");
+        }
+    };
+
+    //本地存储
+    Utils.prototype.get_unread = function (src) {
+        if (localStorage) {
+            //存储to的id
+            return localStorage.getItem("count:" + src);
+        } else {
+            console.log("浏览器不支持本地存储");
+            return recvMsgOne[src];
+
+        }
+    };
 
     Utils.prototype.visitorShowTip = function (content, container) {
         var tip = $(".component-info").find("b");

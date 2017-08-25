@@ -505,6 +505,7 @@ var xChat = function (options) {
         };
         _ws.onopen = function () {
             //心跳检测重置
+            $("#onlineStatus").hide();
             heartCheck.reset().start();
         };
         _ws.onmessage = function (_event) {
@@ -519,6 +520,7 @@ var xChat = function (options) {
     }
 
     this.reconnect = function (url) {
+        $("#onlineStatus").show();
         var _this = this;
         if (lockReconnect) return;
         lockReconnect = true;
@@ -570,7 +572,6 @@ var xChat = function (options) {
 
                 console.log("HeartBeat");
                 self.serverTimeoutObj = setTimeout(function () {//如果超过一定时间还没重置，说明后端主动断开了
-
                     _ws.close();//如果onclose会执行reconnect，我们执行ws.close()就行了.如果直接执行reconnect 会触发onclose导致重连两次
 
                 }, self.timeout)

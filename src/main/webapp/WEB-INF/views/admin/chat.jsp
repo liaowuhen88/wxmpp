@@ -51,6 +51,29 @@
 <jsp:include page="set.jsp"/>
 <%-- 离线消息 --%>
 <jsp:include page="leaveMessage.jsp"/>
+
+<div style="
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(3,3,3,0.8);
+    z-index: 999;
+    text-align: center;
+" id="onlineStatus">
+    <div style="
+    background: #fff;
+    font-size: 25px;
+    padding: 20px;
+    margin: 200px auto 0;
+    display: inherit;
+    width: 500px;
+">
+        该用户一掉线
+    </div>
+</div>
+
 <%-- 等待列表 --%>
 <div class="modal" data-target="holdListBtn">
     <div class="modal_backdrop"></div>

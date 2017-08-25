@@ -17,8 +17,6 @@ var xchat = new xChat({
 
 // 统计有多少用户未回
 xchat.recvMsg = [];
-// 统计一个用户有多少消息未读
-xchat.recvMsgOne = {};
 
 //控件
 xchat.controls = {
@@ -181,13 +179,13 @@ xchat.recvMsgEvent = function (json) {
         // 单个用户
         $(document.getElementById('m' + json.from)).attr("class", "new-message");
         var from = json.from;
-        var count = xchat.recvMsgOne[from];
+        var count = parseInt(myUtils.get_unread(from));
         if (count) {
             count = count + 1;
         } else {
             count = 1;
         }
-        xchat.recvMsgOne[from] = count;
+        myUtils.storage_unread(from, count);
         $(document.getElementById('m' + from)).html(count);
 
         if (json.source && json.source == 1) {//消息来源是微信则绿色背景
@@ -449,9 +447,13 @@ xchat.loadChatList = function () {
                     } else if (friend.onlineStatus == 'changeOffline') {
                         myUtils.renderDivAdd('onlinefriendListTpl', friend, 'changeOfflineFriendList');
                     }
+                    var count = myUtils.get_unread(friend.from);
+                    if (count && count != 0) {
+                        // 单个用户
+                        $(document.getElementById('m' + friend.from)).attr("class", "new-message");
+                        $(document.getElementById('m' + friend.from)).html(count);
+                    }
 
-                    var count = xchat.recvMsgOne[friend.from];
-                    $(document.getElementById('m' + friend.from)).html(count);
 
                 }
             }
@@ -617,7 +619,8 @@ xchat.openFriendWindow = function (isOnline, id, nickname, openId, icon) {
 
     _this.getLocalHistory(id);
     $(document.getElementById('m' + id)).attr("class", "");     //清空有新消息的提示
-    this.recvMsgOne[id] = 0;
+    myUtils.storage_unread(id, 0);
+
     $(document.getElementById('m' + id)).html("");
 
 
