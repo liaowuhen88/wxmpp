@@ -1,11 +1,13 @@
 package com.baodanyun.websocket.bean.userInterface;
 
+import com.baodanyun.robot.dto.RobotDto;
 import com.baodanyun.websocket.bean.userInterface.card.PcontractBaseMessDto;
 import com.baodanyun.websocket.bean.userInterface.claims.ClaimsInfo;
 import com.baodanyun.websocket.bean.userInterface.mall.YouZanOrderTblAll;
 import com.baodanyun.websocket.bean.userInterface.order.OrderInfo;
 import com.baodanyun.websocket.bean.userInterface.policy.EnterpriseContractByUidBean;
 import com.baodanyun.websocket.bean.userInterface.user.PersonalInfo;
+import com.baodanyun.websocket.model.RobotReportCase;
 import com.google.gson.JsonObject;
 import java.util.List;
 
@@ -19,6 +21,7 @@ public class PersonalDetail {
     private List<EnterpriseContractByUidBean> contractInfos;//合同订单
     private List<YouZanOrderTblAll> youzanOrderAll;//mall订单
     private List<PcontractBaseMessDto> cardList; //卡单
+    private List<RobotDto> robotList; //机器人
 
     public List<PersonalInfo> getPersonalInfos() {
         return personalInfos;
@@ -91,5 +94,13 @@ public class PersonalDetail {
 
     public void setCardList(List<PcontractBaseMessDto> cardList) {
         this.cardList = cardList;
+    }
+
+    public List<RobotDto> getRobotList() {
+        return robotList;
+    }
+
+    public void setRobotList(List<RobotDto> robotList) {
+        this.robotList = robotList;
     }
 }

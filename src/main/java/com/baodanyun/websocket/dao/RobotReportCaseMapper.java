@@ -29,4 +29,12 @@ public interface RobotReportCaseMapper {
     int updateByPrimaryKey(RobotReportCase record);
 
     List<RobotReportCase> findNotFinishData();
+
+    /**
+     * 按时间倒序去重查询uid的所有批次号
+     *
+     * @param uid
+     * @return
+     */
+    List<RobotReportCase> findSerialNumberList(Long uid);
 }
