@@ -16,6 +16,7 @@ import com.baodanyun.websocket.util.SpringContextUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 /**
@@ -59,7 +60,9 @@ public class CustomerWebSocketHandler extends AbstractWebSocketHandler {
             String content = message.getPayload();
 
             if ("HeartBeat".equals(content)) {
-                //session.sendMessage();
+                WebSocketMessage wm = new TextMessage("HeartBeat");
+                session.sendMessage(wm);
+                return;
             }
 
             WebSocketTerminal webSocketTerminal = new WebSocketTerminal(au, session);
