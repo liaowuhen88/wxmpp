@@ -4,7 +4,6 @@ import com.baodanyun.robot.dto.AlarmStatisticsDto;
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.model.LoginModel;
-import com.baodanyun.websocket.model.Ofuser;
 import com.baodanyun.websocket.service.AlarmLogService;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
