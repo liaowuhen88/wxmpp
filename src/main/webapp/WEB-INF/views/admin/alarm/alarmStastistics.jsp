@@ -53,8 +53,8 @@
     <tr align="center">
         <td>客服名</td>
         <td>5分钟未回复消息条数</td>
-        <td>15分钟未回复</td>
-        <td>30分钟未回复</td>
+        <td>15分钟未回复消息条数</td>
+        <td>30分钟未回复消息条数</td>
     </tr>
     </thead>
     <tbody id="dataView" align="center">
