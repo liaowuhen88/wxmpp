@@ -70,7 +70,7 @@
     display: inherit;
     width: 500px;
 ">
-        该用户一掉线
+        您已掉线,请刷新
     </div>
 </div>
 
