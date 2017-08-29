@@ -142,12 +142,12 @@
         </ul>
     </div>
 </div>
-<div class="remind_kf">
+<%--<div class="remind_kf">
     <div class="msg">今日共收到报案案件
         <div>100</div>
         件
     </div>
-</div>
+</div>--%>
 <script>
     $(function () {
         var $tabTitleList = $("#tabTitleList>li"),
