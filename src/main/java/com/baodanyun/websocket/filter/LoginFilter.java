@@ -62,6 +62,7 @@ public class LoginFilter implements Filter {
                 || uri.startsWith(request.getContextPath() + "/api/doLoginForUecUser")
                 || uri.startsWith(request.getContextPath() + "/api/customerAndJoin")
                 || uri.startsWith(request.getContextPath() + "/talkFromUec")
+                || uri.contains(request.getContextPath() + "/robot/")
                 //留言
                 || uri.startsWith(request.getContextPath() + "/ kf/api/addMessage")
                 //新版网页端用户客服
