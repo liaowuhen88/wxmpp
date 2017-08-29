@@ -5,6 +5,7 @@ import com.baodanyun.websocket.event.AlarmEvent;
 import com.baodanyun.websocket.model.AlarmLog;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import com.baodanyun.websocket.util.XMPPUtil;
+import org.apache.commons.lang.StringUtils;
 import org.jivesoftware.smack.packet.Message;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -23,10 +24,27 @@ public class WriteDBListenerImpl implements AlarmListener {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     private AlarmLogMapper alarmLogMapper = SpringContextUtil.getBean("alarmLogMapper", AlarmLogMapper.class);
 
+    private static boolean contentFilter(String content) {
+        if (StringUtils.isBlank(content)) {
+            return true;
+        }
+
+        String words = "45015__回复时间超过限制,45047__未知错误代码:45047,【收到不支持的消息类型，暂无法显示】";
+        for (String str : words.split(",")) {
+            if (str.equals(content)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void alarm(AlarmEvent alarmInfo) {
         try {
             Message message = alarmInfo.getMessage();
+            if (this.contentFilter(message.getBody())) {
+                return;
+            }
 
             AlarmLog log = new AlarmLog();
             log.setCreateTime(new Date());
