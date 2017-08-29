@@ -25,6 +25,7 @@ public class SpringMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/customerSimple").setViewName("/WEB-INF/views/admin/customerSimple.jsp");
         registry.addViewController("/talkFromUec").setViewName("/talkFromUec.jsp");
         registry.addViewController("/statistics").setViewName("/WEB-INF/views/admin/webChatMessage/statistics.jsp");
+        registry.addViewController("/alarmStatistics").setViewName("/WEB-INF/views/admin/alarm/alarmStastistics.jsp");
         // 用户咨询跳转页
         registry.addViewController("/consultation.html").setViewName("/consultation.jsp");
     }
