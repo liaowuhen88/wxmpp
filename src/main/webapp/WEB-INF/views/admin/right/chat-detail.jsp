@@ -8,6 +8,22 @@
     #tabContentList > .active {
         display: block;
     }
+
+    .remind_kf {
+        position: fixed;
+        right: 20px;
+        bottom: 35px;
+        padding: 20px;
+        background: #fff;
+        border: 1px solid #ccc
+    }
+
+    .msg {
+        line-height: 20px;
+        font-size: 12px;
+        margin: 0;
+
+    }
 </style>
 <div class="modal" data-target="examReportBtn">
     <div class="modal_backdrop"></div>
@@ -124,6 +140,12 @@
                 <jsp:include page="chat-tpl.jsp"/>
             </li>
         </ul>
+    </div>
+</div>
+<div class="remind_kf">
+    <div class="msg">今日共收到报案案件
+        <div>100</div>
+        件
     </div>
 </div>
 <script>
