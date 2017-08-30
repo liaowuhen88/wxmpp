@@ -92,7 +92,12 @@ public class VisitorChatNode extends AbstarctChatNode {
     @Override
     public void online(AbstractTerminal node) throws InterruptedException, BusinessException {
         super.online(node);
-        this.getCurrentChatNode().joinQueue(this);
+        if (null != this.getCurrentChatNode()) {
+            this.getCurrentChatNode().joinQueue(this);
+        } else {
+            logger.info("CurrentChatNode is null");
+        }
+
     }
 
 

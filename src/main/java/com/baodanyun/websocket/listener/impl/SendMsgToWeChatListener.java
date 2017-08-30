@@ -3,6 +3,7 @@ package com.baodanyun.websocket.listener.impl;
 import com.baodanyun.websocket.event.SendMsgToWeChatEvent;
 import com.baodanyun.websocket.listener.EventBusListener;
 import com.baodanyun.websocket.service.WechatMsgService;
+import com.baodanyun.websocket.util.FilterUtf8Utils;
 import com.google.common.eventbus.Subscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,7 @@ public class SendMsgToWeChatListener extends AbstarctEventBusListener<SendMsgToW
                                     public void run() {
                                         try {
                                             if (null != ve.getWechatMsg()) {
+                                                ve.getWechatMsg().setContent(FilterUtf8Utils.filterOffUtf8Mb4(ve.getWechatMsg().getContent()));
                                                 wechatMsgService.insert(ve.getWechatMsg());
                                             }
 
