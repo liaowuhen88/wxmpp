@@ -669,7 +669,22 @@ xchat.getUserInfo = function (currentId, destJid, openId) {
                                     personalInfo.sex = '女';
                                     break;
                                 default:
-                                    personalInfo.sex = '保密';
+                                    if (2 == personalInfo.idcardtype) {
+                                        if (personalInfo.idcard) {
+                                            if (personalInfo.idcard.length == 18) {
+                                                var num = personalInfo.idcard.substring(16, 17);
+                                                if (num % 2 == 0) {
+                                                    personalInfo.sex = '女';
+                                                } else {
+                                                    personalInfo.sex = '男';
+                                                }
+                                            }
+                                        }
+
+                                    } else {
+                                        personalInfo.sex = '保密';
+                                    }
+
                             }
 
                             if (personalInfo.birthday) {
