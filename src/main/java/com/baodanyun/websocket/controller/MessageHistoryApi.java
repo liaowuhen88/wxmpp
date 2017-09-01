@@ -65,12 +65,17 @@ public class MessageHistoryApi extends BaseController {
         return re;
     }
 
-
+    /**
+     * 侧栏历史记录
+     *
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "getUserHistoryList")
     public Response getUserHistoryList(HistoryMessageUserModel model) {
         // TODO 参数判断
         PageResponse re = new PageResponse();
-
+        model.setId("zhangchi@126xmpp");
         Map<String, Object> map = new HashMap<>();
 
         if (!org.apache.commons.lang.StringUtils.isEmpty(model.getId())) {

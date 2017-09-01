@@ -215,4 +215,19 @@ ORDER BY
       conversationId = #{conversationid,jdbcType=BIGINT}
     where messageId = #{messageid,jdbcType=BIGINT}
   </update>
+
+    <!--查询客服在时间内与所有人聊天的用户名-->
+    <select id="findAllGuest" parameterType="com.baodanyun.websocket.quality.dto.QualitySearchDto"
+            resultType="java.lang.String">
+        SELECT
+        SUBSTR(ac.withJid, 1, LOCATE('@',ac.withJid)-1)
+		FROM
+		archiveconversations ac
+		LEFT JOIN archivemessages am ON ac.conversationId = am.conversationId
+		WHERE ac.ownerJid = #{customerName} AND direction = 'to'
+        AND  am.time between #{startTime} AND #{endTime}
+		GROUP BY ac.withJid
+		ORDER BY am.time desc
+    </select>
+
 </mapper>
