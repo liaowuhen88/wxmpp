@@ -36,4 +36,11 @@ public interface ArchiveMessagesMapper {
      */
     List<String> findAllGuest(QualitySearchDto qualitySearchDto);
 
+    /**
+     * 查询客服与此用户的日期区间内的聊天记录
+     *
+     * @param searchDto
+     * @return
+     */
+    List<HistoryMsg> loadChatMsgFromUser(QualitySearchDto searchDto);
 }

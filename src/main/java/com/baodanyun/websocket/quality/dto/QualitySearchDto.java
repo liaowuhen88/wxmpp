@@ -2,7 +2,11 @@ package com.baodanyun.websocket.quality.dto;
 
 public class QualitySearchDto {
 
+    /*客服名*/
     private String customerName;
+
+    /*用户名*/
+    private String userName;
 
     private String beginDate;
 
@@ -52,5 +56,13 @@ public class QualitySearchDto {
 
     public void setEndTime(Long endTime) {
         this.endTime = endTime;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

@@ -25,9 +25,10 @@
             <li data-toggle="tooltip" data-placement="right" title="用户留言" id="leaveMessageBtn">
                 <a href="javascript:void(0);"><i class="nav-icon icon-visitor"></i></a>
             </li>
-            <%--<li data-toggle="tooltip" data-placement="right" title="报表">
-              <a href="#"><i class="nav-icon icon-report"></i></a>
-            </li>--%>
+                <li data-toggle="tooltip" data-placement="right" title="质检">
+                    <a href="<%=request.getContextPath()%>/api/qualityCheck" target="_blank"><i
+                            class="nav-icon icon-report"></i></a>
+                </li>
         </ul>
     </nav>
     <ul class="tools">

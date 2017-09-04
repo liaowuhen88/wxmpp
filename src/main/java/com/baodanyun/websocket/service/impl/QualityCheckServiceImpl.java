@@ -1,5 +1,6 @@
 package com.baodanyun.websocket.service.impl;
 
+import com.baodanyun.websocket.bean.msg.HistoryMsg;
 import com.baodanyun.websocket.dao.ArchiveMessagesMapper;
 import com.baodanyun.websocket.quality.dto.QualitySearchDto;
 import com.baodanyun.websocket.service.QualityCheckService;
@@ -24,12 +25,31 @@ public class QualityCheckServiceImpl implements QualityCheckService {
 
     @Override
     public List<String> findAllGuestName(QualitySearchDto searchDto) {
-        final DateTimeFormatter pattern = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-
-        searchDto.setCustomerName(XMPPUtil.nameToJid(searchDto.getCustomerName()));
-        searchDto.setStartTime(DateTime.parse(searchDto.getBeginDate(), pattern).getMillis());
-        searchDto.setEndTime(DateTime.parse(searchDto.getEndDate(), pattern).getMillis());
+        this.setSearchDtoProp(searchDto);
 
         return archiveMessagesMapper.findAllGuest(searchDto);
+    }
+
+    @Override
+    public List<HistoryMsg> loadChatMsgFromUser(QualitySearchDto searchDto) {
+        this.setSearchDtoProp(searchDto);
+        return archiveMessagesMapper.loadChatMsgFromUser(searchDto);
+    }
+
+    /**
+     * 设置条件查询时间缀
+     *
+     * @param searchDto
+     */
+    private void setSearchDtoProp(QualitySearchDto searchDto) {
+        final DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+
+        searchDto.setCustomerName(XMPPUtil.nameToJid(searchDto.getCustomerName()));
+        searchDto.setStartTime(DateTime.parse(searchDto.getBeginDate(), format).getMillis());
+        searchDto.setEndTime(DateTime.parse(searchDto.getEndDate(), format).getMillis());
+
+        if (searchDto.getUserName() != null) {//用户名
+            searchDto.setUserName(XMPPUtil.nameToJid(searchDto.getUserName()));
+        }
     }
 }

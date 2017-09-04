@@ -23,8 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 机器人之我要报案操作表service
@@ -239,16 +237,22 @@ public class ReportCaseService {
         List<RobotDto> resultList = null;
         List<RobotReportCase> serialList = robotReportCaseMapper.findSerialNumberList(uid);
         if (CollectionUtils.isNotEmpty(serialList)) {
-            resultList = new ArrayList<>();
             List<RobotReportCase> dataList = this.findListByUid(uid);
-            for (RobotReportCase robot : serialList) {
-                List<RobotImages> imagesList = this.buildRobotImageList(dataList, robot.getSerialNumber());
-                RobotDto robotDto = new RobotDto();
-                BeanUtils.copyProperties(robot, robotDto);
-                robotDto.setRobotImages(imagesList);
+            resultList = this.buildRobotList(serialList, dataList);
+        }
 
-                resultList.add(robotDto);
-            }
+        return resultList;
+    }
+
+    private List<RobotDto> buildRobotList(List<RobotReportCase> serialList, List<RobotReportCase> dataList) {
+        List<RobotDto> resultList = new ArrayList<>();
+        for (RobotReportCase robot : serialList) {
+            List<RobotImages> imagesList = this.buildRobotImageList(dataList, robot.getSerialNumber());
+            RobotDto robotDto = new RobotDto();
+            BeanUtils.copyProperties(robot, robotDto);
+            robotDto.setRobotImages(imagesList);
+
+            resultList.add(robotDto);
         }
 
         return resultList;
@@ -289,5 +293,33 @@ public class ReportCaseService {
         }
 
         return imagesList;
+    }
+
+    /**
+     * 根据电话号码查询
+     *
+     * @param phone
+     * @return
+     */
+    public List<RobotDto> getReportCaseByPhone(Long phone) {
+        List<RobotDto> resultList = null;
+        List<RobotReportCase> serialList = robotReportCaseMapper.findRobotListByPhone(phone);
+        if (CollectionUtils.isNotEmpty(serialList)) {
+            List<RobotReportCase> dataList = this.findListByUserName(phone);
+            resultList = this.buildRobotList(serialList, dataList);
+        }
+
+        return resultList;
+    }
+
+    public List<RobotReportCase> findListByUserName(Long phone) {
+        RobotReportCaseExample example = new RobotReportCaseExample();
+        example.setOrderByClause("content_time ASC"); //消息时间
+        example.createCriteria()
+                .andUserNameEqualTo(String.valueOf(phone))
+                .andContentTypeEqualTo("image")
+                .andStateEqualTo((byte) ReportCaseEnum.SUCCESS.getState());
+
+        return robotReportCaseMapper.selectByExample(example);
     }
 }
