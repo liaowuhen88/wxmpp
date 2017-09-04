@@ -3,6 +3,8 @@ package com.baodanyun.websocket.dao;
 import com.baodanyun.websocket.bean.msg.HistoryMsg;
 import com.baodanyun.websocket.model.ArchiveMessages;
 import com.baodanyun.websocket.model.HistoryMessageModel;
+import com.baodanyun.websocket.quality.dto.QualitySearchDto;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.List;
 
@@ -25,4 +27,20 @@ public interface ArchiveMessagesMapper {
 
     List<HistoryMsg> selectByOwnerJid(String ownerJid);
 
+
+    /**
+     * 查询客服在时间内与所有人聊天的用户名
+     *
+     * @param qualitySearchDto
+     * @return
+     */
+    List<String> findAllGuest(QualitySearchDto qualitySearchDto);
+
+    /**
+     * 查询客服与此用户的日期区间内的聊天记录
+     *
+     * @param searchDto
+     * @return
+     */
+    List<HistoryMsg> loadChatMsgFromUser(QualitySearchDto searchDto);
 }

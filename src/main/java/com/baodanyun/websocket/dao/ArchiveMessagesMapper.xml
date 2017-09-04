@@ -215,4 +215,35 @@ ORDER BY
       conversationId = #{conversationid,jdbcType=BIGINT}
     where messageId = #{messageid,jdbcType=BIGINT}
   </update>
+
+    <!--查询客服在时间内与所有人聊天的用户名-->
+    <select id="findAllGuest" parameterType="com.baodanyun.websocket.quality.dto.QualitySearchDto"
+            resultType="java.lang.String">
+        SELECT
+        SUBSTR(ac.withJid, 1, LOCATE('@',ac.withJid)-1)
+		FROM
+		archiveconversations ac
+		LEFT JOIN archivemessages am ON ac.conversationId = am.conversationId
+		WHERE ac.ownerJid = #{customerName} AND direction = 'to'
+        AND  am.time between #{startTime} AND #{endTime}
+		GROUP BY ac.withJid
+		ORDER BY am.time desc
+    </select>
+
+    <!--查询客服与此用户的日期区间内的聊天记录-->
+    <select id="loadChatMsgFromUser" resultMap="ResultMapFromAndTo"
+            parameterType="com.baodanyun.websocket.quality.dto.QualitySearchDto">
+        SELECT
+        SUBSTR(ac.ownerJid, 1, LOCATE('@',ac.ownerJid)-1) 'from',
+        SUBSTR(ac.withJid, 1, LOCATE('@',ac.withJid)-1) 'to',
+        am.`subject` 'contentType',
+        am.direction,
+        am.body content,
+        am.time ct
+        FROM archiveconversations ac LEFT JOIN archivemessages am ON ac.conversationId = am.conversationId
+        WHERE am.time between #{startTime} AND #{endTime}
+        AND ownerJid = #{customerName} and ac.withJid = #{userName}
+        ORDER BY ct ASC
+    </select>
+
 </mapper>

@@ -2,6 +2,7 @@ package com.baodanyun.websocket.alarm.listener;
 
 import com.alibaba.fastjson.JSON;
 import com.baodanyun.websocket.bean.msg.Msg;
+import com.baodanyun.websocket.enums.AlarmTypeEnum;
 import com.baodanyun.websocket.event.AlarmEvent;
 import com.baodanyun.websocket.node.sendUtils.WeChatResponse;
 import com.baodanyun.websocket.node.sendUtils.WeChatSendUtils;
@@ -12,6 +13,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +28,8 @@ public class AlarmWechatListenerImpl implements AlarmListener {
     /**
      * boss的openId对应的key
      */
-    private static final String BOSS_KEY = "boss";
+    private static final String BOSS_KEY = "wangjing";
+    private final Logger LOGGER = LoggerFactory.getLogger(AlarmWechatListenerImpl.class);
     /**
      * 人名与openid对应的关系
      */
@@ -41,8 +44,6 @@ public class AlarmWechatListenerImpl implements AlarmListener {
         openIdMap.put("zhangchi", "oAH_qsq4sqTB9RRRCsAqm6MNvk94"); //张弛用马秋萌的openid
         openIdMap.put("boss", "oAH_qsk7UoktC1IRUIACJGUZ-Tkg"); //张启科
     }
-
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public void alarm(final AlarmEvent alarmInfo) {
@@ -63,14 +64,14 @@ public class AlarmWechatListenerImpl implements AlarmListener {
         msg.setContent(content);
         this.sendWechat(msg); //告警到客服
 
-        /*if (alarmInfo.getAlarmTypeEnum() == AlarmTypeEnum.TYPE2) {//15分钟无回复发送到boss
+        if (alarmInfo.getAlarmTypeEnum() == AlarmTypeEnum.TYPE2) {//15分钟无回复发送到leader汪婧
             Msg toBossMsg = new Msg();
             BeanUtils.copyProperties(msg, toBossMsg);
             toBossMsg.setFrom(openIdMap.get(BOSS_KEY));
             msg.setOpenId(openIdMap.get(BOSS_KEY));
 
             this.sendWechat(toBossMsg);
-        }*/
+        }
     }
 
     /**

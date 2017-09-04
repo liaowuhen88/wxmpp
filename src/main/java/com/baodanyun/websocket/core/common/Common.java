@@ -19,6 +19,9 @@ public class Common {
     public static final String userVcard = "key";
     public static final String quickReplyVcard = "key";
 
+    /*客服负责人登陆名*/
+    public static final String CUSTOMER_LEADER = "wangjing";
+
 
     public enum ErrorCode {
 
