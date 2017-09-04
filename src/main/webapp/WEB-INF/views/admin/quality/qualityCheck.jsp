@@ -47,7 +47,8 @@
         <tr>
             <td>客服</td>
             <td>
-                <select name="customerName" id="customerName" onchange="showDetail();">
+                <select style="height: 30px;width: 100px;" name="customerName" id="customerName"
+                        onchange="showDetail();">
                     <option value="">--请选择--</option>
                     <option value="maqiumeng">马秋萌</option>
                     <option value="wangjing">汪婧</option>
@@ -58,9 +59,9 @@
                 <input type="hidden" name="userName" id="userName">
             </td>
             <td>查询开始时间</td>
-            <td><input type="text" name="beginDate" id="datetimepickerStart"></td>
+            <td><input type="text" style="height: 30px;" name="beginDate" id="datetimepickerStart"></td>
             <td>查询结束时间</td>
-            <td><input type="text" name="endDate" id="datetimepickerEnd"></td>
+            <td><input type="text" style="height: 30px;" name="endDate" id="datetimepickerEnd"></td>
             <td style="display: ${isCustomerLeader ? 'block' : 'none'}">
                 <input type="button" onclick="showDetail()" value="查询">
             </td>
@@ -69,11 +70,11 @@
 </form>
 
 <div>
-    <div style="width: 25%;float: left;display: none" id="serviceUserDiv">
+    <div id="serviceUserDiv">
         <div>用户列表</div>
-        <div id="userListDiv" style="border: solid 1px gray;height: 450px;overflow-y:auto;"></div>
+        <ul id="userListDiv"></ul>
     </div>
-    <div style="width:70%;float: left;margin-left: 10px;">
+    <div style="margin-left: 300px;">
         <div id="showHistory" data-id="" style="display: none;">
             <div class="chat-window">
                 <div class="chat-screen">
@@ -90,7 +91,38 @@
         </div>
     </div>
 </div>
+<style>
+    #serviceUserDiv {
+        width: 300px;
+        float: left;
+        display: none;
+    }
 
+    #userListDiv {
+        background-color: #fff;
+        margin: 0;
+        padding: 0;
+        border: solid 1px #ddd;
+        height: 450px;
+        overflow-y: auto;
+        list-style: none;
+    }
+
+    input[name="userList"] {
+        display: none;
+    }
+
+    input[name="userList"] + label {
+        display: block;
+        line-height: 30px;
+        padding-left: 10px;
+        cursor: pointer;
+    }
+
+    input[name="userList"]:checked + label {
+        background-color: #ddd;
+    }
+</style>
 <script>
     window.base = '<%=path%>';
 
@@ -135,9 +167,15 @@
                 if (res.success) {
                     $('#userListDiv').empty();
                     var arr = res.data;
+                    var html = '';
                     for (var i = 0, len = arr.length; i < len; i++) {
-                        $('#userListDiv').append('<div><span><a href="javascript:void(0);" onclick=loadChatMsgList("' + arr[i] + '")>' + arr[i] + '</a></span></div><br>');
+                        html += '<li><input type="radio" name="userList" id="' + arr[i] + '">' +
+                            '<label for="' + arr[i] + '">' + arr[i] + '</a></label></li>';
                     }
+                    $('#userListDiv').append(html);
+                    $('#userListDiv').on('click', '[name="userList"]', function () {
+                        loadChatMsgList(this.id)
+                    })
                 }
             },
             error: function (res) {
