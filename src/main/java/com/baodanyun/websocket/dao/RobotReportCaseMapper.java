@@ -37,4 +37,12 @@ public interface RobotReportCaseMapper {
      * @return
      */
     List<RobotReportCase> findSerialNumberList(Long uid);
+
+    /**
+     * 根据电话号码查找
+     *
+     * @param phone
+     * @return
+     */
+    List<RobotReportCase> findRobotListByPhone(Long phone);
 }

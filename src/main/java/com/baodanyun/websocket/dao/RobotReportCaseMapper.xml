@@ -390,4 +390,14 @@
     GROUP BY serial_number
     ORDER BY content_time DESC;
   </select>
+
+  <select id="findRobotListByPhone" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM robot_report_case
+    WHERE user_name =#{phone} AND state = 2 AND content_type='image'
+    GROUP BY serial_number
+    ORDER BY content_time DESC;
+  </select>
+
 </mapper>

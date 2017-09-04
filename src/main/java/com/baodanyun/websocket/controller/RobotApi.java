@@ -36,8 +36,28 @@ public class RobotApi extends BaseController {
             Render.r(servletResponse, JSONUtil.toJson(response));
             return;
         }
-
         List<RobotDto> reportCaseList = reportCaseService.getReportCaseByUid(uid);
+        response.setSuccess(true);
+        response.setData(reportCaseList);
+
+        Render.r(servletResponse, JSONUtil.toJson(response));
+    }
+
+    /**
+     * 根据uid查询机器人数据
+     *
+     * @param phone           用户电话
+     * @param servletResponse
+     */
+    @RequestMapping("robot/user/{phone}")
+    public void getReportCaseByPhone(@PathVariable Long phone, HttpServletResponse servletResponse) {
+        Response response = new Response();
+        if (phone == null) {
+            response.setMsg("电话不能为空");
+            Render.r(servletResponse, JSONUtil.toJson(response));
+            return;
+        }
+        List<RobotDto> reportCaseList = reportCaseService.getReportCaseByPhone(phone);
         response.setSuccess(true);
         response.setData(reportCaseList);
 
