@@ -1,5 +1,7 @@
 package com.baodanyun.websocket.dao;
 
+import com.baodanyun.robot.dto.RobotDto;
+import com.baodanyun.robot.dto.RobotSearchDto;
 import com.baodanyun.websocket.model.RobotReportCase;
 import com.baodanyun.websocket.model.RobotReportCaseExample;
 import java.util.List;
@@ -45,4 +47,8 @@ public interface RobotReportCaseMapper {
      * @return
      */
     List<RobotReportCase> findRobotListByPhone(Long phone);
+
+    List<RobotReportCase> findSerialNumberPage(RobotSearchDto searchDto);
+
+    long getSerialNumberTotalCount(RobotSearchDto searchDto);
 }

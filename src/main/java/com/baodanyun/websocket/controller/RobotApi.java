@@ -1,18 +1,26 @@
 package com.baodanyun.websocket.controller;
 
 import com.baodanyun.robot.dto.RobotDto;
+import com.baodanyun.robot.dto.RobotSearchDto;
 import com.baodanyun.robot.service.ReportCaseService;
+import com.baodanyun.websocket.bean.PageResponse;
 import com.baodanyun.websocket.bean.Response;
-import com.baodanyun.websocket.model.RobotReportCase;
+import com.baodanyun.websocket.util.DateUtils;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
+import org.apache.commons.lang.StringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 机器人[我要报案]接口
@@ -61,6 +69,58 @@ public class RobotApi extends BaseController {
         response.setSuccess(true);
         response.setData(reportCaseList);
 
+        Render.r(servletResponse, JSONUtil.toJson(response));
+    }
+
+    /**
+     * 机器人所有报案数据
+     * 分页(日期可选择,开始结束日期须同时存在)
+     */
+    @RequestMapping("robot/repotcases")
+    public void loadAllRobotList(RobotSearchDto searchDto, HttpServletResponse servletResponse) {
+        Response response = new Response();
+        SimpleDateFormat df = new SimpleDateFormat(DateUtils.DATE_FULL_STR);
+        String bTime = searchDto.getBeginTime();
+        String eTime = searchDto.getEndTime();
+
+        if (StringUtils.isNotBlank(bTime)) {
+            try {
+                df.parse(bTime);
+            } catch (Exception e) {
+                response.setSuccess(false);
+                response.setMsg("beginTime日期格式不合法");
+                Render.r(servletResponse, JSONUtil.toJson(response));
+                return;
+            }
+        }
+        if (StringUtils.isNotBlank(eTime)) {
+            try {
+                df.parse(eTime);
+            } catch (Exception e) {
+                response.setSuccess(false);
+                response.setMsg("endTime日期格式不合法");
+                Render.r(servletResponse, JSONUtil.toJson(response));
+                return;
+            }
+        }
+        if ((StringUtils.isNotBlank(bTime) && StringUtils.isBlank(eTime)) || (StringUtils.isBlank(bTime) && StringUtils.isNotBlank(eTime))) {
+            response.setSuccess(false);
+            response.setMsg("开始日期结束日期格式必填");
+            Render.r(servletResponse, JSONUtil.toJson(response));
+            return;
+        }
+
+        Map<String, Object> map = new HashMap<>();
+
+        List<RobotDto> dataList = reportCaseService.findPageList(searchDto);
+        long totalCount = reportCaseService.getTotalCount(searchDto);
+        map.put("list", dataList); //数据
+        map.put("total", totalCount); //总数
+        map.put("page", searchDto.getPage());
+        map.put("count", searchDto.getCount());
+
+        response.setSuccess(true);
+        response.setData(map);
         Render.r(servletResponse, JSONUtil.toJson(response));
     }
 
