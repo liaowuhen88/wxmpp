@@ -766,10 +766,10 @@ http://bj-bdy-public.oss-cn-beijing.aliyuncs.com/kf/js/talkFromUec.js
     
     
 ## 我要报案接口
-### 根据用户id查找报案
+### 1.用户id查找报案
 接口: api/robot/{uid}
 
-### 根据手机号查找报案
+### 2.手机号查找报案
 接口: api/robot/user/{phone}
 
 返回结果
@@ -806,7 +806,7 @@ http://bj-bdy-public.oss-cn-beijing.aliyuncs.com/kf/js/talkFromUec.js
 }    
 ```
 
-### 分页查询机器人报案图片数据
+### 3.分页查询
 
 接口: 
 - api/robot/repotcases?page=1&count=10&beginTime=2017-08-24 00:25:42&endTime=2017-08-24 23:25:42
