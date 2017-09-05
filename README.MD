@@ -814,8 +814,8 @@ http://bj-bdy-public.oss-cn-beijing.aliyuncs.com/kf/js/talkFromUec.js
 参数:
 - page  页码  (默认0)
 - count 每页条数 (默认10)
-- beginTime 开始日期 (eg: 2017-08-24 00:25:42)
-- endTime 结束日期   (eg: 2017-08-24 23:59:59)
+- beginTime 开始日期 (选填 eg: 2017-08-24 00:25:42)
+- endTime 结束日期   (选填 eg: 2017-08-24 23:59:59)
 
 dto类:
 - [RobotDto](https://github.com/liaowuhen88/wxmpp/blob/master/src/main/java/com/baodanyun/robot/dto/RobotDto.java)   
@@ -835,7 +835,7 @@ dto类:
 "data": {
     "total": 9,//总页数
     "count": 10, //每页条数
-    "page": 1,页码
+    "page": 1, //页码
     "list": [
         {
             "id": 52,
