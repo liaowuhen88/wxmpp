@@ -802,7 +802,7 @@ http://bj-bdy-public.oss-cn-beijing.aliyuncs.com/kf/js/talkFromUec.js
         "createTime": "Aug 24, 2017 5:01:10 PM",
         "updateTime": "Aug 24, 2017 5:01:30 PM"
     }
-}
+   ]
 }    
 ```
 
