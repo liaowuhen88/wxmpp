@@ -835,9 +835,10 @@ dto类:
 "success": true,
 "code": 0,
 "data": {
-    "total": 9,//总页数
-    "count": 10, //每页条数
-    "page": 1, //页码
+    "totalCount": 9,//总记录数
+    "totalPages": 5,//总页数
+    "pageSize": 10, //每页条数
+    "currentPage": 1, //页码
     "list": [
         {
             "id": 52,

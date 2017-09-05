@@ -125,9 +125,12 @@ public class RobotApi extends BaseController {
         List<RobotDto> dataList = reportCaseService.findPageList(searchDto);
         long totalCount = reportCaseService.getTotalCount(searchDto);
         map.put("list", dataList); //数据
-        map.put("total", totalCount); //总数
-        map.put("page", searchDto.getPage());
-        map.put("count", searchDto.getCount());
+        map.put("totalCount", totalCount); //总记录数
+
+        boolean flag = totalCount % searchDto.getCount() == 0;
+        map.put("totalPages", flag ? (totalCount / searchDto.getCount()) : (totalCount / searchDto.getCount() + 1)); //总页数
+        map.put("currentPage", searchDto.getPage());
+        map.put("pageSize", searchDto.getCount());
 
         response.setSuccess(true);
         response.setData(map);
