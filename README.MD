@@ -766,11 +766,11 @@ http://bj-bdy-public.oss-cn-beijing.aliyuncs.com/kf/js/talkFromUec.js
     
     
 ## 我要报案接口
-根据用户id查找报案
-接口: robot/{uid}
+- 根据用户id查找报案
+接口: api/robot/{uid}
 
-根据手机号查找报案
-接口: robot/user/{phone}
+- 根据手机号查找报案
+接口: api/robot/user/{phone}
 
 返回结果
 ```
@@ -785,7 +785,7 @@ http://bj-bdy-public.oss-cn-beijing.aliyuncs.com/kf/js/talkFromUec.js
         "loginUserName": "18511072313",
         "nickName": "胡波",
         "openId": "orT5yw4pTFHOVv3vj7p3quEBpWSA",
-        "robotImages": [
+        "robotImages": [//报案上传的N张图片
             {
                 "imgPath": "https://test.17doubao.com/upload/xmppDownLoad/downLoad?key=chat/image/2017082417/orT5yw4pTFHOVv3vj7p3quEBpWSA__wxId_gcuEYjx-qUpk9p187Gxs7Pa-YO8eyHXcVdwFCef0r33JTV1-x9Enf3-j_BjPm8Fj.png",
                 "uploadTime": "Aug 24, 2017 5:01:10 PM"
@@ -808,23 +808,26 @@ http://bj-bdy-public.oss-cn-beijing.aliyuncs.com/kf/js/talkFromUec.js
 
 
 分页查询机器人报案图片数据
+
 接口: 
-api/robot/repotcases?page=1&count=10&beginTime=2017-08-24 00:25:42&endTime=2017-08-24 23:25:42
+- api/robot/repotcases?page=1&count=10&beginTime=2017-08-24 00:25:42&endTime=2017-08-24 23:25:42
 
 参数:
-page  页码  (默认0)
-count 每页条数 (默认10)
-beginTime 开始日期 (eg: 2017-08-24 00:25:42)
-endTime 结束日期   (eg: 2017-08-24 23:59:59)
+- page  页码  (默认0)
+- count 每页条数 (默认10)
+- beginTime 开始日期 (eg: 2017-08-24 00:25:42)
+- endTime 结束日期   (eg: 2017-08-24 23:59:59)
 
-dto类 [RobotDto](https://github.com/liaowuhen88/wxmpp/blob/master/src/main/java/com/baodanyun/robot/dto/RobotDto.java)   
-  [RobotImages](https://github.com/liaowuhen88/wxmpp/blob/master/src/main/java/com/baodanyun/robot/dto/RobotImages.java)
+dto类:
+- [RobotDto](https://github.com/liaowuhen88/wxmpp/blob/master/src/main/java/com/baodanyun/robot/dto/RobotDto.java)   
+- [RobotImages](https://github.com/liaowuhen88/wxmpp/blob/master/src/main/java/com/baodanyun/robot/dto/RobotImages.java)
+
 返回示例
 
-异常情况结果如下:
+- 异常情况结果如下:
 {"success":false,"code":0,"msg":"endTime日期格式不合法"}
 
-正常结果如下:
+- 正常结果如下:
 ```java
 
 {
