@@ -772,6 +772,12 @@ http://bj-bdy-public.oss-cn-beijing.aliyuncs.com/kf/js/talkFromUec.js
 ### 2.手机号查找报案
 接口: api/robot/user/{phone}
 
+
+dto类:
+- [RobotDto](https://github.com/liaowuhen88/wxmpp/blob/master/src/main/java/com/baodanyun/robot/dto/RobotDto.java)   
+- [RobotImages](https://github.com/liaowuhen88/wxmpp/blob/master/src/main/java/com/baodanyun/robot/dto/RobotImages.java)
+
+
 返回结果
 ```
 {
@@ -816,10 +822,6 @@ http://bj-bdy-public.oss-cn-beijing.aliyuncs.com/kf/js/talkFromUec.js
 - count 每页条数 (默认10)
 - beginTime 开始日期 (选填 eg: 2017-08-24 00:25:42)
 - endTime 结束日期   (选填 eg: 2017-08-24 23:59:59)
-
-dto类:
-- [RobotDto](https://github.com/liaowuhen88/wxmpp/blob/master/src/main/java/com/baodanyun/robot/dto/RobotDto.java)   
-- [RobotImages](https://github.com/liaowuhen88/wxmpp/blob/master/src/main/java/com/baodanyun/robot/dto/RobotImages.java)
 
 返回示例
 
