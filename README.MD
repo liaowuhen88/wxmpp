@@ -780,10 +780,10 @@ http://bj-bdy-public.oss-cn-beijing.aliyuncs.com/kf/js/talkFromUec.js
 "data": [
     {
         "id": 52,
-        "uid": 73849,
-        "userName": "18511072313",
-        "loginUserName": "18511072313",
-        "nickName": "胡波",
+        "uid": 73849, //用户id
+        "userName": "18511072312", 
+        "loginUserName": "18511072312",
+        "nickName": "胡gd",
         "openId": "orT5yw4pTFHOVv3vj7p3quEBpWSA",
         "robotImages": [//报案上传的N张图片
             {
@@ -840,8 +840,8 @@ dto类:
         {
             "id": 52,
             "uid": 73849,  //用户id
-            "userName": "18511072313",  //用户电话
-            "loginUserName": "18511072313",
+            "userName": "18511072312",  //用户电话
+            "loginUserName": "18511072312",
             "nickName": "胡g",
             "openId": "orT5yw4pTFHOVv3vj7p3quEBpWSA",
             "robotImages": [//报案上传的N张图片
@@ -864,8 +864,8 @@ dto类:
         {
             "id": 49,
             "uid": 73849,
-            "userName": "18511072313",
-            "loginUserName": "18511072313",
+            "userName": "18511072312",
+            "loginUserName": "18511072312",
             "nickName": "胡g",
             "openId": "orT5yw4pTFHOVv3vj7p3quEBpWSA",
             "robotImages": [
@@ -884,8 +884,8 @@ dto类:
         {
             "id": 42,
             "uid": 73849,
-            "userName": "18511072313",
-            "loginUserName": "18511072313",
+            "userName": "18511072312",
+            "loginUserName": "18511072312",
             "nickName": "胡g",
             "openId": "orT5yw4pTFHOVv3vj7p3quEBpWSA",
             "robotImages": [
@@ -920,8 +920,8 @@ dto类:
         {
             "id": 37,
             "uid": 73849,
-            "userName": "18511072313",
-            "loginUserName": "18511072313",
+            "userName": "18511072312",
+            "loginUserName": "18511072312",
             "nickName": "胡g",
             "openId": "orT5yw4pTFHOVv3vj7p3quEBpWSA",
             "robotImages": [
