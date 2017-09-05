@@ -335,7 +335,7 @@ public class ReportCaseService {
     public List<RobotDto> findPageList(RobotSearchDto searchDto) {
         List<RobotDto> resultList = null;
 
-        searchDto.setOffset((searchDto.getPage() - 1) * searchDto.getPage());
+        searchDto.setOffset((searchDto.getPage() - 1) * searchDto.getCount());
         List<RobotReportCase> serialList = robotReportCaseMapper.findSerialNumberPage(searchDto);
         if (CollectionUtils.isNotEmpty(serialList)) {
             List<RobotReportCase> dataList = this.findInSerialNumList(serialList);

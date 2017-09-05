@@ -3,14 +3,11 @@ package com.baodanyun.websocket.controller;
 import com.baodanyun.robot.dto.RobotDto;
 import com.baodanyun.robot.dto.RobotSearchDto;
 import com.baodanyun.robot.service.ReportCaseService;
-import com.baodanyun.websocket.bean.PageResponse;
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.util.DateUtils;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
 import org.apache.commons.lang.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -82,6 +79,19 @@ public class RobotApi extends BaseController {
         SimpleDateFormat df = new SimpleDateFormat(DateUtils.DATE_FULL_STR);
         String bTime = searchDto.getBeginTime();
         String eTime = searchDto.getEndTime();
+
+        if (searchDto.getCount() <= 0) {
+            response.setSuccess(false);
+            response.setMsg("每页显示条数不能小于0");
+            Render.r(servletResponse, JSONUtil.toJson(response));
+            return;
+        } else if (searchDto.getCount() > 10) {
+            searchDto.setCount(10);
+        }
+
+        if (searchDto.getPage() <= 0) {
+            searchDto.setPage(1);
+        }
 
         if (StringUtils.isNotBlank(bTime)) {
             try {
