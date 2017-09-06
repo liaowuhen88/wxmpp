@@ -1,5 +1,6 @@
 package com.baodanyun.websocket.alarm.listener;
 
+import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.dao.AlarmLogMapper;
 import com.baodanyun.websocket.event.AlarmEvent;
 import com.baodanyun.websocket.model.AlarmLog;
@@ -29,8 +30,7 @@ public class WriteDBListenerImpl implements AlarmListener {
             return true;
         }
 
-        String words = "45015__回复时间超过限制,45047__未知错误代码:45047,【收到不支持的消息类型，暂无法显示】";
-        for (String str : words.split(",")) {
+        for (String str : Common.WORDS) {
             if (str.equals(content)) {
                 return true;
             }
