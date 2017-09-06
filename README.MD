@@ -815,13 +815,15 @@ dto类:
 ### 3.分页查询
 
 接口: 
-- api/robot/repotcases?page=1&count=10&beginTime=2017-08-24 00:25:42&endTime=2017-08-24 23:25:42
+- api/robot/repotcases?page=1&count=10&beginTime=2017-08-24 00:25:42&endTime=2017-08-24 23:25:42&uid=1&phone=18511072312
 
 参数:
 - page  页码  (默认0)
 - count 每页条数 (默认10)
 - beginTime 开始日期 (选填 eg: 2017-08-24 00:25:42)
 - endTime 结束日期   (选填 eg: 2017-08-24 23:59:59)
+- uid 用户id
+- phone 电话号码
 
 返回示例
 
