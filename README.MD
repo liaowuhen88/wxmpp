@@ -880,7 +880,7 @@ dto类:
                 }
             ],
             "contentType": "image",
-            "serialNumber": "6C2009E2DFD345A3B0F13AE04608EACD",
+            "serialNumber": "6C2009E2DFD345A3B0F13AE04608EACD",//上传流水号
             "state": 2,
             "remark": "",
             "createTime": "Aug 24, 2017 3:23:56 PM",
