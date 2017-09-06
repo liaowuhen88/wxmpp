@@ -120,6 +120,8 @@ public class RobotApi extends BaseController {
             return;
         }
 
+        searchDto.setState(searchDto.getState() != null ? searchDto.getState() : 2); //默认上传成功的
+        searchDto.setContentType(StringUtils.isNotBlank(searchDto.getContentType()) ? searchDto.getContentType() : "image");
         Map<String, Object> map = new HashMap<>();
 
         List<RobotDto> dataList = reportCaseService.findPageList(searchDto);
