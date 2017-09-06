@@ -50,22 +50,7 @@ public class AlarmWechatListenerImpl implements AlarmListener {
     @Override
     public void alarm(final AlarmEvent alarmInfo) {
         Message message = alarmInfo.getMessage();
-        String msgBody = message.getBody();
-        if (StringUtils.isBlank(msgBody)) {
-            return;
-        }
 
-        boolean flag = false;
-        for (String str : Common.WORDS) {//过滤异常关键词
-            if (str.equals(msgBody)) {
-                flag = true;
-                break;
-            }
-        }
-
-        if (flag) {
-            return;
-        }
         DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         String sendTime = new DateTime(alarmInfo.getVisitorSendMsgTime()).toString(fmt);
         String content = "用户【%s】【%s】发送消息【%s】到【%s】,已超时【%s】分钟未回复";

@@ -25,26 +25,10 @@ public class WriteDBListenerImpl implements AlarmListener {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     private AlarmLogMapper alarmLogMapper = SpringContextUtil.getBean("alarmLogMapper", AlarmLogMapper.class);
 
-    private static boolean contentFilter(String content) {
-        if (StringUtils.isBlank(content)) {
-            return true;
-        }
-
-        for (String str : Common.WORDS) {//过滤异常关键词
-            if (str.equals(content)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @Override
     public void alarm(AlarmEvent alarmInfo) {
         try {
             Message message = alarmInfo.getMessage();
-            if (this.contentFilter(message.getBody())) {
-                return;
-            }
 
             AlarmLog log = new AlarmLog();
             log.setCreateTime(new Date());
