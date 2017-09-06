@@ -30,7 +30,7 @@ public class WriteDBListenerImpl implements AlarmListener {
             return true;
         }
 
-        for (String str : Common.WORDS) {
+        for (String str : Common.WORDS) {//过滤异常关键词
             if (str.equals(content)) {
                 return true;
             }

@@ -56,7 +56,7 @@ public class AlarmWechatListenerImpl implements AlarmListener {
         }
 
         boolean flag = false;
-        for (String str : Common.WORDS) {
+        for (String str : Common.WORDS) {//过滤异常关键词
             if (str.equals(msgBody)) {
                 flag = true;
                 break;
