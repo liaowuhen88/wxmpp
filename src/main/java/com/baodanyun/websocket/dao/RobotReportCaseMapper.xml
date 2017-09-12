@@ -400,4 +400,30 @@
     ORDER BY content_time DESC;
   </select>
 
+
+  <!--分页查询所有的批次-->
+  <select id="findSerialNumberPage" resultMap="BaseResultMap"
+          parameterType="com.baodanyun.robot.dto.RobotSearchDto">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM robot_report_case
+    WHERE state = 2 AND content_type='image'
+    <if test="beginTime != null and endTime != null">
+      AND content_time BETWEEN #{beginTime} AND #{endTime}
+    </if>
+    GROUP BY serial_number order by update_time DESC
+    LIMIT #{offset},#{count}
+  </select>
+
+  <!--批次号总条数-->
+  <select id="getSerialNumberTotalCount" resultType="java.lang.Long"
+          parameterType="com.baodanyun.robot.dto.RobotSearchDto">
+    SELECT count(1) from
+    (
+    SELECT serial_number from robot_report_case
+    WHERE  state = 2 AND content_type='image'
+    GROUP BY serial_number
+    ) t
+  </select>
+
 </mapper>

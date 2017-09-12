@@ -763,3 +763,193 @@ http://bj-bdy-public.oss-cn-beijing.aliyuncs.com/kf/js/talkFromUec.js
     3个按钮  并且能弹出模态框  理赔 合同 订单
 
     新增快速回复
+    
+    
+## 我要报案接口
+### 1.用户id查找报案
+接口: api/robot/{uid}
+
+### 2.手机号查找报案
+接口: api/robot/user/{phone}
+
+
+dto类:
+- [RobotDto](https://github.com/liaowuhen88/wxmpp/blob/master/src/main/java/com/baodanyun/robot/dto/RobotDto.java)   
+- [RobotImages](https://github.com/liaowuhen88/wxmpp/blob/master/src/main/java/com/baodanyun/robot/dto/RobotImages.java)
+
+
+返回结果
+```
+{
+"success": true,
+"code": 0,
+"data": [
+    {
+        "id": 52,
+        "uid": 73849, //用户id
+        "userName": "18511072312", 
+        "loginUserName": "18511072312",
+        "nickName": "胡gd",
+        "openId": "orT5yw4pTFHOVv3vj7p3quEBpWSA",
+        "robotImages": [//报案上传的N张图片
+            {
+                "imgPath": "https://test.17doubao.com/upload/xmppDownLoad/downLoad?key=chat/image/2017082417/orT5yw4pTFHOVv3vj7p3quEBpWSA__wxId_gcuEYjx-qUpk9p187Gxs7Pa-YO8eyHXcVdwFCef0r33JTV1-x9Enf3-j_BjPm8Fj.png",
+                "uploadTime": "Aug 24, 2017 5:01:10 PM"
+            },
+            {
+                "imgPath": "https://test.17doubao.com/upload/xmppDownLoad/downLoad?key=chat/image/2017082417/orT5yw4pTFHOVv3vj7p3quEBpWSA__wxId_XN1Eej-yi3NDZkqYS8VF8OQ5MtqPeVt4YET60f9ZCF7ol45VVCmkYrvPIibZ5pmL.png",
+                "uploadTime": "Aug 24, 2017 5:01:20 PM"
+            }
+        ],
+        "contentType": "image",
+        "serialNumber": "AD6997BA4D764ACF8C66D29F60CDB6B8",
+        "state": 2,
+        "remark": "",
+        "createTime": "Aug 24, 2017 5:01:10 PM",
+        "updateTime": "Aug 24, 2017 5:01:30 PM"
+    }
+   ]
+}    
+```
+
+### 3.分页查询
+
+接口: 
+- api/robot/repotcases?page=1&count=10&beginTime=2017-08-24 00:25:42&endTime=2017-08-24 23:25:42
+
+参数:
+- page  页码  (默认0)
+- count 每页条数 (默认10)
+- beginTime 开始日期 (选填 eg: 2017-08-24 00:25:42)
+- endTime 结束日期   (选填 eg: 2017-08-24 23:59:59)
+
+返回示例
+
+- 异常情况结果如下:
+{"success":false,"code":0,"msg":"endTime日期格式不合法"}
+
+- 正常结果如下:
+```java
+
+{
+"success": true,
+"code": 0,
+"data": {
+    "totalCount": 9,//总记录数
+    "totalPages": 5,//总页数
+    "pageSize": 10, //每页条数
+    "currentPage": 1, //页码
+    "list": [
+        {
+            "id": 52,
+            "uid": 73849,  //用户id
+            "userName": "18511072312",  //用户电话
+            "loginUserName": "18511072312",
+            "nickName": "胡g",
+            "openId": "orT5yw4pTFHOVv3vj7p3quEBpWSA",
+            "robotImages": [//报案上传的N张图片
+                {
+                    "imgPath": "https://test.17doubao.com/upload/xmppDownLoad/downLoad?key=chat/image/2017082417/orT5yw4pTFHOVv3vj7p3quEBpWSA__wxId_XN1Eej-yi3NDZkqYS8VF8OQ5MtqPeVt4YET60f9ZCF7ol45VVCmkYrvPIibZ5pmL.png",
+                    "uploadTime": "Aug 24, 2017 5:01:20 PM"
+                },
+                {
+                    "imgPath": "https://test.17doubao.com/upload/xmppDownLoad/downLoad?key=chat/image/2017082417/orT5yw4pTFHOVv3vj7p3quEBpWSA__wxId_gcuEYjx-qUpk9p187Gxs7Pa-YO8eyHXcVdwFCef0r33JTV1-x9Enf3-j_BjPm8Fj.png",
+                    "uploadTime": "Aug 24, 2017 5:01:10 PM"
+                }
+            ],
+            "contentType": "image",
+            "serialNumber": "AD6997BA4D764ACF8C66D29F60CDB6B8",//批次号
+            "state": 2,
+            "remark": "",
+            "createTime": "Aug 24, 2017 5:01:10 PM", 
+            "updateTime": "Aug 24, 2017 5:01:30 PM"
+        },
+        {
+            "id": 49,
+            "uid": 73849,
+            "userName": "18511072312",
+            "loginUserName": "18511072312",
+            "nickName": "胡g",
+            "openId": "orT5yw4pTFHOVv3vj7p3quEBpWSA",
+            "robotImages": [
+                {
+                    "imgPath": "https://test.17doubao.com/upload/xmppDownLoad/downLoad?key=chat/image/2017082415/orT5yw4pTFHOVv3vj7p3quEBpWSA__wxId_Wfl5z5zxL8pNkSUfw95XkHxGPVqy-ZaFTdRPvtfVyszeDk6PDE5Cde3Kh4l4mabn.png",
+                    "uploadTime": "Aug 24, 2017 3:23:56 PM"
+                }
+            ],
+            "contentType": "image",
+            "serialNumber": "6C2009E2DFD345A3B0F13AE04608EACD",
+            "state": 2,
+            "remark": "",
+            "createTime": "Aug 24, 2017 3:23:56 PM",
+            "updateTime": "Aug 24, 2017 3:23:59 PM"
+        },
+        {
+            "id": 42,
+            "uid": 73849,
+            "userName": "18511072312",
+            "loginUserName": "18511072312",
+            "nickName": "胡g",
+            "openId": "orT5yw4pTFHOVv3vj7p3quEBpWSA",
+            "robotImages": [
+                {
+                    "imgPath": "https://test.17doubao.com/upload/xmppDownLoad/downLoad?key=chat/image/2017082415/orT5yw4pTFHOVv3vj7p3quEBpWSA__wxId_kRkVLCU8PIhF9pzxMfF7KNVz8aRM95eGM6FCEB8GqdMjkUeU2LSuPqAJSCvObs3X.png",
+                    "uploadTime": "Aug 24, 2017 3:23:03 PM"
+                },
+                {
+                    "imgPath": "https://test.17doubao.com/upload/xmppDownLoad/downLoad?key=chat/image/2017082415/orT5yw4pTFHOVv3vj7p3quEBpWSA__wxId_DCQHssQpTbWxDiJOdHX-ihex7bWKYhwZdbDRTOtzhHE_1pOiy_cwDXIRInYW8eHr.png",
+                    "uploadTime": "Aug 24, 2017 3:23:03 PM"
+                },
+                {
+                    "imgPath": "https://test.17doubao.com/upload/xmppDownLoad/downLoad?key=chat/image/2017082415/orT5yw4pTFHOVv3vj7p3quEBpWSA__wxId_EkZ-CloRHQ5QzgrmdCfW7JB0hPhDx1Ff3Zb7ZmUZsZ2v048-logyUNYPfBFBsq-G.png",
+                    "uploadTime": "Aug 24, 2017 3:23:03 PM"
+                },
+                {
+                    "imgPath": "https://test.17doubao.com/upload/xmppDownLoad/downLoad?key=chat/image/2017082415/orT5yw4pTFHOVv3vj7p3quEBpWSA__wxId_eMzNK1riD4em-F7yXuDN2G36IzPJTexMJlprAvdWuHefYeh7rnCu-pMhkH1vaq6q.png",
+                    "uploadTime": "Aug 24, 2017 3:23:03 PM"
+                },
+                {
+                    "imgPath": "https://test.17doubao.com/upload/xmppDownLoad/downLoad?key=chat/image/2017082415/orT5yw4pTFHOVv3vj7p3quEBpWSA__wxId_8LJsUyohLQmMJQuDtkTtmiq-myPj2CeFBT0jzFOkL2acjUQa4mbGodBz8jIaBEoi.png",
+                    "uploadTime": "Aug 24, 2017 3:23:02 PM"
+                }
+            ],
+            "contentType": "image",
+            "serialNumber": "0C865EA744444D55A381DC34821994BF",
+            "state": 2,
+            "remark": "",
+            "createTime": "Aug 24, 2017 3:23:02 PM",
+            "updateTime": "Aug 24, 2017 3:23:07 PM"
+        },
+        {
+            "id": 37,
+            "uid": 73849,
+            "userName": "18511072312",
+            "loginUserName": "18511072312",
+            "nickName": "胡g",
+            "openId": "orT5yw4pTFHOVv3vj7p3quEBpWSA",
+            "robotImages": [
+                {
+                    "imgPath": "https://test.17doubao.com/upload/xmppDownLoad/downLoad?key=chat/image/2017082415/orT5yw4pTFHOVv3vj7p3quEBpWSA__wxId_fl0YkL-TeTxqHcb_mlvWggZ1xwf7umsGcPteMWYZMnv4hYx5wpPBloGnBnC1xqFH.png",
+                    "uploadTime": "Aug 24, 2017 3:22:32 PM"
+                },
+                {
+                    "imgPath": "https://test.17doubao.com/upload/xmppDownLoad/downLoad?key=chat/image/2017082415/orT5yw4pTFHOVv3vj7p3quEBpWSA__wxId_CurDrh0inrRMqH0BOm1vooLWvwXaWoue82t-1iBEDgbwG-YWKa5a9jHR3XpKa-C-.png",
+                    "uploadTime": "Aug 24, 2017 3:22:31 PM"
+                },
+                {
+                    "imgPath": "https://test.17doubao.com/upload/xmppDownLoad/downLoad?key=chat/image/2017082415/orT5yw4pTFHOVv3vj7p3quEBpWSA__wxId_yZZ-hDitrh1G1vBUhnx85SRGZ1jFPTXOEkYm_63JYpWO3KD3K2C85Tlv_d042Efc.png",
+                    "uploadTime": "Aug 24, 2017 3:22:31 PM"
+                }
+            ],
+            "contentType": "image",
+            "serialNumber": "ABCAD9B2EDF04A67AFCF0662E14D44C5",
+            "state": 2,
+            "remark": "",
+            "createTime": "Aug 24, 2017 3:22:31 PM",
+            "updateTime": "Aug 24, 2017 3:22:34 PM"
+        }
+    ]
+}
+}
+
+```

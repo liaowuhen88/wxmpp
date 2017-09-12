@@ -100,5 +100,4 @@ public class AlarmBoxer {
             customer.alarm(ruleTime, alarmInfo); //告警
         }
     }
-
 }

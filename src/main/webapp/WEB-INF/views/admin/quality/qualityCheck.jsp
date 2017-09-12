@@ -47,12 +47,11 @@
         <tr>
             <td>客服</td>
             <td>
-                <select style="height: 30px;width: 100px;" name="customerName" id="customerName"
-                        onchange="showDetail();">
+                <select style="height: 30px;width: 100px;" name="customerName" id="customerName">
                     <option value="">--请选择--</option>
                     <option value="maqiumeng">马秋萌</option>
                     <option value="wangjing">汪婧</option>
-                    <option value="hushuanyue">胡双月</option>
+                    <option value="hushuangyue">胡双月</option>
                     <option value="liuya">刘雅</option>
                     <option value="zhangchi">张弛</option>
                 </select>

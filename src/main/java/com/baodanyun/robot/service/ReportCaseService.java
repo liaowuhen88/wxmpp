@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.baodanyun.robot.common.RobotConstant;
 import com.baodanyun.robot.dto.RobotDto;
 import com.baodanyun.robot.dto.RobotImages;
+import com.baodanyun.robot.dto.RobotSearchDto;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.dao.RobotReportCaseMapper;
@@ -13,6 +14,7 @@ import com.baodanyun.websocket.model.RobotReportCaseExample;
 import com.baodanyun.websocket.service.CacheService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Predicate;
+import org.apache.commons.collections4.Transformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -321,5 +323,55 @@ public class ReportCaseService {
                 .andStateEqualTo((byte) ReportCaseEnum.SUCCESS.getState());
 
         return robotReportCaseMapper.selectByExample(example);
+    }
+
+
+    /**
+     * 所有机器人报案数据
+     *
+     * @param searchDto
+     * @return
+     */
+    public List<RobotDto> findPageList(RobotSearchDto searchDto) {
+        List<RobotDto> resultList = null;
+
+        searchDto.setOffset((searchDto.getPage() - 1) * searchDto.getCount());
+        List<RobotReportCase> serialList = robotReportCaseMapper.findSerialNumberPage(searchDto);
+        if (CollectionUtils.isNotEmpty(serialList)) {
+            List<RobotReportCase> dataList = this.findInSerialNumList(serialList);
+            resultList = this.buildRobotList(serialList, dataList);
+        }
+        return resultList;
+    }
+
+    private List<RobotReportCase> findInSerialNumList(List<RobotReportCase> serialList) {
+        List<String> list = (List<String>) CollectionUtils.collect(serialList, new Transformer() {
+            @Override
+            public String transform(Object obj) {
+                RobotReportCase reportCase = (RobotReportCase) obj;
+                return reportCase.getSerialNumber();
+            }
+        });
+        return this.findInSerialNum(list);
+    }
+
+    public List<RobotReportCase> findInSerialNum(List<String> list) {
+        RobotReportCaseExample example = new RobotReportCaseExample();
+        example.setOrderByClause("content_time DESC"); //消息时间
+        example.createCriteria()
+                .andSerialNumberIn(list)
+                .andContentTypeEqualTo("image")
+                .andStateEqualTo((byte) ReportCaseEnum.SUCCESS.getState());
+
+        return robotReportCaseMapper.selectByExample(example);
+    }
+
+    /**
+     * 批次号的总条数
+     *
+     * @return
+     */
+    public long getTotalCount(RobotSearchDto searchDto) {
+        return robotReportCaseMapper.getSerialNumberTotalCount(searchDto);
     }
 }

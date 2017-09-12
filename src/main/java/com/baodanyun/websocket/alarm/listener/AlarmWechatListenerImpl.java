@@ -2,11 +2,13 @@ package com.baodanyun.websocket.alarm.listener;
 
 import com.alibaba.fastjson.JSON;
 import com.baodanyun.websocket.bean.msg.Msg;
+import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.enums.AlarmTypeEnum;
 import com.baodanyun.websocket.event.AlarmEvent;
 import com.baodanyun.websocket.node.sendUtils.WeChatResponse;
 import com.baodanyun.websocket.node.sendUtils.WeChatSendUtils;
 import com.baodanyun.websocket.util.XMPPUtil;
+import org.apache.commons.lang.StringUtils;
 import org.jivesoftware.smack.packet.Message;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -48,6 +50,7 @@ public class AlarmWechatListenerImpl implements AlarmListener {
     @Override
     public void alarm(final AlarmEvent alarmInfo) {
         Message message = alarmInfo.getMessage();
+
         DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         String sendTime = new DateTime(alarmInfo.getVisitorSendMsgTime()).toString(fmt);
         String content = "用户【%s】【%s】发送消息【%s】到【%s】,已超时【%s】分钟未回复";
