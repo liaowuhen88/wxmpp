@@ -407,7 +407,19 @@
     SELECT
     <include refid="Base_Column_List"/>
     FROM robot_report_case
-    WHERE state = 2 AND content_type='image'
+    WHERE 1=1
+    <if test="state != null">
+      AND state = #{state}
+    </if>
+    <if test="contentType != null and contentType !=''">
+      AND content_type = #{contentType}
+    </if>
+    <if test="uid != null">
+      AND uid = #{uid}
+    </if>
+    <if test="phone != null and phone !=''">
+      AND user_name=#{phone}
+    </if>
     <if test="beginTime != null and endTime != null">
       AND content_time BETWEEN #{beginTime} AND #{endTime}
     </if>
@@ -421,7 +433,22 @@
     SELECT count(1) from
     (
     SELECT serial_number from robot_report_case
-    WHERE  state = 2 AND content_type='image'
+    WHERE 1=1
+    <if test="state != null">
+      AND state = #{state}
+    </if>
+    <if test="contentType != null and contentType !=''">
+      AND content_type = #{contentType}
+    </if>
+    <if test="uid != null">
+      AND uid = #{uid}
+    </if>
+    <if test="phone != null and phone !=''">
+      AND user_name=#{phone}
+    </if>
+    <if test="beginTime != null and endTime != null">
+      AND content_time BETWEEN #{beginTime} AND #{endTime}
+    </if>
     GROUP BY serial_number
     ) t
   </select>
