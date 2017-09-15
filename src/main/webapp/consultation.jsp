@@ -5,40 +5,99 @@
 %>
 <!DOCTYPE html>
 <html>
-<style>
-    .mark {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        display: none;
-        background: rgba(0, 0, 0, .8);
-    }
 
-    .register {
-        display: none;
-    }
-    .mark .mark-content {
-        font-size: .64rem;
-        width: 13.86667rem;
-        margin: 4.26667rem auto;
-        padding: .64rem .53333rem;
-        letter-spacing: .04267rem;
-        color: #666;
-        background: #fff;
-    }
+</
+
+style
+
+>
+<
+head >
+< title > 豆包客服<
+
+/
+title >
+< meta name
+
+=
+"viewport"
+content
+
+=
+"width=device-width, initial-scale=1,user-select=no"
+>
+< script src
+
+=
+"
+<%=request.getContextPath()%>
+/resouces/js/jquery.js"
+> <
+
+/
+script >
+< script >
+window.base
+
+=
+"
+<%=base%>
+"
+;
+<
+/
+script >
+<style>
+html,
+body,
+div {
+    margin: 0;
+    padding: 0;
+}
+
+.qrcode {
+    text-align: center;
+    padding: 60px 0 0 0;
+    font-size: 17px;
+    line-height: 1.5;
+    display: none;
+}
+
+.qrcode img {
+    width: 250px;
+}
+
+.qrcode p {
+    margin: 10px 0;
+}
+
+.qrcode .pic {
+    width: 250px;
+    margin: 0 auto;
+    background: url(./resouces/images/qrcode-loading.gif) no-repeat center;
+}
+
+.mark {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: none;
+    background: rgba(0, 0, 0, .8);
+}
+
+.mark .mark-content {
+    font-size: 14px
+    width: 13.86667rem;
+    margin: 20px auto;
+    padding: 10px 5px
+
+    color: #666;
+    background: #fff;
+}
 
 </style>
-<head>
-    <title>豆包客服</title>
-    <script src="<%=request.getContextPath()%>/resouces/js/jquery.js"></script>
-    <script src="<%=request.getContextPath()%>/resouces/js/hotcss.js"></script>
-
-    <script>
-        window.base = "<%=base%>";
-    </script>
-
 </head>
 <body>
 <div class="mark">
@@ -47,18 +106,20 @@
     </div>
 </div>
 
-<div class="register">
-    <div class="mark-content">
-        <img src="" id="register">
+<div class="qrcode">
+    <div class="pic" id="register">
 
-        <div>尊敬的用户您好，请您扫描上图二维码关注豆包管家咨询客服。</div>
     </div>
+    <p>尊敬的用户您好：
+        <br>请您扫描上图二维码
+        <br>关注豆包管家咨询客服</p>
 </div>
 </body>
 <script>
 
     $(function () {
         var follow = '${follow}';
+        //var follow = 'false';
         console.log(follow);
         if (follow == true || follow == 'true') {
             $('.mark').show();
@@ -67,10 +128,13 @@
                 });
             }, 2000);
         } else {
-            $('.register').show();
+            $('.qrcode').show();
             var url = '${url}';
             //url = 'http://vipkefu.oss-cn-shanghai.aliyuncs.com/vvZhuShou/4d26f65a02a64bbba.jpg';
-            document.getElementById("register").setAttribute("src", url);
+            //var url="https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQE58DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAydnpvR2dxMF9iR08xVmNvNGhwMVUAAgTMXbtZAwSAOgkA";
+
+            document.getElementById("register").innerHTML = ['<img src="', url, '"/>'].join('');
+
         }
     });
 
