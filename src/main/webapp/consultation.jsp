@@ -41,7 +41,7 @@
         .qrcode .pic {
     width: 250px;
     margin: 0 auto;
-            background: url(/resouces/images/qrcode-loading.gif) no-repeat center;
+            background: url(<%=request.getContextPath()%>/resouces/images/qrcode-loading.gif) no-repeat center;
         }
 
         .mark {
