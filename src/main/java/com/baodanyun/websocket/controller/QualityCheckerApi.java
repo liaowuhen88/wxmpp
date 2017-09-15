@@ -3,9 +3,11 @@ package com.baodanyun.websocket.controller;
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.msg.HistoryMsg;
 import com.baodanyun.websocket.bean.user.Customer;
+import com.baodanyun.websocket.bean.userInterface.user.PersonalInfo;
 import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.quality.dto.QualitySearchDto;
+import com.baodanyun.websocket.service.ArchiveMessagesServer;
 import com.baodanyun.websocket.service.QualityCheckService;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
@@ -27,6 +29,8 @@ public class QualityCheckerApi extends BaseController {
 
     @Autowired
     private QualityCheckService qualityCheckService;
+    @Autowired
+    private ArchiveMessagesServer archiveMessagesServer;
 
     /**
      * 跳转到质检首页
@@ -72,7 +76,8 @@ public class QualityCheckerApi extends BaseController {
         }
 
         List<String> nameList = qualityCheckService.findAllGuestName(searchDto);
-        response.setData(nameList);
+        //List<PersonalInfo> personalInfoList = qualityCheckService.findUserList(nameList);
+        response.setData(1);
         response.setSuccess(true);
         Render.r(servletResponse, JSONUtil.toJson(response));
     }
@@ -87,6 +92,7 @@ public class QualityCheckerApi extends BaseController {
     public void loadChatMsgFromUser(QualitySearchDto searchDto, HttpServletResponse servletResponse) {
         Response response = new Response();
         List<HistoryMsg> userMsgList = qualityCheckService.loadChatMsgFromUser(searchDto);
+        archiveMessagesServer.getHistoryMsgList(userMsgList);
 
         response.setData(userMsgList);
         response.setSuccess(true);

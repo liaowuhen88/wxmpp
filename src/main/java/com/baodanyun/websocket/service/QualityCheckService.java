@@ -1,6 +1,7 @@
 package com.baodanyun.websocket.service;
 
 import com.baodanyun.websocket.bean.msg.HistoryMsg;
+import com.baodanyun.websocket.bean.userInterface.user.PersonalInfo;
 import com.baodanyun.websocket.quality.dto.QualitySearchDto;
 
 import java.util.List;
@@ -22,4 +23,13 @@ public interface QualityCheckService {
      * @return
      */
     List<HistoryMsg> loadChatMsgFromUser(QualitySearchDto searchDto);
+
+    /**
+     * 根据用户电话查询用户信息
+     *
+     * @param phoneList
+     * @return
+     */
+    List<PersonalInfo> findUserList(List<String> phoneList);
+
 }

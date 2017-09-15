@@ -52,7 +52,7 @@ public class OpenCloudTest {
      */
     @Test
     public void pcontractBaseMessTest() {
-        final String serviceName = "doubao.pcontract.IPcontractService.getPcontractBaseMess";
+        final String serviceName = "doubao.message.MessageService.sendMessage";
 //        final String serviceName = "com.doubao.dubbo.service.pcontract.IPcontractService";
         final String appKey = "2030IM4SKD93FE03RLDF078E";
         final String appSecret = "kpSR6uZq8yU6djrkZzgzxlASaU1PNa1oiGOws7unTy";
@@ -85,7 +85,7 @@ public class OpenCloudTest {
         defaultRequest.setSignType(Constants.MD5);
         defaultRequest.setEncrypt(true);
         // 86603
-        defaultRequest.setContent("{\"accountId\":97948}");
+        defaultRequest.setContent("{\"message\":{\"bizId\":300000000,\"emailMsg\":false,\"innerMsg\":false,\"mobile\":\"18511072313\",\"smsMsg\":true,\"type\":1,\"weChatMsg\":false},\"templateCode\":\"SMS_TPL_DOUBAO_INVITE\",\"templateParams\":{\"companyName\":\"豆包网\",\"link\":\"www.baidu.com\",\"userName\":\"胡波test\"}}");
 
         DoubaoClient client = new DoubaoClient(DouBaoEnvEnum.PRD, appKey, appSecret, privateKey);
         try {
