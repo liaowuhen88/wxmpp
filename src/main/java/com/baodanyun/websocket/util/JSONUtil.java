@@ -1,6 +1,7 @@
 package com.baodanyun.websocket.util;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.Type;
 
@@ -16,8 +17,7 @@ public class JSONUtil {
      * @return
      */
     public static String toJson(Object o){
-        Gson gson = new Gson();
-
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         return gson.toJson(o);
     }
 

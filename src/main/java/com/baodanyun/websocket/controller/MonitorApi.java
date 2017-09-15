@@ -1,16 +1,25 @@
 package com.baodanyun.websocket.controller;
 
 import com.baodanyun.websocket.bean.NodeStatues;
+import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.bean.user.AbstractUser;
 import com.baodanyun.websocket.exception.BusinessException;
-import com.baodanyun.websocket.service.*;
+import com.baodanyun.websocket.service.UserCacheServer;
+import com.baodanyun.websocket.service.UserServer;
+import com.baodanyun.websocket.service.WebSocketService;
+import com.baodanyun.websocket.service.XmppServer;
+import com.baodanyun.websocket.util.JSONUtil;
+import com.baodanyun.websocket.util.Render;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -30,6 +39,14 @@ public class MonitorApi extends BaseController {
 
     @Autowired
     private UserCacheServer userCacheServer;
+
+    @RequestMapping(value = "monitor")
+    public void api(HttpServletRequest request, HttpServletResponse response) {
+        Response re = new Response();
+        re.setSuccess(true);
+        re.setData("ALL_PASS=OK");
+        Render.r(response, JSONUtil.toJson(re));
+    }
 
     public List<NodeStatues> getNodeStatues(String id, Map<String, ? extends AbstractUser> map) throws BusinessException {
 

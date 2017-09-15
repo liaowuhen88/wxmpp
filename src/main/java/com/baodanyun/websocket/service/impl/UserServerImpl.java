@@ -32,7 +32,6 @@ public class UserServerImpl implements UserServer {
     @Autowired
     private PersonalServiceImpl personalService;
 
-
     @Override
     public Visitor initUserByOpenId(String openId) throws BusinessException {
 

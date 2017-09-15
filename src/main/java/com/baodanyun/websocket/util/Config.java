@@ -23,6 +23,9 @@ public class Config {
     public static final String greetingWord;
     public static final String offlineWord;
     public static final String bdyEnv;
+    public static final String dubbo_appKey;
+    public static final String dubbo_appSecret;
+    public static final String dubbo_privateKey;
 
     static {
         Properties p = new Properties();
@@ -59,6 +62,9 @@ public class Config {
         greetingWord = p.getProperty("greeting.word");
         offlineWord = p.getProperty("offline.word");
         bdyEnv = p.getProperty("bdy.env");
+        dubbo_appKey = p.getProperty("dubbo_appKey");
+        dubbo_appSecret = p.getProperty("dubbo_appSecret");
+        dubbo_privateKey = p.getProperty("dubbo_privateKey");
 
     }
 }

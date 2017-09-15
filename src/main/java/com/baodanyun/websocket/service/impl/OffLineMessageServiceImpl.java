@@ -8,7 +8,10 @@ import com.baodanyun.websocket.node.VisitorChatNode;
 import com.baodanyun.websocket.service.MessageSendToWeixin;
 import com.baodanyun.websocket.service.MessageServer;
 import com.baodanyun.websocket.service.OffLineMessageService;
+import com.baodanyun.websocket.util.CommonConfig;
 import com.baodanyun.websocket.util.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OffLineMessageServiceImpl implements OffLineMessageService {
+    protected static Logger logger = LoggerFactory.getLogger(OffLineMessageServiceImpl.class);
 
     @Autowired
     private MessageSendToWeixin messageSendToWeixin;
@@ -38,7 +42,11 @@ public class OffLineMessageServiceImpl implements OffLineMessageService {
         Long ct = System.currentTimeMillis();
         sendMsg.setTo(customer.getId());
         sendMsg.setCt(ct);
-        messageSendToWeixin.send(sendMsg, visitor.getOpenId());
+        try {
+            messageSendToWeixin.send(sendMsg, visitor.getOpenId());
+        } catch (Exception e) {
+            logger.error("error", e);
+        }
 
         // 记录留言并且通知事件中心
         MessageModel mm = new MessageModel();
@@ -48,13 +56,19 @@ public class OffLineMessageServiceImpl implements OffLineMessageService {
         mm.setPhone(visitor.getUserName());
         mm.setUsername(visitor.getNickName());
 
-        int stu = messageServer.addMessage(mm);
-        visitorListener.leaveMessage(visitor.getUid() + "", mm.getContent());
+        messageServer.addMessage(mm);
+        visitorListener.pushEvent(visitor.getUid() + "", CommonConfig.MSG_BIZ_KF_LEAVE_MESSAGE, mm.getContent());
 
     }
 
     @Override
     public void dealOfflineMessage(VisitorChatNode visitorChatNode, String leaveMsg) {
         dealOfflineMessage(visitorChatNode, leaveMsg, Config.offlineWord);
+    }
+
+    @Override
+    public void dealUnRegisterMessage(AbstractUser visitor, String leaveMsg) {
+
+        visitorListener.pushEvent(visitor.getUid() + "", CommonConfig.MSG_BIZ_KF_NOT_REGISTER, leaveMsg);
     }
 }

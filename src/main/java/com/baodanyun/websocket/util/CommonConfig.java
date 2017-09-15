@@ -17,6 +17,8 @@ public class CommonConfig {
 
     public static final String MSG_BIZ_KF_QUIT = "0102"; //退出客服
     public static final String MSG_BIZ_KF_LEAVE_MESSAGE = "0103"; //用户留言
+    public static final String MSG_BIZ_KF_NOT_REGISTER = "0111"; //用户未关注咨询
+
 
     public static final String LOGIN_FROM_H5 = "0109"; //用户从H5进入
     public static final String LOGIN__FROM_WE_CHAT_ACTIVE = "0108"; //用户主动从微信进入

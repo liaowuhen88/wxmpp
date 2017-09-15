@@ -41,7 +41,7 @@ public class AccessMsgSendServiceImpl extends MsgSendServiceImpl {
     }
 
     @Override
-    public void produce(Msg msgBean) throws InterruptedException {
+    public void produce(Msg msgBean) throws Exception {
         messageSendToWeixin.send(msgBean, msgBean.getFrom(), "sys");
     }
 }

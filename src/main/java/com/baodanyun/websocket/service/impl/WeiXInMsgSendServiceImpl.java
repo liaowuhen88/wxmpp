@@ -39,7 +39,7 @@ public class WeiXInMsgSendServiceImpl extends MsgSendServiceImpl {
     }
 
     @Override
-    public void sendHelloToVisitor(AbstractUser visitor, AbstractUser customer) {
+    public void sendHelloToVisitor(AbstractUser visitor, AbstractUser customer) throws Exception {
         Visitor visi = (Visitor) visitor;
         visi.setType(1);
         Msg msg = msgSendControl.getMsgHelloToVisitor(visi, customer);
@@ -53,7 +53,7 @@ public class WeiXInMsgSendServiceImpl extends MsgSendServiceImpl {
     }
 
     @Override
-    public void produce(Msg msgBean) throws InterruptedException {
+    public void produce(Msg msgBean) throws Exception {
         messageSendToWeixin.send(msgBean, msgBean.getFrom(), "sys");
     }
 }

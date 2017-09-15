@@ -52,10 +52,10 @@ public interface MsgSendService {
 
     void sendSMMsgToCustomer(AbstractUser customer, MsgStatus status) throws InterruptedException;
 
-    void sendHelloToVisitor(AbstractUser visitor, AbstractUser customer) throws InterruptedException;
+    void sendHelloToVisitor(AbstractUser visitor, AbstractUser customer) throws Exception;
 
     void sendHelloToCustomer(AbstractUser visitor, AbstractUser customer) throws InterruptedException;
 
-    void produce( Msg msgBean) throws InterruptedException;
+    void produce(Msg msgBean) throws Exception;
 
 }

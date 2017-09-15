@@ -7,6 +7,7 @@ import com.baodanyun.websocket.listener.VisitorListener;
 import com.baodanyun.websocket.model.MessageModel;
 import com.baodanyun.websocket.service.MessageServer;
 import com.baodanyun.websocket.util.AccessControlAllowUtils;
+import com.baodanyun.websocket.util.CommonConfig;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.Render;
 import org.apache.commons.lang.StringUtils;
@@ -104,7 +105,7 @@ public class MessageApi extends BaseController {
         try {
             if (StringUtils.isEmpty(message.addCheck())) {
                 int stu = messageServer.addMessage(message);
-                visitorListener.leaveMessage(message.getPhone(), message.getContent());
+                visitorListener.pushEvent(message.getPhone(), CommonConfig.MSG_BIZ_KF_LEAVE_MESSAGE, message.getContent());
                 response.setData(stu);
                 response.setSuccess(true);
             } else {

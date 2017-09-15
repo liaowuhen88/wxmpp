@@ -17,27 +17,23 @@ import org.springframework.stereotype.Service;
 
 public class MessageSendToWeixin {
     private static Logger logger = org.slf4j.LoggerFactory.getLogger(MessageSendToWeixin.class);
-    public void send(Msg sendMsg, AbstractUser user) {
+
+    public void send(Msg sendMsg, AbstractUser user) throws Exception {
         send(sendMsg,user.getOpenId(),user.getId());
     }
 
-    public void send(Msg sendMsg, String openId, String id) {
-        try {
+    public void send(Msg sendMsg, String openId, String id) throws Exception {
             sendMsg.setType("text");
             sendMsg.setFrom(openId);
             String result = HttpUtils.send(Config.weiXinCallback + "/wechatDoubao/callback", sendMsg);
-
             if (StringUtils.isEmpty(result)) {
                 result = "{}";
             }
             logger.info("id [" + id + "] send message to weiXin openid ["+openId+"]:" +  JSONObject.toJSONString(sendMsg) + "----result:" + JSONUtil.toJson(result));
-        } catch (Exception e) {
-            logger.error("error", "发送失败", e);
-        }
 
     }
 
-    public void send(Msg sendMsg, String openId) {
+    public void send(Msg sendMsg, String openId) throws Exception {
         send(sendMsg, openId, null);
     }
 

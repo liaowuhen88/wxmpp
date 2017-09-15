@@ -56,12 +56,12 @@ public class VisitorListener {
         }
     }
 
-    public void leaveMessage(String myid,String m ){
+    public void pushEvent(String myid, String evt, String m) {
         try{
             LogUserEvents le = new LogUserEvents();
             le.setOtype(CommonConfig.Event_OType_WX_KF);
             le.setMyUid(myid);
-            le.setEvt(CommonConfig.MSG_BIZ_KF_LEAVE_MESSAGE);
+            le.setEvt(evt);
             le.setMark(m);
             se.sendToEventCenter(le);
         }catch (Exception e){

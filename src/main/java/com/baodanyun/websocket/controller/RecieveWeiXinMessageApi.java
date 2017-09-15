@@ -161,13 +161,14 @@ public class RecieveWeiXinMessageApi extends BaseController {
         sendMsg.setContentType(Msg.MsgContentType.text.toString());
         Long ct = new Date().getTime();
         sendMsg.setCt(ct);
-
-        messageSendToWeixin.send(sendMsg, msg.getFrom(), "sys");
-
         Response response = new Response();
-        response.setMsg("change bind customer");
-        response.setSuccess(true);
-
+        try {
+            messageSendToWeixin.send(sendMsg, msg.getFrom(), "sys");
+            response.setMsg("change bind customer");
+            response.setSuccess(true);
+        } catch (Exception e) {
+            logger.error("error", e);
+        }
         return response;
     }
 

@@ -1,5 +1,7 @@
 package com.baodanyun.websocket.controller;
 
+import com.baodanyun.websocket.bean.dubbo.FollowWXResponse;
+import com.baodanyun.websocket.bean.dubbo.QRCodeResponse;
 import com.baodanyun.websocket.bean.msg.Msg;
 import com.baodanyun.websocket.bean.msg.msg.TextMsg;
 import com.baodanyun.websocket.bean.request.ProductConsultation;
@@ -10,6 +12,8 @@ import com.baodanyun.websocket.node.*;
 import com.baodanyun.websocket.service.MessageSendToWeixin;
 import com.baodanyun.websocket.service.OffLineMessageService;
 import com.baodanyun.websocket.service.UserServer;
+import com.baodanyun.websocket.service.dubbo.WechatService;
+import com.baodanyun.websocket.service.dubbo.WxQRCodeService;
 import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.JSONUtil;
 import org.apache.commons.lang.StringUtils;
@@ -47,43 +51,62 @@ public class ConsultationApi extends BaseController {
     @Autowired
     private WeChatTerminalVisitorFactory weChatTerminalVisitorFactory;
 
+    @Autowired
+    private WxQRCodeService wxQRCodeService;
+    @Autowired
+    private WechatService wechatService;
+
     @RequestMapping(value = "consultation")
     public ModelAndView getMessageByCId(ProductConsultation pc, HttpServletRequest request, HttpServletResponse httpServletResponse) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/consultation.html");
+
         try {
             logger.info(JSONUtil.toJson(pc));
+            FollowWXResponse fw = wechatService.getFollow(pc.getU());
             AbstractUser visitor = userServer.initUserByOpenId(pc.getU());
-            VisitorChatNode visitorChatNode = initVisitorChatNode(visitor);
-            AbstractTerminal node = visitorChatNode.getNode(weChatTerminalVisitorFactory.getId(visitorChatNode.getAbstractUser()));
-
-            CustomerChatNode customerChatNode = visitorChatNode.getCurrentChatNode();
-            boolean cFlag = visitorChatNode.getCurrentChatNode().isXmppOnline();
-            logger.info("客服是否在线" + cFlag);
+            mv.addObject("follow", fw.isFollow());
             String body;
-            if (!cFlag) {
-                body = Config.offlineWord;
-            } else {
-                if (StringUtils.isEmpty(pc.getName()) || StringUtils.isEmpty(pc.getGoodUrl())) {
-                    body = "您好，我是豆包网的专属客服,不知道您有什么疑问可以帮到您^_^";
-                } else {
-                    body = "您好，我是豆包网的专属客服，您刚浏览了<a href=\\\"" + pc.getGoodUrl() + "\\\">" + pc.getName() + "</a>，不知道您有什么疑问可以帮到您^_^";
+            if (!fw.isFollow()) {
+                body = "未关注豆包管家用户咨询客服";
+                //TODO 请求关注二维码
+                QRCodeResponse qc = wxQRCodeService.getQRCodeTempUrl(pc.getName(), "", pc.getGoodUrl(), (byte) 5);
+                if (null != qc && StringUtils.isNotEmpty(qc.getUrl())) {
+                    mv.addObject("url", qc.getUrl());
                 }
-            }
-            logger.info("info:" + body);
-            // 客服不在线
-            Msg msg = new TextMsg(body);
-            msg.setSource(TeminalTypeEnum.PRODUCT.getCode()); //消息来源是微信
-            msg.setTo(customerChatNode.getAbstractUser().getId());
-            msg.setFrom(pc.getU());
-
-            if (!cFlag) {
-                offLineMessageService.dealOfflineMessage(visitorChatNode, body);
+                offLineMessageService.dealUnRegisterMessage(visitor, body);
+                logger.info("{} 未关注", visitor.getOpenId());
             } else {
-                messageSendToWeixin.send(msg, pc.getU(), null);
+                VisitorChatNode visitorChatNode = initVisitorChatNode(visitor);
+                AbstractTerminal node = visitorChatNode.getNode(weChatTerminalVisitorFactory.getId(visitorChatNode.getAbstractUser()));
+
+                CustomerChatNode customerChatNode = visitorChatNode.getCurrentChatNode();
+                boolean cFlag = visitorChatNode.getCurrentChatNode().isXmppOnline();
+                logger.info("客服是否在线" + cFlag);
+
+                if (!cFlag) {
+                    body = Config.offlineWord;
+                } else {
+                    if (StringUtils.isEmpty(pc.getName()) || StringUtils.isEmpty(pc.getGoodUrl())) {
+                        body = "您好，我是豆包网的专属客服,不知道您有什么疑问可以帮到您^_^";
+                    } else {
+                        body = "您好，我是豆包网的专属客服，您刚浏览了<a href=\\\"" + pc.getGoodUrl() + "\\\">" + pc.getName() + "</a>，不知道您有什么疑问可以帮到您^_^";
+                    }
+                }
+                logger.info("info:" + body);
+                // 客服不在线
+                Msg msg = new TextMsg(body);
+                msg.setSource(TeminalTypeEnum.PRODUCT.getCode()); //消息来源是微信
+                msg.setTo(customerChatNode.getAbstractUser().getId());
+                msg.setFrom(pc.getU());
+                if (!cFlag) {
+                    offLineMessageService.dealOfflineMessage(visitorChatNode, body);
+                } else {
+                    messageSendToWeixin.send(msg, pc.getU(), null);
+                }
+                visitorChatNode.receiveFromGod(node, msg);
             }
 
-            visitorChatNode.receiveFromGod(node, msg);
         } catch (BusinessException e) {
             logger.error("error", e);
 

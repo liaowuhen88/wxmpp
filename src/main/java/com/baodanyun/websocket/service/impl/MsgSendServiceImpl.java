@@ -99,7 +99,7 @@ public class MsgSendServiceImpl implements MsgSendService {
     }
 
     @Override
-    public void sendHelloToVisitor(AbstractUser visitor, AbstractUser customer) throws InterruptedException {
+    public void sendHelloToVisitor(AbstractUser visitor, AbstractUser customer) throws Exception {
         Msg msg = msgSendControl.getMsgHelloToVisitor((Visitor) visitor, customer);
         webSocketService.produce(msg);
 
@@ -112,7 +112,7 @@ public class MsgSendServiceImpl implements MsgSendService {
     }
 
     @Override
-    public void produce(Msg msgBean) throws InterruptedException {
+    public void produce(Msg msgBean) throws Exception {
         webSocketService.produce(msgBean);
     }
 }
