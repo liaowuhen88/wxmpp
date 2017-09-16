@@ -49,7 +49,7 @@ public class PersonalServiceImpl implements PersonalService {
     protected static Logger logger = LoggerFactory.getLogger(CustomerApi.class);
 
     @Autowired
-    @Qualifier(value = "nullMemCacheServiceImpl")
+    //@Qualifier(value = "nullMemCacheServiceImpl")
     private CacheService cacheService;
 
     @Autowired
