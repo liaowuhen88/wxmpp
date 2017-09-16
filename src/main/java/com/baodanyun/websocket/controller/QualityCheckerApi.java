@@ -76,8 +76,8 @@ public class QualityCheckerApi extends BaseController {
         }
 
         List<String> nameList = qualityCheckService.findAllGuestName(searchDto);
-        //List<PersonalInfo> personalInfoList = qualityCheckService.findUserList(nameList);
-        response.setData(1);
+        List<PersonalInfo> personalInfoList = qualityCheckService.findUserList(nameList);
+        response.setData(personalInfoList);
         response.setSuccess(true);
         Render.r(servletResponse, JSONUtil.toJson(response));
     }

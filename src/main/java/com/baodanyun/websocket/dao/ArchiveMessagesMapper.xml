@@ -242,8 +242,9 @@ ORDER BY
         am.time ct
         FROM archiveconversations ac LEFT JOIN archivemessages am ON ac.conversationId = am.conversationId
         WHERE am.time between #{startTime} AND #{endTime}
-        AND ownerJid = #{customerName}
+        AND ownerJid = #{userName}
         ORDER BY ct ASC
+        LIMIT 300
     </select>
 
 </mapper>

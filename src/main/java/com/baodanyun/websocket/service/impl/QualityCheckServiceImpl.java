@@ -56,7 +56,7 @@ public class QualityCheckServiceImpl implements QualityCheckService {
         List<PersonalInfo> personalInfos = new ArrayList<>();
         try {
             for (String phone : phoneList) {
-                if (phone.matches("^\\d{11}$")) {
+                if (phone.matches("^\\d{11}$")) {//电话号码
                     Visitor visitor = userServer.initByPhone(phone);
                     if (visitor != null) {
                         PersonalInfo person = personalService.getPersonalInfo(visitor.getUid());
