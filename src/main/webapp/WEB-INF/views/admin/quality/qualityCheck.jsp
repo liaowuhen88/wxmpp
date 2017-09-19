@@ -128,7 +128,7 @@
             <td>查询结束时间</td>
             <td><input type="text" style="height: 30px;" name="endDate" id="datetimepickerEnd"></td>
             <%-- <td style="display: ${isCustomerLeader ? 'block' : 'none'}">--%>
-            <td>
+            <td style="display: ${isCustomerLeader ? 'block' : 'none'}">
                 <input type="button" onclick="showDetail()" value="查询">
             </td>
         </tr>
