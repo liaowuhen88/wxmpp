@@ -69,7 +69,9 @@
         } else {
             $('.register').show();
             var url = '${url}';
-            //url = 'http://vipkefu.oss-cn-shanghai.aliyuncs.com/vvZhuShou/4d26f65a02a64bbba.jpg';
+            if (!url) {
+                url = 'http://vipkefu.oss-cn-shanghai.aliyuncs.com/vvZhuShou/4d26f65a02a64bbba.jpg';
+            }
             document.getElementById("register").setAttribute("src", url);
         }
     });
