@@ -3,6 +3,7 @@ package com.baodanyun.websocket.springConfig;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.PropertiesUtil;
+import com.mongodb.*;
 import com.whalin.MemCached.MemCachedClient;
 import com.whalin.MemCached.SockIOPool;
 import org.apache.activemq.ActiveMQConnectionFactory;
@@ -18,7 +19,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.Scope;
+import org.springframework.data.authentication.UserCredentials;
+import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jms.core.JmsTemplate;
@@ -27,6 +35,8 @@ import org.springframework.stereotype.Component;
 
 import javax.jms.Destination;
 import javax.sql.DataSource;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -154,7 +164,36 @@ public class SpringConfig {
 
     @Bean
     public MemCachedClient getMemCachedClient() {
-        MemCachedClient  memCachedClient= new  MemCachedClient();
+        MemCachedClient memCachedClient = new MemCachedClient();
         return memCachedClient;
+    }
+
+    /**
+     * mongoDB配置
+     *
+     * @return
+     * @throws Exception
+     */
+    @Bean
+    public MongoDbFactory mongoDbFactory() throws Exception {
+        String host = map.get("mongodb.host");
+        String port = map.get("mongodb.port");
+
+        String databaseName = map.get("mongodb.dbname"); //数据库名
+        String username = map.get("mongodb.username"); //用户名
+        char[] password = map.get("mongodb.password").toCharArray(); //密码
+
+
+        Mongo mongo = new Mongo(host, Integer.valueOf(port));
+        UserCredentials credentials = new UserCredentials(username, map.get("mongodb.password"));
+        MongoDbFactory mongoDbFactory = new SimpleMongoDbFactory(mongo, databaseName, credentials);
+
+        return mongoDbFactory;
+    }
+
+    @Bean
+    public MongoTemplate mongoTemplate(@Qualifier("mongoDbFactory") MongoDbFactory mongoDbFactory) {
+        MongoTemplate template = new MongoTemplate(mongoDbFactory);
+        return template;
     }
 }
