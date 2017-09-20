@@ -19,8 +19,6 @@
     <script src="<%=request.getContextPath()%>/resouces/js/util.js"></script>
     <script src="<%=request.getContextPath()%>/resouces/js/plugins/mustache.js"></script>
     <script src="<%=request.getContextPath()%>/resouces/js/datetimepicker/jquery.datetimepicker.full.js"></script>
-
-
     <script src="<%=request.getContextPath()%>/resouces/js/webuploader/webuploader.js"></script>
     <script src="<%=request.getContextPath()%>/resouces/js/webuploader/uploadimg.js"></script>
     <script src="<%=request.getContextPath()%>/resouces/ajax/common.js"></script>
@@ -163,6 +161,7 @@
         </li>
     </ul>
 
+    <!--
     <ul class="select-list">
         <li>
             <input type="radio" id="100" name="select" checked>
@@ -188,7 +187,7 @@
             <input type="radio" id="600" name="select">
             <label for="600">进入客服</label>
         </li>
-    </ul>
+    </ul>-->
 </div>
 
 <div>
