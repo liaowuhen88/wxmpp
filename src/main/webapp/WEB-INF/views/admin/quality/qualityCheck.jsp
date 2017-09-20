@@ -338,7 +338,7 @@
      * @param userName
      */
     function loadChatMsgList(userName) {
-        if (!isAdmin) {
+        if (isAdmin == 'false') {
             return false;
         }
         if (!$('#customerName').val()) {
@@ -426,7 +426,7 @@
     }
 
     function selectByDate(type) {
-        if (!isAdmin) {
+        if (isAdmin) {
             return false;
         }
 
