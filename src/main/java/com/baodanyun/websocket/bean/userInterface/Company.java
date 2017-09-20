@@ -16,4 +16,12 @@ public class Company {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getEname() {
+        return ename;
+    }
+
+    public void setEname(String ename) {
+        this.ename = ename;
+    }
 }
