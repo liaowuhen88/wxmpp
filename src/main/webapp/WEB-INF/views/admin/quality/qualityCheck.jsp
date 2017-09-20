@@ -300,28 +300,28 @@
                             continue;
                         }
                         var templateHtml = '<li><input type="radio" name="userList" id="@mobile" onclick=loadChatMsgList("@mobile")>' +
-                            '<label for="@mobile" class="item">' +
-                            '@index)<span style="color: #007fff">@uid</span>' +
-                            '<span class="blue">@name</span>' +
-                            '<span class="eucalyptus">@age岁</span>' +
-                            '<span class="blue">@mobile</span><br>' +
-                            '<span class="red">@company</span>' +
-                            '</label><hr></li>';
+                                '<label for="@mobile" class="item">' +
+                                '@index)<span style="color: #007fff">@uid</span>' +
+                                '<span class="blue">@name</span>' +
+                                '<span class="eucalyptus">@age岁</span>' +
+                                '<span class="blue">@mobile</span><br>' +
+                                '<span class="red">@company</span>' +
+                                '</label><hr></li>';
                         if (!$.isNumeric(user.mobile)) {
                             templateHtml = '<li><input type="radio" name="userList" id="@mobile"  onclick=loadChatMsgList("@mobile")>' +
-                                '<label for="@mobile" class="item">' +
-                                '@index)&nbsp;&nbsp;<span class="blue">@name</span></br>' +
-                                '</label><hr></li>';
+                                    '<label for="@mobile" class="item">' +
+                                    '@index)&nbsp;&nbsp;<span class="blue">@name</span></br>' +
+                                    '</label><hr></li>';
                         }
                         templateHtml = templateHtml.replace(/@mobile/g, user.mobile).replace('@index', i + 1)
-                            .replace('@uid', user.useraccountid).replace('@name', user.pname)
-                            .replace('@age', jsGetAge(user.birthday)).replace('@company', user.attr);
+                                .replace('@uid', user.useraccountid).replace('@name', user.pname)
+                                .replace('@age', jsGetAge(user.birthday)).replace('@company', user.attr);
 
                         htmlArr.push(templateHtml);
                     }
                     $('#userListDiv').append(htmlArr.join(""));
                     /* $('#userListDiv').on('click', '[name="userList"]', function () {
-                         loadChatMsgList(this.id)
+                     loadChatMsgList(this.id)
                      })*/
                 }
             },

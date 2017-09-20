@@ -1,6 +1,5 @@
 package com.baodanyun.websocket.service.impl;
 
-import com.baodanyun.robot.service.RobotCheckerService;
 import com.baodanyun.websocket.bean.msg.HistoryMsg;
 import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.bean.userInterface.Company;

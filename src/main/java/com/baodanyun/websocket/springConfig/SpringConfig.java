@@ -3,7 +3,7 @@ package com.baodanyun.websocket.springConfig;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.PropertiesUtil;
-import com.mongodb.*;
+import com.mongodb.Mongo;
 import com.whalin.MemCached.MemCachedClient;
 import com.whalin.MemCached.SockIOPool;
 import org.apache.activemq.ActiveMQConnectionFactory;
@@ -35,8 +35,6 @@ import org.springframework.stereotype.Component;
 
 import javax.jms.Destination;
 import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
