@@ -247,6 +247,8 @@
 <script>
     window.base = '<%=path%>';
 
+    var isAdmin = '${isCustomerLeader}'; //管理员查询
+
     $('#datetimepickerStart').datetimepicker({
         //yearOffset:222,
         lang: 'ch',
@@ -336,6 +338,9 @@
      * @param userName
      */
     function loadChatMsgList(userName) {
+        if (!isAdmin) {
+            return false;
+        }
         if (!$('#customerName').val()) {
             alert('请选择客服');
             return false;
@@ -421,6 +426,10 @@
     }
 
     function selectByDate(type) {
+        if (!isAdmin) {
+            return false;
+        }
+
         var date, start, end = "";
         var start = " 00:00:00";
         var end = " 23:59:59";
