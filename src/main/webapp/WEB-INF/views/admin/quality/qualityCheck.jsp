@@ -31,6 +31,9 @@
     <script src="<%=request.getContextPath()%>/resouces/js/wechatface.js"></script>
 
     <style>
+        .total {
+            color: red;
+        }
         #allMsgHistoryContainer .avatar {
             display: none;
         }
@@ -111,7 +114,7 @@
             <td>客服</td>
             <td>
                 <select style="height: 30px;width: 100px;" name="customerName" id="customerName">
-                    <option value="">--请选择--</option>
+                    <option value="">请选择</option>
                     <option value="maqiumeng">马秋萌</option>
                     <option value="wangjing">汪婧</option>
                     <option value="hushuangyue">胡双月</option>
@@ -122,11 +125,11 @@
                 <input type="hidden" name="userName" id="userName">
             </td>
             <td>查询开始时间</td>
-            <td><input type="text" style="height: 30px;" name="beginDate" id="datetimepickerStart"></td>
+            <td><input type="text" style="height: 30px;" name="beginDate" id="datetimepickerStart" value="${startTime}">
+            </td>
             <td>查询结束时间</td>
-            <td><input type="text" style="height: 30px;" name="endDate" id="datetimepickerEnd"></td>
-            <%-- <td style="display: ${isCustomerLeader ? 'block' : 'none'}">--%>
-            <td style="display: ${isCustomerLeader ? 'block' : 'none'}">
+            <td><input type="text" style="height: 30px;" name="endDate" id="datetimepickerEnd" value="${endTime}"></td>
+            <td>
                 <input type="button" onclick="showDetail()" value="查询">
             </td>
         </tr>
@@ -136,58 +139,59 @@
 <div class="select">
     <ul class="select-list">
         <li>
-            <input type="radio" id="0" name="select" checked>
+            <input type="radio" id="0" name="selectDate" disabled>
             <label for="0">全部</label>
         </li>
         <li>
-            <input type="radio" id="1" name="select" onclick="selectByDate(1)">
+            <input type="radio" id="1" name="selectDate" checked onclick="selectByDate(1)">
             <label for="1">今天</label>
         </li>
         <li>
-            <input type="radio" id="2" name="select" onclick="selectByDate(2)">
+            <input type="radio" id="2" name="selectDate" onclick="selectByDate(2)">
             <label for="2">昨天</label>
         </li>
         <li>
-            <input type="radio" id="3" name="select" onclick="selectByDate(3)">
+            <input type="radio" id="3" name="selectDate" onclick="selectByDate(3)">
             <label for="3">前天</label>
         </li>
         <li>
-            <input type="radio" id="4" name="select" onclick="selectByDate(4)">
+            <input type="radio" id="4" name="selectDate" onclick="selectByDate(4)">
             <label for="4">一周以内</label>
         </li>
-        <li>
+        <%--<li>
             <input type="radio" id="5" name="select" onclick="selectByDate(5)">
             <label for="5">一个月以内</label>
-        </li>
+        </li>--%>
     </ul>
 
-    <!--
+
     <ul class="select-list">
         <li>
-            <input type="radio" id="100" name="select" checked>
+            <input type="radio" id="100" name="select" disabled>
             <label for="100">全部</label>
+            <input type="hidden" id="code" value="1">
         </li>
         <li>
-            <input type="radio" id="200" name="select">
-            <label for="200">用户留言</label>
+            <input type="radio" id="200" name="select" checked onclick="loadEvtData(1)">
+            <label for="200">用户留言(<span class="total" id="leaveCount">${totalMap.leaveCount}</span>)</label>
         </li>
         <li>
-            <input type="radio" id="300" name="select">
-            <label for="300">微信主动咨询</label>
+            <input type="radio" id="300" name="select" onclick="loadEvtData(2)">
+            <label for="300">微信主动咨询(<span class="total" id="wxActiveCount">${totalMap.wxActiveCount}</span>)</label>
         </li>
         <li>
-            <input type="radio" id="400" name="select">
-            <label for="400">H5主动咨询</label>
+            <input type="radio" id="400" name="select" onclick="loadEvtData(3)">
+            <label for="400">H5主动咨询(<span class="total" id="h5Count">${totalMap.h5Count}</span>)</label>
         </li>
         <li>
-            <input type="radio" id="500" name="select">
-            <label for="500">客服主动接入</label>
+            <input type="radio" id="500" name="select" onclick="loadEvtData(4)">
+            <label for="500">客服主动接入(<span class="total" id="wxPassiveCount">${totalMap.wxPassiveCount}</span>)</label>
         </li>
         <li>
-            <input type="radio" id="600" name="select">
-            <label for="600">进入客服</label>
+            <input type="radio" id="600" name="select" onclick="loadEvtData(5)">
+            <label for="600">进入客服(<span class="total" id="enterCount">${totalMap.enterCount}</span>)</label>
         </li>
-    </ul>-->
+    </ul>
 </div>
 
 <div>
@@ -247,8 +251,6 @@
 <script>
     window.base = '<%=path%>';
 
-    var isAdmin = '${isCustomerLeader}'; //管理员查询
-
     $('#datetimepickerStart').datetimepicker({
         //yearOffset:222,
         lang: 'ch',
@@ -280,56 +282,9 @@
             alert('请选择日期');
             return false;
         }
-        $('#serviceUserDiv').show();
-        $('#allMsgHistoryContainer').empty();
-        $("#dataView").html("");
-        $.ajax({
-            url: base + '/api/findAllGuestName',
-            type: 'POST',
-            data: $('#qualityForm').serialize(),
-            success: function (res) {
-                res.success = true;
-                if (res.success) {
-                    $('#userListDiv').empty();
-                    var arr = res.data;
-                    var htmlArr = [];
 
-                    for (var i = 0, len = arr.length; i < len; i++) {
-                        var user = arr[i];
-                        if (user.pname && user.pname == 'undefined') {
-                            continue;
-                        }
-                        var templateHtml = '<li><input type="radio" name="userList" id="@mobile" onclick=loadChatMsgList("@mobile")>' +
-                                '<label for="@mobile" class="item">' +
-                                '@index)<span style="color: #007fff">@uid</span>' +
-                                '<span class="blue">@name</span>' +
-                                '<span class="eucalyptus">@age岁</span>' +
-                                '<span class="blue">@mobile</span><br>' +
-                                '<span class="red">@company</span>' +
-                                '</label><hr></li>';
-                        if (!$.isNumeric(user.mobile)) {
-                            templateHtml = '<li><input type="radio" name="userList" id="@mobile"  onclick=loadChatMsgList("@mobile")>' +
-                                    '<label for="@mobile" class="item">' +
-                                    '@index)&nbsp;&nbsp;<span class="blue">@name</span></br>' +
-                                    '</label><hr></li>';
-                        }
-                        templateHtml = templateHtml.replace(/@mobile/g, user.mobile).replace('@index', i + 1)
-                                .replace('@uid', user.useraccountid).replace('@name', user.pname)
-                                .replace('@age', jsGetAge(user.birthday)).replace('@company', user.attr);
-
-                        htmlArr.push(templateHtml);
-                    }
-                    $('#userListDiv').append(htmlArr.join(""));
-                    /* $('#userListDiv').on('click', '[name="userList"]', function () {
-                     loadChatMsgList(this.id)
-                     })*/
-                }
-            },
-            error: function (res) {
-                alert('查询失败');
-                console.log(res);
-            }
-        });
+        statisticCount(); //更新数量
+        loadEvtData($('#code').val());
     };
 
 
@@ -338,9 +293,11 @@
      * @param userName
      */
     function loadChatMsgList(userName) {
-        if (isAdmin == 'false') {
+        if (!userName) {
+            alert('用户电话为空');
             return false;
         }
+
         if (!$('#customerName').val()) {
             alert('请选择客服');
             return false;
@@ -426,10 +383,6 @@
     }
 
     function selectByDate(type) {
-        if (isAdmin) {
-            return false;
-        }
-
         var date, start, end = "";
         var start = " 00:00:00";
         var end = " 23:59:59";
@@ -479,6 +432,89 @@
             d = '0' + d;
         }
         return a.getFullYear() + "-" + m + "-" + d;
+    }
+    ;
+
+    function statisticCount() {
+        $.ajax({
+            url: base + '/api/statisticCount',
+            type: 'POST',
+            data: $('#qualityForm').serialize(),
+            success: function (res) {
+                if (res.success) {
+                    var data = res.data;
+                    for (var key in data) {
+                        $('#' + key).text(data[key]);
+                    }
+                }
+            },
+            error: function (res) {
+                alert('查询失败');
+                console.log(res);
+            }
+        });
+    }
+    ;
+
+    function loadEvtData(code) {
+        $('#code').val(code);
+        $('#userListDiv').empty();
+        $('#serviceUserDiv').show();
+        $('#allMsgHistoryContainer').empty();
+        $("#dataView").html("");
+        $.ajax({
+            url: base + '/api/loadEvtData/' + code,
+            type: 'POST',
+            data: $('#qualityForm').serialize(),
+            success: function (res) {
+                console.log(res);
+                res.success = true;
+                if (res.success) {
+                    $('#userListDiv').empty();
+                    var arr = res.data;
+                    if (!arr) {
+                        return;
+                    }
+                    var htmlArr = [];
+
+                    for (var i = 0, len = arr.length; i < len; i++) {
+                        var user = arr[i];
+                        if (!user) {
+                            continue;
+                        }
+                        if (user.pname && user.pname == 'undefined') {
+                            continue;
+                        }
+                        var templateHtml = '<li><input type="radio" name="userList" id="@mobile" onclick=loadChatMsgList("@mobile")>' +
+                                '<label for="@mobile" class="item">' +
+                                '@index)<span style="color: #007fff">@uid</span>' +
+                                '<span class="blue">@name</span>' +
+                                '<span class="eucalyptus">@age</span>' +
+                                '<span class="blue">@mobile</span><br>' +
+                                '<span class="red">@company</span>' +
+                                '</label><hr></li>';
+
+                        if (user.useraccountid == 0) {//openid
+                            templateHtml = '<li><input type="radio" name="userList" id="@mobile"  onclick=loadChatMsgList("@mobile")>' +
+                                    '<label for="@mobile" class="item">' +
+                                    '@index)&nbsp;&nbsp;<span class="blue">@name</span></br>' +
+                                    '</label><hr></li>';
+                        }
+                        var age = jsGetAge(user.birthday);
+                        templateHtml = templateHtml.replace(/@mobile/g, user.mobile || '').replace('@index', i + 1)
+                                .replace('@uid', user.useraccountid || '').replace('@name', user.pname || '')
+                                .replace('@age', age == -1 ? '' : age + '岁').replace('@company', user.attr || '');
+
+                        htmlArr.push(templateHtml);
+                    }
+                    $('#userListDiv').append(htmlArr.join(""));
+                }
+            },
+            error: function (res) {
+                alert('查询失败');
+                console.log(res);
+            }
+        });
     }
 
 </script>

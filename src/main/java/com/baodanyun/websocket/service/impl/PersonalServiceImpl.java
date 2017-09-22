@@ -48,7 +48,6 @@ public class PersonalServiceImpl implements PersonalService {
     protected static Logger logger = LoggerFactory.getLogger(CustomerApi.class);
 
     @Autowired
-    //@Qualifier(value = "nullMemCacheServiceImpl")
     private CacheService cacheService;
 
     @Autowired
@@ -98,6 +97,7 @@ public class PersonalServiceImpl implements PersonalService {
                 }
             }
         }
+        logger.info("用户uid={}在hr上查询返回空", uid);
         return null;
     }
 

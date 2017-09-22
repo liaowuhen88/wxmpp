@@ -12,6 +12,9 @@ public class XMPPUtil {
     public static Logger logger = LoggerFactory.getLogger(XMPPUtil.class);
 
     public static String nameToJid(String name) {
+        if (StringUtils.isBlank(name))
+            return null;
+
         return name + Common.COMMON_XMPP_DOMAIN;
     }
 

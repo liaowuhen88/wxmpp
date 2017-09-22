@@ -462,7 +462,11 @@ public class CustomerApi extends BaseController {
         } catch (Exception e) {
             logger.error("error", e);
         }
+
+        boolean flag = Common.CUSTOMER_LEADER.contains(au.getLoginUsername());
+
         VcardUserRes wu = new VcardUserRes();
+        wu.setIsAdmin(flag ? 1 : -1);
         wu.setUser(au);
         wu.setVcard(vcard);
         mv.setViewName("/customer/chat");

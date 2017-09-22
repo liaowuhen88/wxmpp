@@ -40,6 +40,10 @@
             history.init();
             set.init();
             leaveMessage.init();
+
+            if (wu.isAdmin == 1) {
+                $('#qualityCheck').show();
+            }
         });
     </script>
 </head>

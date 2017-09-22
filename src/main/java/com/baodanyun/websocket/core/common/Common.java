@@ -20,7 +20,7 @@ public class Common {
     public static final String quickReplyVcard = "key";
 
     /*客服负责人登陆名*/
-    public static final String CUSTOMER_LEADER = "wangjing";
+    public static final String CUSTOMER_LEADER = "wangjing;yutao";
 
     /*微信超时返回结果*/
     public static final String[] WORDS = {"45015__回复时间超过限制", "45047__未知错误代码:45047"

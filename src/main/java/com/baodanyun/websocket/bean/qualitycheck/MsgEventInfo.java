@@ -7,16 +7,15 @@ import java.io.Serializable;
 
 @Document
 public class MsgEventInfo implements Serializable {
-
-    //evt"":""0203"",""t"":""1489459620160"",""otype"":""0"",""oid"
+    private String t;
 
     private String evt;
-
-    private String t;
 
     private String otype;
 
     private String oid;
+
+    private String m;
 
     public String getEvt() {
         return evt;
@@ -24,5 +23,37 @@ public class MsgEventInfo implements Serializable {
 
     public void setEvt(String evt) {
         this.evt = evt;
+    }
+
+    public String getT() {
+        return t;
+    }
+
+    public void setT(String t) {
+        this.t = t;
+    }
+
+    public String getOtype() {
+        return otype;
+    }
+
+    public void setOtype(String otype) {
+        this.otype = otype;
+    }
+
+    public String getOid() {
+        return oid;
+    }
+
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
+
+    public String getM() {
+        return m;
+    }
+
+    public void setM(String m) {
+        this.m = m;
     }
 }

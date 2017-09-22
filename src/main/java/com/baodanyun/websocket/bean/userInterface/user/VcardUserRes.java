@@ -9,6 +9,8 @@ public class VcardUserRes {
     private AbstractUser user;
     private AbstractUser vcard;
 
+    private int isAdmin;
+
     public AbstractUser getUser() {
         return user;
     }
@@ -23,5 +25,13 @@ public class VcardUserRes {
 
     public void setVcard(AbstractUser vcard) {
         this.vcard = vcard;
+    }
+
+    public int getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(int isAdmin) {
+        this.isAdmin = isAdmin;
     }
 }
