@@ -119,6 +119,7 @@ public class QualityCheckServiceImpl implements QualityCheckService {
         if (StringUtils.isBlank(evtCode)) {
             return null;
         }
+
         this.setSearchDtoProp(searchDto);
         LOGGER.info("搜索条件: evtcode={},{}", evtCode, JSON.toJSONString(searchDto));
 
