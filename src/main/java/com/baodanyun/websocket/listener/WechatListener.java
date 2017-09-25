@@ -2,7 +2,6 @@ package com.baodanyun.websocket.listener;
 
 import com.baodanyun.websocket.bean.LogUserEvents;
 import com.baodanyun.websocket.bean.user.AbstractUser;
-import com.baodanyun.websocket.bean.user.Visitor;
 import com.baodanyun.websocket.service.SendToEventCenterService;
 import com.baodanyun.websocket.util.CommonConfig;
 import org.slf4j.Logger;
@@ -56,28 +55,6 @@ public class WechatListener {
         }
     }
 
-    public void leaveMessage(String myid, String m) {
-        try {
-            LogUserEvents le = new LogUserEvents();
-            le.setOtype(CommonConfig.Event_OType_WX_KF);
-            le.setMyUid(myid);
-            le.setEvt(CommonConfig.MSG_BIZ_KF_LEAVE_MESSAGE);
-            le.setMark(m);
-            se.sendToEventCenter(le);
-        } catch (Exception e) {
-            logger.error("error", "error", e);
-        }
-    }
-
-    public void leaveMessage(Visitor visitor, AbstractUser customer) {
-        try {
-            LogUserEvents le = getByLogUserEvents(visitor, customer);
-            le.setEvt(CommonConfig.MSG_BIZ_KF_LEAVE_MESSAGE);
-            se.sendToEventCenter(le);
-        } catch (Exception e) {
-            logger.error("error", "error", e);
-        }
-    }
 
     public void chat(String mark, AbstractUser visitor, AbstractUser customer, String evnetNum) {
         try {
