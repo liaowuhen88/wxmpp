@@ -175,6 +175,11 @@ public class QualityCheckServiceImpl implements QualityCheckService {
     public List<PersonalInfo> findMongoEvtData(int code, QualitySearchDto searchDto) {
         String evtCode = this.getEvtCode(code);
 
+        if (evtCode.equals(CommonConfig.MSG_BIZ_KF_LEAVE_MESSAGE)
+                && LEAVE_MSG_CUSTOMER.equals(searchDto.getCustomerName()) {
+            searchDto.setCustomerName(null);
+        }
+
         AggregationResults<Map> aggregate = this.getEventResult(evtCode, searchDto);
         List<Map> list = (List) aggregate.getMappedResults();
 
