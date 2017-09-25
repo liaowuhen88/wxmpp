@@ -67,7 +67,7 @@ public abstract class VisitorTerminal extends AbstractTerminal {
         super.online();
 
         VisitorLoginEvent vl = new VisitorLoginEvent(this.getAbstractUser(),
-                this.getChatNodeAdaptation().getAbstractUser(), CommonConfig.MSG_BIZ_KF_ENTER);
+                this.getChatNodeAdaptation().getCustomer(), CommonConfig.MSG_BIZ_KF_ENTER);
         EventBusUtils.post(vl);
     }
 
