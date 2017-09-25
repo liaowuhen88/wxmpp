@@ -41,7 +41,7 @@ public class QualityCheckServiceImpl implements QualityCheckService {
     /*mongoDB事件统计表集合名*/
     private static final String COLLECTIO_NNAME = "userEventList";
     /*留言都是给maqiumeng*/
-    private static final String LEAVE_MSG_CUSTOMER = "maqiumeng";
+    private static final String LEAVE_MSG_CUSTOMER = "maqiumeng@126xmpp";
     private final Logger LOGGER = LoggerFactory.getLogger(QualityCheckServiceImpl.class);
     @Autowired
     public MongoTemplate mongoTemplate;
@@ -151,10 +151,13 @@ public class QualityCheckServiceImpl implements QualityCheckService {
     public Map<String, Integer> getEventTotalMap(QualitySearchDto searchDto) {
         Map<String, Integer> map = new HashMap<>();
 
+        String leave = searchDto.getCustomerName();
         if (LEAVE_MSG_CUSTOMER.equals(searchDto.getCustomerName())) {
             searchDto.setCustomerName(null);
         }
         map.put("leaveCount", this.getSize(CommonConfig.MSG_BIZ_KF_LEAVE_MESSAGE, searchDto));
+
+        searchDto.setCustomerName(leave);
         map.put("wxActiveCount", this.getSize(CommonConfig.MSG_SOURCE_WE_CHAT_ACTIVE, searchDto));
         map.put("h5Count", this.getSize(CommonConfig.MSG_SOURCE_H5, searchDto));
         map.put("wxPassiveCount", this.getSize(CommonConfig.MSG_SOURCE_WE_CHAT_PASSIVE, searchDto));
