@@ -176,7 +176,7 @@ public class QualityCheckServiceImpl implements QualityCheckService {
         String evtCode = this.getEvtCode(code);
 
         if (evtCode.equals(CommonConfig.MSG_BIZ_KF_LEAVE_MESSAGE)
-                && LEAVE_MSG_CUSTOMER.equals(searchDto.getCustomerName()) {
+                && LEAVE_MSG_CUSTOMER.equals(searchDto.getCustomerName())) {
             searchDto.setCustomerName(null);
         }
 
