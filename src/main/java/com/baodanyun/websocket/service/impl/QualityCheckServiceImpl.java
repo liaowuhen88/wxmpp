@@ -106,7 +106,6 @@ public class QualityCheckServiceImpl implements QualityCheckService {
     private void setSearchDtoProp(QualitySearchDto searchDto) {
         final DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
-        searchDto.setCustomerName(XMPPUtil.nameToJid(searchDto.getCustomerName()));
         searchDto.setStartTime(DateTime.parse(searchDto.getBeginDate(), format).getMillis());
         searchDto.setEndTime(DateTime.parse(searchDto.getEndDate(), format).getMillis());
 
@@ -201,12 +200,6 @@ public class QualityCheckServiceImpl implements QualityCheckService {
                     PersonalInfo person = personalService.getPersonalInfo(userID);
                     if (person == null)
                         continue;
-
-                    /*if (StringUtils.isBlank(person.getMobile()) && StringUtils.isNotBlank(openid)) {
-                        person.setPname(openid); //电话为空则显示openid
-                        person.setMobile(openid);
-                        person.setUseraccountid(0L);
-                    }*/
 
                     List<Company> companies = personalService.getCompany(userID);
                     if (!CollectionUtils.isEmpty(companies)) {

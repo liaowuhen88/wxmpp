@@ -128,12 +128,12 @@
                 <select style="height: 30px;width: 100px;" name="customerName" id="customerName"
                         onchange="showDetail()">
                     <option value="">请选择</option>
-                    <option value="maqiumeng">马秋萌</option>
-                    <option value="wangjing">汪婧</option>
-                    <option value="hushuangyue">胡双月</option>
-                    <option value="liuya">刘雅</option>
-                    <option value="zhangchi">张弛</option>
-                    <option value="yutao">yutao</option>
+                    <option value="maqiumeng@126xmpp">马秋萌</option>
+                    <option value="wangjing@126xmpp">汪婧</option>
+                    <option value="hushuangyue@126xmpp">胡双月</option>
+                    <option value="liuya@126xmpp">刘雅</option>
+                    <option value="zhangchi@126xmpp">张弛</option>
+                    <option value="yutao@126xmpp">yutao</option>
                 </select>
                 <input type="hidden" name="userName" id="userName">
             </td>
