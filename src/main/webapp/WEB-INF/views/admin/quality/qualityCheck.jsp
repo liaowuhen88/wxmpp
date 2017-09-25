@@ -102,10 +102,22 @@
             display: inline-block;
             padding: 0 5px;
         }
+
+        #mask {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            z-index: 999999;
+            display: none;
+            background: url("<%=request.getContextPath()%>/resouces/images/loading.gif") no-repeat center;
+            background-color: rgba(255, 255, 255, .6);
+        }
     </style>
 </head>
 
 <body>
+<div id="mask"></div>
+
 <div id="calendar" class="calendar"></div>
 <div><h3>&nbsp;&nbsp;质检</h3></div>
 <form id="qualityForm">
@@ -113,7 +125,8 @@
         <tr>
             <td>客服</td>
             <td>
-                <select style="height: 30px;width: 100px;" name="customerName" id="customerName">
+                <select style="height: 30px;width: 100px;" name="customerName" id="customerName"
+                        onchange="showDetail()">
                     <option value="">请选择</option>
                     <option value="maqiumeng">马秋萌</option>
                     <option value="wangjing">汪婧</option>
@@ -282,7 +295,6 @@
             alert('请选择日期');
             return false;
         }
-
         statisticCount(); //更新数量
         loadEvtData($('#code').val());
     };
@@ -432,8 +444,7 @@
             d = '0' + d;
         }
         return a.getFullYear() + "-" + m + "-" + d;
-    }
-    ;
+    };
 
     function statisticCount() {
         $.ajax({
@@ -453,10 +464,11 @@
                 console.log(res);
             }
         });
-    }
-    ;
+    };
 
     function loadEvtData(code) {
+        $('#mask').show();
+
         $('#code').val(code);
         $('#userListDiv').empty();
         $('#serviceUserDiv').show();
@@ -467,7 +479,8 @@
             type: 'POST',
             data: $('#qualityForm').serialize(),
             success: function (res) {
-                console.log(res);
+                $('#mask').hide();
+
                 res.success = true;
                 if (res.success) {
                     $('#userListDiv').empty();
@@ -486,24 +499,24 @@
                             continue;
                         }
                         var templateHtml = '<li><input type="radio" name="userList" id="@mobile" onclick=loadChatMsgList("@mobile")>' +
-                                '<label for="@mobile" class="item">' +
-                                '@index)<span style="color: #007fff">@uid</span>' +
-                                '<span class="blue">@name</span>' +
-                                '<span class="eucalyptus">@age</span>' +
-                                '<span class="blue">@mobile</span><br>' +
-                                '<span class="red">@company</span>' +
-                                '</label><hr></li>';
+                            '<label for="@mobile" class="item">' +
+                            '@index)<span style="color: #007fff">@uid</span>' +
+                            '<span class="blue">@name</span>' +
+                            '<span class="eucalyptus">@age</span>' +
+                            '<span class="blue">@mobile</span><br>' +
+                            '<span class="red">@company</span>' +
+                            '</label><hr></li>';
 
                         if (user.useraccountid == 0) {//openid
                             templateHtml = '<li><input type="radio" name="userList" id="@mobile"  onclick=loadChatMsgList("@mobile")>' +
-                                    '<label for="@mobile" class="item">' +
-                                    '@index)&nbsp;&nbsp;<span class="blue">@name</span></br>' +
-                                    '</label><hr></li>';
+                                '<label for="@mobile" class="item">' +
+                                '@index)&nbsp;&nbsp;<span class="blue">@name</span></br>' +
+                                '</label><hr></li>';
                         }
                         var age = jsGetAge(user.birthday);
                         templateHtml = templateHtml.replace(/@mobile/g, user.mobile || '').replace('@index', i + 1)
-                                .replace('@uid', user.useraccountid || '').replace('@name', user.pname || '')
-                                .replace('@age', age == -1 ? '' : age + '岁').replace('@company', user.attr || '');
+                            .replace('@uid', user.useraccountid || '').replace('@name', user.pname || '')
+                            .replace('@age', age == -1 ? '' : age + '岁').replace('@company', user.attr || '');
 
                         htmlArr.push(templateHtml);
                     }
@@ -513,6 +526,7 @@
             error: function (res) {
                 alert('查询失败');
                 console.log(res);
+                $('#mask').hide();
             }
         });
     }
