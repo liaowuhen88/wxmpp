@@ -152,7 +152,7 @@ public class QualityCheckServiceImpl implements QualityCheckService {
 
         String leave = searchDto.getCustomerName();
         if (LEAVE_MSG_CUSTOMER.equals(searchDto.getCustomerName())
-                || StringUtils.isBlank(searchDto.getUserName())) {//留言
+                || StringUtils.isBlank(searchDto.getCustomerName())) {//留言
             searchDto.setCustomerName(null);
             map.put("leaveCount", this.getSize(CommonConfig.MSG_BIZ_KF_LEAVE_MESSAGE, searchDto));
         } else {
@@ -173,9 +173,12 @@ public class QualityCheckServiceImpl implements QualityCheckService {
     @Override
     public List<PersonalInfo> findMongoEvtData(int code, QualitySearchDto searchDto) {
         String evtCode = this.getEvtCode(code);
-        if (StringUtils.isNotBlank(searchDto.getCustomerName()) &&
-                LEAVE_MSG_CUSTOMER.equals(searchDto.getCustomerName())) {
+
+        String leaver = searchDto.getCustomerName();
+        if (StringUtils.isNotBlank(leaver) && LEAVE_MSG_CUSTOMER.equals(leaver)) {
             searchDto.setCustomerName(null);
+        } else {
+            searchDto.setCustomerName(leaver);
         }
 
         AggregationResults<Map> aggregate = this.getEventResult(evtCode, searchDto);
