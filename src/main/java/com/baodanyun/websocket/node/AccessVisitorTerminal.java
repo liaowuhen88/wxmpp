@@ -62,7 +62,7 @@ public class AccessVisitorTerminal extends WeChatTerminal {
     public void wechatMsgEvt(Msg msg) {
         //消息来源于微信发事件中心
         VisitorReciveMsgEvent vle = new VisitorReciveMsgEvent(this.getAbstractUser(),
-                this.getChatNodeAdaptation().getAbstractUser(), msg.getContent(),
+                this.getChatNodeAdaptation().getCustomer(), msg.getContent(),
                 CommonConfig.MSG_SOURCE_WE_CHAT_PASSIVE);
         EventBusUtils.post(vle);
     }

@@ -45,7 +45,7 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
         if (flag) {
             //坐席客服回复用户消息
             VisitorReciveMsgEvent msgEvent = new VisitorReciveMsgEvent(this.getAbstractUser(),
-                    this.getChatNodeAdaptation().getAbstractUser(), msg.getContent(), CommonConfig.MSG_SOURCE_kf);
+                    this.getChatNodeAdaptation().getCustomer(), msg.getContent(), CommonConfig.MSG_SOURCE_kf);
             EventBusUtils.post(msgEvent);
         } else {
             logger.info("发送消息失败{}", msg.getId());
@@ -127,7 +127,7 @@ public class WebSocketVisitorTerminal extends VisitorTerminal {
 
         //消息来源于H5发事件中心
         VisitorReciveMsgEvent msgEvent = new VisitorReciveMsgEvent(this.getAbstractUser(),
-                this.getChatNodeAdaptation().getAbstractUser(), msg.getContent(), CommonConfig.MSG_SOURCE_H5);
+                this.getChatNodeAdaptation().getCustomer(), msg.getContent(), CommonConfig.MSG_SOURCE_H5);
         EventBusUtils.post(msgEvent);
     }
 }

@@ -73,7 +73,7 @@ public class WeChatTerminal extends VisitorTerminal {
 
                 //坐席客服回复用户消息
                 VisitorReciveMsgEvent msgEvent = new VisitorReciveMsgEvent(this.getAbstractUser(),
-                        this.getChatNodeAdaptation().getAbstractUser(), msg.getContent(), CommonConfig.MSG_SOURCE_kf);
+                        this.getChatNodeAdaptation().getCustomer(), msg.getContent(), CommonConfig.MSG_SOURCE_kf);
                 EventBusUtils.post(msgEvent);
 
             }
@@ -138,7 +138,7 @@ public class WeChatTerminal extends VisitorTerminal {
     public void wechatMsgEvt(Msg msg) {
         //消息来源于微信发事件中心
         VisitorReciveMsgEvent vle = new VisitorReciveMsgEvent(this.getAbstractUser(),
-                this.getChatNodeAdaptation().getAbstractUser(), msg.getContent(), CommonConfig.MSG_SOURCE_WE_CHAT_ACTIVE);
+                this.getChatNodeAdaptation().getCustomer(), msg.getContent(), CommonConfig.MSG_SOURCE_WE_CHAT_ACTIVE);
         EventBusUtils.post(vle);
     }
 }
