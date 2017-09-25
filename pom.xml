@@ -627,6 +627,12 @@
 			<groupId>com.doubao.open</groupId>
 			<artifactId>doubao-open-client</artifactId>
 			<version>1.0-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.doubao.open</groupId>
+					<artifactId>doubao-open-model</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
