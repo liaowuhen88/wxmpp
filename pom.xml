@@ -144,12 +144,15 @@
 	</profiles>
 	<repositories>
 		<repository>
-			<id>thirdparty</id>
+			<id>doubao-releases</id>
 			<url>http://repo.baodanyun-inc.com:8011/nexus/content/repositories/doubao-releases</url>
 		</repository>
-
 		<repository>
-			<id>snapshots</id>
+			<id>thirdparty</id>
+			<url>http://repo.baodanyun-inc.com:8011/nexus/content/repositories/thirdparty</url>
+		</repository>
+		<repository>
+			<id>doubao-snapshots</id>
 			<url>http://repo.baodanyun-inc.com:8011/nexus/content/repositories/doubao-snapshots</url>
 		</repository>
 	</repositories>
@@ -668,15 +671,26 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<!-- <dependency>
-             <groupId>org.springframework.data</groupId>
-             <artifactId>spring-data-commons</artifactId>
-             <version>1.13.6.RELEASE</version>
-         </dependency>-->
 		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongo-java-driver</artifactId>
 			<version>2.14.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.bm.insurance.xls.tools</groupId>
+			<artifactId>xls2entity</artifactId>
+			<version>1.0.1.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.9</version>
 		</dependency>
 	</dependencies>
 
