@@ -38,11 +38,13 @@ import java.util.Map;
  */
 @Service
 public class QualityCheckServiceImpl implements QualityCheckService {
+    private final Logger LOGGER = LoggerFactory.getLogger(QualityCheckServiceImpl.class);
+
     /*mongoDB事件统计表集合名*/
     private static final String COLLECTIO_NNAME = "userEventList";
     /*留言都是给maqiumeng*/
     private static final String LEAVE_MSG_CUSTOMER = "maqiumeng@126xmpp";
-    private final Logger LOGGER = LoggerFactory.getLogger(QualityCheckServiceImpl.class);
+
     @Autowired
     public MongoTemplate mongoTemplate;
     @Autowired

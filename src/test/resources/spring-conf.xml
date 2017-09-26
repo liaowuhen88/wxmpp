@@ -22,4 +22,6 @@
     <task:annotation-driven/>
 
     <import resource="spring-activeMQ-conf.xml" />-->
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
 </beans>

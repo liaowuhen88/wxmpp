@@ -14,6 +14,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
+import org.apache.tomcat.util.http.fileupload.FileItemFactory;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +34,14 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.util.WebUtils;
 
 import javax.jms.Destination;
+import javax.servlet.ServletContext;
 import javax.sql.DataSource;
 import java.util.Map;
 
@@ -47,7 +55,8 @@ import java.util.Map;
                 "com.baodanyun.websocket.controller",
                 "com.baodanyun.websocket.node",
                 "com.baodanyun.websocket.listener",
-                "com.baodanyun.robot"
+                "com.baodanyun.robot",
+                "com.baodanyun.admin"
         })
 //加载资源文件
 @PropertySource({"classpath:config.properties"})
@@ -190,8 +199,16 @@ public class SpringConfig {
     }
 
     @Bean
-    public MongoTemplate mongoTemplate(@Qualifier("mongoDbFactory") MongoDbFactory mongoDbFactory) {
+    public MongoTemplate mongoTemplate(@Qualifier(value = "mongoDbFactory") MongoDbFactory mongoDbFactory) {
         MongoTemplate template = new MongoTemplate(mongoDbFactory);
         return template;
+    }
+
+    @Bean
+    public MultipartResolver multipartResolver(/*@Qualifier(value="servletContext") ServletContext servletContext*/) {
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        multipartResolver.setMaxInMemorySize(10485760);
+
+        return multipartResolver;
     }
 }

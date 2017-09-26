@@ -118,6 +118,14 @@
 <body>
 <div id="mask"></div>
 
+
+<form action="<%=request.getContextPath()%>/api/customer/uploadExcel" method="post" enctype="multipart/form-data"
+      onsubmit="return check();">
+    <div style="margin: 30px;">
+        <input id="excel_file" type="file" name="file" size="80"/>
+        <input id="excel_button" type="submit" value="导入Excel"/></div>
+</form>
+
 <div id="calendar" class="calendar"></div>
 <div><h3>&nbsp;&nbsp;质检</h3></div>
 <form id="qualityForm">
@@ -529,6 +537,17 @@
                 $('#mask').hide();
             }
         });
+    };
+
+
+    function check() {
+        var excel_file = $("#excel_file").val();
+        alert(excel_file);
+        if (excel_file == "" || excel_file.length == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
 </script>
