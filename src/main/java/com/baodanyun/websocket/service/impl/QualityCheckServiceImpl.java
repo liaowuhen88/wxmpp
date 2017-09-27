@@ -152,14 +152,14 @@ public class QualityCheckServiceImpl implements QualityCheckService {
 
         String leave = searchDto.getCustomerName();
         if (LEAVE_MSG_CUSTOMER.equals(searchDto.getCustomerName())
-                || StringUtils.isNotBlank(searchDto.getUserName())) {//留言
+                || StringUtils.isNotBlank(searchDto.getCustomerName())) {//留言
             searchDto.setCustomerName(null);
             map.put("leaveCount", this.getSize(CommonConfig.MSG_BIZ_KF_LEAVE_MESSAGE, searchDto));
         } else {
-            searchDto.setCustomerName(leave);
             map.put("leaveCount", 0);
         }
 
+        searchDto.setCustomerName(leave);
         map.put("wxActiveCount", this.getSize(CommonConfig.MSG_SOURCE_WE_CHAT_ACTIVE, searchDto));
         map.put("h5Count", this.getSize(CommonConfig.MSG_SOURCE_H5, searchDto));
         map.put("wxPassiveCount", this.getSize(CommonConfig.MSG_SOURCE_WE_CHAT_PASSIVE, searchDto));
