@@ -27,7 +27,8 @@ public class CustomerExcelCheckRule implements ExcelRule<CustomerDto> {
             if (str.matches("^\\d+$")) {
                 mess = ValidateUtils.validatePhoneNum("2", str);
             } else if (str.contains("-")) {
-                mess = ValidateUtils.validatePhoneNum("1", str);
+                String temp = str.replaceAll("\\-/g", "");
+                mess = temp.matches("^\\d+$") ? "" : "-1";
             }
             if (StringUtils.isNotBlank(mess)) {
                 throw new ExcelParseException(mess);
