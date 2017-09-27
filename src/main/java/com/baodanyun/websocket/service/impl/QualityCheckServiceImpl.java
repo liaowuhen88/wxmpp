@@ -186,6 +186,7 @@ public class QualityCheckServiceImpl implements QualityCheckService {
         for (int i = 0, len = list.size(); i < len; i++) {
             Map map = list.get(i);
             Qualitycheck qualitycheck = JSON.parseObject(JSON.toJSONString(map), Qualitycheck.class);
+            LOGGER.info("mongodata: {}", JSON.toJSONString(qualitycheck));
             userList.add(qualitycheck);
         }
 
