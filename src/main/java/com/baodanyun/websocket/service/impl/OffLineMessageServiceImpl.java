@@ -10,6 +10,7 @@ import com.baodanyun.websocket.service.MessageServer;
 import com.baodanyun.websocket.service.OffLineMessageService;
 import com.baodanyun.websocket.util.CommonConfig;
 import com.baodanyun.websocket.util.Config;
+import com.baodanyun.websocket.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,18 @@ public class OffLineMessageServiceImpl implements OffLineMessageService {
 
     @Autowired
     private VisitorListener visitorListener;
+
+    public static void main(String[] args) {
+        Long start = DateUtils.parse("2017-10-01 00:00:00", DateUtils.DATE_FULL_STR).getTime();
+        Long end = DateUtils.parse("2017-10-09 00:00:00", DateUtils.DATE_FULL_STR).getTime();
+        Long now = System.currentTimeMillis();
+        if (now > start && now < end) {
+            String message = "尊敬的用户您好，国庆中秋双节快乐！有问题可在上午9点至下午5点期间拨打4000700166客服电话哦，我们在线等您哦！";
+            System.out.print(message);
+        } else {
+            System.out.print(Config.offlineWord);
+        }
+    }
 
     @Override
     public void dealOfflineMessage(VisitorChatNode visitorChatNode, String leaveMsg, String returnMsg) {
@@ -63,7 +76,16 @@ public class OffLineMessageServiceImpl implements OffLineMessageService {
 
     @Override
     public void dealOfflineMessage(VisitorChatNode visitorChatNode, String leaveMsg) {
-        dealOfflineMessage(visitorChatNode, leaveMsg, Config.offlineWord);
+        //2017年10月1日-2017年10月8日。
+        Long start = DateUtils.parse("2017-10-01 00:00:00", DateUtils.DATE_FULL_STR).getTime();
+        Long end = DateUtils.parse("2017-10-09 00:00:00", DateUtils.DATE_FULL_STR).getTime();
+        Long now = System.currentTimeMillis();
+        if (now > start && now < end) {
+            String message = "尊敬的用户您好，国庆中秋双节快乐！有问题可在上午9点至下午5点期间拨打4000700166客服电话哦，我们在线等您哦！";
+            dealOfflineMessage(visitorChatNode, leaveMsg, message);
+        } else {
+            dealOfflineMessage(visitorChatNode, leaveMsg, Config.offlineWord);
+        }
     }
 
     @Override
