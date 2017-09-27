@@ -119,7 +119,6 @@ public class QualityCheckServiceImpl implements QualityCheckService {
         if (StringUtils.isBlank(evtCode)) {
             return null;
         }
-
         this.setSearchDtoProp(searchDto);
         LOGGER.info("搜索条件: evtcode={},{}", evtCode, JSON.toJSONString(searchDto));
 
@@ -153,7 +152,7 @@ public class QualityCheckServiceImpl implements QualityCheckService {
 
         String leave = searchDto.getCustomerName();
         if (LEAVE_MSG_CUSTOMER.equals(searchDto.getCustomerName())
-                || StringUtils.isBlank(searchDto.getCustomerName())) {//留言
+                || StringUtils.isNotBlank(searchDto.getCustomerName())) {//留言
             searchDto.setCustomerName(null);
             map.put("leaveCount", this.getSize(CommonConfig.MSG_BIZ_KF_LEAVE_MESSAGE, searchDto));
         } else {
@@ -174,9 +173,8 @@ public class QualityCheckServiceImpl implements QualityCheckService {
     @Override
     public List<PersonalInfo> findMongoEvtData(int code, QualitySearchDto searchDto) {
         String evtCode = this.getEvtCode(code);
-
-        if (evtCode.equals(CommonConfig.MSG_BIZ_KF_LEAVE_MESSAGE)
-                && LEAVE_MSG_CUSTOMER.equals(searchDto.getCustomerName())) {
+        if (StringUtils.isNotBlank(searchDto.getCustomerName()) &&
+                LEAVE_MSG_CUSTOMER.equals(searchDto.getCustomerName())) {
             searchDto.setCustomerName(null);
         }
 
