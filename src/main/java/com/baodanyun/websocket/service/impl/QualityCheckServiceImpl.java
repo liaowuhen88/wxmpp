@@ -22,6 +22,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -133,7 +134,8 @@ public class QualityCheckServiceImpl implements QualityCheckService {
 
         Criteria criteria = Criteria.where("array").elemMatch(c);
         Aggregation aggregation = Aggregation.newAggregation(
-                Aggregation.match(criteria)
+                Aggregation.match(criteria),
+                Aggregation.sort(Sort.Direction.ASC, "t")
         );
 
         aggregation.group("userid").count().as("total");
@@ -152,7 +154,7 @@ public class QualityCheckServiceImpl implements QualityCheckService {
 
         String leave = searchDto.getCustomerName();
         if (LEAVE_MSG_CUSTOMER.equals(searchDto.getCustomerName())
-                || StringUtils.isNotBlank(searchDto.getCustomerName())) {//留言
+                || StringUtils.isBlank(searchDto.getCustomerName())) {//全部或者是马秋萌时统计留言数量不要array.oid条件
             searchDto.setCustomerName(null);
             map.put("leaveCount", this.getSize(CommonConfig.MSG_BIZ_KF_LEAVE_MESSAGE, searchDto));
         } else {
@@ -173,8 +175,8 @@ public class QualityCheckServiceImpl implements QualityCheckService {
     @Override
     public List<PersonalInfo> findMongoEvtData(int code, QualitySearchDto searchDto) {
         String evtCode = this.getEvtCode(code);
-        if (StringUtils.isNotBlank(searchDto.getCustomerName()) &&
-                LEAVE_MSG_CUSTOMER.equals(searchDto.getCustomerName())) {
+        if (LEAVE_MSG_CUSTOMER.equals(searchDto.getCustomerName())
+                && evtCode.equals(CommonConfig.MSG_BIZ_KF_LEAVE_MESSAGE)) {
             searchDto.setCustomerName(null);
         }
 

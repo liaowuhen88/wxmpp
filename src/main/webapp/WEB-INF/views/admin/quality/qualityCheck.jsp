@@ -172,13 +172,14 @@
 
     <ul class="select-list">
         <li>
-            <input type="hidden" id="code" value="5">
-            <input type="radio" id="600" name="select" checked onclick="loadEvtData(5)">
-            <label for="600">进入客服(<span class="total" id="enterCount">${totalMap.enterCount}</span>)</label>
+            <input type="hidden" id="code" value="1">
+            <input type="radio" id="200" name="select" checked onclick="loadEvtData(1)">
+            <label for="200">用户留言(<span class="total" id="leaveCount">${totalMap.leaveCount}</span>)</label>
         </li>
         <li>
-            <input type="radio" id="200" name="select" onclick="loadEvtData(1)">
-            <label for="200">用户留言(<span class="total" id="leaveCount">${totalMap.leaveCount}</span>)</label>
+
+            <input type="radio" id="600" name="select" onclick="loadEvtData(5)">
+            <label for="600">进入客服(<span class="total" id="enterCount">${totalMap.enterCount}</span>)</label>
         </li>
         <li>
             <input type="radio" id="300" name="select" onclick="loadEvtData(2)">
@@ -291,11 +292,6 @@
     function loadChatMsgList(userName) {
         if (!userName) {
             alert('用户电话为空');
-            return false;
-        }
-
-        if (!$('#customerName').val()) {
-            alert('请选择客服');
             return false;
         }
 
@@ -516,7 +512,7 @@
     };
 
     $(function () {
-        loadEvtData(5);
+        loadEvtData($('#code').val());
     });
 
 </script>
