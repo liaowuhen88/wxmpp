@@ -239,7 +239,7 @@ Utils = (function () {
 
                 }
 
-                if (flag) {
+                if (!flag) {
                     //TODO 历史记录的发送状态应该全为发送成功
                     $(Mustache.to_html(commentTpl, item)).appendTo("#" + renderDiv);
                 }
