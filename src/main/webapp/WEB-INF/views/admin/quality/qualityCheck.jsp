@@ -135,7 +135,7 @@
             <td>
                 <select style="height: 30px;width: 100px;" name="customerName" id="customerName"
                         onchange="showDetail()">
-                    <option value="">请选择</option>
+                    <option value="">全部</option>
                     <option value="maqiumeng@126xmpp">马秋萌</option>
                     <option value="wangjing@126xmpp">汪婧</option>
                     <option value="hushuangyue@126xmpp">胡双月</option>
@@ -160,10 +160,6 @@
 <div class="select">
     <ul class="select-list">
         <li>
-            <input type="radio" id="0" name="selectDate" disabled>
-            <label for="0">全部</label>
-        </li>
-        <li>
             <input type="radio" id="1" name="selectDate" checked onclick="selectByDate(1)">
             <label for="1">今天</label>
         </li>
@@ -179,38 +175,29 @@
             <input type="radio" id="4" name="selectDate" onclick="selectByDate(4)">
             <label for="4">一周以内</label>
         </li>
-        <%--<li>
-            <input type="radio" id="5" name="select" onclick="selectByDate(5)">
-            <label for="5">一个月以内</label>
-        </li>--%>
     </ul>
 
 
     <ul class="select-list">
         <li>
-            <input type="radio" id="100" name="select" disabled>
-            <label for="100">全部</label>
-            <input type="hidden" id="code" value="1">
+            <input type="radio" id="600" name="select" checked onclick="loadEvtData(5)">
+            <label for="600">进入客服(<span class="total" id="enterCount">${totalMap.enterCount}</span>)</label>
         </li>
         <li>
-            <input type="radio" id="200" name="select" checked onclick="loadEvtData(1)">
+            <input type="radio" id="200" name="select" onclick="loadEvtData(1)">
             <label for="200">用户留言(<span class="total" id="leaveCount">${totalMap.leaveCount}</span>)</label>
         </li>
         <li>
             <input type="radio" id="300" name="select" onclick="loadEvtData(2)">
             <label for="300">微信主动咨询(<span class="total" id="wxActiveCount">${totalMap.wxActiveCount}</span>)</label>
         </li>
-        <li>
-            <input type="radio" id="400" name="select" onclick="loadEvtData(3)">
-            <label for="400">H5主动咨询(<span class="total" id="h5Count">${totalMap.h5Count}</span>)</label>
-        </li>
+        <%-- <li>
+             <input type="radio" id="400" name="select" onclick="loadEvtData(3)">
+             <label for="400">H5主动咨询(<span class="total" id="h5Count">${totalMap.h5Count}</span>)</label>
+         </li>--%>
         <li>
             <input type="radio" id="500" name="select" onclick="loadEvtData(4)">
             <label for="500">客服主动接入(<span class="total" id="wxPassiveCount">${totalMap.wxPassiveCount}</span>)</label>
-        </li>
-        <li>
-            <input type="radio" id="600" name="select" onclick="loadEvtData(5)">
-            <label for="600">进入客服(<span class="total" id="enterCount">${totalMap.enterCount}</span>)</label>
         </li>
     </ul>
 </div>
@@ -293,10 +280,6 @@
      * @returns {boolean}
      */
     function showDetail() {
-        if (!$('#customerName').val()) {
-            alert('请选择客服');
-            return false;
-        }
         var startDate = $("#datetimepickerStart").val();
         var endDate = $("#datetimepickerEnd").val();
         if (!startDate || !endDate) {
