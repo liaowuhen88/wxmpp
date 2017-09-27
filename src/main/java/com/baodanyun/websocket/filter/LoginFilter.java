@@ -65,6 +65,9 @@ public class LoginFilter implements Filter {
                 || uri.startsWith(request.getContextPath() + "/consultation.jsp")
 
                 ) {
+            if (uri.contains("customer_chat")) {
+                return false;
+            }
             return true;
         }
         return false;

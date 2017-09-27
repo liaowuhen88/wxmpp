@@ -513,7 +513,8 @@
                 $('#mask').hide();
             }
         });
-    };
+    }
+    ;
 
     $(function () {
         loadEvtData(5);
