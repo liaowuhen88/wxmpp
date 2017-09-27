@@ -177,7 +177,6 @@
             <label for="200">用户留言(<span class="total" id="leaveCount">${totalMap.leaveCount}</span>)</label>
         </li>
         <li>
-
             <input type="radio" id="600" name="select" onclick="loadEvtData(5)">
             <label for="600">进入客服(<span class="total" id="enterCount">${totalMap.enterCount}</span>)</label>
         </li>
@@ -185,13 +184,18 @@
             <input type="radio" id="300" name="select" onclick="loadEvtData(2)">
             <label for="300">微信主动咨询(<span class="total" id="wxActiveCount">${totalMap.wxActiveCount}</span>)</label>
         </li>
-        <li>
-            <input type="radio" id="400" name="select" onclick="loadEvtData(3)">
-            <label for="400">H5主动咨询(<span class="total" id="h5Count">${totalMap.h5Count}</span>)</label>
-        </li>
+        <%-- <li>
+             <input type="radio" id="400" name="select" onclick="loadEvtData(3)">
+             <label for="400">H5主动咨询(<span class="total" id="h5Count">${totalMap.h5Count}</span>)</label>
+         </li>--%>
         <li>
             <input type="radio" id="500" name="select" onclick="loadEvtData(4)">
-            <label for="500">客服主动接入(<span class="total" id="wxPassiveCount">${totalMap.wxPassiveCount}</span>)</label>
+            <label for="500">客服主动接入且有回复(<span class="total"
+                                              id="wxPassiveCount">${totalMap.wxPassiveCount}</span>)</label>
+        </li>
+        <li>
+            <input type="radio" id="700" name="select" onclick="loadEvtData(6)">
+            <label for="700">客服主动接入(<span class="total" id="wxCount">${totalMap.wxCount}</span>)</label>
         </li>
     </ul>
 </div>

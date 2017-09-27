@@ -164,6 +164,7 @@ public class QualityCheckServiceImpl implements QualityCheckService {
         map.put("wxActiveCount", this.getSize(CommonConfig.MSG_SOURCE_WE_CHAT_ACTIVE, searchDto));
         map.put("h5Count", this.getSize(CommonConfig.MSG_SOURCE_H5, searchDto));
         map.put("wxPassiveCount", this.getSize(CommonConfig.MSG_SOURCE_WE_CHAT_PASSIVE, searchDto));
+        map.put("wxCount", this.getSize(CommonConfig.LOGIN__FROM_WE_CHAT_PASSIVE, searchDto));
         map.put("enterCount", this.getSize(CommonConfig.MSG_BIZ_KF_ENTER, searchDto));
 
         LOGGER.info("统计数量: {}", JSON.toJSONString(map));
@@ -251,6 +252,9 @@ public class QualityCheckServiceImpl implements QualityCheckService {
                 break;
             case 5:
                 evtCode = CommonConfig.MSG_BIZ_KF_ENTER;
+                break;
+            case 6:
+                evtCode = CommonConfig.LOGIN__FROM_WE_CHAT_PASSIVE;
                 break;
             default:
                 break;

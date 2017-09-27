@@ -39,7 +39,7 @@ public class AccessVisitorTerminal extends WeChatTerminal {
     public void wecahtLoginEvt() {
         //用户被动接入微信
         VisitorLoginEvent vle = new VisitorLoginEvent(this.getAbstractUser(),
-                this.getChatNodeAdaptation().getAbstractUser(), CommonConfig.LOGIN__FROM_WE_CHAT_PASSIVE);
+                this.getChatNodeAdaptation().getCustomer(), CommonConfig.LOGIN__FROM_WE_CHAT_PASSIVE);
         EventBusUtils.post(vle);
     }
 
