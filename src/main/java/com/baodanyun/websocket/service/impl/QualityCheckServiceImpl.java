@@ -134,8 +134,7 @@ public class QualityCheckServiceImpl implements QualityCheckService {
 
         Criteria criteria = Criteria.where("array").elemMatch(c);
         Aggregation aggregation = Aggregation.newAggregation(
-                Aggregation.match(criteria),
-                Aggregation.sort(Sort.Direction.ASC, "t")
+                Aggregation.match(criteria)
         );
 
         aggregation.group("userid").count().as("total");
