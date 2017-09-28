@@ -29,4 +29,12 @@ public interface AppCustomerFailMapper {
     int updateByPrimaryKeySelective(AppCustomerFail record);
 
     int updateByPrimaryKey(AppCustomerFail record);
+
+    /**
+     * 批量插入
+     *
+     * @param list
+     * @return
+     */
+    int insertBatch(List<AppCustomerFail> list);
 }

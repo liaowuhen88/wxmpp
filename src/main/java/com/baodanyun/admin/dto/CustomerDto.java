@@ -32,22 +32,32 @@ public class CustomerDto implements Serializable {
     /**
      * 邮箱
      */
+    @ExcelProperty(value = "邮箱", required = true)
     private String email;
 
     /**
      * 联系地址
      */
+    @ExcelProperty(value = "联系地址", required = true)
     private String addr;
 
     /**
      * 客户标签
      */
+    @ExcelProperty(value = "客户标签", required = true)
     private String label;
 
     /**
      * 客户来源
      */
+    @ExcelProperty(value = "客户来源", required = true)
     private String source;
+
+    /**
+     * 备用电话
+     */
+    @ExcelProperty(value = "备用电话", required = false)
+    private String phnoeBak;
 
     public Long getId() {
         return id;
@@ -103,5 +113,13 @@ public class CustomerDto implements Serializable {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public String getPhnoeBak() {
+        return phnoeBak;
+    }
+
+    public void setPhnoeBak(String phnoeBak) {
+        this.phnoeBak = phnoeBak;
     }
 }

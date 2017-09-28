@@ -5,26 +5,29 @@ import com.baodanyun.admin.dto.CustomerDto;
 import com.baodanyun.admin.extend.ExcelCallbackFunction;
 import com.baodanyun.websocket.dao.AppCustomerFailMapper;
 import com.baodanyun.websocket.dao.AppCustomerSerialMapper;
+import com.baodanyun.websocket.dao.AppCustomerSuccessMapper;
+import com.baodanyun.websocket.model.AppCustomerFail;
 import com.baodanyun.websocket.model.AppCustomerSerial;
 import com.baodanyun.websocket.model.AppCustomerSuccess;
 import com.baodanyun.websocket.service.impl.QualityCheckServiceImpl;
+import com.google.common.collect.Lists;
 import com.wzg.xls.tools.exception.ExcelErrorLogBean;
 import com.wzg.xls.tools.tools.ExcelAndCsvUtils;
 import com.wzg.xls.tools.tools.ExcelFileHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Service
 public class CustomerService {
@@ -34,9 +37,10 @@ public class CustomerService {
     private AppCustomerSerialMapper appCustomerSerialMapper;
     @Autowired
     private AppCustomerFailMapper appCustomerFailMapper;
+    /*批量插入默认条数500条数*/
+    private static final int BATCH_SIZE = 500;
     @Autowired
-    private AppCustomerSuccess appCustomerSuccess;
-
+    private AppCustomerSuccessMapper appCustomerSuccessMapper;
 
     /**
      * 上传excel
@@ -45,17 +49,20 @@ public class CustomerService {
      * @throws Exception
      */
     public void uploadExcel(final InputStream inputStream) throws Exception {
-        parseExcel(inputStream);
-        String serialNum = UUID.randomUUID().toString().replaceAll("-", "");
-        if (generateSerial(serialNum)) {
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                parseExcel(inputStream);
+            }
+        }).start();
+
     }
 
     /**
      * 生成一条上传批次记录
      *
-     * @param serialNum
-     * @return
+     * @param serialNum 批次号
+     * @return true成功
      */
     @Transactional
     public boolean generateSerial(final String serialNum) {
@@ -69,7 +76,7 @@ public class CustomerService {
     /**
      * 解析excel
      *
-     * @param inputStream
+     * @param inputStream 上传文件流
      */
     private void parseExcel(InputStream inputStream) {
         try {
@@ -84,36 +91,121 @@ public class CustomerService {
         }
     }
 
+    /**
+     * excel回调解析成功后的操作
+     *
+     * @param excelFileHelper 异常数据信息集合
+     * @param list            合法数据
+     */
     public void saveExcelData(ExcelFileHelper excelFileHelper, List<CustomerDto> list) {
-        //批次号
         String serialNum = UUID.randomUUID().toString().replaceAll("-", "");
-        if (generateSerial(serialNum)) {
-            this.insert(excelFileHelper, list);
+        if (this.generateSerial(serialNum)) { //批次号上传生成
+            this.insert(serialNum, excelFileHelper, list);
         }
     }
 
-    private void insert(ExcelFileHelper excelFileHelper, List<CustomerDto> list) {
-        List<ExcelErrorLogBean> errorLogBeanList = excelFileHelper.getErrorLogBeans();
+    /**
+     * 保存数据
+     *
+     * @param serialNum       批次号
+     * @param excelFileHelper 校验不合法数据
+     * @param nomalList       合法数据
+     */
+    private void insert(final String serialNum, ExcelFileHelper excelFileHelper, List<CustomerDto> nomalList) {
 
-        List<CustomerDto> errorList = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(errorLogBeanList)) {
-            for (ExcelErrorLogBean bean : errorLogBeanList) {
-                CustomerDto customerDto = (CustomerDto) bean.getObj();
-                errorList.add(customerDto);
+        List<AppCustomerFail> errorList = getAppCustomerFails(serialNum, excelFileHelper.getErrorLogBeans());
+        this.batchInsertFailRecords(errorList); //插入异常的数据
+
+        List<AppCustomerSuccess> successList = this.getAppCustomerSuccess(serialNum, nomalList);
+        this.batchInsertSuccessRecords(successList);  //插入正常的数据
+    }
+
+    /**
+     * 记录不合法的数据入库
+     *
+     * @param errorList 异常的数据
+     */
+    private void batchInsertFailRecords(List<AppCustomerFail> errorList) {
+        if (CollectionUtils.isEmpty(errorList))
+            return;
+
+        List<List<AppCustomerFail>> dataList = Lists.partition(errorList, BATCH_SIZE);//分批
+        for (List<AppCustomerFail> list : dataList) {
+            try {
+                appCustomerFailMapper.insertBatch(list);
+            } catch (Exception e) {
+                LOGGER.error("批次入库失败: {}", JSON.toJSONString(list));
+            }
+        }
+    }
+
+    /**
+     * 保存成功的数据入库
+     *
+     * @param successList 成功的集合
+     */
+    private void batchInsertSuccessRecords(List<AppCustomerSuccess> successList) {
+        if (CollectionUtils.isEmpty(successList))
+            return;
+
+        List<List<AppCustomerSuccess>> dataList = Lists.partition(successList, BATCH_SIZE);
+        for (List<AppCustomerSuccess> list : dataList) {
+            try {
+                appCustomerSuccessMapper.insertBatch(list);
+            } catch (Exception e) {
+                LOGGER.error("批次入库失败{};{}", e.getMessage(), JSON.toJSONString(list));
+            }
+        }
+    }
+
+    /**
+     * 转换excel数据到实体
+     *
+     * @param serialNum 批次号
+     * @param list      正常数据集合
+     * @return 成功集合
+     */
+    private List<AppCustomerSuccess> getAppCustomerSuccess(String serialNum, List<CustomerDto> list) {
+        List<AppCustomerSuccess> successesList = new ArrayList<>(); //解析正常的excel数据
+
+        if (!CollectionUtils.isEmpty(list)) {
+            for (CustomerDto customerDto : list) {
+                AppCustomerSuccess customerSuccess = new AppCustomerSuccess();
+                BeanUtils.copyProperties(customerDto, customerSuccess);
+
+                customerSuccess.setSerialNo(serialNum);
+                successesList.add(customerSuccess);
             }
         }
 
-        batchInsertFailRecords(errorList); //插入异常的数据
-        batchInsertSuccessRecords(list);  //插入正常的数据
+        return successesList;
     }
 
-    private void batchInsertFailRecords(List<CustomerDto> errorList) {
-        if (CollectionUtils.isEmpty(errorList)) {
+    /**
+     * 转换excel数据到实体
+     *
+     * @param serialNum        批次号
+     * @param errorLogBeanList 异常数据集合
+     * @return 非法数据集合
+     */
+    private List<AppCustomerFail> getAppCustomerFails(String serialNum, List<ExcelErrorLogBean> errorLogBeanList) {
+        List<AppCustomerFail> errorList = new ArrayList<>(); //不合法excel数据
 
+        if (!CollectionUtils.isEmpty(errorLogBeanList)) {
+            for (ExcelErrorLogBean bean : errorLogBeanList) {
+                CustomerDto customerDto = (CustomerDto) bean.getObj();
+
+                AppCustomerFail customerFail = new AppCustomerFail();
+                BeanUtils.copyProperties(customerDto, customerFail);
+
+                customerFail.setSerialNo(serialNum);
+                customerFail.setRowNum((long) bean.getRowNum());
+                customerFail.setRemark(bean.getMessage());
+                errorList.add(customerFail);
+            }
         }
-    }
 
-    private void batchInsertSuccessRecords(List<CustomerDto> successList) {
+        return errorList;
     }
 
 

@@ -204,10 +204,15 @@ public class SpringConfig {
         return template;
     }
 
+    /**
+     * springMVC支持文件上传配置
+     *
+     * @return
+     */
     @Bean
-    public MultipartResolver multipartResolver(/*@Qualifier(value="servletContext") ServletContext servletContext*/) {
+    public MultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxInMemorySize(10485760);
+        multipartResolver.setMaxInMemorySize(10485760); //文件大小上限
 
         return multipartResolver;
     }

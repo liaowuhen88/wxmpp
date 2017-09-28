@@ -29,5 +29,8 @@ public class SpringMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/qualityCheck").setViewName("/WEB-INF/views/admin/quality/qualityCheck.jsp");
         // 用户咨询跳转页
         registry.addViewController("/consultation.html").setViewName("/consultation.jsp");
+
+        //客户配置
+        registry.addViewController("/customerConfig").setViewName("/WEB-INF/views/admin/customer/customerConfig.jsp");
     }
 }

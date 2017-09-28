@@ -1,5 +1,6 @@
 package com.baodanyun.websocket.dao;
 
+import com.baodanyun.websocket.model.AppCustomerFail;
 import com.baodanyun.websocket.model.AppCustomerSuccess;
 import com.baodanyun.websocket.model.AppCustomerSuccessExample;
 
@@ -29,4 +30,12 @@ public interface AppCustomerSuccessMapper {
     int updateByPrimaryKeySelective(AppCustomerSuccess record);
 
     int updateByPrimaryKey(AppCustomerSuccess record);
+
+    /**
+     * 批量插入
+     *
+     * @param list
+     * @return
+     */
+    int insertBatch(List<AppCustomerSuccess> list);
 }

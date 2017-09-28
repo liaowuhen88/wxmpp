@@ -1,19 +1,20 @@
 package com.baodanyun.admin.controller;
 
 import com.baodanyun.admin.service.CustomerService;
+import com.baodanyun.websocket.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.InputStream;
 import java.util.concurrent.Semaphore;
 
 @RestController
-@RequestMapping("/api/customer")
-public class CustomerController {
+public class CustomerController extends BaseController {
 
     @Autowired
     private CustomerService customerService;
@@ -22,6 +23,19 @@ public class CustomerController {
      * 信号量
      */
     private Semaphore semaphore = new Semaphore(3);
+
+    /**
+     * 客户配置首页
+     *
+     * @return
+     */
+    @RequestMapping("customerConfig")
+    public ModelAndView customerConfig() {
+        ModelAndView view = new ModelAndView();
+        view.setViewName("/customerConfig");
+
+        return view;
+    }
 
     /**
      * 上传客服excel

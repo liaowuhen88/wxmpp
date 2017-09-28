@@ -369,4 +369,23 @@
         exp3 = #{exp3,jdbcType=VARCHAR}
         where id = #{id,jdbcType=BIGINT}
     </update>
+
+    <!--批量插入-->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into app_customer_success (
+        customer_name, phone,
+        email, addr, label,
+        source, serial_no, phone_bak,
+        remark, create_time
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.customerName}, #{item.phone},
+            #{item.email}, #{item.addr}, #{item.label},
+            #{item.source}, #{item.serialNo}, #{item.phoneBak},
+            #{item.remark}, CURRENT_TIMESTAMP()
+            )
+        </foreach>
+    </insert>
 </mapper>

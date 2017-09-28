@@ -29,6 +29,10 @@
                     <a href="<%=request.getContextPath()%>/api/qualityCheck" target="_blank"><i
                             class="nav-icon icon-report"></i></a>
                 </li>
+                <li data-toggle="tooltip" data-placement="right" title="客户配置" id="leaveMessageBtn">
+                    <a href="<%=request.getContextPath()%>/api/customerConfig" target="_blank"><i
+                            class="nav-icon icon-visitor"></i></a>
+                </li>
         </ul>
     </nav>
     <ul class="tools">
