@@ -2,7 +2,9 @@ package com.baodanyun.websocket.dao;
 
 import com.baodanyun.websocket.model.AppCustomerSerial;
 import com.baodanyun.websocket.model.AppCustomerSerialExample;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface AppCustomerSerialMapper {

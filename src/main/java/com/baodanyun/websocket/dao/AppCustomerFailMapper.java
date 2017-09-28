@@ -2,7 +2,9 @@ package com.baodanyun.websocket.dao;
 
 import com.baodanyun.websocket.model.AppCustomerFail;
 import com.baodanyun.websocket.model.AppCustomerFailExample;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface AppCustomerFailMapper {

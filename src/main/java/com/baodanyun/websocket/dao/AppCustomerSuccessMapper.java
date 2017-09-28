@@ -2,7 +2,9 @@ package com.baodanyun.websocket.dao;
 
 import com.baodanyun.websocket.model.AppCustomerSuccess;
 import com.baodanyun.websocket.model.AppCustomerSuccessExample;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface AppCustomerSuccessMapper {
