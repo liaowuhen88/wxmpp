@@ -154,17 +154,18 @@ public class QualityCheckServiceImpl implements QualityCheckService {
 
         String leave = searchDto.getCustomerName();
         if (LEAVE_MSG_CUSTOMER.equals(searchDto.getCustomerName())
-                || StringUtils.isNotBlank(searchDto.getUserName())) {//留言
+                || StringUtils.isBlank(searchDto.getCustomerName())) {//全部或者是马秋萌时统计留言数量不要array.oid条件
             searchDto.setCustomerName(null);
             map.put("leaveCount", this.getSize(CommonConfig.MSG_BIZ_KF_LEAVE_MESSAGE, searchDto));
         } else {
-            searchDto.setCustomerName(leave);
             map.put("leaveCount", 0);
         }
 
+        searchDto.setCustomerName(leave);
         map.put("wxActiveCount", this.getSize(CommonConfig.MSG_SOURCE_WE_CHAT_ACTIVE, searchDto));
         map.put("h5Count", this.getSize(CommonConfig.MSG_SOURCE_H5, searchDto));
         map.put("wxPassiveCount", this.getSize(CommonConfig.MSG_SOURCE_WE_CHAT_PASSIVE, searchDto));
+        map.put("wxCount", this.getSize(CommonConfig.LOGIN__FROM_WE_CHAT_PASSIVE, searchDto));
         map.put("enterCount", this.getSize(CommonConfig.MSG_BIZ_KF_ENTER, searchDto));
 
         LOGGER.info("统计数量: {}", JSON.toJSONString(map));
@@ -175,8 +176,8 @@ public class QualityCheckServiceImpl implements QualityCheckService {
     @Override
     public List<PersonalInfo> findMongoEvtData(int code, QualitySearchDto searchDto) {
         String evtCode = this.getEvtCode(code);
-        if (StringUtils.isNotBlank(searchDto.getCustomerName()) &&
-                LEAVE_MSG_CUSTOMER.equals(searchDto.getCustomerName())) {
+        if (LEAVE_MSG_CUSTOMER.equals(searchDto.getCustomerName())
+                && evtCode.equals(CommonConfig.MSG_BIZ_KF_LEAVE_MESSAGE)) {
             searchDto.setCustomerName(null);
         }
 
@@ -187,6 +188,7 @@ public class QualityCheckServiceImpl implements QualityCheckService {
         for (int i = 0, len = list.size(); i < len; i++) {
             Map map = list.get(i);
             Qualitycheck qualitycheck = JSON.parseObject(JSON.toJSONString(map), Qualitycheck.class);
+            LOGGER.info("mongodata: {}", JSON.toJSONString(qualitycheck));
             userList.add(qualitycheck);
         }
 
@@ -251,6 +253,9 @@ public class QualityCheckServiceImpl implements QualityCheckService {
                 break;
             case 5:
                 evtCode = CommonConfig.MSG_BIZ_KF_ENTER;
+                break;
+            case 6:
+                evtCode = CommonConfig.LOGIN__FROM_WE_CHAT_PASSIVE;
                 break;
             default:
                 break;

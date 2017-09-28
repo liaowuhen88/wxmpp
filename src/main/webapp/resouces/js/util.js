@@ -204,6 +204,18 @@ Utils = (function () {
                 var commentTpl;
                 var direction = item.direction;
                 item.direction = item.direction + ":" + item.to;
+
+                var words = ["豆包管家", "您好，我是豆包网的专属客服,不知道您有什么疑问可以帮到您^_^", "您好，我是豆包网的专属客服，您刚浏览了"];
+                var flag = false;
+                if (direction == 'to') {
+                    for (var i = 0, len = words.length; i < len; i++) {
+                        if (item.content == words[i] || item.content.indexOf(words[i]) != -1) {
+                            flag = true;
+                            continue;
+                        }
+                    }
+                }
+
                 if (item.ct) {
                     item.time = myUtils.formatDate(item.ct);
                 }
@@ -226,8 +238,11 @@ Utils = (function () {
                     }
 
                 }
-                //TODO 历史记录的发送状态应该全为发送成功
-                $(Mustache.to_html(commentTpl, item)).appendTo("#" + renderDiv);
+
+                if (!flag) {
+                    //TODO 历史记录的发送状态应该全为发送成功
+                    $(Mustache.to_html(commentTpl, item)).appendTo("#" + renderDiv);
+                }
 
             });
             if (fn) {

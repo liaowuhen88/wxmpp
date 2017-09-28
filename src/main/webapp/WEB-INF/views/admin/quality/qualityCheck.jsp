@@ -118,14 +118,6 @@
 <body>
 <div id="mask"></div>
 
-
-<form action="<%=request.getContextPath()%>/api/customer/uploadExcel" method="post" enctype="multipart/form-data"
-      onsubmit="return check();">
-    <div style="margin: 30px;">
-        <input id="excel_file" type="file" name="file" size="80"/>
-        <input id="excel_button" type="submit" value="导入Excel"/></div>
-</form>
-
 <div id="calendar" class="calendar"></div>
 <div><h3>&nbsp;&nbsp;质检</h3></div>
 <form id="qualityForm">
@@ -145,12 +137,18 @@
                 </select>
                 <input type="hidden" name="userName" id="userName">
             </td>
-            <td>查询开始时间</td>
+
+
+            <%--<td>查询开始时间</td>
             <td><input type="text" style="height: 30px;" name="beginDate" id="datetimepickerStart" value="${startTime}">
             </td>
             <td>查询结束时间</td>
             <td><input type="text" style="height: 30px;" name="endDate" id="datetimepickerEnd" value="${endTime}"></td>
+            --%>
             <td>
+                <input type="hidden" name="beginDate" id="datetimepickerStart" value="${startTime}">
+                <input type="hidden" name="endDate" id="datetimepickerEnd" value="${endTime}">
+
                 <input type="button" onclick="showDetail()" value="查询">
             </td>
         </tr>
@@ -180,24 +178,30 @@
 
     <ul class="select-list">
         <li>
-            <input type="radio" id="600" name="select" checked onclick="loadEvtData(5)">
-            <label for="600">进入客服(<span class="total" id="enterCount">${totalMap.enterCount}</span>)</label>
+            <input type="hidden" id="code" value="1">
+            <input type="radio" id="200" name="select" checked onclick="loadEvtData(1)">
+            <label for="200">用户留言(<span class="total" id="leaveCount">${totalMap.leaveCount}</span>)</label>
         </li>
         <li>
-            <input type="radio" id="200" name="select" onclick="loadEvtData(1)">
-            <label for="200">用户留言(<span class="total" id="leaveCount">${totalMap.leaveCount}</span>)</label>
+            <input type="radio" id="600" name="select" onclick="loadEvtData(5)">
+            <label for="600">进入客服(<span class="total" id="enterCount">${totalMap.enterCount}</span>)</label>
         </li>
         <li>
             <input type="radio" id="300" name="select" onclick="loadEvtData(2)">
             <label for="300">微信主动咨询(<span class="total" id="wxActiveCount">${totalMap.wxActiveCount}</span>)</label>
         </li>
         <%-- <li>
-             <input type="radio" id="400" name="select" onclick="loadEvtData(3)">
-             <label for="400">H5主动咨询(<span class="total" id="h5Count">${totalMap.h5Count}</span>)</label>
+            <input type="radio" id="400" name="select" onclick="loadEvtData(3)">
+            <label for="400">H5主动咨询(<span class="total" id="h5Count">${totalMap.h5Count}</span>)</label>
          </li>--%>
         <li>
             <input type="radio" id="500" name="select" onclick="loadEvtData(4)">
-            <label for="500">客服主动接入(<span class="total" id="wxPassiveCount">${totalMap.wxPassiveCount}</span>)</label>
+            <label for="500">客服主动接入且有回复(<span class="total"
+                                              id="wxPassiveCount">${totalMap.wxPassiveCount}</span>)</label>
+        </li>
+        <li>
+            <input type="radio" id="700" name="select" onclick="loadEvtData(6)">
+            <label for="700">客服主动接入(<span class="total" id="wxCount">${totalMap.wxCount}</span>)</label>
         </li>
     </ul>
 </div>
@@ -301,18 +305,10 @@
             return false;
         }
 
-        if (!$('#customerName').val()) {
-            alert('请选择客服');
-            return false;
-        }
-
         $('#showHistory').show();
-        var startDate = $("#datetimepickerStart").val();
-        var endDate = $("#datetimepickerEnd").val();
-        if (!startDate || !endDate) {
-            alert('请选择日期');
-            return false;
-        }
+        $("#datetimepickerStart").val("2015-09-28 00:00:00");
+        $("#datetimepickerEnd").val(myUtils.formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"));
+
         $('#allMsgHistoryContainer').empty();
 
         var customername = $('#customerName').val();
@@ -520,18 +516,12 @@
                 $('#mask').hide();
             }
         });
-    };
-
-
-    function check() {
-        var excel_file = $("#excel_file").val();
-        alert(excel_file);
-        if (excel_file == "" || excel_file.length == 0) {
-            return false;
-        } else {
-            return true;
-        }
     }
+    ;
+
+    $(function () {
+        loadEvtData($('#code').val());
+    });
 
 </script>
 

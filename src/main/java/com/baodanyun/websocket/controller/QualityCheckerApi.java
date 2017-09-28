@@ -108,11 +108,6 @@ public class QualityCheckerApi extends BaseController {
     public void loadEvtData(@PathVariable int code, QualitySearchDto searchDto, HttpServletResponse servletResponse) {
         Response response = new Response();
 
-        if (StringUtils.isBlank(searchDto.getCustomerName())) {
-            response.setMsg("客服名不能为空");
-            Render.r(servletResponse, JSONUtil.toJson(response));
-            return;
-        }
         if (StringUtils.isBlank(searchDto.getBeginDate())) {
             response.setMsg("开始日期不能为空");
             Render.r(servletResponse, JSONUtil.toJson(response));
