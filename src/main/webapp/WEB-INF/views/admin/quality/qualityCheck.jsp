@@ -137,12 +137,18 @@
                 </select>
                 <input type="hidden" name="userName" id="userName">
             </td>
-            <td>查询开始时间</td>
+
+
+            <%--<td>查询开始时间</td>
             <td><input type="text" style="height: 30px;" name="beginDate" id="datetimepickerStart" value="${startTime}">
             </td>
             <td>查询结束时间</td>
             <td><input type="text" style="height: 30px;" name="endDate" id="datetimepickerEnd" value="${endTime}"></td>
+            --%>
             <td>
+                <input type="hidden" name="beginDate" id="datetimepickerStart" value="${startTime}">
+                <input type="hidden" name="endDate" id="datetimepickerEnd" value="${endTime}">
+
                 <input type="button" onclick="showDetail()" value="查询">
             </td>
         </tr>
@@ -300,12 +306,9 @@
         }
 
         $('#showHistory').show();
-        var startDate = $("#datetimepickerStart").val();
-        var endDate = $("#datetimepickerEnd").val();
-        if (!startDate || !endDate) {
-            alert('请选择日期');
-            return false;
-        }
+        $("#datetimepickerStart").val("2015-09-28 00:00:00");
+        $("#datetimepickerEnd").val(myUtils.formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"));
+
         $('#allMsgHistoryContainer').empty();
 
         var customername = $('#customerName').val();
