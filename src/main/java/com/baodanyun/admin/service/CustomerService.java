@@ -8,6 +8,7 @@ import com.baodanyun.websocket.dao.AppCustomerSerialMapper;
 import com.baodanyun.websocket.dao.AppCustomerSuccessMapper;
 import com.baodanyun.websocket.model.AppCustomerFail;
 import com.baodanyun.websocket.model.AppCustomerSerial;
+import com.baodanyun.websocket.model.AppCustomerSerialExample;
 import com.baodanyun.websocket.model.AppCustomerSuccess;
 import com.baodanyun.websocket.service.impl.QualityCheckServiceImpl;
 import com.google.common.collect.Lists;
@@ -15,16 +16,13 @@ import com.wzg.xls.tools.exception.ExcelErrorLogBean;
 import com.wzg.xls.tools.tools.ExcelAndCsvUtils;
 import com.wzg.xls.tools.tools.ExcelFileHelper;
 import org.apache.commons.collections4.Predicate;
-import org.apache.commons.collections4.Transformer;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -107,6 +105,27 @@ public class CustomerService {
         String serialNum = UUID.randomUUID().toString().replaceAll("-", "");
         if (this.generateSerial(serialNum)) { //批次号上传生成
             this.insert(serialNum, excelFileHelper, list);
+
+            LOGGER.info("上传成功");
+            this.updateUploadState(serialNum);
+        }
+    }
+
+    /**
+     * 更新上传状态
+     *
+     * @param serialNum 批次号
+     */
+    private void updateUploadState(final String serialNum) {
+        AppCustomerSerial serial = new AppCustomerSerial();
+        serial.setState((byte) 1);
+        AppCustomerSerialExample example = new AppCustomerSerialExample();
+        example.createCriteria().andSerialNoEqualTo(serialNum);
+
+        try {
+            appCustomerSerialMapper.updateByExampleSelective(serial, example);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
         }
     }
 
@@ -154,7 +173,7 @@ public class CustomerService {
         if (CollectionUtils.isEmpty(successList))
             return;
 
-        List<List<AppCustomerSuccess>> dataList = Lists.partition(successList, BATCH_SIZE);
+        List<List<AppCustomerSuccess>> dataList = Lists.partition(successList, BATCH_SIZE);//分批
         for (List<AppCustomerSuccess> list : dataList) {
             try {
                 appCustomerSuccessMapper.insertBatch(list);
@@ -268,7 +287,7 @@ public class CustomerService {
                 customerFail.setSerialNo(serialNum);
                 customerFail.setRowNum(customerDto.getId());
                 customerFail.setRemark(bean.getMessage());
-                customerFail.setExp1("excel行号:" + bean.getRowNum());
+                customerFail.setExp1(String.format("excel行号:%s,列%s", bean.getRowNum(), bean.getCellIndex()));
 
                 String phone = customerDto.getPhone();
                 if (StringUtils.isNotBlank(phone) && !phone.contains("-")) {

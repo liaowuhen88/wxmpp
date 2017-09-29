@@ -46,7 +46,7 @@ public class AppCustomerSuccess {
     }
 
     public void setCustomerName(String customerName) {
-        this.customerName = customerName == null ? null : customerName.trim();
+        this.customerName = customerName;
     }
 
     public String getPhone() {
@@ -54,7 +54,7 @@ public class AppCustomerSuccess {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
+        this.phone = phone;
     }
 
     public String getEmail() {
@@ -62,7 +62,7 @@ public class AppCustomerSuccess {
     }
 
     public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
+        this.email = email;
     }
 
     public String getAddr() {
@@ -70,7 +70,7 @@ public class AppCustomerSuccess {
     }
 
     public void setAddr(String addr) {
-        this.addr = addr == null ? null : addr.trim();
+        this.addr = addr;
     }
 
     public String getLabel() {
@@ -78,7 +78,7 @@ public class AppCustomerSuccess {
     }
 
     public void setLabel(String label) {
-        this.label = label == null ? null : label.trim();
+        this.label = label;
     }
 
     public String getSource() {
@@ -86,7 +86,7 @@ public class AppCustomerSuccess {
     }
 
     public void setSource(String source) {
-        this.source = source == null ? null : source.trim();
+        this.source = source;
     }
 
     public String getSerialNo() {
@@ -94,7 +94,7 @@ public class AppCustomerSuccess {
     }
 
     public void setSerialNo(String serialNo) {
-        this.serialNo = serialNo == null ? null : serialNo.trim();
+        this.serialNo = serialNo;
     }
 
     public String getPhoneBak() {
@@ -102,7 +102,7 @@ public class AppCustomerSuccess {
     }
 
     public void setPhoneBak(String phoneBak) {
-        this.phoneBak = phoneBak == null ? null : phoneBak.trim();
+        this.phoneBak = phoneBak;
     }
 
     public String getRemark() {
@@ -110,7 +110,7 @@ public class AppCustomerSuccess {
     }
 
     public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
+        this.remark = remark;
     }
 
     public Date getCreateTime() {
@@ -134,7 +134,7 @@ public class AppCustomerSuccess {
     }
 
     public void setExp1(String exp1) {
-        this.exp1 = exp1 == null ? null : exp1.trim();
+        this.exp1 = exp1;
     }
 
     public String getExp2() {
@@ -142,7 +142,7 @@ public class AppCustomerSuccess {
     }
 
     public void setExp2(String exp2) {
-        this.exp2 = exp2 == null ? null : exp2.trim();
+        this.exp2 = exp2;
     }
 
     public String getExp3() {
@@ -150,6 +150,6 @@ public class AppCustomerSuccess {
     }
 
     public void setExp3(String exp3) {
-        this.exp3 = exp3 == null ? null : exp3.trim();
+        this.exp3 = exp3;
     }
 }
