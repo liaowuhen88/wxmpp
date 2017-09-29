@@ -27,6 +27,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -138,7 +139,8 @@ public class CustomerService {
             try {
                 appCustomerFailMapper.insertBatch(list);
             } catch (Exception e) {
-                LOGGER.error("批时入库失败: {}", JSON.toJSONString(list));
+                LOGGER.error(e.getMessage());
+                LOGGER.error("批量插入异常的数据失败: {}", JSON.toJSONString(list));
             }
         }
     }
@@ -264,8 +266,19 @@ public class CustomerService {
                 BeanUtils.copyProperties(customerDto, customerFail);
 
                 customerFail.setSerialNo(serialNum);
-                customerFail.setRowNum((long) bean.getRowNum());
+                customerFail.setRowNum(customerDto.getId());
                 customerFail.setRemark(bean.getMessage());
+                customerFail.setExp1("excel行号:" + bean.getRowNum());
+
+                String phone = customerDto.getPhone();
+                if (StringUtils.isNotBlank(phone) && !phone.contains("-")) {
+                    try {
+                        BigDecimal db = new BigDecimal(phone);
+                        customerFail.setPhone(db.toPlainString());
+                    } catch (Exception e) {
+                    }
+                }
+
                 errorList.add(customerFail);
             }
         }

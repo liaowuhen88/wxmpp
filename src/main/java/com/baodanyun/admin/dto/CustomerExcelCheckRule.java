@@ -22,14 +22,23 @@ public class CustomerExcelCheckRule implements ExcelRule<CustomerDto> {
 
     @Override
     public void checkRow(CustomerDto customerDto) throws ExcelContentInvalidException, ExcelParseException {
-        String tipMsg = null;
+        String tipMsg = "";
 
         String phone = customerDto.getPhone(); //电话
-        if (phone.matches("^\\d+$")) {
+        if (StringUtils.isBlank(phone)) {
+            tipMsg = "电话号码必填";
+        } else if (phone.matches("^\\d+$")) {
             tipMsg = ValidateUtils.validatePhoneNum("2", phone);
         } else if (phone.contains("-")) {
             String temp = phone.replaceAll("-", "");
             tipMsg = temp.matches("^\\d+$") ? "" : "座机号码不正确;";
+        } else {
+            try {
+                BigDecimal db = new BigDecimal(phone);
+            } catch (Exception e) {
+                tipMsg = "电话号码不正确;";
+            }
+
         }
 
         if (customerDto.getId() == null) {
@@ -47,9 +56,13 @@ public class CustomerExcelCheckRule implements ExcelRule<CustomerDto> {
     @Override
     public CustomerDto filterRow(CustomerDto customerDto) {
         String phone = customerDto.getPhone();
-        if (!phone.contains("-")) {
-            BigDecimal db = new BigDecimal(phone);
-            customerDto.setPhone(db.toPlainString());
+
+        if (StringUtils.isNotBlank(phone) && !phone.contains("-")) {
+            try {
+                BigDecimal db = new BigDecimal(phone);
+                customerDto.setPhone(db.toPlainString());
+            } catch (Exception e) {
+            }
         }
         return customerDto;
     }
