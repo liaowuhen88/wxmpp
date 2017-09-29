@@ -27,6 +27,8 @@ import org.springframework.util.CollectionUtils;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,6 +49,8 @@ public class CustomerService {
     /*重复电话文案*/
     private static final String DUMPLATE_PHONE = "重复电话号码";
 
+    ExecutorService executorService = Executors.newFixedThreadPool(4);
+
     /**
      * 上传excel
      *
@@ -54,13 +58,12 @@ public class CustomerService {
      * @throws Exception
      */
     public void uploadExcel(final InputStream inputStream) throws Exception {
-        new Thread(new Runnable() {
+        executorService.submit(new Runnable() {
             @Override
             public void run() {
                 parseExcel(inputStream);
             }
-        }).start();
-
+        });
     }
 
     /**
