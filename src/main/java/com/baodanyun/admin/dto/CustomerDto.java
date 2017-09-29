@@ -14,49 +14,49 @@ public class CustomerDto implements Serializable {
     /**
      * 序号
      */
-    @ExcelProperty(value = "序号", required = true)
+    @ExcelProperty(value = "序号")
     private Long id;
 
     /**
      * 客户名称
      */
-    @ExcelProperty(value = "客户名称", required = true)
+    @ExcelProperty(value = "客户名称")
     private String customerName;
 
     /**
      * 联系电话
      */
-    @ExcelProperty(value = "联系电话", required = true)
+    @ExcelProperty(value = "联系电话")
     private String phone;
 
     /**
      * 邮箱
      */
-    @ExcelProperty(value = "邮箱", required = true)
+    @ExcelProperty(value = "邮箱")
     private String email;
 
     /**
      * 联系地址
      */
-    @ExcelProperty(value = "联系地址", required = true)
+    @ExcelProperty(value = "联系地址")
     private String addr;
 
     /**
      * 客户标签
      */
-    @ExcelProperty(value = "客户标签", required = true)
+    @ExcelProperty(value = "客户标签")
     private String label;
 
     /**
      * 客户来源
      */
-    @ExcelProperty(value = "客户来源", required = true)
+    @ExcelProperty(value = "客户来源")
     private String source;
 
     /**
      * 备用电话
      */
-    @ExcelProperty(value = "备用电话", required = false)
+    @ExcelProperty(value = "备用电话")
     private String phnoeBak;
 
     public Long getId() {
