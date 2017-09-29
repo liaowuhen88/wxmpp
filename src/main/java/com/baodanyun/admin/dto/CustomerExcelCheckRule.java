@@ -6,6 +6,8 @@ import com.wzg.xls.tools.extension.ExcelRule;
 import com.wzg.xls.tools.utils.ValidateUtils;
 import org.apache.commons.lang.StringUtils;
 
+import java.math.BigDecimal;
+
 public class CustomerExcelCheckRule implements ExcelRule<CustomerDto> {
 
     @Override
@@ -27,8 +29,10 @@ public class CustomerExcelCheckRule implements ExcelRule<CustomerDto> {
             if (str.matches("^\\d+$")) {
                 mess = ValidateUtils.validatePhoneNum("2", str);
             } else if (str.contains("-")) {
-                String temp = str.replaceAll("\\-/g", "");
+                String temp = str.replaceAll("-", "");
                 mess = temp.matches("^\\d+$") ? "" : "-1";
+            } else {
+                mess = ValidateUtils.validatePhoneNum("1", str);
             }
             if (StringUtils.isNotBlank(mess)) {
                 throw new ExcelParseException(mess);
@@ -40,6 +44,11 @@ public class CustomerExcelCheckRule implements ExcelRule<CustomerDto> {
 
     @Override
     public CustomerDto filterRow(CustomerDto customerDto) {
+        String phone = customerDto.getPhone();
+        if (!phone.contains("-")) {
+            BigDecimal db = new BigDecimal(phone);
+            customerDto.setPhone(db.toPlainString());
+        }
         return customerDto;
     }
 }

@@ -14,6 +14,9 @@ import com.google.common.collect.Lists;
 import com.wzg.xls.tools.exception.ExcelErrorLogBean;
 import com.wzg.xls.tools.tools.ExcelAndCsvUtils;
 import com.wzg.xls.tools.tools.ExcelFileHelper;
+import org.apache.commons.collections4.Predicate;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -24,10 +27,9 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class CustomerService {
@@ -37,10 +39,11 @@ public class CustomerService {
     private AppCustomerSerialMapper appCustomerSerialMapper;
     @Autowired
     private AppCustomerFailMapper appCustomerFailMapper;
-    /*批量插入默认条数500条数*/
-    private static final int BATCH_SIZE = 500;
     @Autowired
     private AppCustomerSuccessMapper appCustomerSuccessMapper;
+
+    /*批量插入默认条数1000条数*/
+    private static final int BATCH_SIZE = 1000;
 
     /**
      * 上传excel
@@ -64,7 +67,6 @@ public class CustomerService {
      * @param serialNum 批次号
      * @return true成功
      */
-    @Transactional
     public boolean generateSerial(final String serialNum) {
         AppCustomerSerial serial = new AppCustomerSerial();
         serial.setSerialNo(serialNum);
@@ -134,7 +136,7 @@ public class CustomerService {
             try {
                 appCustomerFailMapper.insertBatch(list);
             } catch (Exception e) {
-                LOGGER.error("批次入库失败: {}", JSON.toJSONString(list));
+                LOGGER.error("批时入库失败: {}", JSON.toJSONString(list));
             }
         }
     }
@@ -153,20 +155,78 @@ public class CustomerService {
             try {
                 appCustomerSuccessMapper.insertBatch(list);
             } catch (Exception e) {
-                LOGGER.error("批次入库失败{};{}", e.getMessage(), JSON.toJSONString(list));
+                String cause = e.getMessage();
+                String phone = getDumplacatePhone(cause);
+
+                duplicateSave(phone, list);
             }
         }
+    }
+
+    /**
+     * 重复的数据保存错误表中,正常的数据入正常的表
+     *
+     * @param phone
+     * @param list
+     */
+    private void duplicateSave(final String phone, final List<AppCustomerSuccess> list) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                saveDuliateList(phone, list);
+            }
+        }).start();
+    }
+
+    private void saveDuliateList(final String phone, final List<AppCustomerSuccess> list) {
+        List<AppCustomerSuccess> errorList = separate(phone, list, true); //重复的记录
+        List<AppCustomerFail> failList = Collections.synchronizedList(new ArrayList<AppCustomerFail>());
+        for (AppCustomerSuccess customer : errorList) {
+            AppCustomerFail fail = new AppCustomerFail();
+            BeanUtils.copyProperties(customer, fail);
+            fail.setRowNum(customer.getId()); //行号
+
+            failList.add(fail);
+        }
+
+        try {
+            this.batchInsertFailRecords(failList);  //插入正常的数据
+        } catch (Exception e) {
+            LOGGER.error("插入batchInsertFailRecords失败: {}", JSON.toJSONString(failList));
+        }
+
+        List<AppCustomerSuccess> successList = separate(phone, list, false);
+        try {
+            this.batchInsertSuccessRecords(successList);  //插入正常的数据
+        } catch (Exception e) {
+            LOGGER.error("插入batchInsertSuccessRecords失败: {}", JSON.toJSONString(successList));
+        }
+    }
+
+    private List<AppCustomerSuccess> separate(final String phone, List<AppCustomerSuccess> list, final boolean error) {
+        return (List<AppCustomerSuccess>) org.apache.commons.collections4.CollectionUtils.select(list,
+                new Predicate<AppCustomerSuccess>() {
+                    @Override
+                    public boolean evaluate(AppCustomerSuccess appCustomerSuccess) {
+                        final String compare = appCustomerSuccess.getPhone();
+                        boolean flag = error ? phone.equals(compare) : !phone.equals(compare);
+                        if (flag) {
+                            appCustomerSuccess.setRemark("重复电话号码");
+                        }
+                        return flag;
+                    }
+                });
     }
 
     /**
      * 转换excel数据到实体
      *
      * @param serialNum 批次号
-     * @param list      正常数据集合
+     * @param list      解析正常的excel数据
      * @return 成功集合
      */
     private List<AppCustomerSuccess> getAppCustomerSuccess(String serialNum, List<CustomerDto> list) {
-        List<AppCustomerSuccess> successesList = new ArrayList<>(); //解析正常的excel数据
+        List<AppCustomerSuccess> successesList = Collections.synchronizedList(new ArrayList<AppCustomerSuccess>());
 
         if (!CollectionUtils.isEmpty(list)) {
             for (CustomerDto customerDto : list) {
@@ -185,11 +245,11 @@ public class CustomerService {
      * 转换excel数据到实体
      *
      * @param serialNum        批次号
-     * @param errorLogBeanList 异常数据集合
+     * @param errorLogBeanList 解析不合法的excel数据
      * @return 非法数据集合
      */
     private List<AppCustomerFail> getAppCustomerFails(String serialNum, List<ExcelErrorLogBean> errorLogBeanList) {
-        List<AppCustomerFail> errorList = new ArrayList<>(); //不合法excel数据
+        List<AppCustomerFail> errorList = Collections.synchronizedList(new ArrayList<AppCustomerFail>());
 
         if (!CollectionUtils.isEmpty(errorLogBeanList)) {
             for (ExcelErrorLogBean bean : errorLogBeanList) {
@@ -208,5 +268,25 @@ public class CustomerService {
         return errorList;
     }
 
+    /**
+     * 从异常中获取触发了唯一索引的电话
+     *
+     * @param cause 异常原因
+     * @return 电话号码
+     */
+    public String getDumplacatePhone(String cause) {
+        if (StringUtils.isNotBlank(cause) && cause.contains("'idx_phone'")) {
+            cause = cause.split("###")[1].replaceAll("\\r\\n", "");
+            String phone = "";
+            Pattern p = Pattern.compile("Duplicate.*?entry.*?'(.*?)'.*?for.*?");
+            Matcher matcher = p.matcher(cause);
+            if (matcher.find()) {
+                cause = matcher.group(1);
+            }
+        } else {
+            cause = null;
+        }
+        return cause;
+    }
 
 }
