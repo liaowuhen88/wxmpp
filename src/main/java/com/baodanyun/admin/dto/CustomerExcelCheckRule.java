@@ -22,23 +22,25 @@ public class CustomerExcelCheckRule implements ExcelRule<CustomerDto> {
 
     @Override
     public void checkRow(CustomerDto customerDto) throws ExcelContentInvalidException, ExcelParseException {
-        String[] phons = customerDto.getPhone().split("/"); //电话
+        String tipMsg = null;
 
-        for (String str : phons) {
-            String mess = "";
-            if (str.matches("^\\d+$")) {
-                mess = ValidateUtils.validatePhoneNum("2", str);
-            } else if (str.contains("-")) {
-                String temp = str.replaceAll("-", "");
-                mess = temp.matches("^\\d+$") ? "" : "-1";
-            } else {
-                mess = ValidateUtils.validatePhoneNum("1", str);
-            }
-            if (StringUtils.isNotBlank(mess)) {
-                throw new ExcelParseException(mess);
-            }
+        String phone = customerDto.getPhone(); //电话
+        if (phone.matches("^\\d+$")) {
+            tipMsg = ValidateUtils.validatePhoneNum("2", phone);
+        } else if (phone.contains("-")) {
+            String temp = phone.replaceAll("-", "");
+            tipMsg = temp.matches("^\\d+$") ? "" : "座机号码不正确;";
         }
 
+        if (customerDto.getId() == null) {
+            tipMsg += ";序号必填;";
+        }
+        if (StringUtils.isBlank(customerDto.getCustomerName())) {
+            tipMsg += ";客户名称必填;";
+        }
+        if (StringUtils.isNotBlank(tipMsg)) {
+            throw new ExcelParseException(tipMsg);
+        }
     }
 
 

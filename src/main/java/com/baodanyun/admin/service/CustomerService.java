@@ -45,6 +45,9 @@ public class CustomerService {
     /*批量插入默认条数1000条数*/
     private static final int BATCH_SIZE = 1000;
 
+    /*重复电话文案*/
+    private static final String DUMPLATE_PHONE = "重复电话号码";
+
     /**
      * 上传excel
      *
@@ -114,7 +117,6 @@ public class CustomerService {
      * @param nomalList       合法数据
      */
     private void insert(final String serialNum, ExcelFileHelper excelFileHelper, List<CustomerDto> nomalList) {
-
         List<AppCustomerFail> errorList = getAppCustomerFails(serialNum, excelFileHelper.getErrorLogBeans());
         this.batchInsertFailRecords(errorList); //插入异常的数据
 
@@ -155,10 +157,8 @@ public class CustomerService {
             try {
                 appCustomerSuccessMapper.insertBatch(list);
             } catch (Exception e) {
-                String cause = e.getMessage();
-                String phone = getDumplacatePhone(cause);
-
-                duplicateSave(phone, list);
+                //重复的电话处理
+                duplicateSave(getDumplacatePhone(e.getMessage()), list);
             }
         }
     }
@@ -179,6 +179,10 @@ public class CustomerService {
     }
 
     private void saveDuliateList(final String phone, final List<AppCustomerSuccess> list) {
+        if (StringUtils.isBlank(phone)) {
+            return;
+        }
+
         List<AppCustomerSuccess> errorList = separate(phone, list, true); //重复的记录
         List<AppCustomerFail> failList = Collections.synchronizedList(new ArrayList<AppCustomerFail>());
         for (AppCustomerSuccess customer : errorList) {
@@ -208,12 +212,13 @@ public class CustomerService {
                 new Predicate<AppCustomerSuccess>() {
                     @Override
                     public boolean evaluate(AppCustomerSuccess appCustomerSuccess) {
-                        final String compare = appCustomerSuccess.getPhone();
-                        boolean flag = error ? phone.equals(compare) : !phone.equals(compare);
-                        if (flag) {
-                            appCustomerSuccess.setRemark("重复电话号码");
+                        final String compare = appCustomerSuccess.getPhone();//集合中的电话
+                        if (error) {//取重复的
+                            appCustomerSuccess.setRemark(DUMPLATE_PHONE);
+                            return phone.equals(compare);
+                        } else {
+                            return !phone.equals(compare);
                         }
-                        return flag;
                     }
                 });
     }
@@ -275,17 +280,16 @@ public class CustomerService {
      * @return 电话号码
      */
     public String getDumplacatePhone(String cause) {
-        if (StringUtils.isNotBlank(cause) && cause.contains("'idx_phone'")) {
-            cause = cause.split("###")[1].replaceAll("\\r\\n", "");
-            String phone = "";
-            Pattern p = Pattern.compile("Duplicate.*?entry.*?'(.*?)'.*?for.*?");
-            Matcher matcher = p.matcher(cause);
-            if (matcher.find()) {
-                cause = matcher.group(1);
-            }
-        } else {
-            cause = null;
+        if (!cause.contains("'idx_phone'"))
+            return null;
+
+        cause = cause.split("###")[1].replaceAll("\\r\\n", "");
+        Pattern p = Pattern.compile("Duplicate.*?entry.*?'(.*?)'.*?for.*?");
+        Matcher matcher = p.matcher(cause);
+        if (matcher.find()) {
+            cause = matcher.group(1);
         }
+
         return cause;
     }
 
