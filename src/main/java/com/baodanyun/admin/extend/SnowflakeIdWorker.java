@@ -112,20 +112,6 @@ public class SnowflakeIdWorker {
     }
 
     /**
-     * 测试
-     */
-    public static void main(String[] args) {
-        System.out.println(System.currentTimeMillis());
-        SnowflakeIdWorker idWorker = new SnowflakeIdWorker(1, 1);
-        long startTime = System.nanoTime();
-        for (int i = 0; i < 50000; i++) {
-            long id = idWorker.nextId();
-            System.out.println(id);
-        }
-        System.out.println((System.nanoTime() - startTime) / 1000000 + "ms");
-    }
-
-    /**
      * 获得下一个ID (该方法是线程安全的)
      *
      * @return SnowflakeId
@@ -182,5 +168,19 @@ public class SnowflakeIdWorker {
      */
     protected long timeGen() {
         return System.currentTimeMillis();
+    }
+
+    /**
+     * 测试
+     */
+    public static void main(String[] args) {
+        System.out.println(System.currentTimeMillis());
+        SnowflakeIdWorker idWorker = new SnowflakeIdWorker(1, 1);
+        long startTime = System.nanoTime();
+        for (int i = 0; i < 50000; i++) {
+            long id = idWorker.nextId();
+            System.out.println(id);
+        }
+        System.out.println((System.nanoTime() - startTime) / 1000000 + "ms");
     }
 }
