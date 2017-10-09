@@ -1,4 +1,4 @@
-package com.baodanyun.admin;
+package com.baodanyun.admin.extend;
 
 /**
  * Twitter的Snowflake雪花算法:ID生成器<br>

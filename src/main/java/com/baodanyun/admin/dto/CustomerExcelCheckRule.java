@@ -34,7 +34,7 @@ public class CustomerExcelCheckRule implements ExcelRule<CustomerDto> {
             tipMsg = temp.matches("^\\d+$") ? "" : "座机号码不正确;";
         } else {
             try {
-                BigDecimal db = new BigDecimal(phone);
+                new BigDecimal(phone);
             } catch (Exception e) {
                 tipMsg = "电话号码不正确;";
             }
@@ -46,6 +46,12 @@ public class CustomerExcelCheckRule implements ExcelRule<CustomerDto> {
         }
         if (StringUtils.isBlank(customerDto.getCustomerName())) {
             tipMsg += ";客户名称必填;";
+        }
+        if (StringUtils.isBlank(customerDto.getLabel())) {
+            tipMsg += ";客户标签必填;";
+        }
+        if (StringUtils.isBlank(customerDto.getSource())) {
+            tipMsg += ";客户来源必填;";
         }
         if (StringUtils.isNotBlank(tipMsg)) {
             throw new ExcelParseException(tipMsg);

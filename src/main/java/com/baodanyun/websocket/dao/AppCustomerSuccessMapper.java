@@ -38,4 +38,12 @@ public interface AppCustomerSuccessMapper {
      * @return
      */
     int insertBatch(List<AppCustomerSuccess> list);
+
+    /**
+     * 根据批次号统计记录数
+     *
+     * @param serialNo 批次号
+     * @return 总数
+     */
+    int countBySerialNo(String serialNo);
 }

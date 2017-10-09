@@ -1,5 +1,6 @@
 package com.baodanyun.websocket.service;
 
+import com.baodanyun.admin.service.CustomerService;
 import com.baodanyun.robot.service.ReportCaseService;
 import com.baodanyun.websocket.alarm.AlarmBoxer;
 import com.baodanyun.websocket.node.ChatNodeManager;
@@ -31,6 +32,8 @@ public class TimerTaskService {
     private MsgConsumer msgConsumer;
     @Autowired
     private ReportCaseService reportCaseService;
+    @Autowired
+    private CustomerService customerService;
 
 
     /**
@@ -97,6 +100,18 @@ public class TimerTaskService {
             reportCaseService.clearExpireData();
         } catch (Exception e) {
             logger.error("error", "定时清理超过15分钟的[我要报案]机器人流程失败", e);
+        }
+    }
+
+    /**
+     * 补偿修复更新上传批次的状态
+     */
+    @Scheduled(cron = "0 0/5 * * * ?")
+    public void fixSerialState() {
+        try {
+            customerService.fixSerialState();
+        } catch (Exception e) {
+            logger.error("error", "补偿更新上传批次的状态", e);
         }
     }
 

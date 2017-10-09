@@ -37,4 +37,12 @@ public interface AppCustomerFailMapper {
      * @return
      */
     int insertBatch(List<AppCustomerFail> list);
+
+    /**
+     * 根据批次号统计记录数
+     *
+     * @param serialNo 批次号
+     * @return 总数
+     */
+    int countBySerialNo(String serialNo);
 }

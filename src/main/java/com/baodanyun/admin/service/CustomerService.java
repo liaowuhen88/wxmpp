@@ -1,7 +1,8 @@
 package com.baodanyun.admin.service;
 
 import com.alibaba.fastjson.JSON;
-import com.baodanyun.admin.SnowflakeIdWorker;
+import com.baodanyun.admin.enums.ExcelStatusEnum;
+import com.baodanyun.admin.extend.SnowflakeIdWorker;
 import com.baodanyun.admin.dto.CustomerDto;
 import com.baodanyun.admin.extend.ExcelCallbackFunction;
 import com.baodanyun.websocket.dao.AppCustomerFailMapper;
@@ -121,8 +122,8 @@ public class CustomerService {
         if (this.generateSerial(serialNum)) { //批次号上传生成
             this.insert(serialNum, excelFileHelper, list);
 
-            LOGGER.info("上传成功，更新批次状态");
-            this.updateUploadState(serialNum);
+            ExcelStatusEnum statusEnum = CollectionUtils.isEmpty(list) ? ExcelStatusEnum.FAIL : ExcelStatusEnum.SUCCESS;
+            this.updateUploadState(serialNum, statusEnum);
         } else {
             LOGGER.info("生成批次号且保存失败");
         }
@@ -133,16 +134,18 @@ public class CustomerService {
      *
      * @param serialNum 批次号
      */
-    private void updateUploadState(final String serialNum) {
+    private void updateUploadState(final String serialNum, ExcelStatusEnum excelStatusEnum) {
         AppCustomerSerial serial = new AppCustomerSerial();
-        serial.setState((byte) 1);
+        serial.setState((byte) excelStatusEnum.getCode());
+        serial.setUpdateTime(new Date());
         AppCustomerSerialExample example = new AppCustomerSerialExample();
         example.createCriteria().andSerialNoEqualTo(serialNum);
 
         try {
             appCustomerSerialMapper.updateByExampleSelective(serial, example);
+            LOGGER.info("上传成功，更新批次状态成功");
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error("上传成功，更新批次状态失败,{}", e.getMessage());
         }
     }
 
@@ -204,8 +207,8 @@ public class CustomerService {
     /**
      * 重复的数据保存错误表中,正常的数据入正常的表
      *
-     * @param phone
-     * @param list
+     * @param phone 电话
+     * @param list  数据集
      */
     private void duplicateSave(final String phone, final List<AppCustomerSuccess> list) {
         new Thread(new Runnable() {
@@ -216,12 +219,18 @@ public class CustomerService {
         }).start();
     }
 
+    /**
+     * 保存重复的数据
+     *
+     * @param phone
+     * @param list
+     */
     private void saveDuliateList(final String phone, final List<AppCustomerSuccess> list) {
         if (StringUtils.isBlank(phone)) {
             return;
         }
 
-        List<AppCustomerSuccess> errorList = separate(phone, list, true); //重复的记录
+        List<AppCustomerSuccess> errorList = this.separate(phone, list, true); //重复的记录
         List<AppCustomerFail> failList = Collections.synchronizedList(new ArrayList<AppCustomerFail>());
         for (AppCustomerSuccess customer : errorList) {
             AppCustomerFail fail = new AppCustomerFail();
@@ -237,7 +246,7 @@ public class CustomerService {
             LOGGER.error("插入batchInsertFailRecords失败: {}", JSON.toJSONString(failList));
         }
 
-        List<AppCustomerSuccess> successList = separate(phone, list, false);
+        List<AppCustomerSuccess> successList = this.separate(phone, list, false);
         try {
             this.batchInsertSuccessRecords(successList);  //插入正常的数据
         } catch (Exception e) {
@@ -255,6 +264,7 @@ public class CustomerService {
                             appCustomerSuccess.setRemark(DUMPLATE_PHONE);
                             return phone.equals(compare);
                         } else {
+                            appCustomerSuccess.setRemark(null);
                             return !phone.equals(compare);
                         }
                     }
@@ -297,30 +307,38 @@ public class CustomerService {
         if (!CollectionUtils.isEmpty(errorLogBeanList)) {
             for (ExcelErrorLogBean bean : errorLogBeanList) {
                 CustomerDto customerDto = (CustomerDto) bean.getObj();
-
                 AppCustomerFail customerFail = new AppCustomerFail();
                 BeanUtils.copyProperties(customerDto, customerFail);
 
+                this.formatePhone(customerDto, customerFail); //处理电话号
                 customerFail.setSerialNo(serialNum);
                 customerFail.setRowNum(customerDto.getId());
                 customerFail.setRemark(bean.getMessage());
                 customerFail.setExp1(String.format("excel行号:%s,列%s", bean.getRowNum(), bean.getCellIndex()));
-
-                String phone = customerDto.getPhone();
-                if (StringUtils.isNotBlank(phone) && !phone.contains("-")) {
-                    try {
-                        BigDecimal db = new BigDecimal(phone);
-                        customerFail.setPhone(db.toPlainString());
-                    } catch (Exception e) {
-                        LOGGER.error("电话号码{}转换BigDecimal失败:{}", phone, e.getMessage());
-                    }
-                }
 
                 errorList.add(customerFail);
             }
         }
 
         return errorList;
+    }
+
+    /**
+     * 将科学计算法的电话转换为数字
+     *
+     * @param customerDto
+     * @param customerFail
+     */
+    private void formatePhone(CustomerDto customerDto, AppCustomerFail customerFail) {
+        String phone = customerDto.getPhone();
+        if (StringUtils.isNotBlank(phone) && !phone.contains("-")) {
+            try {
+                BigDecimal db = new BigDecimal(phone);
+                customerFail.setPhone(db.toPlainString());
+            } catch (Exception e) {
+                LOGGER.error("异常电话号码:{}", phone);
+            }
+        }
     }
 
     /**
@@ -341,6 +359,40 @@ public class CustomerService {
         }
 
         return cause;
+    }
+
+    /**
+     * 补偿修复更新上传批次的状态
+     * 上传成功的数据可能状态没有更新成功
+     * 上传失败的状态可能更新没有更新为失败
+     */
+    public void fixSerialState() {
+        AppCustomerSerialExample example = new AppCustomerSerialExample();
+        example.createCriteria().andStateEqualTo((byte) ExcelStatusEnum.PROCESS.getCode());
+
+        List<AppCustomerSerial> list = appCustomerSerialMapper.selectByExample(example);
+        if (!CollectionUtils.isEmpty(list)) {
+            for (AppCustomerSerial serial : list) {
+                String serialNo = serial.getSerialNo();
+
+                try {
+                    if (appCustomerSuccessMapper.countBySerialNo(serialNo) > 0) {
+                        this.updateUploadState(serialNo, ExcelStatusEnum.SUCCESS);
+                    }
+                } catch (Exception e) {
+                    LOGGER.error("补偿修复状态批次号{},{}", serialNo, e.getMessage());
+                }
+
+                try {
+                    if (appCustomerFailMapper.countBySerialNo(serialNo) >= 0) {
+                        this.updateUploadState(serialNo, ExcelStatusEnum.FAIL);
+                    }
+                } catch (Exception e) {
+                    LOGGER.error("补偿修复状态批次号{},{}", serialNo, e.getMessage());
+                }
+            }
+        }
+
     }
 
 }

@@ -388,4 +388,8 @@
             )
         </foreach>
     </insert>
+
+    <select id="countBySerialNo" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT count(1) from app_customer_success WHERE serial_no = #{serialNo}
+    </select>
 </mapper>
