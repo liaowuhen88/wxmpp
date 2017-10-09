@@ -3,6 +3,7 @@ package com.baodanyun.websocket.springConfig;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.PropertiesUtil;
+import com.github.pagehelper.PageHelper;
 import com.mongodb.Mongo;
 import com.whalin.MemCached.MemCachedClient;
 import com.whalin.MemCached.SockIOPool;
@@ -10,12 +11,13 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.pool.PooledConnectionFactory;
 import org.apache.ibatis.mapping.Environment;
+import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
-import org.apache.tomcat.util.http.fileupload.FileItemFactory;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.authentication.UserCredentials;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -34,16 +38,13 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.ContextLoader;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.util.WebUtils;
 
 import javax.jms.Destination;
-import javax.servlet.ServletContext;
 import javax.sql.DataSource;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Created by liaowuhen on 2016/11/2.
@@ -90,7 +91,7 @@ public class SpringConfig {
         return new DataSourceTransactionManager(dataSource);
     }
 
-    @Bean
+   /* @Bean
     public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws Exception {
         logger.info("sqlSessionFactory");
         TransactionFactory transactionFactory = new
@@ -101,17 +102,47 @@ public class SpringConfig {
 
         org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration(environment);
 
-        SqlSessionFactory sessionFactory =
-                new SqlSessionFactoryBuilder().build(configuration);
+        SqlSessionFactory sessionFactory = new SqlSessionFactoryBuilder().build(configuration);
+        //SqlSessionFactoryBean
+
         return sessionFactory;
+    }*/
+
+    @Bean
+    public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource, @Qualifier("pageHelper") PageHelper pageHelper) throws Exception {
+        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+        factoryBean.setDataSource(dataSource);  //数据源
+
+        TransactionFactory transactionFactory = new JdbcTransactionFactory();
+        factoryBean.setTransactionFactory(transactionFactory);  //事务
+
+        factoryBean.setPlugins(new Interceptor[]{pageHelper}); //分页插件
+
+        return factoryBean.getObject();
     }
 
     @Bean
-    public MapperScannerConfigurer mapperScannerConfigurer(@Qualifier("sqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
+    public PageHelper pageHelper() {
+        PageHelper pageHelper = new PageHelper();
+        Properties prop = new Properties();
+        prop.put("dialect", "mysql");
+        pageHelper.setProperties(prop);
+        return pageHelper;
+    }
+
+    @Bean
+    public MapperScannerConfigurer mapperScannerConfigurer(@Qualifier("sqlSessionTemplate") SqlSessionTemplate sqlSessionTemplate) throws Exception {
         MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
-        mapperScannerConfigurer.setSqlSessionFactory(sqlSessionFactory);
+        //mapperScannerConfigurer.setSqlSessionFactory(sqlSessionFactory);
         mapperScannerConfigurer.setBasePackage("com/baodanyun/websocket/dao");
+
+        mapperScannerConfigurer.setSqlSessionTemplate(sqlSessionTemplate);
         return mapperScannerConfigurer;
+    }
+
+    @Bean
+    public SqlSessionTemplate sqlSessionTemplate(@Qualifier("sqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
+        return new SqlSessionTemplate(sqlSessionFactory);
     }
 
 
