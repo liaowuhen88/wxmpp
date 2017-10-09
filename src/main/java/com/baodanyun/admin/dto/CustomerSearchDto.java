@@ -10,7 +10,7 @@ public class CustomerSearchDto implements Serializable {
     /**
      * 状态
      */
-    private int state;
+    private Integer state;
 
     /**
      * 批次号
@@ -27,11 +27,11 @@ public class CustomerSearchDto implements Serializable {
      */
     private String endTime;
 
-    public int getState() {
+    public Integer getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(Integer state) {
         this.state = state;
     }
 

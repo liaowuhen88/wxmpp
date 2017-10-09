@@ -1,10 +1,15 @@
 package com.baodanyun.admin.controller;
 
 import com.baodanyun.admin.dto.CustomerSearchDto;
+import com.baodanyun.admin.dto.PageDto;
 import com.baodanyun.admin.service.CustomerService;
 import com.baodanyun.websocket.bean.Response;
 import com.baodanyun.websocket.controller.BaseController;
-import com.github.pagehelper.PageHelper;
+import com.baodanyun.websocket.model.AppCustomerFail;
+import com.baodanyun.websocket.model.AppCustomerSerial;
+import com.baodanyun.websocket.model.AppCustomerSuccess;
+import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.InputStream;
-import java.util.concurrent.Semaphore;
 
 /**
  * 客户配置
@@ -63,20 +67,23 @@ public class CustomerController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/searchCustomer")
-    public Response searchCustomer(CustomerSearchDto searchDto) {
-
+    public Response searchCustomer(PageDto pageDto, CustomerSearchDto searchDto) {
+        PageInfo<AppCustomerSerial> pageInfo = customerService.searchCustomer(pageDto, searchDto);
         return null;
     }
 
     /**
      * 根据批次查询上传成功的记录
      *
-     * @param serialNo
+     * @param serialNo 批次
      * @return
      */
     @RequestMapping(value = "/getSuccessCustomer")
-    public Response getSuccessCustomer(String serialNo) {
-
+    public Response findSuccessCustomerPage(PageDto pageDto, String serialNo) {
+        if (StringUtils.isBlank(serialNo)) {
+            return null;
+        }
+        PageInfo<AppCustomerSuccess> pageInfo = customerService.findSuccessCustomerPage(pageDto, serialNo);
         return null;
     }
 
@@ -87,8 +94,8 @@ public class CustomerController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getFailCustomer")
-    public Response getFailCustomer(String serialNo) {
-
+    public Response finalFailCustomerPage(PageDto pageDto, String serialNo) {
+        PageInfo<AppCustomerFail> pageInfo = customerService.finalFailCustomerPage(pageDto, serialNo);
         return null;
     }
 }

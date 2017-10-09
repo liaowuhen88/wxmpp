@@ -1,6 +1,8 @@
 package com.baodanyun.admin.service;
 
 import com.alibaba.fastjson.JSON;
+import com.baodanyun.admin.dto.CustomerSearchDto;
+import com.baodanyun.admin.dto.PageDto;
 import com.baodanyun.admin.enums.ExcelStatusEnum;
 import com.baodanyun.admin.extend.SnowflakeIdWorker;
 import com.baodanyun.admin.dto.CustomerDto;
@@ -8,11 +10,11 @@ import com.baodanyun.admin.extend.ExcelCallbackFunction;
 import com.baodanyun.websocket.dao.AppCustomerFailMapper;
 import com.baodanyun.websocket.dao.AppCustomerSerialMapper;
 import com.baodanyun.websocket.dao.AppCustomerSuccessMapper;
-import com.baodanyun.websocket.model.AppCustomerFail;
-import com.baodanyun.websocket.model.AppCustomerSerial;
-import com.baodanyun.websocket.model.AppCustomerSerialExample;
-import com.baodanyun.websocket.model.AppCustomerSuccess;
+import com.baodanyun.websocket.model.*;
 import com.baodanyun.websocket.service.impl.QualityCheckServiceImpl;
+import com.baodanyun.websocket.util.DateUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.wzg.xls.tools.exception.ExcelErrorLogBean;
 import com.wzg.xls.tools.tools.ExcelAndCsvUtils;
@@ -395,4 +397,79 @@ public class CustomerService {
 
     }
 
+    /**
+     * 搜索
+     *
+     * @param pageDto   分页查询条件
+     * @param searchDto 查询条件
+     * @return 分布结果信息
+     */
+    public PageInfo<AppCustomerSerial> searchCustomer(PageDto pageDto, CustomerSearchDto searchDto) {
+        PageHelper.startPage(pageDto.getPageNo(), pageDto.getPageSize()); //分页拦截
+
+        AppCustomerSerialExample example = new AppCustomerSerialExample();
+        example.setOrderByClause("create_time desc");  //生成时间倒序
+        AppCustomerSerialExample.Criteria criteria = example.createCriteria();
+
+        if (searchDto.getState() != null) {//状态
+            criteria.andStateEqualTo((byte) searchDto.getState().intValue());
+        } else if (StringUtils.isNotBlank(searchDto.getSerialNo())) {//批次
+            criteria.andSerialNoEqualTo(searchDto.getSerialNo());
+        } else if (StringUtils.isNotBlank(searchDto.getBeginTime()) && StringUtils.isBlank(searchDto.getEndTime())) {
+            criteria.andCreateTimeGreaterThanOrEqualTo(
+                    DateUtils.parse(searchDto.getBeginTime() + DateUtils.ZERO_TIME)
+            );
+        } else if (StringUtils.isBlank(searchDto.getBeginTime()) && StringUtils.isNotBlank(searchDto.getEndTime())) {
+            criteria.andCreateTimeLessThanOrEqualTo(
+                    DateUtils.parse(searchDto.getEndTime() + DateUtils.MAX_TIME)
+            );
+        } else if (StringUtils.isNotBlank(searchDto.getBeginTime()) && StringUtils.isNotBlank(searchDto.getEndTime())) {
+            criteria.andCreateTimeBetween(
+                    DateUtils.parse(searchDto.getBeginTime() + DateUtils.ZERO_TIME),
+                    DateUtils.parse(searchDto.getEndTime() + DateUtils.MAX_TIME)
+            );
+        }
+
+        List<AppCustomerSerial> list = appCustomerSerialMapper.selectByExample(example);
+        PageInfo<AppCustomerSerial> pageInfo = new PageInfo<>(list);
+
+        return pageInfo;
+    }
+
+    /**
+     * 查询导入成功的客户数据
+     *
+     * @param pageDto
+     * @param serialNo
+     * @return
+     */
+    public PageInfo<AppCustomerSuccess> findSuccessCustomerPage(PageDto pageDto, String serialNo) {
+        PageHelper.startPage(pageDto.getPageNo(), pageDto.getPageSize()); //分页拦截
+
+        AppCustomerSuccessExample example = new AppCustomerSuccessExample();
+        example.createCriteria().andSerialNoEqualTo(serialNo);
+        List<AppCustomerSuccess> list = appCustomerSuccessMapper.selectByExample(example);
+
+        PageInfo<AppCustomerSuccess> pageInfo = new PageInfo<>(list);
+        return pageInfo;
+    }
+
+    /**
+     * 查询失败异常的导入的客户数据
+     *
+     * @param pageDto
+     * @param serialNo
+     * @return
+     */
+    public PageInfo<AppCustomerFail> finalFailCustomerPage(PageDto pageDto, final String serialNo) {
+        PageHelper.startPage(pageDto.getPageNo(), pageDto.getPageSize()); //分页拦截
+
+        AppCustomerFailExample example = new AppCustomerFailExample();
+        example.createCriteria().andSerialNoEqualTo(serialNo);
+        List<AppCustomerFail> list = appCustomerFailMapper.selectByExample(example);
+
+        PageInfo<AppCustomerFail> pageInfo = new PageInfo<>(list);
+
+        return pageInfo;
+    }
 }

@@ -28,6 +28,9 @@ public class DateUtils {
     public static final String DATE_KEY_STR    = "yyMMddHHmmss";
     public static final String DATE_FULL_TRIM  = "yyyyMMddHHmmss";
     public static final String DATE_FULL_STR   = "yyyy-MM-dd HH:mm:ss";
+    public static final String ZERO_TIME = " 00:00:00";
+    public static final String MAX_TIME = " 23:59:59";
+
 
 
 

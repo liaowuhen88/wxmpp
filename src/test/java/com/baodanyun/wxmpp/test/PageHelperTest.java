@@ -26,16 +26,16 @@ public class PageHelperTest extends BaseTest {
     @Test
     public void findPage() {
         //分页拦截
-        Page<AppCustomerSuccess> page = PageHelper.startPage(1, 20);
+        PageHelper.startPage(1, 20);
 
         AppCustomerSuccessExample example = new AppCustomerSuccessExample();
         example.setOrderByClause("create_time desc");
         List<AppCustomerSuccess> list = appCustomerSuccessMapper.selectByExample(example);
 
-        PageInfo<AppCustomerSuccess> pageInfo = new PageInfo<>(list); //分页信息
+        //分页结果
+        PageInfo<AppCustomerSuccess> pageInfo = new PageInfo<>(list);
 
         System.out.println(JSON.toJSONStringWithDateFormat(pageInfo, "yyyy-MM-dd HH:mm:ss"));
-
     }
 
 
