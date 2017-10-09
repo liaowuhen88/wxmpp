@@ -1,6 +1,7 @@
 package com.baodanyun.admin.service;
 
 import com.alibaba.fastjson.JSON;
+import com.baodanyun.admin.SnowflakeIdWorker;
 import com.baodanyun.admin.dto.CustomerDto;
 import com.baodanyun.admin.extend.ExcelCallbackFunction;
 import com.baodanyun.websocket.dao.AppCustomerFailMapper;
@@ -32,6 +33,9 @@ import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 导入客户服务
+ */
 @Service
 public class CustomerService {
     private final Logger LOGGER = LoggerFactory.getLogger(QualityCheckServiceImpl.class);
@@ -73,11 +77,18 @@ public class CustomerService {
      * @return true成功
      */
     public boolean generateSerial(final String serialNum) {
-        AppCustomerSerial serial = new AppCustomerSerial();
-        serial.setSerialNo(serialNum);
-        serial.setCreateTime(new Date());
+        boolean flag = false;
 
-        return appCustomerSerialMapper.insertSelective(serial) > 0;
+        try {
+            AppCustomerSerial serial = new AppCustomerSerial();
+            serial.setSerialNo(serialNum);
+            serial.setCreateTime(new Date());
+            flag = appCustomerSerialMapper.insertSelective(serial) > 0;
+        } catch (Exception e) {
+            LOGGER.error(",生成一条上传批次记录入库失败{}", e.getMessage());
+        }
+
+        return flag;
     }
 
     /**
@@ -105,12 +116,15 @@ public class CustomerService {
      * @param list            合法数据
      */
     public void saveExcelData(ExcelFileHelper excelFileHelper, List<CustomerDto> list) {
-        String serialNum = UUID.randomUUID().toString().replaceAll("-", "");
+        String serialNum = String.valueOf(SnowflakeIdWorker.createID()); //生成批次号
+
         if (this.generateSerial(serialNum)) { //批次号上传生成
             this.insert(serialNum, excelFileHelper, list);
 
-            LOGGER.info("上传成功");
+            LOGGER.info("上传成功，更新批次状态");
             this.updateUploadState(serialNum);
+        } else {
+            LOGGER.info("生成批次号且保存失败");
         }
     }
 
@@ -261,8 +275,8 @@ public class CustomerService {
             for (CustomerDto customerDto : list) {
                 AppCustomerSuccess customerSuccess = new AppCustomerSuccess();
                 BeanUtils.copyProperties(customerDto, customerSuccess);
-
                 customerSuccess.setSerialNo(serialNum);
+
                 successesList.add(customerSuccess);
             }
         }
@@ -298,6 +312,7 @@ public class CustomerService {
                         BigDecimal db = new BigDecimal(phone);
                         customerFail.setPhone(db.toPlainString());
                     } catch (Exception e) {
+                        LOGGER.error("电话号码{}转换BigDecimal失败:{}", phone, e.getMessage());
                     }
                 }
 
