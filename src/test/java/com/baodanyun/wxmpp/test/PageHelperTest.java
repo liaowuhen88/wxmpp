@@ -1,18 +1,17 @@
 package com.baodanyun.wxmpp.test;
 
 import com.alibaba.fastjson.JSON;
+import com.baodanyun.admin.dto.PageDto;
+import com.baodanyun.admin.service.CustomerService;
 import com.baodanyun.websocket.dao.AppCustomerSuccessMapper;
+import com.baodanyun.websocket.model.AppCustomerFail;
 import com.baodanyun.websocket.model.AppCustomerSuccess;
 import com.baodanyun.websocket.model.AppCustomerSuccessExample;
-import com.baodanyun.websocket.service.MqService;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.activemq.command.ActiveMQQueue;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.jms.Destination;
 import java.util.List;
 
 /**
@@ -22,6 +21,8 @@ public class PageHelperTest extends BaseTest {
 
     @Autowired
     public AppCustomerSuccessMapper appCustomerSuccessMapper;
+    @Autowired
+    private CustomerService customerService;
 
     @Test
     public void findPage() {
@@ -35,7 +36,29 @@ public class PageHelperTest extends BaseTest {
         //分页结果
         PageInfo<AppCustomerSuccess> pageInfo = new PageInfo<>(list);
 
-        System.out.println(JSON.toJSONStringWithDateFormat(pageInfo, "yyyy-MM-dd HH:mm:ss"));
+        print(pageInfo);
+    }
+
+    @Test
+    public void findSuccessPage() {
+        PageDto pageDto = new PageDto();
+        String serialNo = "77279711700586496";
+        PageInfo<AppCustomerSuccess> pageInfo = customerService.findSuccessCustomerPage(pageDto, serialNo);
+
+        print(pageInfo);
+    }
+
+    @Test
+    public void findFailPage() {
+        PageDto pageDto = new PageDto(2, 10);
+        String serialNo = "77279711700586496";
+        PageInfo<AppCustomerFail> pageInfo = customerService.finalFailCustomerPage(pageDto, serialNo);
+
+        print(pageInfo);
+    }
+
+    public void print(Object obj) {
+        System.out.println(JSON.toJSONStringWithDateFormat(obj, "yyyy-MM-dd HH:mm:ss"));
     }
 
 

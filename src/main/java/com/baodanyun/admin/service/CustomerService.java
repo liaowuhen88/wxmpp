@@ -447,6 +447,7 @@ public class CustomerService {
         PageHelper.startPage(pageDto.getPageNo(), pageDto.getPageSize()); //分页拦截
 
         AppCustomerSuccessExample example = new AppCustomerSuccessExample();
+        example.setOrderByClause("id ASC");
         example.createCriteria().andSerialNoEqualTo(serialNo);
         List<AppCustomerSuccess> list = appCustomerSuccessMapper.selectByExample(example);
 
@@ -465,6 +466,7 @@ public class CustomerService {
         PageHelper.startPage(pageDto.getPageNo(), pageDto.getPageSize()); //分页拦截
 
         AppCustomerFailExample example = new AppCustomerFailExample();
+        example.setOrderByClause("id ASC");
         example.createCriteria().andSerialNoEqualTo(serialNo);
         List<AppCustomerFail> list = appCustomerFailMapper.selectByExample(example);
 
