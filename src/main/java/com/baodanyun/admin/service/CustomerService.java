@@ -213,12 +213,12 @@ public class CustomerService {
      * @param list  数据集
      */
     private void duplicateSave(final String phone, final List<AppCustomerSuccess> list) {
-        new Thread(new Runnable() {
+        executorService.submit(new Runnable() {
             @Override
             public void run() {
                 saveDuliateList(phone, list);
             }
-        }).start();
+        });
     }
 
     /**
@@ -232,6 +232,7 @@ public class CustomerService {
             return;
         }
 
+        LOGGER.error("重复电话:{}", phone);
         List<AppCustomerSuccess> errorList = this.separate(phone, list, true); //重复的记录
         List<AppCustomerFail> failList = Collections.synchronizedList(new ArrayList<AppCustomerFail>());
         for (AppCustomerSuccess customer : errorList) {
@@ -243,14 +244,18 @@ public class CustomerService {
         }
 
         try {
-            this.batchInsertFailRecords(failList);  //插入正常的数据
+            if (failList.size() > 0) {
+                this.batchInsertFailRecords(failList);  //插入异常的数据
+            }
         } catch (Exception e) {
             LOGGER.error("插入batchInsertFailRecords失败: {}", JSON.toJSONString(failList));
         }
 
         List<AppCustomerSuccess> successList = this.separate(phone, list, false);
         try {
-            this.batchInsertSuccessRecords(successList);  //插入正常的数据
+            if (!CollectionUtils.isEmpty(successList)) {
+                this.batchInsertSuccessRecords(successList);  //插入正常的数据
+            }
         } catch (Exception e) {
             LOGGER.error("插入batchInsertSuccessRecords失败: {}", JSON.toJSONString(successList));
         }
@@ -470,7 +475,7 @@ public class CustomerService {
         example.createCriteria().andSerialNoEqualTo(serialNo);
         List<AppCustomerFail> list = appCustomerFailMapper.selectByExample(example);
 
-        PageInfo<AppCustomerFail> pageInfo = new PageInfo<>(list);
+        PageInfo<AppCustomerFail> pageInfo = new PageInfo<>(list); //分页结果
 
         return pageInfo;
     }

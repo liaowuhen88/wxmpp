@@ -69,33 +69,34 @@ public class CustomerController extends BaseController {
     @RequestMapping(value = "/searchCustomer")
     public Response searchCustomer(PageDto pageDto, CustomerSearchDto searchDto) {
         PageInfo<AppCustomerSerial> pageInfo = customerService.searchCustomer(pageDto, searchDto);
-        return null;
+        return super.success(pageDto);
     }
 
     /**
      * 根据批次查询上传成功的记录
      *
-     * @param serialNo 批次
+     * @param serialNo 批次号
      * @return
      */
     @RequestMapping(value = "/getSuccessCustomer")
     public Response findSuccessCustomerPage(PageDto pageDto, String serialNo) {
         if (StringUtils.isBlank(serialNo)) {
-            return null;
+            return super.error("批次为空");
         }
         PageInfo<AppCustomerSuccess> pageInfo = customerService.findSuccessCustomerPage(pageDto, serialNo);
-        return null;
+
+        return super.success(pageDto);
     }
 
     /**
      * 根据批次查询上传失败的记录
      *
-     * @param serialNo
+     * @param serialNo 批次号
      * @return
      */
     @RequestMapping(value = "/getFailCustomer")
     public Response finalFailCustomerPage(PageDto pageDto, String serialNo) {
         PageInfo<AppCustomerFail> pageInfo = customerService.finalFailCustomerPage(pageDto, serialNo);
-        return null;
+        return super.success(pageDto);
     }
 }

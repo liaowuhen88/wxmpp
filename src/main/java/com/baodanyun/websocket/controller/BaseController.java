@@ -1,5 +1,6 @@
 package com.baodanyun.websocket.controller;
 
+import com.baodanyun.websocket.bean.Response;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -22,5 +23,31 @@ public class BaseController {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         CustomDateEditor dateEditor = new CustomDateEditor(dateFormat, true);
         binder.registerCustomEditor(Date.class, dateEditor);
+    }
+
+    protected Response success(Object data) {
+        Response response = new Response();
+        response.setData(data);
+        response.setSuccess(true);
+
+        return response;
+    }
+
+    protected Response error(String msg) {
+        Response response = new Response();
+        response.setSuccess(false);
+        response.setMsg(msg);
+        response.setCode(500);
+
+        return response;
+    }
+
+    protected Response error(String msg, int code) {
+        Response response = new Response();
+        response.setSuccess(false);
+        response.setMsg(msg);
+        response.setCode(code);
+
+        return response;
     }
 }

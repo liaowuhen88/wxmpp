@@ -80,7 +80,7 @@ public class SpringConfig {
         dataSource.setTimeBetweenEvictionRunsMillis(60000);
         dataSource.setMinEvictableIdleTimeMillis(300000);
         dataSource.setRemoveAbandoned(true);
-        dataSource.setRemoveAbandonedTimeoutMillis(1800);
+        dataSource.setRemoveAbandonedTimeoutMillis(60 * 1000);
         dataSource.setLogAbandoned(true);
         //dataSource.setFilters("mergeStat");
         return dataSource;
