@@ -121,11 +121,11 @@ public class CustomerService {
     public void saveExcelData(ExcelFileHelper excelFileHelper, List<CustomerDto> list) {
         String serialNum = String.valueOf(SnowflakeIdWorker.createID()); //生成批次号
 
-        if (this.generateSerial(serialNum)) { //批次号上传生成
+        if (this.generateSerial(serialNum)) { //生成上传批次记录
             this.insert(serialNum, excelFileHelper, list);
 
             ExcelStatusEnum statusEnum = CollectionUtils.isEmpty(list) ? ExcelStatusEnum.FAIL : ExcelStatusEnum.SUCCESS;
-            this.updateUploadState(serialNum, statusEnum);
+            this.updateUploadState(serialNum, statusEnum); //更新批次表状态
         } else {
             LOGGER.info("生成批次号且保存失败");
         }
@@ -293,7 +293,7 @@ public class CustomerService {
                 AppCustomerSuccess customerSuccess = new AppCustomerSuccess();
                 BeanUtils.copyProperties(customerDto, customerSuccess);
                 customerSuccess.setSerialNo(serialNum);
-
+                customerSuccess.setPhoneBak(customerDto.getPhnoeBak());
                 successesList.add(customerSuccess);
             }
         }
@@ -320,6 +320,7 @@ public class CustomerService {
                 this.formatePhone(customerDto, customerFail); //处理电话号
                 customerFail.setSerialNo(serialNum);
                 customerFail.setRowNum(customerDto.getId());
+                customerFail.setPhoneBak(customerDto.getPhnoeBak());
                 customerFail.setRemark(bean.getMessage());
                 customerFail.setExp1(String.format("excel行号:%s,列%s", bean.getRowNum(), bean.getCellIndex()));
 
@@ -381,7 +382,6 @@ public class CustomerService {
         if (!CollectionUtils.isEmpty(list)) {
             for (AppCustomerSerial serial : list) {
                 String serialNo = serial.getSerialNo();
-
                 try {
                     if (appCustomerSuccessMapper.countBySerialNo(serialNo) > 0) {
                         this.updateUploadState(serialNo, ExcelStatusEnum.SUCCESS);
