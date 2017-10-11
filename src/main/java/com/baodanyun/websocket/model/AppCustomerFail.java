@@ -2,7 +2,7 @@ package com.baodanyun.websocket.model;
 
 import java.util.Date;
 
-public class AppCustomerFail {
+public class AppCustomerFail implements Cloneable {
     private Long id;
 
     private Long rowNum;
@@ -161,5 +161,15 @@ public class AppCustomerFail {
 
     public void setExp3(String exp3) {
         this.exp3 = exp3 == null ? null : exp3.trim();
+    }
+
+    @Override
+    public Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

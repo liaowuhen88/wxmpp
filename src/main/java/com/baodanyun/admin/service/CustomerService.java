@@ -54,7 +54,7 @@ public class CustomerService {
     private static final int BATCH_SIZE = 1000;
 
     /*重复电话文案*/
-    private static final String DUMPLATE_PHONE = "重复电话号码";
+    private static final String DUMPLCATE_PHONE = "重复电话号码";
 
     ExecutorService executorService = Executors.newFixedThreadPool(4);
 
@@ -120,7 +120,6 @@ public class CustomerService {
      */
     public void saveExcelData(ExcelFileHelper excelFileHelper, List<CustomerDto> list) {
         String serialNum = String.valueOf(SnowflakeIdWorker.createID()); //生成批次号
-
         if (this.generateSerial(serialNum)) { //生成上传批次记录
             this.insert(serialNum, excelFileHelper, list);
 
@@ -192,8 +191,9 @@ public class CustomerService {
      * @param successList 成功的集合
      */
     private void batchInsertSuccessRecords(List<AppCustomerSuccess> successList) {
-        if (CollectionUtils.isEmpty(successList))
+        if (CollectionUtils.isEmpty(successList)) {
             return;
+        }
 
         List<List<AppCustomerSuccess>> dataList = Lists.partition(successList, BATCH_SIZE);//分批
         for (List<AppCustomerSuccess> list : dataList) {
@@ -232,11 +232,13 @@ public class CustomerService {
             return;
         }
 
-        LOGGER.error("重复电话:{}", phone);
+        LOGGER.trace("重复电话:{}", phone);
         List<AppCustomerSuccess> errorList = this.separate(phone, list, true); //重复的记录
         List<AppCustomerFail> failList = Collections.synchronizedList(new ArrayList<AppCustomerFail>());
+        AppCustomerFail customerFail = new AppCustomerFail();
+
         for (AppCustomerSuccess customer : errorList) {
-            AppCustomerFail fail = new AppCustomerFail();
+            AppCustomerFail fail = (AppCustomerFail) customerFail.clone();
             BeanUtils.copyProperties(customer, fail);
             fail.setRowNum(customer.getId()); //行号
 
@@ -268,7 +270,7 @@ public class CustomerService {
                     public boolean evaluate(AppCustomerSuccess appCustomerSuccess) {
                         final String compare = appCustomerSuccess.getPhone();//集合中的电话
                         if (error) {//取重复的
-                            appCustomerSuccess.setRemark(DUMPLATE_PHONE);
+                            appCustomerSuccess.setRemark(DUMPLCATE_PHONE);
                             return phone.equals(compare);
                         } else {
                             appCustomerSuccess.setRemark(null);
@@ -287,13 +289,14 @@ public class CustomerService {
      */
     private List<AppCustomerSuccess> getAppCustomerSuccess(String serialNum, List<CustomerDto> list) {
         List<AppCustomerSuccess> successesList = Collections.synchronizedList(new ArrayList<AppCustomerSuccess>());
-
         if (!CollectionUtils.isEmpty(list)) {
+            AppCustomerSuccess appCustomerSuccess = new AppCustomerSuccess();
             for (CustomerDto customerDto : list) {
-                AppCustomerSuccess customerSuccess = new AppCustomerSuccess();
+                AppCustomerSuccess customerSuccess = (AppCustomerSuccess) appCustomerSuccess.clone();
                 BeanUtils.copyProperties(customerDto, customerSuccess);
                 customerSuccess.setSerialNo(serialNum);
                 customerSuccess.setPhoneBak(customerDto.getPhnoeBak());
+
                 successesList.add(customerSuccess);
             }
         }
@@ -311,21 +314,24 @@ public class CustomerService {
     private List<AppCustomerFail> getAppCustomerFails(String serialNum, List<ExcelErrorLogBean> errorLogBeanList) {
         List<AppCustomerFail> errorList = Collections.synchronizedList(new ArrayList<AppCustomerFail>());
 
-        if (!CollectionUtils.isEmpty(errorLogBeanList)) {
-            for (ExcelErrorLogBean bean : errorLogBeanList) {
-                CustomerDto customerDto = (CustomerDto) bean.getObj();
-                AppCustomerFail customerFail = new AppCustomerFail();
-                BeanUtils.copyProperties(customerDto, customerFail);
+        if (CollectionUtils.isEmpty(errorLogBeanList)) {
+            return null;
+        }
 
-                this.formatePhone(customerDto, customerFail); //处理电话号
-                customerFail.setSerialNo(serialNum);
-                customerFail.setRowNum(customerDto.getId());
-                customerFail.setPhoneBak(customerDto.getPhnoeBak());
-                customerFail.setRemark(bean.getMessage());
-                customerFail.setExp1(String.format("excel行号:%s,列%s", bean.getRowNum(), bean.getCellIndex()));
+        AppCustomerFail appCustomerFail = new AppCustomerFail();
+        for (ExcelErrorLogBean bean : errorLogBeanList) {
+            AppCustomerFail customerFail = (AppCustomerFail) appCustomerFail.clone();
+            CustomerDto customerDto = (CustomerDto) bean.getObj();
+            BeanUtils.copyProperties(customerDto, customerFail);
 
-                errorList.add(customerFail);
-            }
+            this.formatePhone(customerDto, customerFail); //处理电话号
+            customerFail.setSerialNo(serialNum);
+            customerFail.setRowNum(customerDto.getId());
+            customerFail.setPhoneBak(customerDto.getPhnoeBak());
+            customerFail.setRemark(bean.getMessage());
+            customerFail.setExp1(String.format("excel行号:%s,列%s", bean.getRowNum(), bean.getCellIndex()));
+
+            errorList.add(customerFail);
         }
 
         return errorList;
@@ -344,7 +350,7 @@ public class CustomerService {
                 BigDecimal db = new BigDecimal(phone);
                 customerFail.setPhone(db.toPlainString());
             } catch (Exception e) {
-                LOGGER.error("异常电话号码:{}", phone);
+                LOGGER.warn("异常电话号码:{}", phone);
             }
         }
     }
@@ -356,8 +362,9 @@ public class CustomerService {
      * @return 电话号码
      */
     public String getDumplacatePhone(String cause) {
-        if (!cause.contains("'idx_phone'"))
+        if (!cause.contains("'idx_phone'")) {
             return null;
+        }
 
         cause = cause.split("###")[1].replaceAll("\\r\\n", "");
         Pattern p = Pattern.compile("Duplicate.*?entry.*?'(.*?)'.*?for.*?");
@@ -379,27 +386,29 @@ public class CustomerService {
         example.createCriteria().andStateEqualTo((byte) ExcelStatusEnum.PROCESS.getCode());
 
         List<AppCustomerSerial> list = appCustomerSerialMapper.selectByExample(example);
-        if (!CollectionUtils.isEmpty(list)) {
-            for (AppCustomerSerial serial : list) {
-                String serialNo = serial.getSerialNo();
-                try {
-                    if (appCustomerSuccessMapper.countBySerialNo(serialNo) > 0) {
-                        this.updateUploadState(serialNo, ExcelStatusEnum.SUCCESS);
-                    }
-                } catch (Exception e) {
-                    LOGGER.error("补偿修复状态批次号{},{}", serialNo, e.getMessage());
-                }
-
-                try {
-                    if (appCustomerFailMapper.countBySerialNo(serialNo) >= 0) {
-                        this.updateUploadState(serialNo, ExcelStatusEnum.FAIL);
-                    }
-                } catch (Exception e) {
-                    LOGGER.error("补偿修复状态批次号{},{}", serialNo, e.getMessage());
-                }
-            }
+        if (CollectionUtils.isEmpty(list)) {
+            return;
         }
 
+
+        for (AppCustomerSerial serial : list) {
+            String serialNo = serial.getSerialNo();
+            try {
+                if (appCustomerSuccessMapper.countBySerialNo(serialNo) > 0) {
+                    this.updateUploadState(serialNo, ExcelStatusEnum.SUCCESS);
+                }
+            } catch (Exception e) {
+                LOGGER.error("补偿修复状态批次号{},{}", serialNo, e.getMessage());
+            }
+
+            try {
+                if (appCustomerFailMapper.countBySerialNo(serialNo) >= 0) {
+                    this.updateUploadState(serialNo, ExcelStatusEnum.FAIL);
+                }
+            } catch (Exception e) {
+                LOGGER.error("补偿修复状态批次号{},{}", serialNo, e.getMessage());
+            }
+        }
     }
 
     /**

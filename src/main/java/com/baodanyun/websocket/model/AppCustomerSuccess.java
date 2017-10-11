@@ -2,7 +2,7 @@ package com.baodanyun.websocket.model;
 
 import java.util.Date;
 
-public class AppCustomerSuccess {
+public class AppCustomerSuccess implements Cloneable {
     private Long id;
 
     private String customerName;
@@ -151,5 +151,16 @@ public class AppCustomerSuccess {
 
     public void setExp3(String exp3) {
         this.exp3 = exp3;
+    }
+
+    @Override
+    public Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
