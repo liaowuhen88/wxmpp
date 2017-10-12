@@ -198,7 +198,7 @@ Utils = (function () {
 
 
     // 历史纪录展示  数据库
-    Utils.prototype.DBRenderDivAll = function renderDiv(currentId, datas, renderDiv, fn) {
+    Utils.prototype.DBRenderDivAll = function renderDiv(currentId, datas, renderDiv, fn, ascOrDesc) {
         if (datas) {
             $.each(datas, function (i, item) {
                 var commentTpl;
@@ -241,7 +241,11 @@ Utils = (function () {
 
                 if (!flag) {
                     //TODO 历史记录的发送状态应该全为发送成功
-                    $(Mustache.to_html(commentTpl, item)).appendTo("#" + renderDiv);
+                    if (ascOrDesc && ascOrDesc == 'desc') {
+                        $(Mustache.to_html(commentTpl, item)).prependTo("#" + renderDiv);
+                    } else {
+                        $(Mustache.to_html(commentTpl, item)).appendTo("#" + renderDiv);
+                    }
                 }
 
             });

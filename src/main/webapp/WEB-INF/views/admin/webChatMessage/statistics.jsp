@@ -33,7 +33,7 @@
                 <option value="yutao@126xmpp">于涛</option>
                 <option value="maqiumeng@126xmpp">马秋萌</option>
                 <option value="wangjing@126xmpp">汪婧</option>
-                <option value="hushuanyue@126xmpp">胡双月</option>
+                <option value="hushuangyue@126xmpp">胡双月</option>
                 <option value="liuya@126xmpp">刘雅</option>
                 <option value="zhangchi@126xmpp">张弛</option>
             </select>
