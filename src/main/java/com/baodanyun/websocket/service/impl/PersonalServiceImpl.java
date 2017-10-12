@@ -381,7 +381,7 @@ public class PersonalServiceImpl implements PersonalService {
                     return null;
                 } else {
                     logger.info("uid:[" + uid + "]--------openId[" + openId + "]");
-                    logger.info("" + cacheService.setOneMonth(CommonConfig.USER_OPENID_KEY + openId, hrUser));
+                    logger.info("" + cacheService.setOneDay(CommonConfig.USER_OPENID_KEY + openId, hrUser));
                     return uid;
 
                 }

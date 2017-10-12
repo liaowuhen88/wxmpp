@@ -48,7 +48,7 @@ public class UserCacheServerImpl implements UserCacheServer {
 
         map.put(openId, to);
 
-        return cacheService.setOneMonth(openId, map);
+        return cacheService.setOneWeek(openId, map);
     }
 
     /**
