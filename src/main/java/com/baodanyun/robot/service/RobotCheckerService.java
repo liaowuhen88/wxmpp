@@ -46,7 +46,7 @@ public class RobotCheckerService {
                 String serialNumber = UUID.randomUUID().toString();
                 serialNumber = serialNumber.replaceAll("-", "");
                 msg.setSerialNumber(serialNumber.toUpperCase());//UUID批次号
-                boolean flag = cacheService.setHalfHour(cacheKey, msg);
+                boolean flag = cacheService.set(cacheKey, msg, (int) RobotConstant.RULE_TIME);
                 LOGGER.info("{}缓存{}", cacheKey, flag);
             } else {
                 LOGGER.info("isLogin {}", isLogin);

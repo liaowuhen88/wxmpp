@@ -179,13 +179,8 @@ public class PersonalServiceImpl implements PersonalService {
     @Override
     public List<OrderInfo> getOrderInfo(Long uid) {
 
-        String orderInfo = (String) cacheService.get(CommonConfig.USER_ORDER_KEY + uid);
-        if (StringUtils.isBlank(orderInfo)) {
-            RequestBean requestBean = new RequestBean(uid);
-            orderInfo = KdtApiClient.postJson(KdtApiClient.APiMethods.getOrderInfo.getValue(), requestBean);
-            cacheService.setOneDay(CommonConfig.USER_ORDER_KEY + uid, orderInfo);
-
-        }
+        RequestBean requestBean = new RequestBean(uid);
+        String orderInfo = KdtApiClient.postJson(KdtApiClient.APiMethods.getOrderInfo.getValue(), requestBean);
 
         if (!StringUtils.isEmpty(orderInfo)) {
             java.lang.reflect.Type userInfoType = new TypeToken<List<OrderInfo>>() {
