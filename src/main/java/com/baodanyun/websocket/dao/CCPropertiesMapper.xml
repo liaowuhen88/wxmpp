@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baodanyun.websocket.dao.CCPropertiesMapper">
+    <resultMap id="BaseResultMap" type="com.baodanyun.websocket.model.CCProperties">
+        <id column="ccName" property="ccname" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.baodanyun.websocket.model.CCProperties" extends="BaseResultMap">
+        <result column="value" property="value" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ccName
+  </sql>
+    <sql id="Blob_Column_List">
+    value
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from cc_properties
+        where ccName = #{ccname,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from cc_properties
+    where ccName = #{ccname,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.baodanyun.websocket.model.CCProperties">
+    insert into cc_properties (ccName, value)
+    values (#{ccname,jdbcType=VARCHAR}, #{value,jdbcType=LONGVARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.baodanyun.websocket.model.CCProperties">
+        insert into cc_properties
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ccname != null">
+                ccName,
+            </if>
+            <if test="value != null">
+                value,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ccname != null">
+                #{ccname,jdbcType=VARCHAR},
+            </if>
+            <if test="value != null">
+                #{value,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.baodanyun.websocket.model.CCProperties">
+        update cc_properties
+        <set>
+            <if test="value != null">
+                value = #{value,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where ccName = #{ccname,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.baodanyun.websocket.model.CCProperties">
+    update cc_properties
+    set value = #{value,jdbcType=LONGVARCHAR}
+    where ccName = #{ccname,jdbcType=VARCHAR}
+  </update>
+</mapper>

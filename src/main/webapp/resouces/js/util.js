@@ -24,7 +24,7 @@ Utils = (function () {
                 if (json.success) {
                     callback(json);
                 } else {
-                    myUtils.visitorShowTip("获取数据出错");
+                    //myUtils.visitorShowTip("获取数据出错");
                 }
             },
             data: data,

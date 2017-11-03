@@ -13,8 +13,8 @@ import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.TransactionFactory;
-import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
+import org.mybatis.spring.transaction.SpringManagedTransactionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,6 +32,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.jms.Destination;
 import javax.sql.DataSource;
@@ -42,8 +43,11 @@ import java.util.Map;
  */
 @Component
 @EnableScheduling
+@EnableTransactionManagement(proxyTargetClass = true)
 @ComponentScan(basePackages =
         {"com.baodanyun.websocket.service",
+                "com.baodanyun.cc",
+                "com.baodanyun.websocket.alarm",
                 "com.baodanyun.websocket.controller",
                 "com.baodanyun.websocket.node",
                 "com.baodanyun.websocket.listener",
@@ -85,7 +89,7 @@ public class SpringConfig {
     public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws Exception {
         logger.info("sqlSessionFactory");
         TransactionFactory transactionFactory = new
-                JdbcTransactionFactory();
+                SpringManagedTransactionFactory();
 
         Environment environment =
                 new Environment("development", transactionFactory, dataSource);
@@ -108,7 +112,6 @@ public class SpringConfig {
 
     @Bean
     public JdbcTemplate jdbcTemplate(@Qualifier("dataSource") DataSource dataSource) {
-
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         jdbcTemplate.setDataSource(dataSource);
         return jdbcTemplate;
@@ -194,4 +197,5 @@ public class SpringConfig {
         MongoTemplate template = new MongoTemplate(mongoDbFactory);
         return template;
     }
+
 }

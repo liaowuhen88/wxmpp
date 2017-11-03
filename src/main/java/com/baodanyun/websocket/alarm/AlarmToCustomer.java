@@ -2,6 +2,10 @@ package com.baodanyun.websocket.alarm;
 
 import com.baodanyun.websocket.enums.AlarmTypeEnum;
 import com.baodanyun.websocket.event.AlarmEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
 
 /**
  * 客服链对象
@@ -10,10 +14,20 @@ import com.baodanyun.websocket.event.AlarmEvent;
  * @author hubo
  * @since 2017-06-29 18:57
  **/
+@Service
 public class AlarmToCustomer extends AlarmHandler {
+    @Autowired
+    private AlarmToDestroy alarmToDestroy;
 
-    private AlarmToCustomer(Builder builder) {
-        this.nextAlarmHandler = builder.nextHandler;
+    @Autowired
+    private AlarmToBoss alarmToBoss;
+
+    @PostConstruct
+    public void init() {
+        LOGGER.info("init customer");
+        //组合责任链
+        alarmToBoss.setNextAlarmHandler(alarmToDestroy);
+        setNextAlarmHandler(alarmToBoss);
     }
 
     @Override
@@ -39,26 +53,4 @@ public class AlarmToCustomer extends AlarmHandler {
                 getNextAlarmHandler().alarm(ruleTime, alarmInfo);
         }
     }
-
-    public static class Builder {
-        private AlarmHandler nextHandler;
-
-        public Builder() {
-
-        }
-
-        public Builder(AlarmHandler nextHandler) {
-            this.nextHandler = nextHandler;
-        }
-
-        public Builder nextHandler(AlarmHandler nextHandler) {
-            this.nextHandler = nextHandler;
-            return this;
-        }
-
-        public AlarmToCustomer build() {
-            return new AlarmToCustomer(this);
-        }
-    }
-
 }

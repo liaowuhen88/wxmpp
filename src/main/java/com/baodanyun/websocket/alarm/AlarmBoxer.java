@@ -9,6 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.jivesoftware.smack.packet.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,23 +21,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author hubo
  * @since 2017-06-29 17:58
  **/
+@Service
 public class AlarmBoxer {
     protected static final Logger LOGGER = LoggerFactory.getLogger(AlarmBoxer.class);
     private final Map<String, AlarmEvent> alarmMap = new ConcurrentHashMap();
 
-    public static synchronized AlarmBoxer getInstance() {
-        return SingletonHolder.INSTANCE;
-    }
-
-    /**
-     * 内部类单例
-     */
-    private static class SingletonHolder {
-        private static final AlarmBoxer INSTANCE = new AlarmBoxer();
-    }
-
-    private AlarmBoxer() {
-    }
+    @Autowired
+    private AlarmToCustomer alarmToCustomer;
 
     /**
      * 以访客的jid为key存储
@@ -92,12 +84,7 @@ public class AlarmBoxer {
             AlarmEvent alarmInfo = map.getValue();
             long ruleTime = DateUtils.getMinutesDiff(alarmInfo.getVisitorSendMsgTime());//分钟差
 
-            //组合责任链
-            AlarmToDestroy destroy = new AlarmToDestroy();
-            AlarmToBoss boss = new AlarmToBoss.Builder().nextHandler(destroy).build();
-            AlarmToCustomer customer = new AlarmToCustomer.Builder().nextHandler(boss).build();
-
-            customer.alarm(ruleTime, alarmInfo); //告警
+            alarmToCustomer.alarm(ruleTime, alarmInfo); //告警
         }
     }
 }

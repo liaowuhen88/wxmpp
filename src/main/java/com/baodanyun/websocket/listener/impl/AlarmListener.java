@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jivesoftware.smack.packet.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -19,6 +20,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class AlarmListener extends AbstarctEventBusListener<AlarmEvent> implements EventBusListener<AlarmEvent> {
     private static Logger logger = LoggerFactory.getLogger(AlarmListener.class);
+
+    @Autowired
+    private AlarmBoxer alarmBoxer;
 
     @Override
     @Subscribe
@@ -45,10 +49,10 @@ public class AlarmListener extends AbstarctEventBusListener<AlarmEvent> implemen
 
         switch (alarmEvent.getAlarmEnum()) {
             case CUSTOMER:
-                AlarmBoxer.getInstance().remove(alarmEvent);
+                alarmBoxer.remove(alarmEvent);
                 break;
             case VISITOR:
-                AlarmBoxer.getInstance().put(alarmEvent);
+                alarmBoxer.put(alarmEvent);
                 break;
         }
 

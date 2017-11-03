@@ -17,15 +17,9 @@ public class TimerTaskService {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private boolean dealMsgSendControl = true;
-    @Autowired
-    private LastVisitorSendMessageService las;
 
     @Autowired
-    private XmppServer xmppServer;
-
-
-    @Autowired
-    private WebSocketService webSocketService;
+    private AlarmBoxer alarmBoxer;
 
     @Autowired
     private MsgConsumer msgConsumer;
@@ -82,7 +76,7 @@ public class TimerTaskService {
     public void alarmJob() {
         try {
             logger.info("开始计时告警");
-            AlarmBoxer.getInstance().doAlarmJob();
+            alarmBoxer.doAlarmJob();
         } catch (Exception e) {
             logger.error("error", "告警任务操作失败", e);
         }

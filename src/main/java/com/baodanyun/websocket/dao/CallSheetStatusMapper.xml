@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baodanyun.websocket.dao.CallSheetStatusMapper">
+    <resultMap id="BaseResultMap" type="com.baodanyun.websocket.model.CallSheetStatus">
+        <id column="CALL_SHEET_ID" property="callSheetId" jdbcType="VARCHAR"/>
+        <result column="oss_url" property="ossUrl" jdbcType="VARCHAR"/>
+        <result column="stutus" property="stutus" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    CALL_SHEET_ID, oss_url, stutus
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from cc_callsheetstatus
+        where CALL_SHEET_ID = #{callSheetId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from cc_callsheetstatus
+    where CALL_SHEET_ID = #{callSheetId,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.baodanyun.websocket.model.CallSheetStatus">
+    insert into cc_callsheetstatus (CALL_SHEET_ID, oss_url, stutus
+      )
+    values (#{callSheetId,jdbcType=VARCHAR}, #{ossUrl,jdbcType=VARCHAR}, #{stutus,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.baodanyun.websocket.model.CallSheetStatus">
+        insert into cc_callsheetstatus
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="callSheetId != null">
+                CALL_SHEET_ID,
+            </if>
+            <if test="ossUrl != null">
+                oss_url,
+            </if>
+            <if test="stutus != null">
+                stutus,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="callSheetId != null">
+                #{callSheetId,jdbcType=VARCHAR},
+            </if>
+            <if test="ossUrl != null">
+                #{ossUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="stutus != null">
+                #{stutus,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.baodanyun.websocket.model.CallSheetStatus">
+        update cc_callsheetstatus
+        <set>
+            <if test="ossUrl != null">
+                oss_url = #{ossUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="stutus != null">
+                stutus = #{stutus,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where CALL_SHEET_ID = #{callSheetId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.baodanyun.websocket.model.CallSheetStatus">
+    update cc_callsheetstatus
+    set oss_url = #{ossUrl,jdbcType=VARCHAR},
+      stutus = #{stutus,jdbcType=VARCHAR}
+    where CALL_SHEET_ID = #{callSheetId,jdbcType=VARCHAR}
+  </update>
+</mapper>

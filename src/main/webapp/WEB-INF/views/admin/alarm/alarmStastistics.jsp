@@ -36,6 +36,7 @@
                     <option value="hushuanyue">胡双月</option>
                     <option value="liuya">刘雅</option>
                     <option value="zhangchi">张弛</option>
+                    <option value="zhangfuliang">张福亮</option>
                 </select>
             </td>
             <td>查询开始时间</td>

@@ -2,6 +2,8 @@ package com.baodanyun.websocket.alarm;
 
 import com.baodanyun.websocket.enums.AlarmTypeEnum;
 import com.baodanyun.websocket.event.AlarmEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 
 /**
@@ -11,7 +13,11 @@ import com.baodanyun.websocket.event.AlarmEvent;
  * @author hubo
  * @since 2017-06-29 18:57
  **/
+@Service
 public class AlarmToDestroy extends AlarmHandler {
+
+    @Autowired
+    private AlarmBoxer alarmBoxer;
 
     @Override
     protected boolean isAlarm() {
@@ -27,7 +33,7 @@ public class AlarmToDestroy extends AlarmHandler {
     public void alarm(final long ruleTime, final AlarmEvent alarmInfo) {
 
         if (ruleTime >= AlarmTypeEnum.TYPE3.getMinute()) {
-            AlarmBoxer.getInstance().remove(alarmInfo); //清除此条任务
+            alarmBoxer.remove(alarmInfo); //清除此条任务
             alarmInfo.setAlarmTypeEnum(AlarmTypeEnum.TYPE3);
 
             super.processAlarm(alarmInfo);

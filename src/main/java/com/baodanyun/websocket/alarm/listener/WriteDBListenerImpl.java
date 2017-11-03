@@ -1,16 +1,15 @@
 package com.baodanyun.websocket.alarm.listener;
 
-import com.baodanyun.websocket.core.common.Common;
 import com.baodanyun.websocket.dao.AlarmLogMapper;
 import com.baodanyun.websocket.event.AlarmEvent;
 import com.baodanyun.websocket.model.AlarmLog;
-import com.baodanyun.websocket.util.SpringContextUtil;
 import com.baodanyun.websocket.util.XMPPUtil;
-import org.apache.commons.lang.StringUtils;
 import org.jivesoftware.smack.packet.Message;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
@@ -20,10 +19,13 @@ import java.util.Date;
  * @author hubo
  * @since 2017-06-30 15:40
  **/
+@Service("writeDBListener")
 public class WriteDBListenerImpl implements AlarmListener {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    private AlarmLogMapper alarmLogMapper = SpringContextUtil.getBean("alarmLogMapper", AlarmLogMapper.class);
+
+    @Autowired
+    private AlarmLogMapper alarmLogMapper;
 
     @Override
     public void alarm(AlarmEvent alarmInfo) {

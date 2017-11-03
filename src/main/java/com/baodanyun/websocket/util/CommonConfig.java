@@ -29,6 +29,10 @@ public class CommonConfig {
     public static final String MSG_SOURCE_WE_CHAT_PASSIVE = "010601"; //用户被动从微信进入
     public static final String MSG_SOURCE_kf = "0110"; //坐席客服回复用户消息
 
+    public static final String NORMAL_NOTDEAL = "011201"; //用户呼入未接事件
+    public static final String NORMAL_DEALING = "011202"; //用户呼入接通事件
+    public static final String DIALOUT_NOTDEAL = "011203"; //客服外呼未接事件
+    public static final String DIALOUT_DEALING = "011204"; //客服外呼接通事件
 
 
     // 缓存常量

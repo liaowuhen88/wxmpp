@@ -2,6 +2,7 @@ package com.baodanyun.websocket.alarm;
 
 import com.baodanyun.websocket.enums.AlarmTypeEnum;
 import com.baodanyun.websocket.event.AlarmEvent;
+import org.springframework.stereotype.Service;
 
 /**
  * Boss告警链
@@ -10,11 +11,8 @@ import com.baodanyun.websocket.event.AlarmEvent;
  * @author hubo
  * @since 2017-06-29 18:57
  **/
+@Service
 public class AlarmToBoss extends AlarmHandler {
-
-    private AlarmToBoss(Builder builder) {
-        this.nextAlarmHandler = builder.nextHandler;
-    }
 
     @Override
     protected boolean isAlarm() {
@@ -37,24 +35,6 @@ public class AlarmToBoss extends AlarmHandler {
         } else {
             if (getNextAlarmHandler() != null)
                 getNextAlarmHandler().alarm(ruleTime, alarmInfo);
-        }
-    }
-
-
-    public static class Builder {
-        private AlarmHandler nextHandler;
-
-        public Builder() {
-
-        }
-
-        public Builder nextHandler(AlarmHandler nextHandler) {
-            this.nextHandler = nextHandler;
-            return this;
-        }
-
-        public AlarmToBoss build() {
-            return new AlarmToBoss(this);
         }
     }
 }

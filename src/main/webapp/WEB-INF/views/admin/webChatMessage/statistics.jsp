@@ -36,6 +36,8 @@
                 <option value="hushuangyue@126xmpp">胡双月</option>
                 <option value="liuya@126xmpp">刘雅</option>
                 <option value="zhangchi@126xmpp">张弛</option>
+                <option value="zhangfuliang@126xmpp">张福亮</option>
+
             </select>
         </td>
         <td>查询开始时间</td>

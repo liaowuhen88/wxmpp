@@ -14,11 +14,9 @@ import java.util.concurrent.Executors;
  * @since 2017-06-30 15:42
  **/
 public class AlarmModels {
+    private static final ExecutorService executorService = Executors.newFixedThreadPool(2);
     private final Logger LOGGER = LoggerFactory.getLogger(AlarmModels.class);
-
     private Queue<AlarmListener> listeners = new ConcurrentLinkedDeque<>();
-
-    private ExecutorService executorService = Executors.newFixedThreadPool(2);
 
     public synchronized void addListener(AlarmListener listener) {
         listeners.add(listener);

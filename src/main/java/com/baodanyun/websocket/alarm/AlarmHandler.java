@@ -1,8 +1,7 @@
 package com.baodanyun.websocket.alarm;
 
+import com.baodanyun.websocket.alarm.listener.AlarmListener;
 import com.baodanyun.websocket.alarm.listener.AlarmModels;
-import com.baodanyun.websocket.alarm.listener.AlarmWechatListenerImpl;
-import com.baodanyun.websocket.alarm.listener.WriteDBListenerImpl;
 import com.baodanyun.websocket.event.AlarmEvent;
 import org.jivesoftware.smack.packet.Message;
 import org.joda.time.DateTime;
@@ -10,6 +9,9 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 /**
  * 告警责任链
@@ -17,27 +19,44 @@ import org.slf4j.LoggerFactory;
  * @author hubo
  * @since 2017-06-29 18:53
  **/
-public abstract class AlarmHandler {
+@Service
+public class AlarmHandler {
     protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-
     protected AlarmHandler nextAlarmHandler;
+    @Autowired
+    @Qualifier("writeDBListener")
+    private AlarmListener writeDBListener;
+    @Autowired
+    @Qualifier("alarmWechatListener")
+    private AlarmListener alarmWechatListener;
+    @Autowired
+    @Qualifier("alarmSmsListener")
+    private AlarmListener alarmSmsListener;
 
     protected AlarmHandler getNextAlarmHandler() {
         return nextAlarmHandler;
     }
 
+    public void setNextAlarmHandler(AlarmHandler nextAlarmHandler) {
+        this.nextAlarmHandler = nextAlarmHandler;
+    }
 
     /**
      * 告警
      *
      * @param ruleTime 规则时间
      */
-    protected abstract void alarm(final long ruleTime, final AlarmEvent alarmInfo);
+    protected void alarm(final long ruleTime, final AlarmEvent alarmInfo) {
+    }
+
+    ;
 
     /**
      * 是否告警
      */
-    protected abstract boolean isAlarm();
+    protected boolean isAlarm() {
+        return false;
+    }
 
     /**
      * 告警业务
@@ -50,10 +69,11 @@ public abstract class AlarmHandler {
         this.printLong(alarmInfo);
 
         AlarmModels models = new AlarmModels();
-        models.addListener(new WriteDBListenerImpl()); //记录到库
+        models.addListener(writeDBListener); //记录到库
 
         if (isAlarm()) {
-            models.addListener(new AlarmWechatListenerImpl());//微信告警
+            models.addListener(alarmWechatListener);//微信告警
+            models.addListener(alarmSmsListener);//短信告警
         }
 
         models.executeAlarm(alarmInfo);

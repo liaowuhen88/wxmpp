@@ -1,429 +1,428 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.baodanyun</groupId>
-	<artifactId>kf</artifactId>
-	<packaging>war</packaging>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>wxmpp Maven Webapp</name>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.baodanyun</groupId>
+    <artifactId>kf</artifactId>
+    <packaging>war</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>wxmpp Maven Webapp</name>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<xmpp.username>wxrobot</xmpp.username>
-		<xmpp.userpass>1234</xmpp.userpass>
-		<tomcat.manager.host>localhost:8080</tomcat.manager.host>
-		<weixin.appid>wxabe98902520de69c</weixin.appid>
-		<spring.version>4.3.5.RELEASE</spring.version>
-		<org.springframework-version>4.0.0.RELEASE</org.springframework-version>
-		<guava.version>19.0</guava.version>
-		<gson.version>2.2</gson.version>
-		<druid.version>1.0.16</druid.version>
-		<fastjson.version>1.2.14</fastjson.version>
-		<version.suffix>1.0.0-SNAPSHOT</version.suffix>
-		<activemq.version>5.12.1</activemq.version>
-	</properties>
-	<profiles>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <xmpp.username>wxrobot</xmpp.username>
+        <xmpp.userpass>1234</xmpp.userpass>
+        <tomcat.manager.host>localhost:8080</tomcat.manager.host>
+        <weixin.appid>wxabe98902520de69c</weixin.appid>
+        <org.springframework-version>4.0.0.RELEASE</org.springframework-version>
+        <guava.version>19.0</guava.version>
+        <gson.version>2.2</gson.version>
+        <druid.version>1.0.16</druid.version>
+        <fastjson.version>1.2.14</fastjson.version>
+        <version.suffix>1.0.0-SNAPSHOT</version.suffix>
+        <activemq.version>5.12.1</activemq.version>
+    </properties>
+    <profiles>
 
-		<profile>
-			<id>dev</id>
-			<properties>
-				<bdy.env>dev</bdy.env>
-				<log4j.level>info</log4j.level>
-				<oss.upload>http://101.200.87.16:9080</oss.upload>
-				<open.msg.debug>true</open.msg.debug>
-				<user.info.interface>http://10.3.2.124:8059/tjhr</user.info.interface>
-				<user.info.appKey><![CDATA[_(&%#!_L]]></user.info.appKey>
-				<user.info.appSecret>hr@$^*</user.info.appSecret>
-				<!-- mall order interface  -->
-				<mall.info.order>http://localhost/baodan/api/orderAll</mall.info.order>
-				<cache.url>101.200.87.16</cache.url>
-				<cache.port>11211</cache.port>
-				<xmpp.ip>10.3.2.124</xmpp.ip>
-				<xmpp.port>5222</xmpp.port>
-				<xmpp.domain>126xmpp</xmpp.domain>
-				<weiXin.callback>http://localhost:8095</weiXin.callback>
-				<jdbc_driverClassName>com.mysql.jdbc.Driver</jdbc_driverClassName>
-				<jdbc_username>root</jdbc_username>
-				<jdbc_password>banma123</jdbc_password>
-				<jdbc_url>
-					<![CDATA[jdbc:mysql://10.3.2.123:3306/openfire?useUnicode=true&amp;characterEncoding=UTF-8]]></jdbc_url>
-				<!--客服总台jid-->
-				<control.id>zwv11132</control.id>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <bdy.env>dev</bdy.env>
+                <log4j.level>info</log4j.level>
+                <oss.upload>http://101.200.87.16:9080</oss.upload>
+                <open.msg.debug>true</open.msg.debug>
+                <user.info.interface>http://10.3.2.124:8059/tjhr</user.info.interface>
+                <user.info.appKey><![CDATA[_(&%#!_L]]></user.info.appKey>
+                <user.info.appSecret>hr@$^*</user.info.appSecret>
+                <!-- mall order interface  -->
+                <mall.info.order>http://localhost/baodan/api/orderAll</mall.info.order>
+                <cache.url>101.200.87.16</cache.url>
+                <cache.port>11211</cache.port>
+                <xmpp.ip>10.3.2.124</xmpp.ip>
+                <xmpp.port>5222</xmpp.port>
+                <xmpp.domain>126xmpp</xmpp.domain>
+                <weiXin.callback>http://localhost:8095</weiXin.callback>
+                <jdbc_driverClassName>com.mysql.jdbc.Driver</jdbc_driverClassName>
+                <jdbc_username>root</jdbc_username>
+                <jdbc_password>banma123</jdbc_password>
+                <jdbc_url>
+                    <![CDATA[jdbc:mysql://10.3.2.123:3306/openfire?useUnicode=true&amp;characterEncoding=UTF-8]]></jdbc_url>
+                <!--客服总台jid-->
+                <control.id>zwv11132</control.id>
 
-				<!-- mq 地址-->
-				<broker.url>tcp://101.200.87.16:61616</broker.url>
+                <!-- mq 地址-->
+                <broker.url>tcp://101.200.87.16:61616</broker.url>
 
-				<!--mongodb配置-->
-				<mongodb.host>10.3.2.124</mongodb.host>
-				<mongodb.port>27017</mongodb.port>
-				<mongodb.dbname>hubo</mongodb.dbname>
-				<mongodb.username>hubo</mongodb.username>
-				<mongodb.password>123456</mongodb.password>
-			</properties>
-		</profile>
+                <!--mongodb配置-->
+                <mongodb.host>10.3.2.124</mongodb.host>
+                <mongodb.port>27017</mongodb.port>
+                <mongodb.dbname>hubo</mongodb.dbname>
+                <mongodb.username>hubo</mongodb.username>
+                <mongodb.password>123456</mongodb.password>
+            </properties>
+        </profile>
 
-		<profile>
-			<id>test</id>
-			<properties>
-				<bdy.env>test</bdy.env>
-				<log4j.level>info</log4j.level>
-				<oss.upload>http://101.200.87.16:9080</oss.upload>
-				<open.msg.debug>true</open.msg.debug>
-				<user.info.interface>http://test2.17doubao.com/hrtest</user.info.interface>
-				<user.info.appKey><![CDATA[_(&%#!_L]]></user.info.appKey>
-				<user.info.appSecret>hr@$^*</user.info.appSecret>
-				<!-- mall order interface  -->
-				<mall.info.order>http://localhost/baodan/api/orderAll</mall.info.order>
-				<cache.url>101.200.87.16</cache.url>
-				<cache.port>11211</cache.port>
-				<xmpp.ip>101.200.87.16</xmpp.ip>
-				<xmpp.port>5222</xmpp.port>
-				<xmpp.domain>126xmpp</xmpp.domain>
-				<weiXin.callback>https://test.17doubao.com/easemob</weiXin.callback>
+        <profile>
+            <id>test</id>
+            <properties>
+                <bdy.env>test</bdy.env>
+                <log4j.level>info</log4j.level>
+                <oss.upload>http://101.200.87.16:9080</oss.upload>
+                <open.msg.debug>true</open.msg.debug>
+                <user.info.interface>http://test2.17doubao.com/hrtest</user.info.interface>
+                <user.info.appKey><![CDATA[_(&%#!_L]]></user.info.appKey>
+                <user.info.appSecret>hr@$^*</user.info.appSecret>
+                <!-- mall order interface  -->
+                <mall.info.order>http://localhost/baodan/api/orderAll</mall.info.order>
+                <cache.url>101.200.87.16</cache.url>
+                <cache.port>11211</cache.port>
+                <xmpp.ip>101.200.87.16</xmpp.ip>
+                <xmpp.port>5222</xmpp.port>
+                <xmpp.domain>126xmpp</xmpp.domain>
+                <weiXin.callback>https://test.17doubao.com/easemob</weiXin.callback>
 
-				<jdbc_driverClassName>com.mysql.jdbc.Driver</jdbc_driverClassName>
-				<jdbc_username>xmpp</jdbc_username>
-				<jdbc_password>vdVyS3jRzQGhPcdEU7EM</jdbc_password>
-				<jdbc_url>
-					<![CDATA[jdbc:mysql://rm-2ze15w77o950l031o.mysql.rds.aliyuncs.com:3306/openfire_test?useUnicode=true&amp;characterEncoding=UTF-8]]></jdbc_url>
-				<!--客服总台jid-->
-				<control.id>zwv11132</control.id>
-				<!-- mq 地址-->
-				<broker.url>tcp://101.200.87.16:61616</broker.url>
+                <jdbc_driverClassName>com.mysql.jdbc.Driver</jdbc_driverClassName>
+                <jdbc_username>xmpp</jdbc_username>
+                <jdbc_password>vdVyS3jRzQGhPcdEU7EM</jdbc_password>
+                <jdbc_url>
+                    <![CDATA[jdbc:mysql://rm-2ze15w77o950l031o.mysql.rds.aliyuncs.com:3306/openfire_test?useUnicode=true&amp;characterEncoding=UTF-8]]></jdbc_url>
+                <!--客服总台jid-->
+                <control.id>zwv11132</control.id>
+                <!-- mq 地址-->
+                <broker.url>tcp://101.200.87.16:61616</broker.url>
 
-				<!--mongodb配置-->
-				<mongodb.host>0.0.0.0</mongodb.host>
-				<mongodb.port>27017</mongodb.port>
-				<mongodb.dbname>eventAnalysis</mongodb.dbname>
-				<mongodb.username>test</mongodb.username>
-				<mongodb.password>123456</mongodb.password>
-			</properties>
-		</profile>
+                <!--mongodb配置-->
+                <mongodb.host>0.0.0.0</mongodb.host>
+                <mongodb.port>27017</mongodb.port>
+                <mongodb.dbname>eventAnalysis</mongodb.dbname>
+                <mongodb.username>test</mongodb.username>
+                <mongodb.password>123456</mongodb.password>
+            </properties>
+        </profile>
 
 
-		<profile>
-			<id>online</id>
-			<properties>
-				<bdy.env>online</bdy.env>
-				<log4j.level>info</log4j.level>
-				<oss.upload>http://upload.17doubao.com</oss.upload>
-				<open.msg.debug>true</open.msg.debug>
-				<user.info.interface>https://b.17doubao.com</user.info.interface>
-				<user.info.appKey><![CDATA[_(&%#!_L]]></user.info.appKey>
-				<user.info.appSecret>hr@$^*</user.info.appSecret>
-				<!-- mall order interface  -->
-				<mall.info.order>http://localhost/baodan/api/orderAll</mall.info.order>
-				<!--<cache.url>4af035dc9c6148a1.m.cnbjalicm12pub001.ocs.aliyuncs.com</cache.url>-->
-				<cache.url>4af035dc9c6148a1.m.cnbjalicm12pub001.ocs.aliyuncs.com</cache.url>
-				<cache.port>11211</cache.port>
-				<xmpp.ip>101.201.211.108</xmpp.ip>
-				<xmpp.port>5222</xmpp.port>
-				<xmpp.domain>126xmpp</xmpp.domain>
-				<weiXin.callback>http://notify.17doubao.cn/easemob</weiXin.callback>
-				<jdbc_driverClassName>com.mysql.jdbc.Driver</jdbc_driverClassName>
+        <profile>
+            <id>online</id>
+            <properties>
+                <bdy.env>online</bdy.env>
+                <log4j.level>info</log4j.level>
+                <oss.upload>http://upload.17doubao.com</oss.upload>
+                <open.msg.debug>true</open.msg.debug>
+                <user.info.interface>https://b.17doubao.com</user.info.interface>
+                <user.info.appKey><![CDATA[_(&%#!_L]]></user.info.appKey>
+                <user.info.appSecret>hr@$^*</user.info.appSecret>
+                <!-- mall order interface  -->
+                <mall.info.order>http://localhost/baodan/api/orderAll</mall.info.order>
+                <!--<cache.url>4af035dc9c6148a1.m.cnbjalicm12pub001.ocs.aliyuncs.com</cache.url>-->
+                <cache.url>4af035dc9c6148a1.m.cnbjalicm12pub001.ocs.aliyuncs.com</cache.url>
+                <cache.port>11211</cache.port>
+                <xmpp.ip>101.201.211.108</xmpp.ip>
+                <xmpp.port>5222</xmpp.port>
+                <xmpp.domain>126xmpp</xmpp.domain>
+                <weiXin.callback>http://notify.17doubao.cn/easemob</weiXin.callback>
+                <jdbc_driverClassName>com.mysql.jdbc.Driver</jdbc_driverClassName>
 
-				<jdbc_username>xmpp</jdbc_username>
-				<jdbc_password>vdVyS3jRzQGhPcdEU7EM</jdbc_password>
-				<jdbc_url>
-					<![CDATA[jdbc:mysql://rm-2ze15w77o950l031o.mysql.rds.aliyuncs.com/openfire?useUnicode=true&amp;characterEncoding=UTF-8]]></jdbc_url>
+                <jdbc_username>xmpp</jdbc_username>
+                <jdbc_password>vdVyS3jRzQGhPcdEU7EM</jdbc_password>
+                <jdbc_url>
+                    <![CDATA[jdbc:mysql://rm-2ze15w77o950l031o.mysql.rds.aliyuncs.com/openfire?useUnicode=true&amp;characterEncoding=UTF-8]]></jdbc_url>
 
-				<!--客服总台jid-->
-				<control.id>maqiumeng</control.id>
-				<!-- mq 地址-->
-				<broker.url>tcp://10.170.195.14:61616</broker.url>
+                <!--客服总台jid-->
+                <control.id>maqiumeng</control.id>
+                <!-- mq 地址-->
+                <broker.url>tcp://10.170.195.14:61616</broker.url>
 
-				<!--mongodb配置-->
-				<mongodb.host>dds-2ze0de088cde9e741.mongodb.rds.aliyuncs.com</mongodb.host>
-				<mongodb.port>3717</mongodb.port>
-				<mongodb.dbname>eventAnalysis</mongodb.dbname>
-				<mongodb.username>doubao</mongodb.username>
-				<mongodb.password>doubao123</mongodb.password>
-			</properties>
-		</profile>
+                <!--mongodb配置-->
+                <mongodb.host>dds-2ze0de088cde9e741.mongodb.rds.aliyuncs.com</mongodb.host>
+                <mongodb.port>3717</mongodb.port>
+                <mongodb.dbname>eventAnalysis</mongodb.dbname>
+                <mongodb.username>doubao</mongodb.username>
+                <mongodb.password>doubao123</mongodb.password>
+            </properties>
+        </profile>
 
-	</profiles>
-	<repositories>
-		<repository>
-			<id>thirdparty</id>
-			<url>http://repo.baodanyun-inc.com:8011/nexus/content/repositories/doubao-releases</url>
-		</repository>
+    </profiles>
+    <repositories>
+        <repository>
+            <id>thirdparty</id>
+            <url>http://repo.baodanyun-inc.com:8011/nexus/content/repositories/doubao-releases</url>
+        </repository>
 
-		<repository>
-			<id>snapshots</id>
-			<url>http://repo.baodanyun-inc.com:8011/nexus/content/repositories/doubao-snapshots</url>
-		</repository>
-	</repositories>
+        <repository>
+            <id>snapshots</id>
+            <url>http://repo.baodanyun-inc.com:8011/nexus/content/repositories/doubao-snapshots</url>
+        </repository>
+    </repositories>
 
-	<build>
-		<finalName>kf</finalName>
+    <build>
+        <finalName>kf</finalName>
 
-		<resources>
-			<resource>
-				<directory>${basedir}/src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-			<resource>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**/*.xml</include>
-				</includes>
-				<filtering>true</filtering>
-			</resource>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
 
-		</resources>
+        </resources>
 
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
 
-			</plugin>
+            </plugin>
 
-			<plugin>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<version>9.3.10.v20160621</version>
-				<configuration>
-					<httpConnector>
-						<port>9910</port>
-					</httpConnector>
-					<stopKey>shutdown</stopKey>
-					<stopPort>9966</stopPort>
-					<scanIntervalSeconds>2</scanIntervalSeconds>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.3.10.v20160621</version>
+                <configuration>
+                    <httpConnector>
+                        <port>9910</port>
+                    </httpConnector>
+                    <stopKey>shutdown</stopKey>
+                    <stopPort>9966</stopPort>
+                    <scanIntervalSeconds>2</scanIntervalSeconds>
 
-				</configuration>
-			</plugin>
+                </configuration>
+            </plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.18.1</version>
-				<configuration>
-					<skipTests>true</skipTests>
-				</configuration>
-			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.18.1</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
 
-			<!-- tomcat部署 -->
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<url>http://${tomcat.manager.host}/manager/text</url>
-					<username>deploy_user</username>
-					<password>17doubao.deploy.123</password>
-					<path>/${project.build.finalName}</path>
-				</configuration>
-			</plugin>
+            <!-- tomcat部署 -->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <url>http://${tomcat.manager.host}/manager/text</url>
+                    <username>deploy_user</username>
+                    <password>17doubao.deploy.123</password>
+                    <path>/${project.build.finalName}</path>
+                </configuration>
+            </plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.18.1</version>
-				<configuration>
-					<skipTests>true</skipTests>
-				</configuration>
-			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.18.1</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
 
-		</plugins>
-	</build>
+        </plugins>
+    </build>
 
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- update to servlet 3 -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-web-api</artifactId>
-			<version>6.0</version>
-			<type>jar</type>
-			<scope>provided</scope>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- update to servlet 3 -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>6.0</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.12</version>
-		</dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.12</version>
+        </dependency>
 
-		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-			<version>1.9</version>
-		</dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.9</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.4</version>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>4.1</version>
         </dependency>
 
-		<dependency>
-			<artifactId>xmpp</artifactId>
-			<groupId>smack-core</groupId>
-			<scope>system</scope>
-			<version>4.1.7</version>
-			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/smack-core-4.1.7.jar</systemPath>
-		</dependency>
+        <dependency>
+            <artifactId>xmpp</artifactId>
+            <groupId>smack-core</groupId>
+            <scope>system</scope>
+            <version>4.1.7</version>
+            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/smack-core-4.1.7.jar</systemPath>
+        </dependency>
 
-		<dependency>
-			<artifactId>xmpp</artifactId>
-			<groupId>smack-tcp</groupId>
-			<scope>system</scope>
-			<version>4.1.7</version>
-			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/smack-tcp-4.1.7.jar</systemPath>
-		</dependency>
+        <dependency>
+            <artifactId>xmpp</artifactId>
+            <groupId>smack-tcp</groupId>
+            <scope>system</scope>
+            <version>4.1.7</version>
+            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/smack-tcp-4.1.7.jar</systemPath>
+        </dependency>
 
-		<dependency>
-			<artifactId>xmpp</artifactId>
-			<groupId>smack-ext</groupId>
-			<scope>system</scope>
-			<version>4.1.7</version>
-			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/smack-extensions-4.1.7.jar</systemPath>
-		</dependency>
+        <dependency>
+            <artifactId>xmpp</artifactId>
+            <groupId>smack-ext</groupId>
+            <scope>system</scope>
+            <version>4.1.7</version>
+            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/smack-extensions-4.1.7.jar</systemPath>
+        </dependency>
 
-		<dependency>
-			<artifactId>xmpp</artifactId>
-			<groupId>smack-java7</groupId>
-			<scope>system</scope>
-			<version>4.1.7</version>
-			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/smack-java7-4.1.7.jar</systemPath>
-		</dependency>
+        <dependency>
+            <artifactId>xmpp</artifactId>
+            <groupId>smack-java7</groupId>
+            <scope>system</scope>
+            <version>4.1.7</version>
+            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/smack-java7-4.1.7.jar</systemPath>
+        </dependency>
 
-		<dependency>
-			<artifactId>xmpp</artifactId>
-			<groupId>smack-debug</groupId>
-			<scope>system</scope>
-			<version>4.1.7</version>
-			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/smack-debug-4.1.7.jar</systemPath>
-		</dependency>
-		<dependency>
-			<artifactId>httpclient</artifactId>
-			<groupId>org.apache</groupId>
-			<scope>system</scope>
-			<version>4.5.2</version>
-			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/httpclient-4.5.2.jar</systemPath>
-		</dependency>
-		<dependency>
-			<artifactId>httpcore</artifactId>
-			<groupId>org.apache</groupId>
-			<scope>system</scope>
-			<version>4.4.4</version>
-			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/httpcore-4.4.4.jar</systemPath>
-		</dependency>
-		<dependency>
-			<artifactId>commons-lang</artifactId>
-			<groupId>org.apache</groupId>
-			<scope>system</scope>
-			<version>2.4</version>
-			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/commons-lang-2.4.jar</systemPath>
-		</dependency>
+        <dependency>
+            <artifactId>xmpp</artifactId>
+            <groupId>smack-debug</groupId>
+            <scope>system</scope>
+            <version>4.1.7</version>
+            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/smack-debug-4.1.7.jar</systemPath>
+        </dependency>
+        <dependency>
+            <artifactId>httpclient</artifactId>
+            <groupId>org.apache</groupId>
+            <scope>system</scope>
+            <version>4.5.2</version>
+            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/httpclient-4.5.2.jar</systemPath>
+        </dependency>
+        <dependency>
+            <artifactId>httpcore</artifactId>
+            <groupId>org.apache</groupId>
+            <scope>system</scope>
+            <version>4.4.4</version>
+            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/httpcore-4.4.4.jar</systemPath>
+        </dependency>
+        <dependency>
+            <artifactId>commons-lang</artifactId>
+            <groupId>org.apache</groupId>
+            <scope>system</scope>
+            <version>2.4</version>
+            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/commons-lang-2.4.jar</systemPath>
+        </dependency>
 
-		<dependency>
-			<groupId>com.whalin</groupId>
-			<artifactId>Memcached-Java-Client</artifactId>
-			<version>3.0.2</version>
-		</dependency>
-<!-- 
-		<dependency>
-			<artifactId>xmpp</artifactId>
-			<groupId>smack-sasl-prov</groupId>
-			<scope>system</scope>
-			<version>4.1.7</version>
-			<systemPath>${basedir}/lib/smack-sasl-provided-4.1.7.jar</systemPath>
-		</dependency>
+        <dependency>
+            <groupId>com.whalin</groupId>
+            <artifactId>Memcached-Java-Client</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <!--
+                <dependency>
+                    <artifactId>xmpp</artifactId>
+                    <groupId>smack-sasl-prov</groupId>
+                    <scope>system</scope>
+                    <version>4.1.7</version>
+                    <systemPath>${basedir}/lib/smack-sasl-provided-4.1.7.jar</systemPath>
+                </dependency>
 
-		<dependency>
-			<artifactId>xmpp</artifactId>
-			<groupId>smack-sasl-javax</groupId>
-			<scope>system</scope>
-			<version>4.1.7</version>
-			<systemPath>${basedir}/lib/smack-sasl-javax-4.1.7.jar</systemPath>
-		</dependency>
- -->
+                <dependency>
+                    <artifactId>xmpp</artifactId>
+                    <groupId>smack-sasl-javax</groupId>
+                    <scope>system</scope>
+                    <version>4.1.7</version>
+                    <systemPath>${basedir}/lib/smack-sasl-javax-4.1.7.jar</systemPath>
+                </dependency>
+         -->
 
-		<dependency>
-			<groupId>javax.servlet.jsp.jstl</groupId>
-			<artifactId>jstl-api</artifactId>
-			<version>1.2</version>
-		</dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp.jstl</groupId>
+            <artifactId>jstl-api</artifactId>
+            <version>1.2</version>
+        </dependency>
 
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-			<version>1.2</version>
-		</dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
 
-		<dependency>
-			<artifactId>xmpp</artifactId>
-			<groupId>smack-im</groupId>
-			<scope>system</scope>
-			<version>4.1.7</version>
-			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/smack-im-4.1.7.jar</systemPath>
-		</dependency>
+        <dependency>
+            <artifactId>xmpp</artifactId>
+            <groupId>smack-im</groupId>
+            <scope>system</scope>
+            <version>4.1.7</version>
+            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/smack-im-4.1.7.jar</systemPath>
+        </dependency>
 
-		<dependency>
-			<artifactId>xmpp</artifactId>
-			<groupId>smack-xpp3</groupId>
-			<scope>system</scope>
-			<version>1.1.4</version>
-			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/xpp3-1.1.4c.jar</systemPath>
-		</dependency>
+        <dependency>
+            <artifactId>xmpp</artifactId>
+            <groupId>smack-xpp3</groupId>
+            <scope>system</scope>
+            <version>1.1.4</version>
+            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/xpp3-1.1.4c.jar</systemPath>
+        </dependency>
 
-		<dependency>
-			<groupId>org.jxmpp</groupId>
-			<artifactId>jxmpp-core</artifactId>
-			<version>0.4.2</version>
-		</dependency>
+        <dependency>
+            <groupId>org.jxmpp</groupId>
+            <artifactId>jxmpp-core</artifactId>
+            <version>0.4.2</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.jxmpp</groupId>
-			<artifactId>jxmpp-util-cache</artifactId>
-			<version>0.4.2</version>
-		</dependency>
+        <dependency>
+            <groupId>org.jxmpp</groupId>
+            <artifactId>jxmpp-util-cache</artifactId>
+            <version>0.4.2</version>
+        </dependency>
 
 
-		<!-- add spring4 -->
+        <!-- add spring4 -->
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${org.springframework-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${org.springframework-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${org.springframework-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-websocket</artifactId>
-			<version>${org.springframework-version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-websocket</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
         <dependency>
@@ -434,73 +433,73 @@
 
 
         <!-- For SockJS -->
-		<!-- http://jira.codehaus.org/browse/JACKSON-884 -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.2.1</version>
-		</dependency>
+        <!-- http://jira.codehaus.org/browse/JACKSON-884 -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.2.1</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>1.6.4</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.6.4</version>
-			<scope>runtime</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>1.6.4</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.6.4</version>
+            <scope>runtime</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.1</version>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.servlet</groupId>
-					<artifactId>servlet-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>tomcat-websocket</artifactId>
-			<version>8.0.0-RC5</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>tomcat-coyote</artifactId>
-			<version>8.0.0-RC5</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty.websocket</groupId>
-			<artifactId>websocket-client</artifactId>
-			<version>9.0.6.v20130930</version>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-websocket</artifactId>
+            <version>8.0.0-RC5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-coyote</artifactId>
+            <version>8.0.0-RC5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-client</artifactId>
+            <version>9.0.6.v20130930</version>
+            <scope>test</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>${guava.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>${gson.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
@@ -508,176 +507,181 @@
             <version>5.1.34</version>
         </dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.jdom/jdom -->
-		<dependency>
-			<groupId>org.jdom</groupId>
-			<artifactId>jdom</artifactId>
-			<version>1.1.3</version>
-		</dependency>
+        <!-- https://mvnrepository.com/artifact/org.jdom/jdom -->
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom</artifactId>
+            <version>1.1.3</version>
+        </dependency>
 
-		<!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
-		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<version>1.2.2</version>
-		</dependency>
+        <!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.2.2</version>
+        </dependency>
 
-		<!--<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-			<version>${fastjson.version}</version>
-		</dependency>-->
-
-
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>druid</artifactId>
-			<version>${druid.version}</version>
-		</dependency>
+        <!--<dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>-->
 
 
-		<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
-		<dependency>
-			<groupId>org.mybatis</groupId>
-			<artifactId>mybatis</artifactId>
-			<version>3.2.1</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
-		<dependency>
-			<groupId>org.mybatis</groupId>
-			<artifactId>mybatis-spring</artifactId>
-			<version>1.3.0</version>
-		</dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
 
 
-		<!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${org.springframework-version}</version>
-		</dependency>
+        <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>1.3.0</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.10</version>
         </dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
-			<version>4.2.5.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>jdom</groupId>
-			<artifactId>jdom</artifactId>
-			<version>1.0</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jdom</groupId>
+            <artifactId>jdom</artifactId>
+            <version>1.0</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jms</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
 
-      <!--mq依赖jar包 -->
-		<!-- activeMQ  start-->
-		<dependency>
-			<groupId>org.apache.geronimo.specs</groupId>
-			<artifactId>geronimo-jms_1.1_spec</artifactId>
-			<version>1.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-client</artifactId>
-			<version>5.12.1</version>
-		</dependency>
+        <!--mq依赖jar包 -->
+        <!-- activeMQ  start-->
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-jms_1.1_spec</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+            <version>5.12.1</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-pool</artifactId>
-			<version>${activemq.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.2</version>
-		</dependency>
-		<dependency>
-			<groupId>com.whalin</groupId>
-			<artifactId>Memcached-Java-Client</artifactId>
-			<version>3.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>com.thetransactioncompany</groupId>
-			<artifactId>cors-filter</artifactId>
-			<version>2.4</version>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-pool</artifactId>
+            <version>${activemq.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.whalin</groupId>
+            <artifactId>Memcached-Java-Client</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.thetransactioncompany</groupId>
+            <artifactId>cors-filter</artifactId>
+            <version>2.4</version>
+        </dependency>
 
 
-		<!--activeMQ  end -->
-		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>2.9.9</version>
-		</dependency>
+        <!--activeMQ  end -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.9.9</version>
+        </dependency>
 
-		<!-- fasterxml end -->
-		<dependency>
-			<groupId>com.doubao.open</groupId>
-			<artifactId>doubao-open-client</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.doubao.open</groupId>
-					<artifactId>doubao-open-model</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+        <!-- fasterxml end -->
+        <dependency>
+            <groupId>com.doubao.open</groupId>
+            <artifactId>doubao-open-client</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.doubao.open</groupId>
+                    <artifactId>doubao-open-model</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.doubao.open</groupId>
+            <artifactId>doubao-open-model</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-mongodb</artifactId>
-			<version>1.10.6.RELEASE</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-tx</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-context</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-beans</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-expression</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<!-- <dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+            <version>1.10.6.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-tx</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-context</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-beans</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-expression</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--<dependency>
              <groupId>org.springframework.data</groupId>
              <artifactId>spring-data-commons</artifactId>
              <version>1.13.6.RELEASE</version>
          </dependency>-->
-		<dependency>
-			<groupId>org.mongodb</groupId>
-			<artifactId>mongo-java-driver</artifactId>
-			<version>2.14.2</version>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>2.14.2</version>
+        </dependency>
+    </dependencies>
 
 </project>

@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baodanyun.websocket.dao.CallSheetMapper">
+    <resultMap id="BaseResultMap" type="com.baodanyun.websocket.model.CallSheet">
+        <id column="_id" property="_id" jdbcType="VARCHAR"/>
+        <result column="CALL_SHEET_ID" property="CALL_SHEET_ID" jdbcType="VARCHAR"/>
+        <result column="CALL_NO" property="CALL_NO" jdbcType="VARCHAR"/>
+        <result column="CALLED_NO" property="CALLED_NO" jdbcType="VARCHAR"/>
+        <result column="END_TIME" property="END_TIME" jdbcType="VARCHAR"/>
+        <result column="CONNECT_TYPE" property="CONNECT_TYPE" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="STATUS" jdbcType="VARCHAR"/>
+        <result column="DISPOSAL_AGENT" property="DISPOSAL_AGENT" jdbcType="VARCHAR"/>
+        <result column="BEGIN_TIME" property="BEGIN_TIME" jdbcType="VARCHAR"/>
+        <result column="OFFERING_TIME" property="OFFERING_TIME" jdbcType="VARCHAR"/>
+        <result column="RECORD_FILE_NAME" property="RECORD_FILE_NAME" jdbcType="VARCHAR"/>
+        <result column="CUSTOMER_NAME" property="CUSTOMER_NAME" jdbcType="VARCHAR"/>
+        <result column="REF_CALL_SHEET_ID" property="REF_CALL_SHEET_ID" jdbcType="VARCHAR"/>
+        <result column="PBX" property="PBX" jdbcType="VARCHAR"/>
+        <result column="QUEUE_NAME" property="QUEUE_NAME" jdbcType="VARCHAR"/>
+        <result column="FILE_SERVER" property="FILE_SERVER" jdbcType="VARCHAR"/>
+        <result column="PROVINCE" property="PROVINCE" jdbcType="VARCHAR"/>
+        <result column="DISTRICT" property="DISTRICT" jdbcType="VARCHAR"/>
+        <result column="DISTRICT_CODE" property="DISTRICT_CODE" jdbcType="VARCHAR"/>
+        <result column="KEY_TAG" property="KEY_TAG" jdbcType="VARCHAR"/>
+        <result column="CALL_TIME_LENGTH" property="CALL_TIME_LENGTH" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    _id, CALL_SHEET_ID, CALL_NO, CALLED_NO, END_TIME, CONNECT_TYPE, STATUS, DISPOSAL_AGENT,
+    BEGIN_TIME, OFFERING_TIME, RECORD_FILE_NAME, CUSTOMER_NAME, REF_CALL_SHEET_ID, PBX,
+    QUEUE_NAME, FILE_SERVER, PROVINCE, DISTRICT, DISTRICT_CODE, KEY_TAG, CALL_TIME_LENGTH
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from cc_callsheet
+        where _id = #{_id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from cc_callsheet
+    where _id = #{_id,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.baodanyun.websocket.model.CallSheet">
+    insert into cc_callsheet (_id, CALL_SHEET_ID, CALL_NO,
+      CALLED_NO, END_TIME, CONNECT_TYPE,
+      STATUS, DISPOSAL_AGENT, BEGIN_TIME,
+      OFFERING_TIME, RECORD_FILE_NAME, CUSTOMER_NAME,
+      REF_CALL_SHEET_ID, PBX, QUEUE_NAME,
+      FILE_SERVER, PROVINCE, DISTRICT,
+      DISTRICT_CODE, KEY_TAG, CALL_TIME_LENGTH
+      )
+    values (#{_id,jdbcType=VARCHAR}, #{CALL_SHEET_ID,jdbcType=VARCHAR}, #{CALL_NO,jdbcType=VARCHAR},
+      #{CALLED_NO,jdbcType=VARCHAR}, #{END_TIME,jdbcType=VARCHAR}, #{CONNECT_TYPE,jdbcType=VARCHAR},
+      #{STATUS,jdbcType=VARCHAR}, #{DISPOSAL_AGENT,jdbcType=VARCHAR}, #{BEGIN_TIME,jdbcType=VARCHAR},
+      #{OFFERING_TIME,jdbcType=VARCHAR}, #{RECORD_FILE_NAME,jdbcType=VARCHAR}, #{CUSTOMER_NAME,jdbcType=VARCHAR},
+      #{REF_CALL_SHEET_ID,jdbcType=VARCHAR}, #{PBX,jdbcType=VARCHAR}, #{QUEUE_NAME,jdbcType=VARCHAR},
+      #{FILE_SERVER,jdbcType=VARCHAR}, #{PROVINCE,jdbcType=VARCHAR}, #{DISTRICT,jdbcType=VARCHAR},
+      #{DISTRICT_CODE,jdbcType=VARCHAR}, #{KEY_TAG,jdbcType=VARCHAR}, #{CALL_TIME_LENGTH,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.baodanyun.websocket.model.CallSheet">
+        insert into cc_callsheet
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="_id != null">
+                _id,
+            </if>
+            <if test="CALL_SHEET_ID != null">
+                CALL_SHEET_ID,
+            </if>
+            <if test="CALL_NO != null">
+                CALL_NO,
+            </if>
+            <if test="CALLED_NO != null">
+                CALLED_NO,
+            </if>
+            <if test="END_TIME != null">
+                END_TIME,
+            </if>
+            <if test="CONNECT_TYPE != null">
+                CONNECT_TYPE,
+            </if>
+            <if test="STATUS != null">
+                STATUS,
+            </if>
+            <if test="DISPOSAL_AGENT != null">
+                DISPOSAL_AGENT,
+            </if>
+            <if test="BEGIN_TIME != null">
+                BEGIN_TIME,
+            </if>
+            <if test="OFFERING_TIME != null">
+                OFFERING_TIME,
+            </if>
+            <if test="RECORD_FILE_NAME != null">
+                RECORD_FILE_NAME,
+            </if>
+            <if test="CUSTOMER_NAME != null">
+                CUSTOMER_NAME,
+            </if>
+            <if test="REF_CALL_SHEET_ID != null">
+                REF_CALL_SHEET_ID,
+            </if>
+            <if test="PBX != null">
+                PBX,
+            </if>
+            <if test="QUEUE_NAME != null">
+                QUEUE_NAME,
+            </if>
+            <if test="FILE_SERVER != null">
+                FILE_SERVER,
+            </if>
+            <if test="PROVINCE != null">
+                PROVINCE,
+            </if>
+            <if test="DISTRICT != null">
+                DISTRICT,
+            </if>
+            <if test="DISTRICT_CODE != null">
+                DISTRICT_CODE,
+            </if>
+            <if test="KEY_TAG != null">
+                KEY_TAG,
+            </if>
+            <if test="CALL_TIME_LENGTH != null">
+                CALL_TIME_LENGTH,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="_id != null">
+                #{_id,jdbcType=VARCHAR},
+            </if>
+            <if test="CALL_SHEET_ID != null">
+                #{CALL_SHEET_ID,jdbcType=VARCHAR},
+            </if>
+            <if test="CALL_NO != null">
+                #{CALL_NO,jdbcType=VARCHAR},
+            </if>
+            <if test="CALLED_NO != null">
+                #{CALLED_NO,jdbcType=VARCHAR},
+            </if>
+            <if test="END_TIME != null">
+                #{END_TIME,jdbcType=VARCHAR},
+            </if>
+            <if test="CONNECT_TYPE != null">
+                #{CONNECT_TYPE,jdbcType=VARCHAR},
+            </if>
+            <if test="STATUS != null">
+                #{STATUS,jdbcType=VARCHAR},
+            </if>
+            <if test="DISPOSAL_AGENT != null">
+                #{DISPOSAL_AGENT,jdbcType=VARCHAR},
+            </if>
+            <if test="BEGIN_TIME != null">
+                #{BEGIN_TIME,jdbcType=VARCHAR},
+            </if>
+            <if test="OFFERING_TIME != null">
+                #{OFFERING_TIME,jdbcType=VARCHAR},
+            </if>
+            <if test="RECORD_FILE_NAME != null">
+                #{RECORD_FILE_NAME,jdbcType=VARCHAR},
+            </if>
+            <if test="CUSTOMER_NAME != null">
+                #{CUSTOMER_NAME,jdbcType=VARCHAR},
+            </if>
+            <if test="REF_CALL_SHEET_ID != null">
+                #{REF_CALL_SHEET_ID,jdbcType=VARCHAR},
+            </if>
+            <if test="PBX != null">
+                #{PBX,jdbcType=VARCHAR},
+            </if>
+            <if test="QUEUE_NAME != null">
+                #{QUEUE_NAME,jdbcType=VARCHAR},
+            </if>
+            <if test="FILE_SERVER != null">
+                #{FILE_SERVER,jdbcType=VARCHAR},
+            </if>
+            <if test="PROVINCE != null">
+                #{PROVINCE,jdbcType=VARCHAR},
+            </if>
+            <if test="DISTRICT != null">
+                #{DISTRICT,jdbcType=VARCHAR},
+            </if>
+            <if test="DISTRICT_CODE != null">
+                #{DISTRICT_CODE,jdbcType=VARCHAR},
+            </if>
+            <if test="KEY_TAG != null">
+                #{KEY_TAG,jdbcType=VARCHAR},
+            </if>
+            <if test="CALL_TIME_LENGTH != null">
+                #{CALL_TIME_LENGTH,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.baodanyun.websocket.model.CallSheet">
+        update cc_callsheet
+        <set>
+            <if test="CALL_SHEET_ID != null">
+                CALL_SHEET_ID = #{CALL_SHEET_ID,jdbcType=VARCHAR},
+            </if>
+            <if test="CALL_NO != null">
+                CALL_NO = #{CALL_NO,jdbcType=VARCHAR},
+            </if>
+            <if test="CALLED_NO != null">
+                CALLED_NO = #{CALLED_NO,jdbcType=VARCHAR},
+            </if>
+            <if test="END_TIME != null">
+                END_TIME = #{END_TIME,jdbcType=VARCHAR},
+            </if>
+            <if test="CONNECT_TYPE != null">
+                CONNECT_TYPE = #{CONNECT_TYPE,jdbcType=VARCHAR},
+            </if>
+            <if test="STATUS != null">
+                STATUS = #{STATUS,jdbcType=VARCHAR},
+            </if>
+            <if test="DISPOSAL_AGENT != null">
+                DISPOSAL_AGENT = #{DISPOSAL_AGENT,jdbcType=VARCHAR},
+            </if>
+            <if test="BEGIN_TIME != null">
+                BEGIN_TIME = #{BEGIN_TIME,jdbcType=VARCHAR},
+            </if>
+            <if test="OFFERING_TIME != null">
+                OFFERING_TIME = #{OFFERING_TIME,jdbcType=VARCHAR},
+            </if>
+            <if test="RECORD_FILE_NAME != null">
+                RECORD_FILE_NAME = #{RECORD_FILE_NAME,jdbcType=VARCHAR},
+            </if>
+            <if test="CUSTOMER_NAME != null">
+                CUSTOMER_NAME = #{CUSTOMER_NAME,jdbcType=VARCHAR},
+            </if>
+            <if test="REF_CALL_SHEET_ID != null">
+                REF_CALL_SHEET_ID = #{REF_CALL_SHEET_ID,jdbcType=VARCHAR},
+            </if>
+            <if test="PBX != null">
+                PBX = #{PBX,jdbcType=VARCHAR},
+            </if>
+            <if test="QUEUE_NAME != null">
+                QUEUE_NAME = #{QUEUE_NAME,jdbcType=VARCHAR},
+            </if>
+            <if test="FILE_SERVER != null">
+                FILE_SERVER = #{FILE_SERVER,jdbcType=VARCHAR},
+            </if>
+            <if test="PROVINCE != null">
+                PROVINCE = #{PROVINCE,jdbcType=VARCHAR},
+            </if>
+            <if test="DISTRICT != null">
+                DISTRICT = #{DISTRICT,jdbcType=VARCHAR},
+            </if>
+            <if test="DISTRICT_CODE != null">
+                DISTRICT_CODE = #{DISTRICT_CODE,jdbcType=VARCHAR},
+            </if>
+            <if test="KEY_TAG != null">
+                KEY_TAG = #{KEY_TAG,jdbcType=VARCHAR},
+            </if>
+            <if test="CALL_TIME_LENGTH != null">
+                CALL_TIME_LENGTH = #{CALL_TIME_LENGTH,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where _id = #{_id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.baodanyun.websocket.model.CallSheet">
+    update cc_callsheet
+    set CALL_SHEET_ID = #{CALL_SHEET_ID,jdbcType=VARCHAR},
+      CALL_NO = #{CALL_NO,jdbcType=VARCHAR},
+      CALLED_NO = #{CALLED_NO,jdbcType=VARCHAR},
+      END_TIME = #{END_TIME,jdbcType=VARCHAR},
+      CONNECT_TYPE = #{CONNECT_TYPE,jdbcType=VARCHAR},
+      STATUS = #{STATUS,jdbcType=VARCHAR},
+      DISPOSAL_AGENT = #{DISPOSAL_AGENT,jdbcType=VARCHAR},
+      BEGIN_TIME = #{BEGIN_TIME,jdbcType=VARCHAR},
+      OFFERING_TIME = #{OFFERING_TIME,jdbcType=VARCHAR},
+      RECORD_FILE_NAME = #{RECORD_FILE_NAME,jdbcType=VARCHAR},
+      CUSTOMER_NAME = #{CUSTOMER_NAME,jdbcType=VARCHAR},
+      REF_CALL_SHEET_ID = #{REF_CALL_SHEET_ID,jdbcType=VARCHAR},
+      PBX = #{PBX,jdbcType=VARCHAR},
+      QUEUE_NAME = #{QUEUE_NAME,jdbcType=VARCHAR},
+      FILE_SERVER = #{FILE_SERVER,jdbcType=VARCHAR},
+      PROVINCE = #{PROVINCE,jdbcType=VARCHAR},
+      DISTRICT = #{DISTRICT,jdbcType=VARCHAR},
+      DISTRICT_CODE = #{DISTRICT_CODE,jdbcType=VARCHAR},
+      KEY_TAG = #{KEY_TAG,jdbcType=VARCHAR},
+      CALL_TIME_LENGTH = #{CALL_TIME_LENGTH,jdbcType=VARCHAR}
+    where _id = #{_id,jdbcType=VARCHAR}
+  </update>
+</mapper>
