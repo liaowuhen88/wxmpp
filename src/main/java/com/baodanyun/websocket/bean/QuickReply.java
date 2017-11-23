@@ -9,8 +9,17 @@ import java.sql.Date;
 public class QuickReply {
     private Integer id;
     private String message;
+    private String tag;
     private Date ct;
     private String addid;
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
     public Integer getId() {
         return id;

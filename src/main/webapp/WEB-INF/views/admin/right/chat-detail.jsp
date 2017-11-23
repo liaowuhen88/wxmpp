@@ -103,7 +103,8 @@
             <li class="chat-tab-bar active">
                 <a href="#home" data-toggle="tab">详细信息</a></li>
             <li class="chat-tab-bar">
-                <a href="#quickchat" data-toggle="tab">快捷回复</a>
+                <!--快捷回复 -->
+                <a href="#quickchat" data-toggle="tab" id="quick_chat_message">快捷回复</a>
             </li>
         </ul>
         <ul class="chat-tab-content">

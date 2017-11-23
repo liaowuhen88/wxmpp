@@ -4,9 +4,13 @@
         <input type="text" name="" value="" placeholder="请输入您要搜索到文字" id="quickReplyInput">
     </label>
 </div>
+
 <ul class="chat-tpl-tools">
     <li id="addQuickReplyBtn">新增快捷回复</li>
+    <li id="changeQuickReplyBtn">换一批推荐</li>
 </ul>
+
+
 <section class="chat-tpl">
     <ul class="chat-tpl-list" id="message_tpl">
         <li>您好，请问有什么可以帮您？
@@ -34,4 +38,14 @@
             </div>
         </li>
     </ul>
+
+
+    <ul class="chat-tpl-list" id="message_tpl_2"></ul>
+
+    <ul>
+        <div id="waiting_quick">
+            <img src="<%=request.getContextPath()%>/resouces/images/ajax-loader.gif">
+        </div>
+    </ul>
+
 </section>

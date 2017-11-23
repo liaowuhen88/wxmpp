@@ -12,6 +12,7 @@ var Chat = function (options) {
         quickReplyContainer: '#message_tpl',
         quickReplyInput: '#quickReplyInput',
         addQuickReplyBtn: '#addQuickReplyBtn',
+        changeQuickReplyBtn: '#changeQuickReplyBtn',
         holdListBtn: '#holdListBtn',
         holdListWeiXInBtn: '#holdListWeiXInBtn',
         turnBtn: '#turnBtn',
@@ -39,6 +40,7 @@ Chat.prototype = {
     init: function () {
         this.getQuickReplyEventBind();      //快速回复列表获取
         this.quickReplySearchEventBind();   //快速回复列表搜索事件绑定
+        this.changeQuickReplyBtnBind();
         this.addQuickReplyEventBind();
         this.deleteQuickReplyEventBind();
         this.tabEventBind();
@@ -70,7 +72,7 @@ Chat.prototype = {
         $(this.controls.historyBtn).modal();
         $(this.controls.examReportBtn).modal();
         /*  $(this.controls.chatClaimsBtn).modal();
-        $(this.controls.chatContractsBtn).modal();
+         $(this.controls.chatContractsBtn).modal();
          $(this.controls.chatOrderBtn).modal();*/
     },
     /*=====================================================================================快速回复=====================================================================================*/
@@ -88,6 +90,7 @@ Chat.prototype = {
     // 定时刷新，防止客服掉线
     keepOnline: function () {
         var _this = this;
+
         function keep() {
             $.ajax({
                 url: _this.interface.keepOnlineApi,
@@ -110,12 +113,36 @@ Chat.prototype = {
 
     //快速回复字符串拼接
     quickReplyComb: function (data) {
-        var _this = this;
-        var html = '';
-        data.map(function (val) {
-            html += '<li>' + val.message + '<div class="tpl-btns"><i class="tpl-btns-icon icon-delete" data-id="' + val.id + '"></i></div></li>';
+        var first = "";
+        var senconde = [];
+
+        data.map(function (val, index) {
+            if (!val.tag) {
+                val.tag = '问候';
+            }
+            if (index > 1) {
+                senconde.push('<li><span class="label label-primary">' + val.tag + '</span>' + val.message + '<div class="tpl-btns"><i class="tpl-btns-icon icon-delete" data-id="' + val.id + '"></i></div></li>');
+
+            } else {
+                first += '<li><span class="label label-primary">' + val.tag + '</span>' + val.message + '<div class="tpl-btns"><i class="tpl-btns-icon icon-delete" data-id="' + val.id + '"></i></div></li>';
+
+            }
         });
-        $(_this.controls.quickReplyContainer).html(html);
+
+        $("#message_tpl").html(first);
+
+        $("#message_tpl_2").html("");
+        for (var m = 0; m < senconde.length; m++) {
+            var _this_senconde = senconde[m];
+            deal(_this_senconde, m);
+        }
+
+        function deal(_this_senconde, m) {
+            setTimeout(function () {
+                //console.log(_this_senconde);
+                $("#message_tpl_2").append(_this_senconde);
+            }, (m + 2) * 1500);
+        }
     },
     //获取快速回复事件绑定
     getQuickReplyEventBind: function () {
@@ -127,6 +154,7 @@ Chat.prototype = {
                 if (res.success) {
                     var data = res.data;
                     _this.quickReplyComb(data);
+
                 }
             },
             error: function () {
@@ -134,6 +162,7 @@ Chat.prototype = {
             }
         });
     },
+
     //增加快速回复
     addQuickReply: function (message) {
         var _this = this;
@@ -171,6 +200,32 @@ Chat.prototype = {
             }
         });
     },
+    //changeQuickReplyBtn
+    changeQuickReplyBtnBind: function () {
+        var _this = this;
+        $("#changeQuickReplyBtn").on('click', function () {
+            $(_this.controls.quickReplyContainer).html("");
+            $("#message_tpl_2").html("");
+            $("#waiting_quick").show();
+            $.ajax({
+                url: window.base + '/api/changeQuickReply?cjid=' + window.destJid,
+                type: 'POST',
+                success: function (res) {
+                    if (res.success) {
+                        var data = res.data;
+
+                        _this.quickReplyComb(data);
+
+
+                    }
+                },
+                error: function () {
+                    $(_this.controls.quickReplyContainer).html('获取数据失败');
+                }
+            });
+        })
+    },
+
     //删除快速回复
     deleteQuickReply: function (id, successCallback) {
         var _this = this;

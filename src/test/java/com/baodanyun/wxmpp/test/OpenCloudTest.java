@@ -65,6 +65,40 @@ public class OpenCloudTest {
         }
     }
 
+
+    @Test
+    public void selectByMap() {
+        final String serviceName = "doubao.doubao.SaleGroupService.selectByMap";
+
+        DefaultRequest defaultRequest = new DefaultRequest() {
+            @Override
+            public String serviceName() {
+                return serviceName;
+            }
+
+            @Override
+            public void checkBizParams() throws DouBaoOpenException {
+            }
+        };
+
+        //defaultRequest.setSignType(Constants.MD5);
+        defaultRequest.setEncrypt(false);
+        // 86603
+        defaultRequest.setContent("{\"source_id\":45}");
+        DouBaoEnvEnum.TEST.setGatewayUrl("http://test2.17doubao.com/gateway.do");
+
+        DoubaoClient client = new DoubaoClient(DouBaoEnvEnum.TEST, Config.dubbo_appKey, Config.dubbo_appSecret, Config.dubbo_privateKey);
+        try {
+            logger.info(JSONUtil.toJson(defaultRequest));
+            logger.info(JSONUtil.toJson(client));
+            DefaultResponse response = client.call(defaultRequest);
+            logger.info(JSON.toJSONString(response));
+        } catch (DouBaoOpenException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     /* public static void main(String[] args) {
          DouBaoEnvEnum.TEST.setGatewayUrl("http://test2.17doubao.cn/gateway.do");
          System.out.print(DouBaoEnvEnum.TEST.getGatewayUrl());

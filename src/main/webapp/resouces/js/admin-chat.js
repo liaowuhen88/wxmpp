@@ -630,6 +630,11 @@ xchat.openFriendWindow = function (isOnline, id, nickname, openId, icon) {
 
     _this.getUserInfo(window.currentId, id, openId);
     _this.getUserLabel();
+
+    // 重新更新快捷回复
+    if (window.currentId && (window.currentId == "zhangqike@126xmpp" || window.currentId == "yutao@126xmpp")) {
+        _this.changeQuickReplyEventBind(id);
+    }
 };
 //获取当前用户的详情
 xchat.getUserInfo = function (currentId, destJid, openId) {
@@ -778,6 +783,60 @@ xchat.getUserLabel = function () {
         }
     });
 };
+
+//获取快速回复事件绑定
+xchat.changeQuickReplyEventBind = function (vjid) {
+    var _this = this;
+    $("#message_tpl").html("");
+    $("#message_tpl_2").html("");
+    $("#waiting_quick").show();
+    //alert('changeQuickReplyEventBind');
+    $.ajax({
+        url: window.base + '/api/changeQuickReply?cjid=' + window.destJid,
+        type: 'POST',
+        success: function (res) {
+            if (res.success) {
+                var data = res.data;
+                _this.quickReplyComb(data);
+            }
+        },
+        error: function () {
+            $(_this.controls.quickReplyContainer).html('获取数据失败');
+        }
+    });
+}
+
+xchat.quickReplyComb = function (data) {
+    var first = "";
+    var senconde = [];
+
+    data.map(function (val, index) {
+        if (index > 1) {
+            senconde.push('<li><span class="label label-primary">' + val.tag + '</span>' + val.message + '<div class="tpl-btns"><i class="tpl-btns-icon icon-delete" data-id="' + val.id + '"></i></div></li>');
+
+        } else {
+            first += '<li><span class="label label-primary">' + val.tag + '</span>' + val.message + '<div class="tpl-btns"><i class="tpl-btns-icon icon-delete" data-id="' + val.id + '"></i></div></li>';
+
+        }
+    });
+
+    $("#message_tpl").html(first);
+
+    $("#message_tpl_2").html("");
+    for (var m = 0; m < senconde.length; m++) {
+        var _this_senconde = senconde[m];
+        deal(_this_senconde, m);
+    }
+    function deal(_this_senconde, m) {
+        setTimeout(function () {
+            //console.log(_this_senconde);
+            $("#message_tpl_2").append(_this_senconde);
+        }, (m + 2) * 1500);
+    }
+
+}
+
+
 //用户标签拼接
 xchat.userLabelComb = function (data) {
     var _this = this;
@@ -1068,6 +1127,10 @@ xchat.contractComb = function (data) {
 //消息模版事件
 xchat.messageListEventBind = function (selector, container) {
     $(selector || '#message_tpl').on('click', 'li', function () {
+        $(container || '#enterChat').val($(this).text());
+    });
+
+    $(selector || '#message_tpl_2').on('click', 'li', function () {
         $(container || '#enterChat').val($(this).text());
     });
 };

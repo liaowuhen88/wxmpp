@@ -1,6 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="zh-CN">
+
+<style type="text/css">
+    .label-primary {
+        background-color: #337ab7;
+    }
+
+    .label {
+        display: inline;
+        padding: .2em .6em .3em;
+        font-size: 75%;
+        font-weight: 700;
+        line-height: 1;
+        color: #fff;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: .25em;
+    }
+
+</style>
 <%
     String path = request.getContextPath();%>
 <head>
@@ -30,6 +50,13 @@
             window.user = wu.vcard;
             window.currentId = wu.user.id;
 
+            if (window.currentId && (window.currentId == "zhangqike@126xmpp" || window.currentId == "yutao@126xmpp")) {
+                $("#addQuickReplyBtn").hide();
+                $("#quick_chat_message").text("大数据智能推荐");
+            } else {
+                $("#changeQuickReplyBtn").hide();
+
+            }
             var chat = new Chat();
             var history = new History();
             var set = new Set();
