@@ -16,6 +16,7 @@ import com.baodanyun.websocket.service.dubbo.WechatService;
 import com.baodanyun.websocket.service.dubbo.WxQRCodeService;
 import com.baodanyun.websocket.util.Config;
 import com.baodanyun.websocket.util.JSONUtil;
+import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPException;
@@ -66,15 +67,16 @@ public class ConsultationApi extends BaseController {
             FollowWXResponse fw = wechatService.getFollow(pc.getU());
             AbstractUser visitor = userServer.initUserByOpenId(pc.getU());
             mv.addObject("follow", fw.isFollow());
-            String body;
+            String customerBody;
+            String visitorBody = null;
             if (!fw.isFollow()) {
-                body = "未关注豆包管家用户咨询客服";
+                customerBody = "未关注豆包管家用户咨询客服";
                 //TODO 请求关注二维码
                 QRCodeResponse qc = wxQRCodeService.getQRCodeTempUrl(pc.getName(), "", pc.getGoodUrl(), (byte) 5);
                 if (null != qc && StringUtils.isNotEmpty(qc.getUrl())) {
                     mv.addObject("url", qc.getUrl());
                 }
-                offLineMessageService.dealUnRegisterMessage(visitor, body);
+                offLineMessageService.dealUnRegisterMessage(visitor, customerBody);
                 logger.info("{} 未关注", visitor.getOpenId());
             } else {
                 VisitorChatNode visitorChatNode = initVisitorChatNode(visitor);
@@ -85,26 +87,34 @@ public class ConsultationApi extends BaseController {
                 logger.info("客服是否在线" + cFlag);
 
                 if (!cFlag) {
-                    body = Config.offlineWord;
+                    customerBody = Config.offlineWord;
                 } else {
                     if (StringUtils.isEmpty(pc.getName()) || StringUtils.isEmpty(pc.getGoodUrl())) {
-                        body = "您好，我是豆包网的专属客服,不知道您有什么疑问可以帮到您^_^";
+                        customerBody = "您好，我是豆包网的专属客服,不知道您有什么疑问可以帮到您^_^";
+                        visitorBody = "系统消息，用户有产品问题咨询，请跟近";
                     } else {
-                        body = "您好，我是豆包网的专属客服，您刚浏览了<a href=\\\"" + pc.getGoodUrl() + "\\\">" + pc.getName() + "</a>，不知道您有什么疑问可以帮到您^_^";
+                        customerBody = "您好，我是豆包网的专属客服，您刚浏览了<a href=\\\"" + pc.getGoodUrl() + "\\\">" + pc.getName() + "</a>，不知道您有什么疑问可以帮到您^_^";
+                        visitorBody = "系统消息，用户刚浏览了<a href=\\\"" + pc.getGoodUrl() + "\\\">" + pc.getName() + "</a>";
                     }
                 }
-                logger.info("info:" + body);
+                logger.info("info:" + customerBody);
                 // 客服不在线
-                Msg msg = new TextMsg(body);
+                Msg msg = new TextMsg(customerBody);
                 msg.setSource(TeminalTypeEnum.PRODUCT.getCode()); //消息来源是微信
                 msg.setTo(customerChatNode.getAbstractUser().getId());
                 msg.setFrom(pc.getU());
                 if (!cFlag) {
-                    offLineMessageService.dealOfflineMessage(visitorChatNode, body);
+                    offLineMessageService.dealOfflineMessage(visitorChatNode, customerBody);
                 } else {
                     messageSendToWeixin.send(msg, pc.getU(), null);
                 }
-                visitorChatNode.receiveFromGod(node, msg);
+
+                if (StringUtils.isNotEmpty(visitorBody)) {
+                    Msg msgClone = (Msg) SerializationUtils.clone(msg);
+                    msgClone.setContent(visitorBody);
+                    visitorChatNode.receiveFromGod(node, msg);
+                }
+
             }
 
         } catch (BusinessException e) {
