@@ -168,7 +168,7 @@ public class AbstarctChatNode implements ChatNode {
     public boolean login() throws BusinessException, IOException, XMPPException, SmackException {
 
         AbstractUser user = getAbstractUser();
-        boolean flag;
+        boolean flag = false;
         try {
             if (StringUtils.isBlank(user.getLoginUsername())) {
                 throw new BusinessException("用户名不能为空");
@@ -182,14 +182,15 @@ public class AbstarctChatNode implements ChatNode {
                 if (null == xmppConnection) {
                     xmppConnection = xmppServer.getXMPPConnection(user.getId());
                 }
-                return true;
+                flag = true;
             }
-            flag = xmppServer.login(this);
+            if (!flag) {
+                flag = xmppServer.login(this);
+            }
 
             if (flag) {
                 ChatNodeManager.saveXmppNode(this);
             }
-
 
         } catch (Exception e) {
 
@@ -324,7 +325,7 @@ public class AbstarctChatNode implements ChatNode {
 
     public Map<String, AbstractTerminal> getNodes() {
         if (null != nodes && nodes.size() > 0) {
-            logger.info("{},{}", this.getAbstractUser().getId(), nodes.keySet().toString());
+            //logger.info("{},{}", this.getAbstractUser().getId(), nodes.keySet().toString());
         }
         return nodes;
     }

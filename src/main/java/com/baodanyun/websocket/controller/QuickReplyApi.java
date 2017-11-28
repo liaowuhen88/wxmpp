@@ -59,7 +59,7 @@ public class QuickReplyApi extends BaseController {
                     Integer co = quickReplyServer.addQuickReply(cjid, message);
                 }
 
-                if (cjid.equals("yutao@126xmpp") || cjid.equals("zhangqike@126xmpp") || cjid.equals("zhangchi@126xmpp")) {
+                if (cjid.equals("yutao@126xmpp") || cjid.equals("zhangqike@126xmpp")) {
                     li = getListCode(cjid, 20, 1);
                 } else {
                     li = quickReplyServer.getQuickReply(cjid);
