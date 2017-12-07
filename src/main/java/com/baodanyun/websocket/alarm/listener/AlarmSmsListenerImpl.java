@@ -2,7 +2,7 @@ package com.baodanyun.websocket.alarm.listener;
 
 import com.baodanyun.websocket.enums.AlarmTypeEnum;
 import com.baodanyun.websocket.event.AlarmEvent;
-import com.baodanyun.websocket.service.SendSmsService;
+import com.baodanyun.websocket.service.dubbo.DubboSendMsgService;
 import com.baodanyun.websocket.util.XMPPUtil;
 import com.doubao.open.dto.message.SmsMsg;
 import org.jivesoftware.smack.packet.Message;
@@ -26,7 +26,6 @@ import java.util.Map;
  **/
 @Service("alarmSmsListener")
 public class AlarmSmsListenerImpl implements AlarmListener {
-
     /**
      * boss的openId对应的key
      */
@@ -50,7 +49,7 @@ public class AlarmSmsListenerImpl implements AlarmListener {
 
     private final Logger LOGGER = LoggerFactory.getLogger(AlarmSmsListenerImpl.class);
     @Autowired
-    public SendSmsService sendSmsService;
+    public DubboSendMsgService dubboSendMsgService;
 
     @Override
     public void alarm(final AlarmEvent alarmInfo) {
@@ -70,14 +69,14 @@ public class AlarmSmsListenerImpl implements AlarmListener {
         smsMsg.setTaskId("001task");
         smsMsg.setContent(content);
 
-        sendSmsService.sendMsg(smsMsg);
+        dubboSendMsgService.sendSmsMsg(smsMsg);
 
         if (alarmInfo.getAlarmTypeEnum() == AlarmTypeEnum.TYPE2) {//15分钟无回复发送到leader汪婧
             SmsMsg toBossMsg = new SmsMsg();
             BeanUtils.copyProperties(smsMsg, toBossMsg);
             toBossMsg.setMobile(MobileMap.get(BOSS_KEY));
 
-            sendSmsService.sendMsg(smsMsg);
+            dubboSendMsgService.sendSmsMsg(smsMsg);
         }
     }
 

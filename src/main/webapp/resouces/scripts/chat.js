@@ -5,6 +5,7 @@
 'use strict';
 var Chat = function (options) {
     options = options || {};
+
     this.currentId = options.currentId || window.currentId;
     this.base = options.base || window.base;
 
@@ -58,13 +59,15 @@ Chat.prototype = {
             window.location.href = window.base + "/customerlogin";
         }, {});
     },
+
     signOutEventBind: function () {
         //退出登录事件绑定
         var self = this;
         $(this.controls.signOutBtn).on('click', function () {
             self.signOut();
         });
-    },
+    }
+    ,
     modalBind: function () {
         $(this.controls.holdListBtn).modal();
         $(this.controls.holdListWeiXInBtn).modal();
@@ -74,20 +77,22 @@ Chat.prototype = {
         /*  $(this.controls.chatClaimsBtn).modal();
          $(this.controls.chatContractsBtn).modal();
          $(this.controls.chatOrderBtn).modal();*/
-    },
+    }
+    ,
     /*=====================================================================================快速回复=====================================================================================*/
     /*=====================================================================================快速回复=====================================================================================*/
-    //快速回复快速搜索
+//快速回复快速搜索
     quickReplySearchEventBind: function () {
         holmes({
             input: '.chat-tpl-search input',
             find: '.chat-tpl-list li',
             placeholder: '没有结果'
         });
-    },
+    }
+    ,
 
 
-    // 定时刷新，防止客服掉线
+// 定时刷新，防止客服掉线
     keepOnline: function () {
         var _this = this;
 
@@ -108,23 +113,58 @@ Chat.prototype = {
 
         // 十分钟调用一次接口   防止掉线
         setInterval(keep, 1000 * 60 * 5);// 注意函数名没有引号和括弧！
-    },
+    }
+    ,
 
 
-    //快速回复字符串拼接
+//快速回复字符串拼接
     quickReplyComb: function (data) {
+        var _this = this;
         var first = "";
         var senconde = [];
-
         data.map(function (val, index) {
-            if (!val.tag) {
-                val.tag = '问候';
+            var span = "";
+            // 提醒  remind   通知  notice   成功  success   拒付  Dishonor
+            // 预约  appointment   作废  ToVoid   撤销  Revoke   商城  mall
+            // 理赔  SettlementOfClaims   体检  PhysicalExamination
+            // 问候  hello
+            var color;
+            if (val.tag) {
+                if (val.tag.indexOf('提醒') >= 0) {
+                    color = window.colors['remind'];
+                } else if (val.tag.indexOf('通知') >= 0) {
+                    color = window.colors['notice'];
+                } else if (val.tag.indexOf('成功') >= 0) {
+                    color = window.colors['success'];
+                } else if (val.tag.indexOf('拒付') >= 0) {
+                    color = window.colors['Dishonor'];
+                } else if (val.tag.indexOf('预约') >= 0) {
+                    color = window.colors['appointment'];
+                } else if (val.tag.indexOf('作废') >= 0) {
+                    color = window.colors['ToVoid'];
+                } else if (val.tag.indexOf('撤销') >= 0) {
+                    color = window.colors['Revoke'];
+                } else if (val.tag.indexOf('商城') >= 0) {
+                    color = window.colors['mall'];
+                } else if (val.tag.indexOf('理赔') >= 0) {
+                    color = window.colors['settlementOfClaims'];
+                } else if (val.tag.indexOf('体检') >= 0) {
+                    color = window.colors['physicalExamination'];
+                } else if (val.tag.indexOf('问候') >= 0) {
+                    color = window.colors['hello'];
+                } else if (val.tag.indexOf('健康') >= 0) {
+                    color = window.colors['healthy'];
+                }
+
+                span = '<span class="label label-primary" style="background-color: ' + color + '">' + val.tag + '</span>';
+
             }
+            //;
             if (index > 1) {
-                senconde.push('<li><span class="label label-primary">' + val.tag + '</span>' + val.message + '<div class="tpl-btns"><i class="tpl-btns-icon icon-delete" data-id="' + val.id + '"></i></div></li>');
+                senconde.push('<li>' + span + val.message + '<div class="tpl-btns"><i class="tpl-btns-icon icon-delete" data-id="' + val.id + '"></i></div></li>');
 
             } else {
-                first += '<li><span class="label label-primary">' + val.tag + '</span>' + val.message + '<div class="tpl-btns"><i class="tpl-btns-icon icon-delete" data-id="' + val.id + '"></i></div></li>';
+                first += '<li>' + span + val.message + '<div class="tpl-btns"><i class="tpl-btns-icon icon-delete" data-id="' + val.id + '"></i></div></li>';
 
             }
         });
@@ -143,8 +183,11 @@ Chat.prototype = {
                 $("#message_tpl_2").append(_this_senconde);
             }, (m + 2) * 1500);
         }
-    },
-    //获取快速回复事件绑定
+
+
+    }
+    ,
+//获取快速回复事件绑定
     getQuickReplyEventBind: function () {
         var _this = this;
         $.ajax({
@@ -161,9 +204,10 @@ Chat.prototype = {
                 $(_this.controls.quickReplyContainer).html('获取数据失败');
             }
         });
-    },
+    }
+    ,
 
-    //增加快速回复
+//增加快速回复
     addQuickReply: function (message) {
         var _this = this;
         $.ajax({
@@ -181,12 +225,14 @@ Chat.prototype = {
                 alert('添加失败,请重试');
             }
         });
-    },
-    //清楚快速回复输入框
+    }
+    ,
+//清楚快速回复输入框
     clearQuickReplyInput: function () {
         $(this.controls.quickReplyInput).val('');
-    },
-    //增加快速回复事件绑定
+    }
+    ,
+//增加快速回复事件绑定
     addQuickReplyEventBind: function () {
         var _this = this;
         $(_this.controls.addQuickReplyBtn).on('click', function () {
@@ -199,8 +245,9 @@ Chat.prototype = {
                 alert("请输入内容");
             }
         });
-    },
-    //changeQuickReplyBtn
+    }
+    ,
+//changeQuickReplyBtn
     changeQuickReplyBtnBind: function () {
         var _this = this;
         $("#changeQuickReplyBtn").on('click', function () {
@@ -224,9 +271,10 @@ Chat.prototype = {
                 }
             });
         })
-    },
+    }
+    ,
 
-    //删除快速回复
+//删除快速回复
     deleteQuickReply: function (id, successCallback) {
         var _this = this;
         $.ajax({
@@ -244,8 +292,9 @@ Chat.prototype = {
                 alert('删除失败,请重试');
             }
         });
-    },
-    //删除快速回复时间绑定
+    }
+    ,
+//删除快速回复时间绑定
     deleteQuickReplyEventBind: function () {
         var _this = this;
         $(_this.controls.quickReplyContainer).on('click', '.icon-delete', function (e) {
@@ -257,16 +306,19 @@ Chat.prototype = {
             e.stopPropagation();
             return false;
         });
-    },
+    }
+    ,
     /*=====================================================================================快速回复=====================================================================================*/
     /*=====================================================================================其他工具=====================================================================================*/
-    //滑动门
+//滑动门
     tabEventBind: function () {
         //$('#chat-tab li:eq(1) a').tab('show');
-    },
-    //工具提示
+    }
+    ,
+//工具提示
     tooltipEventBind: function () {
         $('[data-toggle="tooltip"]').tooltip();
     }
     /*=====================================================================================其他工具=====================================================================================*/
-};
+}
+;

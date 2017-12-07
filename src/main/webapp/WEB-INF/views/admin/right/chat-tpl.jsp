@@ -1,4 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<style>
+    .chat-tpl-list li {
+        border: 1px solid #DEDCDC;
+    }
+
+    .chat-tab ul {
+        padding: 0 0 5px;
+    }
+</style>
 <div class="chat-tpl-search">
     <label>
         <input type="text" name="" value="" placeholder="请输入您要搜索到文字" id="quickReplyInput">

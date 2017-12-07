@@ -809,14 +809,41 @@ xchat.changeQuickReplyEventBind = function (vjid) {
 xchat.quickReplyComb = function (data) {
     var first = "";
     var senconde = [];
-
+    var span = "";
+    var color;
+    console.log("window.colors" + window.colors);
     data.map(function (val, index) {
+        if (val.tag.indexOf('提醒') >= 0) {
+            color = window.colors['remind'];
+        } else if (val.tag.indexOf('通知') >= 0) {
+            color = window.colors['notice'];
+        } else if (val.tag.indexOf('成功') >= 0) {
+            color = window.colors['success'];
+        } else if (val.tag.indexOf('拒付') >= 0) {
+            color = window.colors['Dishonor'];
+        } else if (val.tag.indexOf('预约') >= 0) {
+            color = window.colors['appointment'];
+        } else if (val.tag.indexOf('作废') >= 0) {
+            color = window.colors['ToVoid'];
+        } else if (val.tag.indexOf('撤销') >= 0) {
+            color = window.colors['Revoke'];
+        } else if (val.tag.indexOf('商城') >= 0) {
+            color = window.colors['mall'];
+        } else if (val.tag.indexOf('理赔') >= 0) {
+            color = window.colors['settlementOfClaims'];
+        } else if (val.tag.indexOf('体检') >= 0) {
+            color = window.colors['physicalExamination'];
+        } else if (val.tag.indexOf('问候') >= 0) {
+            color = window.colors['hello'];
+        } else if (val.tag.indexOf('健康') >= 0) {
+            color = window.colors['healthy'];
+        }
+        span = '<span class="label label-primary" style="background-color: ' + color + '">' + val.tag + '</span>';
+
         if (index > 1) {
-            senconde.push('<li><span class="label label-primary">' + val.tag + '</span>' + val.message + '<div class="tpl-btns"><i class="tpl-btns-icon icon-delete" data-id="' + val.id + '"></i></div></li>');
-
+            senconde.push('<li>' + span + val.tag + '</span>' + val.message + '<div class="tpl-btns"><i class="tpl-btns-icon icon-delete" data-id="' + val.id + '"></i></div></li>');
         } else {
-            first += '<li><span class="label label-primary">' + val.tag + '</span>' + val.message + '<div class="tpl-btns"><i class="tpl-btns-icon icon-delete" data-id="' + val.id + '"></i></div></li>';
-
+            first += '<li>' + span + val.tag + '</span>' + val.message + '<div class="tpl-btns"><i class="tpl-btns-icon icon-delete" data-id="' + val.id + '"></i></div></li>';
         }
     });
 

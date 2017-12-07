@@ -2,14 +2,22 @@ package com.baodanyun.websocket.controller;
 
 import com.baodanyun.websocket.bean.QuickReply;
 import com.baodanyun.websocket.bean.Response;
+import com.baodanyun.websocket.bean.user.Visitor;
+import com.baodanyun.websocket.exception.BusinessException;
 import com.baodanyun.websocket.service.QuickReplyServer;
+import com.baodanyun.websocket.service.UserServer;
+import com.baodanyun.websocket.service.dubbo.MessageService;
+import com.baodanyun.websocket.service.dubbo.bean.Message;
 import com.baodanyun.websocket.util.JSONUtil;
+import com.baodanyun.websocket.util.PhoneUtils;
 import com.baodanyun.websocket.util.Render;
+import com.baodanyun.websocket.util.XMPPUtil;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,6 +41,12 @@ public class QuickReplyApi extends BaseController {
     protected static Logger logger = LoggerFactory.getLogger(CustomerApi.class);
     @Autowired
     private QuickReplyServer quickReplyServer;
+
+    @Autowired
+    private MessageService messageService;
+
+    @Autowired
+    private UserServer userServer;
 
     public static void main(String[] args) {
         String cid = "zhassngqike@126xmpp";
@@ -133,10 +147,37 @@ public class QuickReplyApi extends BaseController {
     }
 
     public List<QuickReply> getListCode(String cid, int display, int count) {
-
+        //messageService.getByMessage();
         List<QuickReply> li = getList(cid);
+        List<QuickReply> qrs = null;
+        try {
+            String phone = XMPPUtil.jidToName(cid);
+            if (PhoneUtils.isMobile(phone)) {
+                Visitor visitor = userServer.initByPhone(phone);
+               /* Visitor visitor = new Visitor();
+                visitor.setUid((long) 306);*/
+                if (null != visitor) {
+                    List<Message> list = messageService.getByMessage(visitor.getUid(), 4);
+                    qrs = messageService.MessageToQuickReply(list);
+                    logger.info("qrs size {}", null == qrs ? 0 : qrs.size());
+                } else {
+                    logger.info("visitor {} is null", phone);
+                }
+            } else {
+                logger.info("{} 非电话", phone);
+            }
+
+
+        } catch (BusinessException e) {
+            logger.error("error", e);
+        }
+
+
         //logger.info(JSONUtil.toJson(li.size()));
         List<QuickReply> subList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(qrs)) {
+            li.addAll(qrs);
+        }
         //int code = getCode(cid,li.size(),display,count);
         for (int i = 0; i < display; i++) {
             Random random = new Random();

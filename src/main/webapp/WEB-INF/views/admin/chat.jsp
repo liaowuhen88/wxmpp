@@ -44,7 +44,9 @@
     <script src="<%=request.getContextPath()%>/resouces/js/wechatface.js"></script>
 
     <script>
+        window.colors = {};
         $(function () {
+            initColor();
 
             var wu = ${wu};
             window.user = wu.vcard;
@@ -58,11 +60,13 @@
 
             }
             var chat = new Chat();
+
             var history = new History();
             var set = new Set();
             var leaveMessage = new LeaveMessage();
             //页面初始化建立连接
             xchat.connect();
+
             chat.init();
             history.init();
             set.init();
@@ -71,7 +75,35 @@
             if (wu.isAdmin == 1) {
                 $('#qualityCheck').show();
             }
+
+
         });
+
+
+        function initColor() {
+            getRandomColor('remind', window.colors);
+            getRandomColor('notice', window.colors);
+            getRandomColor('success', window.colors);
+            getRandomColor('Dishonor', window.colors);
+            getRandomColor('appointment', window.colors);
+            getRandomColor('ToVoid', window.colors);
+            getRandomColor('Revoke', window.colors);
+            getRandomColor('mall', window.colors);
+            getRandomColor('settlementOfClaims', window.colors);
+            getRandomColor('physicalExamination', window.colors);
+            getRandomColor('hello', window.colors);
+            getRandomColor('healthy', window.colors);
+
+        }
+        function getRandomColor(key, map) {
+            var color = map[key];
+            if (!color) {
+                color = '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).substr(-6);
+                map[key] = color;
+            }
+
+            return color;
+        }
     </script>
 </head>
 
