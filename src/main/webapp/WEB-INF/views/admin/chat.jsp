@@ -72,7 +72,7 @@
             set.init();
             leaveMessage.init();
 
-            if (wu.isAdmin == 1) {
+            if (wu.isAdmin == 1 || window.currentId == "maqiumeng@126xmpp") {
                 $('#qualityCheck').show();
             }
 

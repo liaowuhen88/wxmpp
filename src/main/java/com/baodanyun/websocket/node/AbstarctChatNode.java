@@ -10,20 +10,16 @@ import com.baodanyun.websocket.service.XmppUserOnlineServer;
 import com.baodanyun.websocket.util.JSONUtil;
 import com.baodanyun.websocket.util.SpringContextUtil;
 import org.apache.commons.lang.StringUtils;
-import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.chat.Chat;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
-import org.jivesoftware.smackx.offline.OfflineMessageManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -34,13 +30,12 @@ public class AbstarctChatNode implements ChatNode {
     private static final Logger logger = LoggerFactory.getLogger(AbstarctChatNode.class);
     XmppUserOnlineServer xmppUserOnlineServer = SpringContextUtil.getBean("xmppUserOnlineServer", XmppUserOnlineServer.class);
 
-    XmppServer xmppServer = SpringContextUtil.getBean("xmppServer", XmppServer.class);
+    XmppServer xmppServer = SpringContextUtil.getBean("xmppServerImpl", XmppServer.class);
     VcardService vcardService = SpringContextUtil.getBean("vcardService", VcardService.class);
 
     private Map<String, AbstractTerminal> nodes = new ConcurrentHashMap<>();
 
     private AbstractUser abstractUser;
-    private XMPPConnection xmppConnection;
     private Long lastActiveTime;
 
     public AbstarctChatNode(AbstractUser abstractUser, Long lastActiveTime) {
@@ -63,11 +58,6 @@ public class AbstarctChatNode implements ChatNode {
 
     public void setAbstractUser(AbstractUser abstractUser) {
         this.abstractUser = abstractUser;
-    }
-
-    @Override
-    public void setXmppConnection(XMPPConnection xmppConnection) {
-        this.xmppConnection = xmppConnection;
     }
 
     @Override
@@ -119,7 +109,6 @@ public class AbstarctChatNode implements ChatNode {
     @Override
     public void authenticated(XMPPConnection xmppConnection, boolean b) {
         logger.info(getAbstractUser().getLoginUsername() + ":authenticated");
-        setXmppConnection(xmppConnection);
         Presence presence = new Presence(Presence.Type.available);
         try {
             xmppConnection.sendStanza(presence);
@@ -179,9 +168,6 @@ public class AbstarctChatNode implements ChatNode {
             }
 
             if (!StringUtils.isEmpty(user.getId()) && xmppServer.isAuthenticated(user.getId())) {
-                if (null == xmppConnection) {
-                    xmppConnection = xmppServer.getXMPPConnection(user.getId());
-                }
                 flag = true;
             }
             if (!flag) {
@@ -204,12 +190,10 @@ public class AbstarctChatNode implements ChatNode {
     @Override
     public boolean logout() {
         logger.info("[" + this.getAbstractUser().getId() + "]logout ");
-        if (null != xmppConnection) {
-            if (xmppConnection.isConnected()) {
-                ((AbstractXMPPConnection) xmppConnection).disconnect();
-            }
-        } else {
-            logger.info("jid:[" + this.getAbstractUser().getId() + "] xMPPConnection is closed or xMPPConnection is null");
+        try {
+            xmppServer.closed(this.getAbstractUser().getId());
+        } catch (IOException e) {
+            logger.error("error", e);
         }
 
         ChatNodeManager.removeXmppNode(this.getId());
@@ -236,6 +220,11 @@ public class AbstarctChatNode implements ChatNode {
     }
 
     @Override
+    public XMPPConnection getXMPPConnection() {
+        return xmppServer.getXMPPConnection(this.getAbstractUser().getId());
+    }
+
+    @Override
     public boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws InterruptedException {
         return false;
     }
@@ -255,31 +244,9 @@ public class AbstarctChatNode implements ChatNode {
 
     }
 
-    public boolean pushOfflineMsg() throws BusinessException {
-        //加载离线记录
-        logger.info("pushOfflineMsg");
-        OfflineMessageManager offlineManager = new OfflineMessageManager(this.xmppConnection);
-        try {
-            Thread.sleep(1000 * 10);
-            List<Message> msgList = offlineManager.getMessages();
-            if (!CollectionUtils.isEmpty(msgList)) {
-                for (Message message : msgList) {
-                    processMessage(message);
-                    offlineManager.deleteMessages();
-                }
-            }
-        } catch (Exception e) {
-            logger.error("error", "offline msg error");
-        }
-        return true;
-    }
-
     @Override
     public boolean isXmppOnline() {
-        if (null != xmppConnection) {
-            return xmppConnection.isAuthenticated();
-        }
-        return false;
+        return xmppServer.isAuthenticated(this.getAbstractUser().getId());
     }
 
     @Override
@@ -318,7 +285,7 @@ public class AbstarctChatNode implements ChatNode {
     }
 
     public void sendMessageTOXmpp(Message xmppMsg) throws SmackException.NotConnectedException {
-        xmppConnection.sendStanza(xmppMsg);
+        getXMPPConnection().sendStanza(xmppMsg);
         logger.info(this.getAbstractUser().getId() + "xmpp send message:" + JSONUtil.toJson(xmppMsg));
 
     }

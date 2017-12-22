@@ -27,8 +27,6 @@ public interface ChatNode extends ChatManagerListener, ChatMessageListener, Conn
      * @return
      */
     Long getLastActiveTime();
-
-    void setXmppConnection(XMPPConnection xmppConnection);
     /**
      * 添加终端节点
      * @param node
@@ -72,6 +70,8 @@ public interface ChatNode extends ChatManagerListener, ChatMessageListener, Conn
      */
 
     boolean isOnline();
+
+    XMPPConnection getXMPPConnection();
 
     boolean messageCallBack(AbstractUser abstractUser, MsgStatus msgStatus) throws InterruptedException;
 }

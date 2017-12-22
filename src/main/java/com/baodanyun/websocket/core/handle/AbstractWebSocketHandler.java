@@ -11,6 +11,6 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
  */
 public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
     protected static Logger logger = LoggerFactory.getLogger(AbstractWebSocketHandler.class);
-    public XmppServer xmppServer = SpringContextUtil.getBean("xmppServer", XmppServer.class);
+    public XmppServer xmppServer = SpringContextUtil.getBean("xmppServerImpl", XmppServer.class);
 
 }
